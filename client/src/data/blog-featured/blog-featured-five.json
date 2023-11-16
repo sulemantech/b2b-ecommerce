@@ -1,7 +1,7 @@
 [
   {
     "id": 1,
-    "image": "/assets/img/blog/blog-13.jpg",
+    "image": "/assets/products/sku_2/images-1700052101167-716296221.jpg",
     "category": ["lifestyle", "men"],
     "title": "A guide to latest trends",
     "url": "/blog-details-standard",
@@ -10,7 +10,7 @@
   },
   {
     "id": 2,
-    "image": "/assets/img/blog/blog-14.jpg",
+    "image": "/assets/products/sku_3/images-1700050565454-349119765.png",
     "category": ["lifestyle"],
     "title": "Five ways to lead a happy life",
     "url": "/blog-details-standard",
@@ -19,7 +19,7 @@
   },
   {
     "id": 3,
-    "image": "/assets/img/blog/blog-15.jpg",
+    "image": "/assets/products/sku_3/images-1700050565454-349119765.png",
     "category": ["lifestyle"],
     "title": "Tips on having a happy life",
     "url": "/blog-details-standard",

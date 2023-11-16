@@ -21,7 +21,6 @@ const ProductImageFixed = ({ product }) => {
         {product.image ? (
           <img
             src={process.env.PUBLIC_URL + product.image[0]}
-            // `${process.env.PUBLIC_URL}/assets/img/product/${product.category}/${SKU}/${product.image[0]}`
             alt=""
             className="img-fluid"
           />

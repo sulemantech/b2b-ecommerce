@@ -9,6 +9,7 @@ export const fetchProducts = () => async (dispatch) => {
       // Fetch data from the determined API endpoint
       const productsData = await axios.get(`http://localhost:5000/api/` ).then((res) => {
         return res?.data;
+        debugger
       });
         
       // Dispatch the setProducts action with the fetched data

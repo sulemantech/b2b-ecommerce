@@ -1,8 +1,8 @@
 // get products
 export const getProducts = (products, category, type, limit) => {
   const finalProducts = category
-    ? products.filter(
-        product => product.category.filter(single => single === category)[0]
+    ? products?.filter(
+        product => product.category?.filter(single => single === category)[0]
       )
     : products;
 
@@ -69,9 +69,6 @@ export const cartItemStock = (item, color, size) => {
 
 //get products based on category
 export const getSortedProducts = (products, sortType, sortValue) => {
- 
-  console.log("products are...", products);
-
   if (products && sortType && sortValue) {
     if (sortType === "category") {
       return products.filter(

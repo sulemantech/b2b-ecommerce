@@ -12,7 +12,7 @@ const TabProductThree = ({ spaceBottomClass, category }) => {
           <Nav variant="pills" className="product-tab-list pb-55 text-center">
             <Nav.Item>
               <Nav.Link eventKey="newArrival">
-                <h4>New luthfiiiiiii</h4>
+                <h4>New Arrivals</h4>
               </Nav.Link>
             </Nav.Item>
             <Nav.Item>

@@ -1,27 +1,27 @@
 [
   {
     "id": 1,
-    "image": "images/1699881133489-plug_100watt.jpg",
+    "image": "/assets/products/sku_1/images-1700052313416-994921738.jpg",
     "category": ["lifestyle", "men"],
-    "title": "Power plug delivering 100 watts for efficient device charging.",
+    "title": "A guide to latest trends",
     "url": "/blog-details-standard",
     "author": "Admin",
     "authorUrl": "/blog-standard"
   },
   {
     "id": 2,
-    "image": "images/1699852683778-applepen.jpg",
+    "image": "/assets/products/sku_2/images-1700052101167-716296221.jpg",
     "category": ["lifestyle"],
-    "title": "Portabkle and reiiable",
+    "title": "Five ways to lead a happy life",
     "url": "/blog-details-standard",
     "author": "Admin",
     "authorUrl": "/blog-standard"
   },
   {
     "id": 3,
-    "image": "images/1699880879206-lighter1.jpg",
+    "image": "/assets/products/sku_3/images-1700050565454-349119765.png",
     "category": ["lifestyle"],
-    "title": "Portable and reliable lighter for everyday use.",
+    "title": "Tips on having a happy life",
     "url": "/blog-details-standard",
     "author": "Admin",
     "authorUrl": "/blog-standard"
