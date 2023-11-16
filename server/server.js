@@ -16,16 +16,15 @@ app.get('/', (req,res)=>{
 
 
 // Use product routes
-app.use('/api', productRoutes);
+// app.use('/api', productRoutes);
 
 app.use('/products', productRoutes)
-
 app.use('/images', express.static('./images'))
 app.use('/imagess', express.static('./imagess'))
 
 
 //productid image getting
-app.use('/product',productRoutes)
+// app.use('/product',productRoutes)
 
 //productImagePost
 app.use('/productImages', productImages)

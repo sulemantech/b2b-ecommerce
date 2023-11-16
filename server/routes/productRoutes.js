@@ -8,56 +8,40 @@ const productModel = require('../models/productModel');
 const productImages= require('../models/productImages')
 
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'images');
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + '-' + file.originalname);
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: (req, file, cb) => {
+//     cb(null, 'images');
+//   },
+//   filename: (req, file, cb) => {
+//     cb(null, Date.now() + '-' + file.originalname);
+//   },
+// });
 
 
-const upload = multer({ 
-  storage: storage,
-  limits:{fileSize: '1000000'} ,
-  // fileFilter: fileFilter 
-  fileFilter: (req,file,cb)=>{
-    const fileTypes = /jpeg|jpg|png|gif/
-    const mimeType =fileTypes.test(file.mimetype)
-    const extname = fileTypes.test(path.extname(file.originalname))
+// const upload = multer({ 
+//   storage: storage,
+//   limits:{fileSize: '1000000'} ,
+//   // fileFilter: fileFilter 
+//   fileFilter: (req,file,cb)=>{
+//     const fileTypes = /jpeg|jpg|png|gif/
+//     const mimeType =fileTypes.test(file.mimetype)
+//     const extname = fileTypes.test(path.extname(file.originalname))
 
-    if (mimeType && extname) {
-      return cb(null, true)
-    } cb('give proper file')
-  }
-}).single('image')
+//     if (mimeType && extname) {
+//       return cb(null, true)
+//     } cb('give proper file')
+//   }
+// }).single('image')
 
 
 // POST API
-router.post('/', upload, async (req, res) => {
+router.post('/', async(req, res) => {
   try {
-    const image = req.file.path;
+    // const image = req.file.path;
     
-    const { name,description,price,quantity, manufacturer,dateAdded,quantityInStock,sku,discount, new: isNew, rating, saleCount, category, tag, stock, } = req.body;
+    const { name,description,price,quantity, manufacturer,dateAdded,quantityInStock,sku,discount, new: isNew, rating,tag ,saleCount,stock, } = req.body;
     const newData = await productModel.create({ 
-      name,
-      description,
-      price,
-      quantity,
-      manufacturer,
-      dateAdded,
-      quantityInStock,
-      sku,
-      
-      discount,
-      new: isNew,
-      rating,
-      saleCount,
-      category: category.split(',').map((item) => item.trim()),
-      tag: tag.split(',').map((item) => item.trim()),
-      stock,
-      image, 
+      name,description,price,quantity, manufacturer,dateAdded,quantityInStock,sku,discount, new: isNew, rating, saleCount,stock,tag
     });
     res.status(200).json(newData)
 
@@ -70,7 +54,7 @@ router.post('/', upload, async (req, res) => {
 });
 
 // GET API
-router.get('/products', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const allProducts = await productModel.findAll();
     console.log(allProducts);
@@ -92,6 +76,7 @@ router.get('/:id', async (req, res) => {
         model: productImages,
         where: { productId: id }, 
         attributes: ['date', 'images'], // Specify the columns 
+      
       },
     });
 

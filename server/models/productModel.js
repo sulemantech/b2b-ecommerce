@@ -18,7 +18,7 @@ const productModel = sequelize.define('products', {
   },
   quantity: {
     type: DataTypes.INTEGER,
-    allowNull: true,
+    allowNull: false,
   },
   manufacturer: {
     type: DataTypes.STRING,
@@ -27,7 +27,7 @@ const productModel = sequelize.define('products', {
   dateAdded: {
     type: DataTypes.DATE,
     allowNull: false,
-    defaultValue: DataTypes.NOW,
+    defaultValue: Date.NOW,
   },
   discount: {
     type: DataTypes.INTEGER,
@@ -43,12 +43,9 @@ const productModel = sequelize.define('products', {
   },
   saleCount: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
   },
-  category: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
-    allowNull: false,
-  },
+
   tag: {
     type: DataTypes.ARRAY(DataTypes.STRING),
     allowNull: false,
@@ -59,16 +56,16 @@ const productModel = sequelize.define('products', {
   },
   quantityInStock: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,
   },
   sku: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
+    unique: false,
   },
-  image: {
-    type: DataTypes.STRING // Assuming you store the file path or URL
-  },
+  // image: {
+  //   type: DataTypes.STRING // Assuming you store the file path or URL
+  // },
 });
 
 // Retrieve a product with images

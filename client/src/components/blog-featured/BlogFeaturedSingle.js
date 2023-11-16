@@ -40,15 +40,15 @@ dispatch(fetchProducts(dispatch));
       <div className="blog-content-wrap">
         <div className="blog-content text-center">
           <h3>
-            <Link to={process.env.PUBLIC_URL + singlePost.url}>
+            {/* <Link to={process.env.PUBLIC_URL + singlePost.url}>
               {products[3].name}
-            </Link>
+            </Link> */}
           </h3>
           <span>
             By{" "}
-            <Link to={process.env.PUBLIC_URL + singlePost.authorUrl}>
+            {/* <Link to={process.env.PUBLIC_URL + singlePost.authorUrl}>
               {singlePost.author}
-            </Link>
+            </Link> */}
           </span>
         </div>
       </div>
