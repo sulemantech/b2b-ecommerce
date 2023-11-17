@@ -6,15 +6,24 @@ import { Link } from "react-router-dom";
 import { fetchProducts } from "../../store/slices/ProductsActions";
 
 const HeroSliderOneSingle = ({ data }) => {
-   const dispatch = useDispatch();
-  const product = useSelector((state) => state.product);
-  // console.log("prooo", product)
-  // Move this line outside of curly braces
-
+  const dispatch = useDispatch();
+const product = useSelector((state) => {
+  const products = state.product.products;
+  if (products.length > 0) {
+    const firstProduct = products[0];
+    if (firstProduct.productImages && firstProduct.productImages.length > 0) {
+      const firstProductImage = firstProduct.productImages[0];
+      if (firstProductImage.images && firstProductImage.images.length > 0) {
+        return firstProductImage.images[0];
+      }
+    }
+  }
+  return null; // or any default value you prefer
+});
   useEffect(() => {
     dispatch(fetchProducts(dispatch));
     
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="single-slider slider-height-1 bg-purple">
@@ -38,7 +47,7 @@ const HeroSliderOneSingle = ({ data }) => {
             <div className="slider-single-img slider-animated-1">
               <img
                 className="animated img-fluid"
-                src={product.products[0].productImages[0].images[0]}
+                src={product}
                 // src="/assets/products/sku_2/images-1700052313416-994921738.jpg"
 
                 alt=""
