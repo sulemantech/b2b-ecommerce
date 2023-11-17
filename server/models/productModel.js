@@ -18,7 +18,7 @@ const productModel = sequelize.define('products', {
   },
   quantity: {
     type: DataTypes.INTEGER,
-    //allowNull: true,
+    allowNull: false,
   },
   manufacturer: {
     type: DataTypes.STRING,
@@ -26,8 +26,8 @@ const productModel = sequelize.define('products', {
   },
   dateAdded: {
     type: DataTypes.DATE,
-    //allowNull: false,
-    defaultValue: DataTypes.NOW,
+    allowNull: false,
+    defaultValue: Date.NOW,
   },
   discount: {
     type: DataTypes.INTEGER,
@@ -43,12 +43,9 @@ const productModel = sequelize.define('products', {
   },
   saleCount: {
     type: DataTypes.INTEGER,
-    //allowNull: false,
-  },
-  category: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
     allowNull: true,
   },
+
   tag: {
     type: DataTypes.ARRAY(DataTypes.STRING),
     //allowNull: false,
@@ -59,12 +56,12 @@ const productModel = sequelize.define('products', {
   },
   quantityInStock: {
     type: DataTypes.INTEGER,
-    //allowNull: false,
+    allowNull: true,
   },
   sku: {
     type: DataTypes.STRING,
-    //allowNull: false,
-    unique: true,
+    allowNull: false,
+    unique: false,
   },
   // image: {
   //   type: DataTypes.STRING // Assuming you store the file path or URL

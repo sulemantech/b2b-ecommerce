@@ -47,12 +47,18 @@ const product = useSelector((state) => {
             <div className="slider-single-img slider-animated-1">
               <img
                 className="animated img-fluid"
+<<<<<<< HEAD
                 src={product}
                 // src="/assets/products/sku_2/images-1700052313416-994921738.jpg"
 
+=======
+                src={`http://localhost:5000/${product?.products[4]?.image}`}
+                
+>>>>>>> 0ba263e8f9cf02fa25b2cfd9bf8ad010ad96e167
                 alt=""
               />
-              {/* {console.log("productttttttt",)} */}
+              {/* product?.products[0]?.image */}
+               {console.log("Image Path:", `http://localhost:5000/${product?.products[4]?.image}`)}
             </div>
           </div>
         </div>
