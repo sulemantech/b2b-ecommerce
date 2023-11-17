@@ -16,7 +16,8 @@ const product = useSelector((state) => {
       if (firstProductImage.images && firstProductImage.images.length > 0) {
         return firstProductImage.images[0];
       }
-    }
+    }      
+    
   }
   return null; // or any default value you prefer
 });
