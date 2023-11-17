@@ -6,15 +6,15 @@ const productImages = require('./productImages');
 const productModel = sequelize.define('products', {
   name: {
     type: DataTypes.STRING,
-    allowNull: false,
+    //allowNull: false,
   },
   description: {
     type: DataTypes.TEXT,
-    allowNull: false,
+    //allowNull: false,
   },
   price: {
     type: DataTypes.FLOAT,
-    allowNull: false,
+    //allowNull: false,
   },
   quantity: {
     type: DataTypes.INTEGER,
@@ -22,7 +22,7 @@ const productModel = sequelize.define('products', {
   },
   manufacturer: {
     type: DataTypes.STRING,
-    allowNull: false,
+    //allowNull: false,
   },
   dateAdded: {
     type: DataTypes.DATE,
@@ -31,15 +31,15 @@ const productModel = sequelize.define('products', {
   },
   discount: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    //allowNull: false,
   },
   new: {
     type: DataTypes.BOOLEAN,
-    allowNull: false,
+   // allowNull: false,
   },
   rating: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+   // allowNull: false,
   },
   saleCount: {
     type: DataTypes.INTEGER,
@@ -48,11 +48,11 @@ const productModel = sequelize.define('products', {
 
   tag: {
     type: DataTypes.ARRAY(DataTypes.STRING),
-    allowNull: false,
+    //allowNull: false,
   },
   stock: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    //allowNull: false,
   },
   quantityInStock: {
     type: DataTypes.INTEGER,
@@ -88,3 +88,12 @@ sequelize.sync()
  
 
 module.exports = productModel;
+
+
+
+// INSERT INTO public.products (
+//   id, name, description, price, quantity, manufacturer, "dateAdded", discount, new, rating, "saleCount", category, tag, stock, "quantityInStock", sku, "createdAt", "updatedAt"
+// )
+// VALUES (
+//  5, 'Nike Air Zoom Pegasus', 'Lightweight running shoes for optimal comfort', 192, 50, 'luthfi', '2023-11-22', 10, TRUE, 4, 5, '{"Fashion"}', '{"new feature"}', 99, 99, 'FSH-FTW-ATH-RUN-001', NOW(), NOW()
+// );

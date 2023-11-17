@@ -21,7 +21,7 @@ dispatch(fetchProducts(dispatch));
         <div className="row">
           <div className="col-xl-6 col-lg-6 col-md-6 col-12 col-sm-6">
             <div className="slider-content slider-animated-1">
-              <h3 className="animated">{product?.products[4]?.name}</h3>
+              <h3 className="animated">{product?.products[1]?.name}</h3>
               <h1 className="animated">{data.subtitle}</h1>
               <div className="slider-btn btn-hover">
                 <Link
@@ -37,12 +37,12 @@ dispatch(fetchProducts(dispatch));
             <div className="slider-single-img slider-animated-1">
               <img
                 className="animated img-fluid"
-                src={`http://localhost:5000/${product?.products[4]?.image}`}
+                src={product.products[0].productImages[0].images[0]}
                 
                 alt=""
               />
               {/* product?.products[0]?.image */}
-               {console.log("Image Path:", `http://localhost:5000/${product?.products[4]?.image}`)}
+               {/* {console.log("Image Path:", `http://localhost:5000/${product?.products[4]?.image}`)} */}
             </div>
           </div>
         </div>
