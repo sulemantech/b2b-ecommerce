@@ -8,6 +8,7 @@ export const fetchProducts = () => async (dispatch) => {
     try {
       const productsData = await axios.get(`http://localhost:5000/api/` ).then((res) => {
         return res?.data;
+        debugger
       });
         
       dispatch(setProducts(productsData));

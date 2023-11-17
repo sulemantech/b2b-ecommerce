@@ -1,5 +1,5 @@
-import React, { Fragment } from "react"; 
-import { useDispatch, useSelector } from "react-redux";
+import React, { Fragment,useEffect } from "react"; 
+import { useSelector,useDispatch } from "react-redux";
 import { useParams, useLocation } from "react-router-dom";
 import SEO from "../../components/seo";
 import LayoutOne from "../../layouts/LayoutOne";
@@ -8,7 +8,7 @@ import RelatedProductSlider from "../../wrappers/product/RelatedProductSlider";
 import ProductDescriptionTab from "../../wrappers/product/ProductDescriptionTab";
 import ProductImageDescription from "../../wrappers/product/ProductImageDescription";
 import { fetchProducts } from "../../store/slices/ProductsActions";
-import { useEffect } from "react";
+
 
 const Product = () => {
   let { pathname } = useLocation();
@@ -49,13 +49,13 @@ const Product = () => {
         {/* product description tab */}
         <ProductDescriptionTab
           spaceBottomClass="pb-90"
-          productFullDesc={product.description}
+          productFullDesc={product.fullDescription}
         />
 
         {/* related product slider */}
         <RelatedProductSlider
           spaceBottomClass="pb-95"
-           category={product?.category[0]}
+          category={product.category[0]}
         />
       </LayoutOne>
     </Fragment>

@@ -1,5 +1,5 @@
 import { Fragment, useState, useEffect } from 'react';
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import Paginator from 'react-hooks-paginator';
 import { useLocation } from "react-router-dom"
 import { getSortedProducts } from '../../helpers/product';
@@ -8,7 +8,6 @@ import LayoutOne from '../../layouts/LayoutOne';
 import Breadcrumb from '../../wrappers/breadcrumb/Breadcrumb';
 import ShopTopbarFilter from '../../wrappers/product/ShopTopbarFilter';
 import ShopProducts from '../../wrappers/product/ShopProducts';
-import { fetchProducts } from '../../store/slices/ProductsActions';
 
 const ShopGridFilter = () => {
     const [layout, setLayout] = useState('grid three-column');
@@ -47,15 +46,6 @@ const ShopGridFilter = () => {
         setCurrentData(sortedProducts.slice(offset, offset + pageLimit));
     }, [offset, products, sortType, sortValue, filterSortType, filterSortValue ]);
 
-
-
-    
-  const dispatch=useDispatch();
-  debugger
-  
-    useEffect(()=>{
-  dispatch(fetchProducts(dispatch));
-        },[])
     return (
         <Fragment>
             <SEO

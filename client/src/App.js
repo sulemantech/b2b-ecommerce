@@ -1,8 +1,6 @@
-import { Suspense, lazy, useEffect } from "react";
+import { Suspense, lazy } from "react";
 import ScrollToTop from "./helpers/scroll-top";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { fetchProducts } from "./store/slices/ProductsActions";
-import { useDispatch, useSelector } from "react-redux";
 
 // home pages
 const HomeFashion = lazy(() => import("./pages/home/HomeFashion"));
@@ -107,14 +105,6 @@ const Checkout = lazy(() => import("./pages/other/Checkout"));
 const NotFound = lazy(() => import("./pages/other/NotFound"));
 
 const App = () => {
-
-const dispatch = useDispatch();
-  const product = useSelector((state) => state.product);
-
-  useEffect(() => {
-    // Use the fetchProducts action directly, no need to pass dispatch
-    dispatch(fetchProducts(dispatch));
-  },[dispatch]) 
   return (
       <Router>
         <ScrollToTop>
@@ -329,7 +319,7 @@ const dispatch = useDispatch();
               {/* Shop product pages */}
               <Route
                 path={process.env.PUBLIC_URL + "/product/:id"}
-                element={<Product product={product}/>}
+                element={<Product />}
               />
               <Route
                 path={process.env.PUBLIC_URL + "/product-tab-left/:id"}

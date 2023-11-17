@@ -1,6 +1,6 @@
 import { Fragment, useState, useEffect } from 'react';
 import Paginator from 'react-hooks-paginator';
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom"
 import { getSortedProducts } from '../../helpers/product';
 import SEO from "../../components/seo";
@@ -10,13 +10,6 @@ import ShopSidebar from '../../wrappers/product/ShopSidebar';
 import ShopTopbar from '../../wrappers/product/ShopTopbar';
 import ShopProducts from '../../wrappers/product/ShopProducts';
 
-///////////////////////////
-import PropTypes from "prop-types";
-import { Link } from "react-router-dom";
-import { fetchProducts } from "../../store/slices/ProductsActions";
-
-
-///////////////////////////////
 const ShopGridStandard = () => {
     const [layout, setLayout] = useState('grid three-column');
     const [sortType, setSortType] = useState('');
@@ -27,16 +20,7 @@ const ShopGridStandard = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [currentData, setCurrentData] = useState([]);
     const [sortedProducts, setSortedProducts] = useState([]);
-    // const { products } = useSelector((state) => state.product.products[0]);
-
-
-    const dispatch = useDispatch();
-    const products = useSelector(state => state.product.products);
-    debugger
-    { console.log("product Path:", products) }
-    useEffect(() => {
-        dispatch(fetchProducts(dispatch));
-    }, [])
+    const { products } = useSelector((state) => state.product);
 
     const pageLimit = 15;
     let { pathname } = useLocation();
@@ -56,15 +40,13 @@ const ShopGridStandard = () => {
     }
 
     useEffect(() => {
-        console.log("Product passed to getSortedProducts:", products);
-debugger
         let sortedProducts = getSortedProducts(products, sortType, sortValue);
         const filterSortedProducts = getSortedProducts(sortedProducts, filterSortType, filterSortValue);
         sortedProducts = filterSortedProducts;
         setSortedProducts(sortedProducts);
         setCurrentData(sortedProducts.slice(offset, offset + pageLimit));
-    }, [offset, products, sortType, sortValue, filterSortType, filterSortValue]);
-    debugger
+    }, [offset, products, sortType, sortValue, filterSortType, filterSortValue ]);
+
     return (
         <Fragment>
             <SEO
@@ -74,19 +56,19 @@ debugger
 
             <LayoutOne headerTop="visible">
                 {/* breadcrumb */}
-                {/* <Breadcrumb 
+                <Breadcrumb 
                     pages={[
                         {label: "Home", path: process.env.PUBLIC_URL + "/" },
                         {label: "Shop", path: process.env.PUBLIC_URL + pathname }
                     ]} 
-                /> */}
+                />
 
                 <div className="shop-area pt-95 pb-100">
                     <div className="container">
                         <div className="row">
                             <div className="col-lg-3 order-2 order-lg-1">
                                 {/* shop sidebar */}
-                                <ShopSidebar products={products} getSortParams={getSortParams} sideSpaceClass="mr-30" />
+                                <ShopSidebar products={products} getSortParams={getSortParams} sideSpaceClass="mr-30"/>
                             </div>
                             <div className="col-lg-9 order-1 order-lg-2">
                                 {/* shop topbar default */}

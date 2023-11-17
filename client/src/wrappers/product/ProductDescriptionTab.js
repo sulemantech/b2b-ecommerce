@@ -79,7 +79,7 @@ const ProductDescriptionTab = ({ spaceBottomClass, productFullDesc }) => {
                           </div>
                           <div className="review-bottom">
                             <p>
-                              sardar saab ipsum primis aucibus orci
+                              Vestibulum ante ipsum primis aucibus orci
                               luctustrices posuere cubilia Curae Suspendisse
                               viverra ed viverra. Mauris ullarper euismod
                               vehicula. Phasellus quam nisi, congue id nulla.

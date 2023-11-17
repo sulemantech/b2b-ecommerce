@@ -6,6 +6,8 @@ const {Op}= require('sequelize')
 const path = require('path');
 const productModel = require('../models/productModel');
 const productImages= require('../models/productImages');
+
+
 // const { log } = require('console');
 
 
@@ -36,12 +38,14 @@ const productImages= require('../models/productImages');
 
 
 // POST API
+
+
 router.post('/', async(req, res) => {
   try {
     // const image = req.file.path;
     // upload,
     const { name,description,price,quantity, manufacturer,dateAdded,quantityInStock,sku,discount, new: isNew, rating, saleCount, category, tag, stock, } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
     debugger
     const newData = await productModel.create({ 
       name,
@@ -80,7 +84,7 @@ router.get('/', async (req, res) => {
         attributes: ['date', 'images'],
       },
     });
-    console.log(allProducts);
+    // console.log(allProducts);
     res.status(200).json(allProducts);
   } catch (error) {
     console.error('Error:', error.message);
