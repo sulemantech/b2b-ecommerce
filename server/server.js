@@ -1,8 +1,8 @@
 const express = require('express');
-// const bodyParser = require('body-parser');
 const cors =require('cors');
 const productRoutes = require('./routes/productRoutes');
-const productImages =require('./routes/productImages')
+const productImages =require('./routes/productImages');
+const categoryRoute= require('./routes/categoryRoute')
 
 
 const app = express();
@@ -17,15 +17,13 @@ app.get('/', (req,res)=>{
 
 app.use('/api', productRoutes);
 
-app.use('/products', productRoutes)
-// app.use('/images', express.static('./images'))
-// app.use('/imagess', express.static('./imagess'))
 
 
-//productid image getting
-// app.use('/product',productRoutes)
 //productImagePost
 app.use('/productImages', productImages)
+// app.use('/categories', category_route)
+
+app.use('/categories', categoryRoute)
 
 
 // Start the server
