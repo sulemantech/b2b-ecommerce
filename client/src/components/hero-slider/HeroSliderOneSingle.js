@@ -14,7 +14,7 @@ const product = useSelector((state) => {
     if (firstProduct.productImages && firstProduct.productImages.length > 0) {
       const firstProductImage = firstProduct.productImages[0];
       if (firstProductImage.images && firstProductImage.images.length > 0) {
-        return firstProductImage.images[0];
+        return firstProductImage.images[1];
       }
     }      
     

@@ -6,6 +6,8 @@ const {Op}= require('sequelize')
 const path = require('path');
 const productModel = require('../models/productModel');
 const productImages= require('../models/productImages');
+const categoryModel=require('../models/categoryModel');
+const productCategoriesModel = require('../models/productCategoriesModel');
 
 
 // const { log } = require('console');
@@ -44,10 +46,11 @@ router.post('/', async(req, res) => {
   try {
     // const image = req.file.path;
     // upload,
-    const { name,description,price,quantity, manufacturer,dateAdded,quantityInStock,sku,discount, new: isNew, rating, saleCount, category, tag, stock, } = req.body;
+    const { id,name,description,price,quantity, manufacturer,dateAdded,quantityInStock,sku,discount, new: isNew, rating, saleCount,  category_id, tag, stock, } = req.body;
     // console.log(req.body);
     debugger
     const newData = await productModel.create({ 
+      id,
       name,
       description,
       price,
@@ -60,13 +63,21 @@ router.post('/', async(req, res) => {
       new: isNew,
       rating,
       saleCount,
-      category,
+      category_id,
        tag,
       stock, 
     });
-    res.status(200).json(newData)
+    const category = await categoryModel.findByPk(category_id);
 
-    // res.status(201).json(newData);
+    if (category) {
+      // Associate the product with the category
+      await newData.addCategory(category, { through: { id: category_id } });
+      // Assuming that you have an 'id' field in your through model (productCategoriesModel)
+      res.status(201).json({ message: 'Product created and associated with category.' });
+    } else {
+      res.status(404).json({ message: 'Category not found.' });
+    }
+    res.status(200).json(newData)
     
   } catch (error) {
     console.error('Error:', error);
