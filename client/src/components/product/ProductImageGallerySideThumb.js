@@ -8,14 +8,22 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
 import Swiper, { SwiperSlide } from "../../components/swiper";
 
+// const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
+//   const [thumbsSwiper, setThumbsSwiper] = useState(null);
+//   const [index, setIndex] = useState(-1);
+//   const slides = product?.image.map((img, i) => ({
+//       src: process.env.PUBLIC_URL + img,
+//       key: i,
+//   }));
 const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [index, setIndex] = useState(-1);
-  const slides = product?.image.map((img, i) => ({
-      src: process.env.PUBLIC_URL + img,
-      key: i,
-  }));
 
+  const slides = product?.productImages[0].images.map((img, i) => ({
+    src: process.env.PUBLIC_URL + img,
+    key: i,
+}));
+debugger
   // swiper slider settings
   const gallerySwiperParams = {
     spaceBetween: 10,
@@ -81,22 +89,25 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
             ) : (
               ""
             )}
-            {product?.image?.length ? (
+            {console.log("ppppppppppppprrrrrrrrrrrrrrrrr",product)}
+            {product?.productImages?.length ? (
               <Swiper options={gallerySwiperParams}>
-                {product?.image.map((single, key) => (
-                  <SwiperSlide key={key}>
-                    <button className="lightgallery-button" onClick={() => setIndex(key)}>
-                      <i className="pe-7s-expand1"></i>
-                    </button>
-                    <div className="single-image">
-                      <img
-                        src={process.env.PUBLIC_URL + single}
-                        className="img-fluid"
-                        alt=""
-                      />
-                    </div>
-                  </SwiperSlide>
-                ))}
+                {product?.productImages.map((imageSet, key) => (
+  <SwiperSlide key={key}>
+    <button className="lightgallery-button" onClick={() => setIndex(key)}>
+      <i className="pe-7s-expand1"></i>
+    </button>
+    <div className="single-image">
+      <img
+        src={process.env.PUBLIC_URL + imageSet.images}
+        className="img-fluid"
+        alt=""
+      />
+    </div>
+    
+  </SwiperSlide>
+))}
+                
                 <AnotherLightbox
                     open={index >= 0}
                     index={index}
@@ -116,7 +127,7 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
           <div className="product-small-image-wrapper product-small-image-wrapper--side-thumb">
             {product?.image?.length ? (
               <Swiper options={thumbnailSwiperParams}>
-                {product.image.map((single, key) => (
+                {product.productImage[0].images[0].map((single, key) => (
                   <SwiperSlide key={key}>
                     <div className="single-image">
                       <img

@@ -16,11 +16,12 @@ const ProductImageDescription = ({ spaceTopClass, spaceBottomClass, galleryType,
   const compareItem = compareItems.find(item => item.id === product.id);
 
   const discountedPrice = getDiscountPrice(product.price, product.discount);
+ 
   const finalProductPrice = +(product.price * currency.currencyRate).toFixed(2);
   const finalDiscountedPrice = +(
     discountedPrice * currency.currencyRate
   ).toFixed(2);
-
+  debugger
   return (
     <div className={clsx("shop-area", spaceTopClass, spaceBottomClass)}>
       <div className="container">
@@ -40,6 +41,7 @@ const ProductImageDescription = ({ spaceTopClass, spaceBottomClass, galleryType,
               <ProductImageGallery product={product} />
             )}
           </div>
+          
           <div className="col-lg-6 col-md-6">
             {/* product description info */}
             <ProductDescriptionInfo

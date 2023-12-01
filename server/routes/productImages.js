@@ -6,7 +6,7 @@ const productImages = require('../models/productImages');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'images');
+    cb(null, '../../b2b-ecommerce/client/public/assets/products/sku_4');
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -45,7 +45,7 @@ router.post('/', upload, async (req, res) => {
 
 
 //getimages
-router.get('/', async (req, res) => {
+router.get('/get', async (req, res) => {
   try {
     const productIma = await productImages.findAll();
     res.json(productIma);

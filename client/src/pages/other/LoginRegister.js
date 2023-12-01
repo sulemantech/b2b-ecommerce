@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment,useState } from "react";
 import { Link, useLocation } from "react-router-dom"; 
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
@@ -9,6 +9,58 @@ import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 const LoginRegister = () => {
   let { pathname } = useLocation();
 
+  ///////////////////////
+  const [loginData, setLoginData] = useState({
+    name: "",
+    password: "",
+  });
+
+  const [isLoggedIn, setLoggedIn] = useState(false);
+
+  // Update login form data on input change
+  const handleInputChange = (e) => {
+    setLoginData({
+      ...loginData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // Handle form submission
+  const handleLoginSubmit = async (e) => {
+    // e.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost:5000/api/signin/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        
+        body: JSON.stringify(loginData),
+        
+      });
+      console.log("llllllllllllll",loginData)
+      console.log("response",response);
+      debugger
+
+      if (response.ok) {
+        // Successful login
+        const data = await response.json();
+        // Handle the authentication data as needed
+        setLoggedIn(true);
+        console.log("on data true",data)
+      } else {
+        // Failed login
+        setLoggedIn(false);
+        console.log("on data false")
+      }
+    } catch (error) {
+      console.error("Error during login:", error);
+      setLoggedIn(false);
+    }
+  };
+
+//////////////////////////
   return (
     <Fragment>
       <SEO
@@ -45,22 +97,26 @@ const LoginRegister = () => {
                       <Tab.Pane eventKey="login">
                         <div className="login-form-container">
                           <div className="login-register-form">
-                            <form>
-                              <input
-                                type="text"
-                                name="user-name"
-                                placeholder="Username"
-                              />
-                              <input
-                                type="password"
-                                name="user-password"
-                                placeholder="Password"
-                              />
+                            <form onSubmit={handleLoginSubmit}>
+                            <input
+                                  type="text"
+                                  name="name" // Change to "username" for consistency
+                                  placeholder="Username"
+                                  value={loginData.name}
+                                  onChange={handleInputChange}
+                                />
+                                <input
+                                  type="password"
+                                  name="password"
+                                  placeholder="Password"
+                                  value={loginData.password}
+                                  onChange={handleInputChange}
+                                />
                               <div className="button-box">
                                 <div className="login-toggle-btn">
                                   <input type="checkbox" />
                                   <label className="ml-10">Remember me</label>
-                                  <Link to={process.env.PUBLIC_URL + "/"}>
+                                  <Link to={process.env.PUBLIC_URL + "/product-tab-right"}>
                                     Forgot Password?
                                   </Link>
                                 </div>
@@ -80,11 +136,13 @@ const LoginRegister = () => {
                                 type="text"
                                 name="user-name"
                                 placeholder="Username"
+                                
                               />
                               <input
                                 type="password"
                                 name="user-password"
                                 placeholder="Password"
+                                
                               />
                               <input
                                 name="user-email"

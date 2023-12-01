@@ -3,6 +3,8 @@ import clsx from "clsx";
 import ProductgridList from "./ProductgridList";
 
 const ShopProducts = ({ products, layout }) => {
+  
+
   return (
     <div className="shop-bottom-area mt-35">
       <div className={clsx("row", layout)}>

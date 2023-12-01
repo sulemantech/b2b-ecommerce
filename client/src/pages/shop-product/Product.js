@@ -57,6 +57,7 @@ const Product = () => {
           spaceBottomClass="pb-95"
           category={product.category[0]}
         />
+
       </LayoutOne>
     </Fragment>
   );

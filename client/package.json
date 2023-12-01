@@ -30,6 +30,7 @@
     "react-visibility-sensor": "^5.1.1",
     "redux": "^4.2.0",
     "redux-persist": "^6.0.0",
+    "redux-thunk": "^2.4.2",
     "swiper": "^8.4.4",
     "uuid": "^9.0.0",
     "yet-another-react-lightbox": "^2.2.0"

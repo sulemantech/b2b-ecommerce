@@ -1,22 +1,47 @@
 // routes/categoryRoutes.js
 const express = require('express');
-const categoryModel = require('../models/categoryModel'); // Make sure to import your Category model
+const categoryModel = require('../models/categoryModel');
+const productModel = require('../models/productModel');
+const productCategoriesModel = require('../models/productCategoriesModel'); // Make sure to import your Category model
 
 const router = express.Router();
 
-// Get all categories
-router.get('/', async (req, res) => {
+
+//get all category list///////////////////////////////////////////////////////
+router.get('/all', async (req, res) => {
   try {
-    
-    const categories = await categoryModel.findAll();
-    res.status(200).json(categories);
+    const categoryList = await categoryModel.findAll();
+    res.status(200).json(categoryList);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error retrieving categories' });
+    console.error('Error:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
-// Create category
+
+//get category by ID///////////////////////////////////////////////////////
+router.get('/:categoryId', async (req, res) => {
+  try {
+    const categoryId = req.params.categoryId;
+
+    // Find the category by ID
+    const category = await categoryModel.findByPk(categoryId);
+
+    if (!category) {
+      return res.status(404).json({ message: 'Category not found' });
+    }
+
+    // Retrieve products associated with the category
+    const products = await category.getProducts();
+
+    res.status(200).json(products);
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// Create category///////////////////////////////////////////////////////
 router.post('/', async (req, res) => {
   try {
     const {name}=req.body

@@ -71,6 +71,7 @@
     "my_account": "My Account",
     "login_register": "Login / Register",
     "about_us": "About Us",
+    "About": "About",
     "contact_us": "Contact Us",
     "404_page": "404 Page",
     "blog": "Blog",
@@ -79,5 +80,14 @@
     "blog_right_sidebar": "Blog Right Sidebar",
     "blog_details_standard": "Blog Details Standard",
     "blog_details_video": "Blog Details Video",
-    "blog_details_slider": "Blog Details Slider"
+    "blog_details_slider": "Blog Details Slider",
+    "category": "Category",
+    "electronics": "Electronics",
+    "home and kitchen": "Home and Kitchen",
+    "fasion": "Fasion"
+
+
+    
+
+    
 }  

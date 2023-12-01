@@ -71,6 +71,7 @@
     "my_account": "Mein Konto",
     "login_register": "Anmeldung Registrieren",
     "about_us": "Über uns",
+    "about":"über",
     "contact_us": "Kontaktiere uns",
     "404_page": "404 Seite",
     "blog": "Blog",
@@ -79,5 +80,9 @@
     "blog_right_sidebar": "Blog rechte Seitenleiste",
     "blog_details_standard": "Blog Details Standard",
     "blog_details_video": "Blog Details Video",
-    "blog_details_slider": "Blog Details Schieberegler"
+    "blog_details_slider": "Blog Details Schieberegler",
+    "category" : "Kategorie",
+    "electronics": "Elektronik",
+   "home and kitchen":"Haushalt und Küche",
+    "fashion" : "Mode"
 }  
