@@ -67,6 +67,7 @@ router.post('/', async(req, res) => {
        tag,
       stock, 
     });
+    
     const category = await categoryModel.findByPk(category_id);
 
     if (category) {
