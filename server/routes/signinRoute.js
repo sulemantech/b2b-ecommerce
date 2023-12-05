@@ -1,7 +1,8 @@
 const jwt = require('jsonwebtoken');
+const express = require('express')
 const { Sequelize } = require('sequelize');
 const registerationModel = require('../models/registerationModel');
-const router = require('./productRoutes');
+const router = express.Router();
 const bcrypt = require('bcrypt')
 
 
@@ -11,17 +12,18 @@ const bcrypt = require('bcrypt')
 
 // Login endpoint
 router.post('/login', async (req, res) => {
-    const { username, password } = req.body;
+    const { firstname, password } = req.body;
   
     try {
       const user = await registerationModel.findOne({
         where: {
-          username,
+          firstname,
         },
       });
+      // console.log("llllllllllllllllllllllll",firstname);
   
       if (user && bcrypt.compareSync(password, user.password)) {
-        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+        const token = jwt.sign({ id: user}, process.env.JWT_SECRET, {
           expiresIn: 86400,
         });
   
@@ -32,7 +34,7 @@ router.post('/login', async (req, res) => {
       }
     } catch (error) {
       console.error(error);
-      res.status(500).send('Internal Server Error');
+      res.status(500).send('Internal Server Error in login');
     }
   });
   
@@ -56,19 +58,29 @@ router.post('/login', async (req, res) => {
 // });
 
 router.post('/register', async (req, res) => {
-    const { username, email, password } = req.body;
+    const { firstname,lastname,address, businessName,contactNumber, email, password } = req.body;
     const passwordhash=await bcrypt.hash(password,10);
     try {
       const newUser = await registerationModel.create({
-        username,
-        email,
-        password: passwordhash,
+        firstname,lastname,address, businessName,contactNumber, email, password: passwordhash,
       });
       res.status(201).json(newUser);
     } catch (error) {
       console.error(error);
-      res.status(500).json({ error: 'Internal Server Error in signin route' });
+      res.status(500).json({ error: 'Internal Server Error in register route' });
     }
   });
+
+
+  // GET API    ///////////////////////////////////////////////////////////////////
+router.get('/', async (req, res) => {
+  try {
+    const allusers = await registerationModel.findAll();
+    res.status(200).json(allusers);
+  } catch (error) {
+    console.error('Error:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 module.exports = router;

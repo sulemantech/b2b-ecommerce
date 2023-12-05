@@ -1,66 +1,114 @@
-import React, { Fragment,useState } from "react";
-import { Link, useLocation } from "react-router-dom"; 
+import React, { Fragment } from "react";
+import { Link, json, useLocation } from "react-router-dom"; 
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import SEO from "../../components/seo";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
+import { useState,useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 
 const LoginRegister = () => {
+  const [errors, setErrors] = useState();
+  const [values,setvaluse]=useState({
+    
+    firstname:"",
+    lastname:"",
+    email:"",
+    password:"",
+    address:"",
+    contactNumber:"",
+    businessName:""
+
+  });
+  const navigate = useNavigate();
+  const SubmitRegistration=(e)=>{
+     e.preventDefault();
+    fetch("http://localhost:5000/api/signin/register",{
+      method:"post",
+      headers:{
+        accept:"application/json",
+        "content-type":"application/json",
+      },
+      body:JSON.stringify(values),
+    })
+    .then((res)=>{
+      res.json()
+     .then((result)=>{
+      console.log(result);
+      setvaluse({
+    firstname:"",
+    lastname:"",
+    email:"",
+    password:"",
+    address:"",
+    contactNumber:"",
+    businessName:""
+
+
+      });
+
+     }) ;
+      // window.location.reload();
+
+    })
+      .catch((err)=>console.log(err));
+
+  };
+
+
+const SubmitLogin=()=>{
+  // e.preventDefault();
+  if (!values.firstname.trim()) {
+    setErrors({ ...errors, firstname: "Firstname is required" });
+    return;
+  }
+
+  if (!values.password.trim()) {
+    setErrors({ ...errors, password: "Password is required" });
+    return;
+  }
+  fetch("http://localhost:5000/api/signin/login",{
+    method:"post",
+    headers:{
+      accept:"application/json",
+      "content-type":"application/json",
+    },
+    body:JSON.stringify(values),
+  })
+  .then((res)=>{
+    res.json()
+   .then((result)=>{
+    console.log(result.token);
+    console.log("loginnnnnnnn",result);
+    if (result.token) {
+      navigate('/');
+  }
+  else{
+    console.log(result.message);
+  }
+    setvaluse({
+  firstname:"",
+  password:"",
+    });
+
+   }) ;
+    // window.location.reload();
+
+  })
+    .catch((err)=>console.log(err));
+
+}
+useEffect(() => {
+  SubmitLogin();
+  SubmitRegistration()
+
+}, []);
+
+
+
   let { pathname } = useLocation();
 
-  ///////////////////////
-  const [loginData, setLoginData] = useState({
-    name: "",
-    password: "",
-  });
-
-  const [isLoggedIn, setLoggedIn] = useState(false);
-
-  // Update login form data on input change
-  const handleInputChange = (e) => {
-    setLoginData({
-      ...loginData,
-      [e.target.name]: e.target.value,
-    });
-  };
-
-  // Handle form submission
-  const handleLoginSubmit = async (e) => {
-    // e.preventDefault();
-
-    try {
-      const response = await fetch("http://localhost:5000/api/signin/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        
-        body: JSON.stringify(loginData),
-        
-      });
-      console.log("llllllllllllll",loginData)
-      console.log("response",response);
-      debugger
-
-      if (response.ok) {
-        // Successful login
-        const data = await response.json();
-        // Handle the authentication data as needed
-        setLoggedIn(true);
-        console.log("on data true",data)
-      } else {
-        // Failed login
-        setLoggedIn(false);
-        console.log("on data false")
-      }
-    } catch (error) {
-      console.error("Error during login:", error);
-      setLoggedIn(false);
-    }
-  };
-
-//////////////////////////
   return (
     <Fragment>
       <SEO
@@ -97,32 +145,38 @@ const LoginRegister = () => {
                       <Tab.Pane eventKey="login">
                         <div className="login-form-container">
                           <div className="login-register-form">
-                            <form onSubmit={handleLoginSubmit}>
-                            <input
-                                  type="text"
-                                  name="name" // Change to "username" for consistency
-                                  placeholder="Username"
-                                  value={loginData.name}
-                                  onChange={handleInputChange}
-                                />
-                                <input
-                                  type="password"
-                                  name="password"
-                                  placeholder="Password"
-                                  value={loginData.password}
-                                  onChange={handleInputChange}
-                                />
+                            <form className="form" onSubmit={SubmitLogin}>
+                              <input
+                                type="text"
+                                placeholder="firstname"
+                                onChange={(e)=>setvaluse({...values,firstname:e.target.value})}
+                                name={values.firstname}
+                              />
+                              <input
+                                type="password"
+                                placeholder="Password"
+                                onChange={(e)=>setvaluse({...values,password:e.target.value})}
+                                name={values.password}
+                                
+                              />
                               <div className="button-box">
                                 <div className="login-toggle-btn">
                                   <input type="checkbox" />
                                   <label className="ml-10">Remember me</label>
-                                  <Link to={process.env.PUBLIC_URL + "/product-tab-right"}>
+                                  <Link to={process.env.PUBLIC_URL + "/"}>
                                     Forgot Password?
                                   </Link>
                                 </div>
-                                <button type="submit">
+                                <input
+                                type="button"
+                                className="btn btn-success"
+                                 onClick={SubmitLogin}
+                                value="Login"
+                                />
+                                
+                                {/* <button type="submit">
                                   <span>Login</span>
-                                </button>
+                                </button> */}
                               </div>
                             </form>
                           </div>
@@ -131,29 +185,65 @@ const LoginRegister = () => {
                       <Tab.Pane eventKey="register">
                         <div className="login-form-container">
                           <div className="login-register-form">
-                            <form>
+                            <form   className="form" onSubmit={SubmitRegistration}>
                               <input
                                 type="text"
-                                name="user-name"
-                                placeholder="Username"
+                                placeholder="firstname"
+                                onChange={(e) =>
+                                  setvaluse({ ...values, firstname : e.target.value })
+                                }
+                                name={values.firstname}
+                              />
+                               <input
+                                type="text"
+                                placeholder="lastname"
+                                onChange={(e)=>setvaluse({...values,lastname:e.target.value})}
+                                name={values.lastname}
                                 
                               />
-                              <input
-                                type="password"
-                                name="user-password"
-                                placeholder="Password"
-                                
-                              />
-                              <input
-                                name="user-email"
-                                placeholder="Email"
+                               <input
                                 type="email"
+                                placeholder="email"
+                                onChange={(e)=>setvaluse({...values,email:e.target.value})}
+                                name={values.email}
                               />
-                              <div className="button-box">
+                               <input
+                                type="password"
+                                placeholder="password"
+                                onChange={(e)=>setvaluse({...values,password:e.target.value})}
+                                name={values.password}
+                              />
+                               <input
+                                type="text"
+                                placeholder="address"
+                                 onChange={(e)=>setvaluse({...values,address:e.target.value})}
+                                name={values.address}
+                              />
+                              <input
+                                type="number"
+                                placeholder="contact"
+                                onChange={(e)=>setvaluse({...values,contactNumber:e.target.value})}
+                                name={values.contactNumber}
+                              />
+                              <input
+                               type="text"
+                                placeholder="Bussinessname"
+                                 onChange={(e)=>setvaluse({...values,businessName:e.target.value})}
+                                name={values.businessName}
+                              
+                              />
+                                <input
+                                type="button"
+                                className="btn btn-success"
+                                 onClick={SubmitRegistration}
+                                value="Register"
+                                />
+                              {/* <div className="button-box">
                                 <button type="submit">
                                   <span>Register</span>
+                                  
                                 </button>
-                              </div>
+                              </div> */}
                             </form>
                           </div>
                         </div>

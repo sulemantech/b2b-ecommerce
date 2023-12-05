@@ -28,7 +28,7 @@ const ProductGridListSingle = ({
   ).toFixed(2);
 
   const dispatch = useDispatch();
-console.log("proooooooooooooooooooo",product?.productImages[0]?.images[0]);
+// console.log("proooooooooooooooooooo",product?.productImages[0]?.images[0]);
   return (
     <Fragment>
       <div className={clsx("product-wrap", spaceBottomClass)}>

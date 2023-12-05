@@ -28,7 +28,7 @@ const ShopGridStandard = () => {
     const { products } = useSelector((state) => state.product);
     const pageLimit = 15;
     let { pathname } = useLocation();
-
+    console.log("PPPPPPPPPPPPPPPPPPproductsSGS",products);
     // console.log(" products in shop grid standord",products);  
     
     const [selectedCategories, setSelectedCategories] = useState([]);
@@ -71,7 +71,7 @@ const ShopGridStandard = () => {
         fetch(`http://localhost:5000/api/products/${selectedCategories.join(',')}`) 
         .then((response) => response.json())
         .then((data) => {
-          console.log('Products from API in SGS:', data);    
+          console.log('Products from API in SGS:11111', data);    
           setCurrentData(data);
           
         })
@@ -111,8 +111,8 @@ const ShopGridStandard = () => {
                                  productCount={products.length}
                                   sortedProductCount={currentData.length}
                                    />
-
-                                {/* shop page content default */}
+{console.log("CURRENTDATA.....",currentData)
+}                                {/* shop page content default */}
                                 <ShopProducts layout={layout} products={currentData} />
 
                                 {/* shop product pagination */}

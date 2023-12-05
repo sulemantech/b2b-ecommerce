@@ -6,6 +6,11 @@ const categoryRoute= require('./routes/categoryRoute')
 const supplierRoute= require('./routes/supplierRoute')
 const cookieParser = require('cookie-parser');
 const signinRoute = require('./routes/signinRoute')
+const stateRoute= require('./routes/stateRoute')
+const citiesRoute=require('./routes/citiesRoute')
+const addressRoute =require('./routes/addressRoute');
+// const orderRoute=require('./routes/orderRoute')
+const orderRoute=require('./routes/orderRoute')
 
 require('dotenv').config();
 
@@ -20,7 +25,7 @@ app.get('/', (req,res)=>{
 })
 
 //products
-app.use('/api/products', productRoutes);
+app.use('/api/products/', productRoutes);
 
 //supplier
 app.use('/api/suppliers', supplierRoute);
@@ -33,6 +38,18 @@ app.use('/productImages', productImages)
 // app.use('/categories', category_route)
 
 app.use('/api/categories', categoryRoute)
+
+//cities
+app.use('/api/cities',citiesRoute)
+
+//state
+app.use('/api/state',stateRoute)
+
+//addresses
+app.use('/api/address',addressRoute)
+
+//order
+app.use('/api/order',orderRoute)
 
 
 // Start the server
