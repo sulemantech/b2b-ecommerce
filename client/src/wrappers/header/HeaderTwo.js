@@ -71,7 +71,7 @@ const HeaderTwo = () => {
           </div>
           {/* mobile menu */}
           <MobileMenu />
-        </div>
+        </div> 
       </div>
     </header>
   );

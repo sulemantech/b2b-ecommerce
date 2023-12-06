@@ -41,6 +41,7 @@ const ShopListFullWidth = ({location}) => {
 
     useEffect(() => {
         let sortedProducts = getSortedProducts(products, sortType, sortValue);
+        console.log(products, sortType, sortValue                  ,"--------------------------------------------------------------->")
         const filterSortedProducts = getSortedProducts(sortedProducts, filterSortType, filterSortValue);
         sortedProducts = filterSortedProducts;
         setSortedProducts(sortedProducts);

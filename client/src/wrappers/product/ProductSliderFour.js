@@ -20,6 +20,7 @@ const ProductSliderFour = ({ spaceBottomClass, category }) => {
             limit={6}
             type="new"
           />
+          
         </div>
       </div>
     </div>

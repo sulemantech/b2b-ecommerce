@@ -11,12 +11,27 @@ import ShopCategories from "../../components/product/ShopCategories";
 import ShopColor from "../../components/product/ShopColor";
 import ShopSize from "../../components/product/ShopSize";
 import ShopTag from "../../components/product/ShopTag";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchCategory } from "../../store/slices/CategoryAction";
 
-const ShopSidebar = ({ products, getSortParams, sideSpaceClass }) => {
-  const uniqueCategories = getIndividualCategories(products);
+const ShopSidebar = ({ products, getSortParams, sideSpaceClass, 
+  selectedCategories={selectedCategories} }) => {
+
+
   const uniqueColors = getIndividualColors(products);
   const uniqueSizes = getProductsIndividualSizes(products);
   const uniqueTags = getIndividualTags(products);
+  const dispatch=useDispatch();
+  const uniqueCategories=useSelector((state)=>state.category);
+  // const uniqueCategories = getIndividualCategories(uniqueCategory?.categories);
+
+  useEffect(()=>{
+dispatch(fetchCategory())
+  },[dispatch])
+
+
+  // console.log("uniqueCategories  ShopSidebar",uniqueCategories.Categories);
 
   return (
     <div className={clsx("sidebar-style", sideSpaceClass)}>
@@ -25,6 +40,7 @@ const ShopSidebar = ({ products, getSortParams, sideSpaceClass }) => {
 
       {/* filter by categories */}
       <ShopCategories
+      selectedCategories={selectedCategories}
         categories={uniqueCategories}
         getSortParams={getSortParams}
       />

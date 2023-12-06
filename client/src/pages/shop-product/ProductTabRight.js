@@ -11,8 +11,10 @@ import ProductImageDescription from "../../wrappers/product/ProductImageDescript
 const ProductTabRight = () => {
   let { pathname } = useLocation();
   let { id } = useParams();
+  const productId = parseInt(id, 10)
   const { products } = useSelector((state) => state.product);
-  const product = products.find(product => product.id === id);
+  const product = products.find(product => product.id === productId);
+  debugger
 
   return (
     <Fragment>
@@ -41,13 +43,13 @@ const ProductTabRight = () => {
         {/* product description tab */}
         <ProductDescriptionTab
           spaceBottomClass="pb-90"
-          productFullDesc={product.fullDescription}
+          productFullDesc={product.description}
         />
 
         {/* related product slider */}
         <RelatedProductSlider
           spaceBottomClass="pb-95"
-          category={product.category[0]}
+          // category={product.category[0]}
         />
       </LayoutOne>
     </Fragment>

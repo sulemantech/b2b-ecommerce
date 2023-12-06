@@ -79,5 +79,10 @@
     "blog_right_sidebar": "Blog Barre latérale droite",
     "blog_details_standard": "Détails du blog Standard",
     "blog_details_video": "Blog Détails Vidéo",
-    "blog_details_slider": "Détails du blog"
-}  
+    "blog_details_slider": "Détails du blog",
+    "category":"catégorie",
+    "About":"À propos de",
+    "electronics":"électronique",
+    "home and kitchen":"maison et cuisine",
+    "fasion":"mode"
+}

@@ -4,15 +4,17 @@ import axios from "axios";
 
 
 
-export const fetchProducts = () => async (dispatch) => {
+export const fetchProducts = (id) => async (dispatch) => {
     try {
-      const productsData = await axios.get(`http://localhost:5000/api/` ).then((res) => {
+      const productsData = await axios.get(`http://localhost:5000/api/products/all` ).then((res) => {
+        console.log("rrrrrrrrrrrrrrrrrrrrrrdata",res.data);
         return res?.data;
         debugger
       });
-        
+      console.log("rrrrrrrrrrrrrrrrrrrrrrdproductsData",productsData);
+
       dispatch(setProducts(productsData));
-      console.log("API FETCHING data",productsData);
+      console.log("API FETCHING data productaction, with images api",productsData);
     } catch (error) {
       console.error('Error fetching products:', error);
       
