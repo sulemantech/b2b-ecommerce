@@ -22,8 +22,15 @@ const LoginRegister = () => {
 
   });
   const navigate = useNavigate();
+
+  useEffect(() => {
+    SubmitLogin();
+    SubmitRegistration()
+  
+  }, []);
+  
   const SubmitRegistration=(e)=>{
-     e.preventDefault();
+    //  e.preventDefault();
     fetch("http://localhost:5000/api/signin/register",{
       method:"post",
       headers:{
@@ -99,11 +106,7 @@ const SubmitLogin=()=>{
     .catch((err)=>console.log(err));
 
 }
-useEffect(() => {
-  SubmitLogin();
-  SubmitRegistration()
 
-}, []);
 
 
 
