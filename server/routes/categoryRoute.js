@@ -1,24 +1,6 @@
 // routes/categoryRoutes.js
 const express = require('express');
-<<<<<<< HEAD
-const categoryModel = require('../models/categoryModel'); // Make sure to import your Category model
 
-const router = express.Router();
-
-// Get all categories
-router.get('/', async (req, res) => {
-  try {
-    
-    const categories = await categoryModel.findAll();
-    res.status(200).json(categories);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error retrieving categories' });
-  }
-});
-
-// Create category
-=======
 const categoryModel = require('../models/categoryModel');
 const productModel = require('../models/productModel');
 const productCategoriesModel = require('../models/productCategoriesModel'); // Make sure to import your Category model
@@ -60,8 +42,6 @@ router.get('/:categoryId', async (req, res) => {
   }
 });
 
-// Create category///////////////////////////////////////////////////////
->>>>>>> luthullah
 router.post('/', async (req, res) => {
   try {
     const {name}=req.body
