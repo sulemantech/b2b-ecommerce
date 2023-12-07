@@ -1,6 +1,5 @@
 // routes/categoryRoutes.js
 const express = require('express');
-
 const categoryModel = require('../models/categoryModel');
 const productModel = require('../models/productModel');
 const productCategoriesModel = require('../models/productCategoriesModel'); // Make sure to import your Category model
@@ -42,6 +41,7 @@ router.get('/:categoryId', async (req, res) => {
   }
 });
 
+// Create category///////////////////////////////////////////////////////
 router.post('/', async (req, res) => {
   try {
     const {name}=req.body

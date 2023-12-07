@@ -49,6 +49,7 @@ const HeaderThree = () => {
                 {/* header logo */}
                 <Logo imageUrl="/assets/img/logo/logo.png" logoClass="logo" />
               </div>
+              
             </div>
             <div className="col-6 d-block d-lg-none">
               {/* Icon group */}

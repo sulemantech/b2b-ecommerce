@@ -8,12 +8,17 @@ import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
 import Swiper, { SwiperSlide } from "../../components/swiper";
 
 const ProductImageGallery = ({ product }) => {
+ 
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [index, setIndex] = useState(-1);
-  const slides = product?.image.map((img, i) => ({
+
+  const slides = product?.productImages?.flatMap((productImage, i) =>
+    productImage.images.map((img, j) => ({
       src: process.env.PUBLIC_URL + img,
-      key: i,
-  }));
+      key: `${i}_${j}`, // Using a combination of i and j as a unique key
+    }))
+  );
+  debugger
 
   // swiper slider settings
   const gallerySwiperParams = {
@@ -53,16 +58,16 @@ const ProductImageGallery = ({ product }) => {
         ) : (
           ""
         )}
-        {product?.image?.length ? (
+        {product?.productImages?.length ? (
           <Swiper options={gallerySwiperParams}>
-            {product.image.map((single, key) => (
+            {product?.productImages.map((single, key) => (
               <SwiperSlide key={key}>
                 <button className="lightgallery-button" onClick={() => setIndex(key)}>
                   <i className="pe-7s-expand1"></i>
                 </button>
                 <div className="single-image">
                   <img
-                    src={process.env.PUBLIC_URL + single}
+                    src={process.env.PUBLIC_URL + single.images}
                     className="img-fluid"
                     alt=""
                   />
@@ -81,13 +86,13 @@ const ProductImageGallery = ({ product }) => {
 
       </div>
       <div className="product-small-image-wrapper mt-15">
-        {product?.image?.length ? (
+        {product?.productImages?.length ? (
           <Swiper options={thumbnailSwiperParams}>
-            {product.image.map((single, key) => (
+            {product?.productImages.map((single, key) => (
               <SwiperSlide key={key}>
                 <div className="single-image">
                   <img
-                    src={process.env.PUBLIC_URL + single}
+                    src={process.env.PUBLIC_URL + single.images}
                     className="img-fluid"
                     alt=""
                   />

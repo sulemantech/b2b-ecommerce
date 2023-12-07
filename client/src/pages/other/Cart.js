@@ -18,6 +18,7 @@ const Cart = () => {
   const currency = useSelector((state) => state.currency);
   const { cartItems } = useSelector((state) => state.cart);
 
+
   return (
     <Fragment>
       <SEO
@@ -70,6 +71,7 @@ const Cart = () => {
                                   finalDiscountedPrice * cartItem.quantity)
                               : (cartTotalPrice +=
                                   finalProductPrice * cartItem.quantity);
+                              //  console.log("cartimagessssssssssss",cartItem?.productImages[0].images)
                             return (
                               <tr key={key}>
                                 <td className="product-thumbnail">
@@ -84,7 +86,7 @@ const Cart = () => {
                                       className="img-fluid"
                                       src={
                                         process.env.PUBLIC_URL +
-                                        cartItem.image[0]
+                                        cartItem?.productImages[0].images
                                       }
                                       alt=""
                                     />

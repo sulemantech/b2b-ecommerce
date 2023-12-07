@@ -3,12 +3,12 @@ import clsx from "clsx";
 import ProductgridList from "./ProductgridList";
 
 const ShopProducts = ({ products, layout }) => {
-  
-console.log("SHOPPRODUCTS.................",products);
+
   return (
     <div className="shop-bottom-area mt-35">
       <div className={clsx("row", layout)}>
         <ProductgridList products={products} spaceBottomClass="mb-25" />
+        
       </div>
     </div>
   );

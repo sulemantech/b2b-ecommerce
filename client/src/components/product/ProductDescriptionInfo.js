@@ -292,6 +292,9 @@ const ProductDescriptionInfo = ({
           </li>
         </ul>
       </div>
+      <Link to={process.env.PUBLIC_URL + "/checkout"}>
+                        Proceed to Checkout
+                      </Link>
     </div>
   );
 };

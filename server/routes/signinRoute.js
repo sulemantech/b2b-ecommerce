@@ -73,7 +73,7 @@ router.post('/register', async (req, res) => {
 
 
   // GET API    ///////////////////////////////////////////////////////////////////
-router.get('/', async (req, res) => {
+router.get('/get/registration', async (req, res) => {
   try {
     const allusers = await registerationModel.findAll();
     res.status(200).json(allusers);

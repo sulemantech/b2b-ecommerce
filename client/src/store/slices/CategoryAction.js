@@ -4,13 +4,11 @@ import { setCategory } from "./category-Slice";
 
 
 
-export const fetchCategory = (id) => async (dispatch) => {
+export const fetchCategory = () => async (dispatch) => {
     try {
-      const Allcategory = await axios.get(`http://localhost:5000/api/categories/all` ).then((res) => {
-        console.log("categoryyyyyyyyes",res.data);
+      const Allcategory = await axios.get(`http://localhost:5001/api/categories/all` ).then((res) => {
         return res?.data;
-        
-    debugger
+    
       });
     
       dispatch(setCategory(Allcategory));

@@ -15,8 +15,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchCategory } from "../../store/slices/CategoryAction";
 
-const ShopSidebar = ({ products, getSortParams, sideSpaceClass, 
-  selectedCategories={selectedCategories} }) => {
+const ShopSidebar = ({ products, getSortParams, sideSpaceClass  , selectedCategories}) => {
 
 
   const uniqueColors = getIndividualColors(products);
@@ -27,11 +26,11 @@ const ShopSidebar = ({ products, getSortParams, sideSpaceClass,
   // const uniqueCategories = getIndividualCategories(uniqueCategory?.categories);
 
   useEffect(()=>{
-dispatch(fetchCategory())
+dispatch(fetchCategory(dispatch))
   },[dispatch])
 
 
-  // console.log("uniqueCategories  ShopSidebar",uniqueCategories.Categories);
+  // console.log("asasasas",uniqueCategories);
 
   return (
     <div className={clsx("sidebar-style", sideSpaceClass)}>
@@ -40,8 +39,8 @@ dispatch(fetchCategory())
 
       {/* filter by categories */}
       <ShopCategories
-      selectedCategories={selectedCategories}
-        categories={uniqueCategories}
+         categories={uniqueCategories}
+         selectedCategories={selectedCategories}
         getSortParams={getSortParams}
       />
 

@@ -37,10 +37,10 @@ const HeaderTwo = () => {
             </div>
             <div className="col-lg-2 d-none d-lg-block text-center">
               {/* header logo */}
-              <Logo
+              {/* <Logo
                 imageUrl="/assets/img/logo/logo.png"
                 logoClass="logo-hm-9"
-              />
+              /> */}
             </div>
             <div className="col-lg-5 col-md-4 col-12">
               {/* Icon group */}

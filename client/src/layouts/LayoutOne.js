@@ -19,6 +19,7 @@ const LayoutOne = ({
         headerPaddingClass={headerPaddingClass}
         headerPositionClass={headerPositionClass}
       />
+    
       {children}
       <FooterOne
         backgroundColorClass="bg-gray"

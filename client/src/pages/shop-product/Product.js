@@ -18,7 +18,6 @@ const Product = () => {
   console.log(product);
 
   useEffect(() => {
-    // Use the fetchProducts action directly, no need to pass dispatch
     dispatch(fetchProducts(dispatch));
   },[dispatch]) 
 
@@ -49,15 +48,14 @@ const Product = () => {
         {/* product description tab */}
         <ProductDescriptionTab
           spaceBottomClass="pb-90"
-          productFullDesc={product.fullDescription}
+          productFullDesc={product.description}
         />
 
         {/* related product slider */}
         <RelatedProductSlider
           spaceBottomClass="pb-95"
-          category={product.category[0]}
+          // category={product.category[0]}
         />
-
       </LayoutOne>
     </Fragment>
   );

@@ -28,6 +28,11 @@ const ShopGridStandard = () => {
     const { products } = useSelector((state) => state.product);
     const pageLimit = 15;
     let { pathname } = useLocation();
+
+//  useEffect(()=>{
+//         dispatch(fetchProducts(dispatch));
+//     },[])
+
     console.log("PPPPPPPPPPPPPPPPPPproductsSGS",products);
     // console.log(" products in shop grid standord",products);  
     
@@ -68,7 +73,7 @@ const ShopGridStandard = () => {
 
     useEffect(() => {
        
-        fetch(`http://localhost:5000/api/products/${selectedCategories.join(',')}`) 
+        fetch(`http://localhost:5001/api/products/${selectedCategories.join(',')}`) 
         .then((response) => response.json())
         .then((data) => {
           console.log('Products from API in SGS:11111', data);    

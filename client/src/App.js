@@ -3,11 +3,12 @@ import ScrollToTop from "./helpers/scroll-top";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 const ShopGridStandard = lazy(() => import("./pages/shop/ShopGridStandard"));
 
-
 // product pages
 const Product = lazy(() => import("./pages/shop-product/Product"));
 const ProductTabRight = lazy(() =>
-  import("./pages/shop-product/ProductTabRight"))
+  import("./pages/shop-product/ProductTabRight")
+);
+
 
 // blog pages
 const BlogStandard = lazy(() => import("./pages/blog/BlogStandard"));
@@ -51,12 +52,16 @@ const App = () => {
                 path={process.env.PUBLIC_URL + "/"}
                 element={<ShopGridStandard/>}
               />
-               {/* products */}
-                <Route
+
+              {/* product pages */}
+              <Route
+                path={process.env.PUBLIC_URL + "/product/:id"}
+                element={<Product/>}
+              />
+               <Route
                 path={process.env.PUBLIC_URL + "/product-tab-right/:id"}
                 element={<ProductTabRight/>}
               />
-              {/* Homepages */}
              
               {/* Shop pages */}
               <Route
@@ -118,30 +123,12 @@ const App = () => {
                 path={process.env.PUBLIC_URL + "/checkout"}
                 element={<Checkout/>}
               /> 
-              {/* <Route
-                path={process.env.PUBLIC_URL + "/product/:id"}
-                element={<Product />}
-              /> */}
-               {/* <Route
-                path={process.env.PUBLIC_URL + "/product/:id"}
-                element={<Product />}
-              />
-              <Route
-                path={process.env.PUBLIC_URL + "/product-tab-left/:id"}
-                element={<ProductTabLeft/>}
-              />
-              <Route
-                path={process.env.PUBLIC_URL + "/product-tab-right/:id"}
-                element={<ProductTabRight/>}
-              /> */}
 
               <Route path="*" element={<NotFound/>} />
             </Routes>
           </Suspense>
         </ScrollToTop>
       </Router>
-
-      
   );
 };
 

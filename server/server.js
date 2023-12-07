@@ -1,4 +1,4 @@
-const express = require('express');
+const express=require('express');
 const cors =require('cors');
 const productRoutes = require('./routes/productRoutes');
 const productImages =require('./routes/productImages');
@@ -11,6 +11,7 @@ const citiesRoute=require('./routes/citiesRoute')
 const addressRoute =require('./routes/addressRoute');
 // const orderRoute=require('./routes/orderRoute')
 const orderRoute=require('./routes/orderRoute')
+const orderItemsRoute=require('./routes/orderItemsRoute')
 
 require('dotenv').config();
 
@@ -36,6 +37,7 @@ app.use('/api/signin', signinRoute)
 //productImagePost
 app.use('/productImages', productImages)
 // app.use('/categories', category_route)
+
 app.use('/api/categories', categoryRoute)
 
 //cities
@@ -49,6 +51,9 @@ app.use('/api/address',addressRoute)
 
 //order
 app.use('/api/order',orderRoute)
+
+//orderItems
+app.use('/api/orderitems', orderItemsRoute)
 
 
 // Start the server

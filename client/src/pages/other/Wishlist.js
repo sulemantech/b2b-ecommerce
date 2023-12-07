@@ -78,7 +78,7 @@ const Wishlist = () => {
                                       className="img-fluid"
                                       src={
                                         process.env.PUBLIC_URL +
-                                        wishlistItem.image[0]
+                                        wishlistItems[0]?.productImages[0]?.images[0]
                                       }
                                       alt=""
                                     />

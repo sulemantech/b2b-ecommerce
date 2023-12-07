@@ -1,4 +1,4 @@
-import { Fragment } from "react"; 
+import { Fragment, useEffect } from "react"; 
 import { useSelector } from "react-redux";
 import { useParams, useLocation } from "react-router-dom";
 import SEO from "../../components/seo";
@@ -8,13 +8,20 @@ import RelatedProductSlider from "../../wrappers/product/RelatedProductSlider";
 import ProductDescriptionTab from "../../wrappers/product/ProductDescriptionTab";
 import ProductImageDescription from "../../wrappers/product/ProductImageDescription";
 
+
 const ProductTabRight = () => {
   let { pathname } = useLocation();
   let { id } = useParams();
-  const productId = parseInt(id, 10)
+  const productId = parseInt(id, 10);
   const { products } = useSelector((state) => state.product);
-  const product = products.find(product => product.id === productId);
-  debugger
+  const product = products.find((product) => product.id === productId);
+
+// console.log("products discription",products);
+// console.log("product iddd",product.id);
+// console.log("product arratBYID",product);
+// console.log("price ",product.price);
+
+
 
   return (
     <Fragment>
@@ -43,13 +50,14 @@ const ProductTabRight = () => {
         {/* product description tab */}
         <ProductDescriptionTab
           spaceBottomClass="pb-90"
-          productFullDesc={product.description}
+          productFullDesc={product?.description}
         />
+        
 
         {/* related product slider */}
         <RelatedProductSlider
           spaceBottomClass="pb-95"
-          // category={product.category[0]}
+          // category={product.category}
         />
       </LayoutOne>
     </Fragment>

@@ -1,114 +1,90 @@
 import React, { Fragment } from "react";
-import { Link, json, useLocation } from "react-router-dom"; 
+import { Link, json, useLocation } from "react-router-dom";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
 import SEO from "../../components/seo";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
-import { useState,useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const LoginRegister = () => {
   const [errors, setErrors] = useState();
-  const [values,setvaluse]=useState({
-    
-    firstname:"",
-    lastname:"",
-    email:"",
-    password:"",
-    address:"",
-    contactNumber:"",
-    businessName:""
-
+  const [values, setvaluse] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    password: "",
+    address: "",
+    contactNumber: "",
+    businessName: "",
   });
   const navigate = useNavigate();
-
-  useEffect(() => {
-    SubmitLogin();
-    SubmitRegistration()
-  
-  }, []);
-  
-  const SubmitRegistration=(e)=>{
-    //  e.preventDefault();
-    fetch("http://localhost:5000/api/signin/register",{
-      method:"post",
-      headers:{
-        accept:"application/json",
-        "content-type":"application/json",
+  const SubmitRegistration = (e) => {
+    e.preventDefault();
+    fetch("http://localhost:5001/api/signin/register", {
+      method: "post",
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
       },
-      body:JSON.stringify(values),
+      body: JSON.stringify(values),
     })
-    .then((res)=>{
-      res.json()
-     .then((result)=>{
-      console.log(result);
-      setvaluse({
-    firstname:"",
-    lastname:"",
-    email:"",
-    password:"",
-    address:"",
-    contactNumber:"",
-    businessName:""
-
-
-      });
-
-     }) ;
-      // window.location.reload();
-
-    })
-      .catch((err)=>console.log(err));
-
+      .then((res) => {
+        res.json().then((result) => {
+          console.log(result);
+          setvaluse({
+            firstname: "",
+            lastname: "",
+            email: "",
+            password: "",
+            address: "",
+            contactNumber: "",
+            businessName: "",
+          });
+        });
+        window.location.reload();
+      })
+      .catch((err) => console.log(err));
   };
 
+  const SubmitLogin = () => {
+    // e.preventDefault();
+    if (!values.firstname.trim()) {
+      setErrors({ ...errors, firstname: "Firstname is required" });
+      return;
+    }
 
-const SubmitLogin=()=>{
-  // e.preventDefault();
-  if (!values.firstname.trim()) {
-    setErrors({ ...errors, firstname: "Firstname is required" });
-    return;
-  }
-
-  if (!values.password.trim()) {
-    setErrors({ ...errors, password: "Password is required" });
-    return;
-  }
-  fetch("http://localhost:5000/api/signin/login",{
-    method:"post",
-    headers:{
-      accept:"application/json",
-      "content-type":"application/json",
-    },
-    body:JSON.stringify(values),
-  })
-  .then((res)=>{
-    res.json()
-   .then((result)=>{
-    console.log(result.token);
-    console.log("loginnnnnnnn",result);
-    if (result.token) {
-      navigate('/');
-  }
-  else{
-    console.log(result.message);
-  }
-    setvaluse({
-  firstname:"",
-  password:"",
-    });
-
-   }) ;
-    // window.location.reload();
-
-  })
-    .catch((err)=>console.log(err));
-
-}
-
-
-
+    if (!values.password.trim()) {
+      setErrors({ ...errors, password: "Password is required" });
+      return;
+    }
+    fetch("http://localhost:5001/api/signin/login", {
+      method: "post",
+      headers: {
+        accept: "application/json",
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(values),
+    })
+      .then((res) => {
+        res.json().then((result) => {
+          console.log(result.token);
+          console.log("loginnnnnnnn", result);
+          if (result.token) {
+            navigate("/");
+          } else {
+            console.log(result.message);
+          }
+          setvaluse({
+            firstname: "",
+            password: "",
+          });
+        });
+        // window.location.reload();
+      })
+      .catch((err) => console.log(err));
+  };
 
   let { pathname } = useLocation();
 
@@ -120,11 +96,14 @@ const SubmitLogin=()=>{
       />
       <LayoutOne headerTop="visible">
         {/* breadcrumb */}
-        <Breadcrumb 
+        <Breadcrumb
           pages={[
-            {label: "Home", path: process.env.PUBLIC_URL + "/" },
-            {label: "Login Register", path: process.env.PUBLIC_URL + pathname }
-          ]} 
+            { label: "Home", path: process.env.PUBLIC_URL + "/" },
+            {
+              label: "Login Register",
+              path: process.env.PUBLIC_URL + pathname,
+            },
+          ]}
         />
         <div className="login-register-area pt-100 pb-100">
           <div className="container">
@@ -152,15 +131,24 @@ const SubmitLogin=()=>{
                               <input
                                 type="text"
                                 placeholder="firstname"
-                                onChange={(e)=>setvaluse({...values,firstname:e.target.value})}
+                                onChange={(e) =>
+                                  setvaluse({
+                                    ...values,
+                                    firstname: e.target.value,
+                                  })
+                                }
                                 name={values.firstname}
                               />
                               <input
                                 type="password"
                                 placeholder="Password"
-                                onChange={(e)=>setvaluse({...values,password:e.target.value})}
+                                onChange={(e) =>
+                                  setvaluse({
+                                    ...values,
+                                    password: e.target.value,
+                                  })
+                                }
                                 name={values.password}
-                                
                               />
                               <div className="button-box">
                                 <div className="login-toggle-btn">
@@ -171,12 +159,12 @@ const SubmitLogin=()=>{
                                   </Link>
                                 </div>
                                 <input
-                                type="button"
-                                className="btn btn-success"
-                                 onClick={SubmitLogin}
-                                value="Login"
+                                  type="button"
+                                  className="btn btn-success"
+                                  onClick={SubmitLogin}
+                                  value="Login"
                                 />
-                                
+
                                 {/* <button type="submit">
                                   <span>Login</span>
                                 </button> */}
@@ -188,59 +176,93 @@ const SubmitLogin=()=>{
                       <Tab.Pane eventKey="register">
                         <div className="login-form-container">
                           <div className="login-register-form">
-                            <form   className="form" onSubmit={SubmitRegistration}>
+                            <form
+                              className="form"
+                              onSubmit={SubmitRegistration}
+                            >
                               <input
                                 type="text"
                                 placeholder="firstname"
                                 onChange={(e) =>
-                                  setvaluse({ ...values, firstname : e.target.value })
+                                  setvaluse({
+                                    ...values,
+                                    firstname: e.target.value,
+                                  })
                                 }
                                 name={values.firstname}
                               />
-                               <input
+                              <input
                                 type="text"
                                 placeholder="lastname"
-                                onChange={(e)=>setvaluse({...values,lastname:e.target.value})}
+                                onChange={(e) =>
+                                  setvaluse({
+                                    ...values,
+                                    lastname: e.target.value,
+                                  })
+                                }
                                 name={values.lastname}
-                                
                               />
-                               <input
+                              <input
                                 type="email"
                                 placeholder="email"
-                                onChange={(e)=>setvaluse({...values,email:e.target.value})}
+                                onChange={(e) =>
+                                  setvaluse({
+                                    ...values,
+                                    email: e.target.value,
+                                  })
+                                }
                                 name={values.email}
                               />
-                               <input
+                              <input
                                 type="password"
                                 placeholder="password"
-                                onChange={(e)=>setvaluse({...values,password:e.target.value})}
+                                onChange={(e) =>
+                                  setvaluse({
+                                    ...values,
+                                    password: e.target.value,
+                                  })
+                                }
                                 name={values.password}
                               />
-                               <input
+                              <input
                                 type="text"
                                 placeholder="address"
-                                 onChange={(e)=>setvaluse({...values,address:e.target.value})}
+                                onChange={(e) =>
+                                  setvaluse({
+                                    ...values,
+                                    address: e.target.value,
+                                  })
+                                }
                                 name={values.address}
                               />
                               <input
                                 type="number"
                                 placeholder="contact"
-                                onChange={(e)=>setvaluse({...values,contactNumber:e.target.value})}
+                                onChange={(e) =>
+                                  setvaluse({
+                                    ...values,
+                                    contactNumber: e.target.value,
+                                  })
+                                }
                                 name={values.contactNumber}
                               />
                               <input
-                               type="text"
+                                type="text"
                                 placeholder="Bussinessname"
-                                 onChange={(e)=>setvaluse({...values,businessName:e.target.value})}
+                                onChange={(e) =>
+                                  setvaluse({
+                                    ...values,
+                                    businessName: e.target.value,
+                                  })
+                                }
                                 name={values.businessName}
-                              
                               />
-                                <input
+                              <input
                                 type="button"
                                 className="btn btn-success"
-                                 onClick={SubmitRegistration}
+                                onClick={SubmitRegistration}
                                 value="Register"
-                                />
+                              />
                               {/* <div className="button-box">
                                 <button type="submit">
                                   <span>Register</span>
