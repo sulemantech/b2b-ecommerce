@@ -4,6 +4,7 @@ node_modules/
 scripts/flow/*/.flowconfig
 .flowconfig
 *~
+yarn.lock
 *.pyc
 .grunt
 _SpecRunner.html

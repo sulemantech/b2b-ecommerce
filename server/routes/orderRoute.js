@@ -6,20 +6,20 @@ const verifyToken = require('../middlewares/verifyToken')
 const router = express.Router();
 
 // Get all orders
-// router.get('/', async (req, res) => {
-//   try {
-//     const orders = await orderModel.findAll({
-//       include: {
-//         model: registerationModel,
-//         attributes: ['id', 'username'], // Include only specific attributes from registerationModel
-//       },
-//     });
-//     res.json(orders);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Internal Server Error' });
-//   }
-// });
+router.get('/', async (req, res) => {
+  try {
+    const orders = await orderModel.findAll({
+      include: {
+        model: registerationModel,
+        attributes: ['id', 'firstname'], // Include only specific attributes from registerationModel
+      },
+    });
+    res.json(orders);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
 
 // Add a new order
 router.post('/', verifyToken, async (req, res) => {
