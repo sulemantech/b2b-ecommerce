@@ -1,10 +1,13 @@
+/node_modules
+/db.js
+.env
+yarn.lock
 .DS_STORE
 node_modules
 node_modules/
 scripts/flow/*/.flowconfig
 .flowconfig
 *~
-yarn.lock
 *.pyc
 .grunt
 _SpecRunner.html
