@@ -7,7 +7,7 @@ const companiesModel = sequelize.define('companies', {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
-    allowNull: false,
+    allowNull: false,    
   },
   companyName: {
     type: DataTypes.STRING,
