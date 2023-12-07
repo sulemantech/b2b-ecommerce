@@ -16,7 +16,7 @@ console.log("selecteddddddddddddddddddddddCategories shop categories",selectedCa
       <div className="sidebar-widget-list mt-30">
         {categories ? (
           <ul>
-          {/* { console.log("categoriessssssssss",categories)}             */}
+          
             <li>
               <div className="sidebar-widget-list-left">
                 <button

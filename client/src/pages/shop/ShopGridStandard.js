@@ -29,15 +29,12 @@ const ShopGridStandard = () => {
     const pageLimit = 15;
     let { pathname } = useLocation();
 
-//  useEffect(()=>{
-//         dispatch(fetchProducts(dispatch));
-//     },[])
-
-    console.log("PPPPPPPPPPPPPPPPPPproductsSGS",products);
-    // console.log(" products in shop grid standord",products);  
+ useEffect(()=>{
+        dispatch(fetchProducts(dispatch));
+    },[]);
+debugger 
     
-    const [selectedCategories, setSelectedCategories] = useState([]);
-
+  const [selectedCategories, setSelectedCategories] = useState([]);
   const handleSortParams = (type, value) => {
     // Implement sorting logic as needed
     if (type === "category") {
@@ -64,7 +61,6 @@ const ShopGridStandard = () => {
     const getSortParams = (sortType, sortValue) => {
         setSortType(sortType);
         setSortValue(sortValue);
-        // console.log("sssssssssssssssssssssssssssssssss",sortType, sortValue);
     }
     const getFilterSortParams = (sortType, sortValue) => {
         setFilterSortType(sortType);
@@ -72,13 +68,11 @@ const ShopGridStandard = () => {
     }
 
     useEffect(() => {
-       
         fetch(`http://localhost:5001/api/products/${selectedCategories.join(',')}`) 
         .then((response) => response.json())
         .then((data) => {
-          console.log('Products from API in SGS:11111', data);    
+        //   console.log('Products from API in SGS:11111', data);    
           setCurrentData(data);
-          
         })
         .catch((error) => console.error('Error fetching data:', error));
 
@@ -116,7 +110,7 @@ const ShopGridStandard = () => {
                                  productCount={products.length}
                                   sortedProductCount={currentData.length}
                                    />
-{console.log("CURRENTDATA.....",currentData)
+                                  {console.log("CURRENTDATA.....",currentData)
 }                                {/* shop page content default */}
                                 <ShopProducts layout={layout} products={currentData} />
 

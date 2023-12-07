@@ -7,6 +7,7 @@ import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { navigate } from "react-router-dom";
 
 const LoginRegister = () => {
   const [errors, setErrors] = useState();
@@ -43,48 +44,56 @@ const LoginRegister = () => {
             businessName: "",
           });
         });
-        window.location.reload();
-      })
-      .catch((err) => console.log(err));
-  };
-
-  const SubmitLogin = () => {
-    // e.preventDefault();
-    if (!values.firstname.trim()) {
-      setErrors({ ...errors, firstname: "Firstname is required" });
-      return;
-    }
-
-    if (!values.password.trim()) {
-      setErrors({ ...errors, password: "Password is required" });
-      return;
-    }
-    fetch("http://localhost:5001/api/signin/login", {
-      method: "post",
-      headers: {
-        accept: "application/json",
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(values),
-    })
-      .then((res) => {
-        res.json().then((result) => {
-          console.log(result.token);
-          console.log("loginnnnnnnn", result);
-          if (result.token) {
-            navigate("/");
-          } else {
-            console.log(result.message);
-          }
-          setvaluse({
-            firstname: "",
-            password: "",
-          });
-        });
         // window.location.reload();
       })
       .catch((err) => console.log(err));
   };
+
+  
+
+const SubmitLogin = () => {
+  
+
+  if (!values.firstname.trim()) {
+    setErrors({ ...errors, firstname: "Firstname is required" });
+    return;
+  }
+
+  if (!values.password.trim()) {
+    setErrors({ ...errors, password: "Password is required" });
+    return;
+  }
+
+  fetch("http://localhost:5001/api/signin/login", {
+    method: "post",
+    headers: {
+      accept: "application/json",
+      "content-type": "application/json",
+    },
+    body: JSON.stringify(values),
+  })
+    .then((res) => res.json())
+    .then((result) => {
+      console.log(result.token);
+      console.log("loginnnnnnnn", result);
+      if (result.token) {
+        
+        navigate("/");
+      } else {
+        alert(result.message);
+      }
+      
+    
+      setvaluse({
+        firstname: "",
+        password: "",
+      });
+    })
+    .catch((err) => console.log(err));
+};
+
+
+  
 
   let { pathname } = useLocation();
 

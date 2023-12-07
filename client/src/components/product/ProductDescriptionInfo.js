@@ -8,6 +8,7 @@ import { addToCart } from "../../store/slices/cart-slice";
 import { addToWishlist } from "../../store/slices/wishlist-slice";
 import { addToCompare } from "../../store/slices/compare-slice";
 
+
 const ProductDescriptionInfo = ({
   product,
   discountedPrice,
@@ -292,9 +293,13 @@ const ProductDescriptionInfo = ({
           </li>
         </ul>
       </div>
+      <br></br>
+      <di className="checkout">
       <Link to={process.env.PUBLIC_URL + "/checkout"}>
                         Proceed to Checkout
                       </Link>
+      </di>
+     
     </div>
   );
 };

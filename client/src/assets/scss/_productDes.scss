@@ -1,0 +1,20 @@
+.checkout a {
+    font-size: 14px;
+    font-weight: 500;
+    width: 60%;
+    line-height: 1;
+
+    display: block;
+
+    padding: 18px 10px 17px;
+
+    text-align: center;
+    text-transform: uppercase;
+
+    color: #fff;
+    border-radius: 50px;
+    background-color: $theme-color;
+    &:hover {
+      background-color: #333;
+    }
+  }
