@@ -7,11 +7,15 @@ import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { navigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { submitLoginAsync } from "../../store/slices/Auth-Action";
+
 
 const LoginRegister = () => {
-  const [errors, setErrors] = useState();
-  const [values, setvaluse] = useState({
+
+
+  const dispatch = useDispatch();
+  const [values, setvalues] = useState({
     firstname: "",
     lastname: "",
     email: "",
@@ -34,7 +38,7 @@ const LoginRegister = () => {
       .then((res) => {
         res.json().then((result) => {
           console.log(result);
-          setvaluse({
+          setvalues({
             firstname: "",
             lastname: "",
             email: "",
@@ -44,56 +48,52 @@ const LoginRegister = () => {
             businessName: "",
           });
         });
-        // window.location.reload();
+        window.location.reload();
       })
       .catch((err) => console.log(err));
   };
 
-  
+  // const SubmitLogin = () => {
 
-const SubmitLogin = () => {
-  
+  //   if (!values.firstname.trim()) {
+  //     setErrors({ ...errors, firstname: "Firstname is required" });
+  //     return;
+  //   }
 
-  if (!values.firstname.trim()) {
-    setErrors({ ...errors, firstname: "Firstname is required" });
-    return;
-  }
+  //   if (!values.password.trim()) {
+  //     setErrors({ ...errors, password: "Password is required" });
+  //     return;
+  //   }
 
-  if (!values.password.trim()) {
-    setErrors({ ...errors, password: "Password is required" });
-    return;
-  }
+  //   fetch("http://localhost:5001/api/signin/login", {
+  //     method: "post",
+  //     headers: {
+  //       accept: "application/json",
+  //       "content-type": "application/json",
+  //     },
+  //     body: JSON.stringify(values),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((result) => {
+  //       console.log(result.token);
+  //       console.log("loginnnnnnnn", result);
+  //       if (result.token) {
 
-  fetch("http://localhost:5001/api/signin/login", {
-    method: "post",
-    headers: {
-      accept: "application/json",
-      "content-type": "application/json",
-    },
-    body: JSON.stringify(values),
-  })
-    .then((res) => res.json())
-    .then((result) => {
-      console.log(result.token);
-      console.log("loginnnnnnnn", result);
-      if (result.token) {
-        
-        navigate("/");
-      } else {
-        alert(result.message);
-      }
-      
-    
-      setvaluse({
-        firstname: "",
-        password: "",
-      });
-    })
-    .catch((err) => console.log(err));
-};
+  //         navigate("/");
+  //       } else {
+  //         alert(result.message);
+  //       }
 
-
-  
+  //       setvaluse({
+  //         firstname: "",
+  //         password: "",
+  //       });
+  //     })
+  //     .catch((err) => console.log(err));
+  // };
+  const SubmitLogin = () => {
+    dispatch(submitLoginAsync(values,navigate));
+  };
 
   let { pathname } = useLocation();
 
@@ -141,7 +141,7 @@ const SubmitLogin = () => {
                                 type="text"
                                 placeholder="firstname"
                                 onChange={(e) =>
-                                  setvaluse({
+                                  setvalues({
                                     ...values,
                                     firstname: e.target.value,
                                   })
@@ -152,7 +152,7 @@ const SubmitLogin = () => {
                                 type="password"
                                 placeholder="Password"
                                 onChange={(e) =>
-                                  setvaluse({
+                                  setvalues({
                                     ...values,
                                     password: e.target.value,
                                   })
@@ -193,7 +193,7 @@ const SubmitLogin = () => {
                                 type="text"
                                 placeholder="firstname"
                                 onChange={(e) =>
-                                  setvaluse({
+                                  setvalues({
                                     ...values,
                                     firstname: e.target.value,
                                   })
@@ -204,7 +204,7 @@ const SubmitLogin = () => {
                                 type="text"
                                 placeholder="lastname"
                                 onChange={(e) =>
-                                  setvaluse({
+                                  setvalues({
                                     ...values,
                                     lastname: e.target.value,
                                   })
@@ -215,7 +215,7 @@ const SubmitLogin = () => {
                                 type="email"
                                 placeholder="email"
                                 onChange={(e) =>
-                                  setvaluse({
+                                  setvalues({
                                     ...values,
                                     email: e.target.value,
                                   })
@@ -226,7 +226,7 @@ const SubmitLogin = () => {
                                 type="password"
                                 placeholder="password"
                                 onChange={(e) =>
-                                  setvaluse({
+                                  setvalues({
                                     ...values,
                                     password: e.target.value,
                                   })
@@ -237,7 +237,7 @@ const SubmitLogin = () => {
                                 type="text"
                                 placeholder="address"
                                 onChange={(e) =>
-                                  setvaluse({
+                                  setvalues({
                                     ...values,
                                     address: e.target.value,
                                   })
@@ -248,7 +248,7 @@ const SubmitLogin = () => {
                                 type="number"
                                 placeholder="contact"
                                 onChange={(e) =>
-                                  setvaluse({
+                                  setvalues({
                                     ...values,
                                     contactNumber: e.target.value,
                                   })
@@ -259,7 +259,7 @@ const SubmitLogin = () => {
                                 type="text"
                                 placeholder="Bussinessname"
                                 onChange={(e) =>
-                                  setvaluse({
+                                  setvalues({
                                     ...values,
                                     businessName: e.target.value,
                                   })

@@ -4,11 +4,6 @@ import { setActiveSort } from "../../helpers/product";
 
 
 const ShopCategories = ({categories ,getSortParams,selectedCategories }) => {
-//   const dispatch=useDispatch();
-//   const categories=useSelector((state)=>state.categories);
-//   useEffect(()=>{
-// dispatch(fetchCategory(dispatch))
-//   },[])
 console.log("selecteddddddddddddddddddddddCategories shop categories",selectedCategories);
   return (
     <div className="sidebar-widget">
