@@ -3,12 +3,7 @@ const sequelize = require('../database/db');
 const addressModel = require('./addressModel');
 
 const companiesModel = sequelize.define('companies', {
-  companyId: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-    allowNull: false,
-  },
+  
   companyName: {
     type: DataTypes.STRING,
     allowNull: false,

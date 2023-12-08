@@ -30,9 +30,13 @@ const orderItemsModel = sequelize.define('orderItems', {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  // priceIndividual:{
+  //   type: DataTypes.INTEGER,
+  //   // allowNull: false,
+  // }
 });
 
-orderItemsModel.belongsTo(orderModel, { foreignKey: 'orderId' });
+// orderItemsModel.belongsTo(orderModel, { foreignKey: 'orderId' });
 orderItemsModel.belongsTo(productModel, { foreignKey: 'productId' });
 
 module.exports = orderItemsModel;
