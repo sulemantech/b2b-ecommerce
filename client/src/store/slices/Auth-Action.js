@@ -43,20 +43,20 @@ export const submitLoginAsync = (values) => async (dispatch) => {
 };
 
 
-
-export const logoutAsync = (yourAuthToken) => async (dispatch) => {
-  // const navigate = useNavigate();
-
+export const logoutAsync = (token) => async (dispatch) => {
   try {
-  
-    await axios.post(`${API_URL}/logout`, null, {
-      headers: {
-        Authorization: `Bearer ${yourAuthToken}`,
-      },
-    });
+    await axios.post(
+      `${API_URL}/logout`,
+      null,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
     dispatch(logout());
+    dispatch(navigateAction("/"));
     console.log("logout session");
-    // navigate('/login-register');
   } catch (error) {
     console.error('Error during logout:', error);
   }
