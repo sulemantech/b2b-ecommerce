@@ -12,6 +12,7 @@ const addressRoute =require('./routes/addressRoute');
 // const orderRoute=require('./routes/orderRoute')
 const orderRoute=require('./routes/orderRoute')
 const orderItemsRoute=require('./routes/orderItemsRoute')
+const companiesRoute=require('./routes/companiesRoute')
 
 require('dotenv').config();
 
@@ -55,7 +56,8 @@ app.use('/api/order',orderRoute)
 //orderItems
 app.use('/api/orderitems', orderItemsRoute)
 
-
+//companies
+app.use('/api/company',companiesRoute)
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

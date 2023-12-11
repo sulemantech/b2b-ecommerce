@@ -18,7 +18,7 @@ router.post('/', async (req, res) => {
   const { orderId, productId, quantity } = req.body;
 
   try {
-    const newOrderItem = await orderItemsModel.create({ orderId, productId, quantity });
+    const newOrderItem = await orderItemsModel.create({ orderId, productId, quantity, });
     res.json(newOrderItem);
   } catch (error) {
     console.error(error);
