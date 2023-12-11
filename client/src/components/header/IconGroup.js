@@ -1,10 +1,18 @@
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import clsx from "clsx";
 import MenuCart from "./sub-components/MenuCart";
+import { logoutAsync } from "../../store/slices/Auth-Action";
 
 const IconGroup = ({ iconWhiteClass }) => {
+  const dispatch = useDispatch();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const authToken = useSelector((state) => state.auth.token);
+
+  const handleLogout = () => {
+    dispatch(logoutAsync(authToken));
+  };
   const handleClick = e => {
     e.currentTarget.nextSibling.classList.toggle("active");
   };
@@ -43,19 +51,33 @@ const IconGroup = ({ iconWhiteClass }) => {
         </button>
         <div className="account-dropdown">
           <ul>
+
+          {isLoggedIn ? (
+              <>
+                <li>
+                  <Link to={process.env.PUBLIC_URL + "/my-account"}>
+                    My Account
+                  </Link>
+                </li>
+                <li>
+                <Link to={process.env.PUBLIC_URL + "/logout"} onClick={handleLogout}>
+              logout
+              </Link>
+
+                </li>
+              </>
+            ) : (
+              <>
             <li>
               <Link to={process.env.PUBLIC_URL + "/login-register"}>Login</Link>
-            </li>
-            <li>
-              <Link to={process.env.PUBLIC_URL + "/login-register"}>
-                Register
-              </Link>
             </li>
             <li>
               <Link to={process.env.PUBLIC_URL + "/my-account"}>
                 my account
               </Link>
             </li>
+            </>
+  )}
           </ul>
         </div>
       </div>
