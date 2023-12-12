@@ -16,13 +16,6 @@ const ProductTabRight = () => {
   const { products } = useSelector((state) => state.product);
   const product = products.find((product) => product.id === productId);
 
-// console.log("products discription",products);
-// console.log("product iddd",product.id);
-// console.log("product arratBYID",product);
-// console.log("price ",product.price);
-
-
-
   return (
     <Fragment>
       <SEO

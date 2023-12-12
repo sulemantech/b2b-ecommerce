@@ -12,7 +12,7 @@ const authSlice = createSlice({
       state.isLoggedIn = true;
       state.user = action.payload.user;
       state.token = action.payload.token;
-      console.log("state token",state.token);
+    
     },
     logout(state) {
       state.isLoggedIn = false;

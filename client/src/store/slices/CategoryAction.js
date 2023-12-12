@@ -12,7 +12,6 @@ export const fetchCategory = () => async (dispatch) => {
       });
     
       dispatch(setCategory(Allcategory));
-      console.log("API FETCHING data",Allcategory);
     } catch (error) {
       console.error('Error fetching products:', error);
       

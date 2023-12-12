@@ -12,9 +12,9 @@ const Checkout = () => {
   let { pathname } = useLocation();
   const currency = useSelector((state) => state.currency);
   const { cartItems } = useSelector((state) => state.cart);
-  const { authState} = useSelector((state) => state.auth);
+  // const { authState} = useSelector((state) => state.auth);
 
-  userEffect
+  // userEffect
   return (
     <Fragment>
       <SEO

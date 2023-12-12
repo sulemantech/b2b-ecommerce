@@ -25,17 +25,14 @@ export const submitLoginAsync = (values, navigate) => async (dispatch) => {
     const result = response.data;
 
     if (result.token) {
-      // axios.defaults.headers.common['Authorization'] = `Bearer ${result.token}`;
       dispatch(login({ user: result.userData, token: result.token }));
       
-      console.log(result.token);
+     
       navigate('/');
     } else {
       alert(result.message);
     }
 
-    // Clear the form values
-    // console.log("ffffff", values.firstname);
   } catch (error) {
     console.error('Error during login:', error);
   }
@@ -45,13 +42,12 @@ export const submitLoginAsync = (values, navigate) => async (dispatch) => {
 
 
 export const logoutAsync = (yourAuthToken) => async (dispatch) => {
-  // const navigate = useNavigate();
-
+  
   try {
     dispatch(logout());
     localStorage.clear(); 
     localStorage.removeItem('cart');
-    // console.log("rrrrrrrrrrr",localStorage);
+   
   } catch (error) {
     console.error('Error during logout:', error);
   }

@@ -40,7 +40,6 @@ const ShopGridStandard = () => {
     if (type === "category") {
       const updatedCategories = [...selectedCategories];
       const categoryIndex = updatedCategories.indexOf(value);
-      console.log(" typeeeeeeee in shop grid standord",selectedCategories); 
       if (categoryIndex !== -1) {
         // Category is already selected, remove it
         updatedCategories.splice(categoryIndex, 1);
@@ -70,8 +69,7 @@ const ShopGridStandard = () => {
     useEffect(() => {
         fetch(`http://localhost:5001/api/products/${selectedCategories.join(',')}`) 
         .then((response) => response.json())
-        .then((data) => {
-        //   console.log('Products from API in SGS:11111', data);    
+        .then((data) => {   
           setCurrentData(data);
         })
         .catch((error) => console.error('Error fetching data:', error));
@@ -110,7 +108,7 @@ const ShopGridStandard = () => {
                                  productCount={products.length}
                                   sortedProductCount={currentData.length}
                                    />
-                                  {console.log("CURRENTDATA.....",currentData)
+                                  
 }                                {/* shop page content default */}
                                 <ShopProducts layout={layout} products={currentData} />
 

@@ -11,45 +11,12 @@ const productCategoriesModel = require('../models/productCategoriesModel');
 const supplierModel = require('../models/supplierModel');
 
 
-
-// const { log } = require('console');
-
-
-// const storage = multer.diskStorage({
-//   destination: (req, file, cb) => {
-//     cb(null, '../client/public/assets/products');
-//   },
-//   filename: (req, file, cb) => {
-//     cb(null, Date.now() + '-' + file.originalname);
-//   },
-// });
-
-
-// const upload = multer({ 
-//   storage: storage,
-//   limits:{fileSize: '1000000'} ,
-//   // fileFilter: fileFilter 
-//   fileFilter: (req,file,cb)=>{
-//     const fileTypes = /jpeg|jpg|png|gif/
-//     const mimeType =fileTypes.test(file.mimetype)
-//     const extname = fileTypes.test(path.extname(file.originalname))
-
-//     if (mimeType && extname) {
-//       return cb(null, true)
-//     } cb('give proper file')
-//   }
-// }).single('image')
-
-
-// POST API
-
 //post API    ///////////////////////////////////////////////////////////////////
 router.post('/', async(req, res) => {
   try {
-    // const image = req.file.path;
-    // upload,
+    
     const { id,name,description,price,quantity, manufacturer,dateAdded,quantityInStock,sku,discount, new: isNew, rating, saleCount,  category_id, tag, stock, } = req.body;
-    // console.log(req.body);
+    
   
     const newData = await productModel.create({ 
       id,
@@ -96,11 +63,6 @@ router.get('/all', async (req, res) => {
         where: { productId: { [Op.col]: 'products.id' } }, 
         attributes: ['date', 'images'],
       },
-              // include: {
-              //   model: supplierModel,
-              //   where: { supplier_id: { [Op.col]: 'supplier.supplier_id' } }, 
-              //   attributes: ['supplier_name', 'contact_info', 'contact_person', 'website', 'description'],
-              // },
     });
     res.status(200).json(allProducts);
   } catch (error) {
