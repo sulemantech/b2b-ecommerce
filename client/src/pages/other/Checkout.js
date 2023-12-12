@@ -14,6 +14,7 @@ const Checkout = () => {
   const { cartItems } = useSelector((state) => state.cart);
   const { authState} = useSelector((state) => state.auth);
 
+  userEffect
   return (
     <Fragment>
       <SEO
