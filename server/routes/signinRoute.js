@@ -65,5 +65,36 @@ router.post('/register', async (req, res) => {
   });
 
 
+  router.get('/user/profile', verifyToken, async (req, res) => {
+    const userId = req.user.id.id; // Assuming the decoded token has an 'id' property
+  
+    try {
+      const user = await registerationModel.findByPk(userId);
+  
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+  
+      // You can customize the user data you want to send in the response
+      const userData = {
+        id: user.id,
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+        address: user.address,
+        contactNumber: user.contactNumber,
+        businessName: user.businessName
+        // Add other fields as needed
+      };
+  
+      res.status(200).json(userData);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error in user profile route' });
+    }
+  });
+  
+
+
 
 module.exports = router;

@@ -34,23 +34,7 @@ router.get('/getAll', async (req, res) => {
   }
 });
 
-// Get address by ID
-// router.get('/:id', async (req, res) => {
-//   const addressId = req.params.id;
 
-//   try {
-//     const address = await addressModel.findByPk(addressId);
-
-//     if (!address) {
-//       return res.status(404).json({ error: 'Address not found' });
-//     }
-
-//     res.status(200).json(address);
-//   } catch (error) {
-//     console.error('Error getting address by ID:', error);
-//     res.status(500).json({ error: 'Internal Server Error' });
-//   }
-// });
 
 
 

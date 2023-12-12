@@ -71,7 +71,7 @@ const Cart = () => {
                                   finalDiscountedPrice * cartItem.quantity)
                               : (cartTotalPrice +=
                                   finalProductPrice * cartItem.quantity);
-                              //  console.log("cartimagessssssssssss",cartItem?.productImages[0].images)
+                              
                             return (
                               <tr key={key}>
                                 <td className="product-thumbnail">
