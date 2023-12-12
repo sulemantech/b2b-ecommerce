@@ -29,9 +29,6 @@ const ShopSidebar = ({ products, getSortParams, sideSpaceClass  , selectedCatego
 dispatch(fetchCategory(dispatch))
   },[dispatch])
 
-
-  // console.log("asasasas",uniqueCategories);
-
   return (
     <div className={clsx("sidebar-style", sideSpaceClass)}>
       {/* shop search */}

@@ -4,7 +4,8 @@ const jwt = require('jsonwebtoken');
 const { Sequelize } = require('sequelize');
 const registerationModel = require('../models/registerationModel');
 const router = require('./productRoutes');
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const verifyToken = require('../middlewares/verifyToken');
 
 router.post('/login', async (req, res) => {
   const { firstname, password } = req.body;
@@ -62,6 +63,7 @@ router.post('/register', async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   });
+
 
 
 module.exports = router;

@@ -18,7 +18,6 @@ const MyAccount = () => {
     .then(response => {
       const data = response.data;
       setUsers(data);
-        console.log("fetch user data",data);
       })
       .catch(error => {
         console.error('Error fetching data:', error)

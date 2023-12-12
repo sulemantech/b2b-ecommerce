@@ -9,12 +9,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { submitLoginAsync } from "../../store/slices/Auth-Action";
-
+// import { logoutAsync } from "../../store/slices/Auth-Action";
 
 const LoginRegister = () => {
-
-
   const dispatch = useDispatch();
+  const [token, setToken] = useState(localStorage.getItem('token') || '');
   const [values, setvalues] = useState({
     firstname: "",
     lastname: "",
@@ -37,7 +36,6 @@ const LoginRegister = () => {
     })
       .then((res) => {
         res.json().then((result) => {
-          console.log(result);
           setvalues({
             firstname: "",
             lastname: "",
@@ -53,44 +51,7 @@ const LoginRegister = () => {
       .catch((err) => console.log(err));
   };
 
-  // const SubmitLogin = () => {
-
-  //   if (!values.firstname.trim()) {
-  //     setErrors({ ...errors, firstname: "Firstname is required" });
-  //     return;
-  //   }
-
-  //   if (!values.password.trim()) {
-  //     setErrors({ ...errors, password: "Password is required" });
-  //     return;
-  //   }
-
-  //   fetch("http://localhost:5001/api/signin/login", {
-  //     method: "post",
-  //     headers: {
-  //       accept: "application/json",
-  //       "content-type": "application/json",
-  //     },
-  //     body: JSON.stringify(values),
-  //   })
-  //     .then((res) => res.json())
-  //     .then((result) => {
-  //       console.log(result.token);
-  //       console.log("loginnnnnnnn", result);
-  //       if (result.token) {
-
-  //         navigate("/");
-  //       } else {
-  //         alert(result.message);
-  //       }
-
-  //       setvaluse({
-  //         firstname: "",
-  //         password: "",
-  //       });
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
+ 
   const SubmitLogin = () => {
     dispatch(submitLoginAsync(values,navigate));
   };

@@ -4,7 +4,6 @@ import { setActiveSort } from "../../helpers/product";
 
 
 const ShopCategories = ({categories ,getSortParams,selectedCategories }) => {
-console.log("selecteddddddddddddddddddddddCategories shop categories",selectedCategories);
   return (
     <div className="sidebar-widget">
       <h4 className="pro-sidebar-title">Categories </h4>
@@ -21,15 +20,14 @@ console.log("selecteddddddddddddddddddddddCategories shop categories",selectedCa
                   }}
                 >
                       <span className={`checkmark ${selectedCategories.length === 0 ? 'selected' : ''}`} /> All Categories
-{                      console.log("ssselectedkkkkkkkkkkkkkkkkk",selectedCategories)
-}                </button>
+                </button>
               </div>
             </li>
             {categories?.Categories?.map((category, key) => {
               return (
                 <li key={key+1}>
                   <div className="sidebar-widget-list-left" id={key+1}>
-                      {/* {console.log("nameee category shop categories",key+1, " categoyr id:"+category.category_id)}  */}
+                      
                    
                       <button
                    
