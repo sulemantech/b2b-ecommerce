@@ -32,7 +32,7 @@ const ShopGridStandard = () => {
  useEffect(()=>{
         dispatch(fetchProducts(dispatch));
     },[]);
-debugger 
+ 
     
   const [selectedCategories, setSelectedCategories] = useState([]);
   const handleSortParams = (type, value) => {

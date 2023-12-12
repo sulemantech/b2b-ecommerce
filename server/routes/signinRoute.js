@@ -4,7 +4,8 @@ const jwt = require('jsonwebtoken');
 const { Sequelize } = require('sequelize');
 const registerationModel = require('../models/registerationModel');
 const router = require('./productRoutes');
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const verifyToken = require('../middlewares/verifyToken');
 
 router.post('/login', async (req, res) => {
   const { firstname, password } = req.body;
@@ -62,6 +63,22 @@ router.post('/register', async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   });
+  // router.get('/all-users',verifyToken, async (req, res) => {
+  //   try {
+  //     console.log("reqqqqqqqq",req.user);
+  //     // Fetch user information using the user ID from the request
+  //     const user = await registerationModel.findByPk(users.id);
+  
+  //     if (!user) {
+  //       return res.status(404).json({ error: 'User not found' });
+  //     }
+  
+  //     res.status(200).json(user);
+  //   } catch (error) {
+  //     console.error('Error:', error.message);
+  //     res.status(500).json({ error: 'Internal Server Error' });
+  //   }
+  // });
 
 
 module.exports = router;
