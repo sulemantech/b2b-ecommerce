@@ -16,6 +16,61 @@ const Checkout = () => {
   const { cartItems } = useSelector((state) => state.cart);
   const storedToken = useSelector((state) => state.auth.token);
   const [users, setUsers] = useState([]);
+
+/////////////////////////////////////
+const [orderPlaced, setOrderPlaced] = useState(false);
+console.log(cartItems);
+const handlePlaceOrder = async () => {
+  // Assuming you have the user's token stored in localStorage or any other way
+ 
+console.log(storedToken);
+  // Assuming your backend API endpoint is 'https://your-backend-api.com/placeOrder'
+  const backendApiUrl = 'http://localhost:5001/api/order/';
+
+  // Extracting cart items data from the frontend code
+  const cartItemsData = cartItems.map(cartItem => ({
+    address: cartItem.name,
+    quantity: cartItem.quantity,
+    price: cartItem.price,
+    discount: cartItem.discount,
+    totalPrice: currency.currencySymbol +
+    cartTotalPrice.toFixed(2)
+  }));
+
+  console.log("cart items data1",cartItemsData);
+
+  // Building the request payload
+  const requestData = {
+    // orderDetails: {
+    //   // Include any other relevant data from your frontend here
+    //   totalPrice: currency.currencySymbol + cartTotalPrice.toFixed(2),
+    // },
+    cartItems: cartItemsData,
+  };
+  console.log("cartItemsDataloop",cartItemsData );
+
+  // Configuring headers with the authorization token
+  const headers = {
+    Authorization: `Bearer ${storedToken}`,
+    'Content-Type': 'application/json',
+  };
+
+  try {
+    console.log("requested data", requestData.cartItems);
+    // Sending the POST request to the backend API
+    const response = await axios.post(backendApiUrl, requestData, { headers });
+
+    // Handle the response from the backend as needed
+    console.log('Order placed successfully:', response.data);
+  } catch (error) {
+    // Handle errors, such as network issues or backend errors
+    console.error('Error placing order:', error.message);
+  }
+};
+
+
+
+  // console.log("ccccccccccccccc",cartItems[0].name);
   //////////////
  
 
@@ -46,6 +101,7 @@ const Checkout = () => {
 
   useEffect(() => {
     getUserInformation(storedToken);
+    
   }, [storedToken]);
   return (
     <Fragment>
@@ -184,7 +240,8 @@ const Checkout = () => {
                               ).toFixed(2);
                               const finalDiscountedPrice = (
                                 discountedPrice * currency.currencyRate
-                              ).toFixed(2);
+                                ).toFixed(2);
+                                console.log("finalDiscountedPrice",finalDiscountedPrice* cartItem.quantity);
 
                               discountedPrice != null
                                 ? (cartTotalPrice +=
@@ -232,7 +289,7 @@ const Checkout = () => {
                       <div className="payment-method"></div>
                     </div>
                     <div className="place-order mt-25">
-                      <button className="btn-hover">Place Order</button>
+                    <button className="btn-hover" onClick={handlePlaceOrder}>Place Order</button>
                     </div>
                   </div>
                 </div>

@@ -29,9 +29,9 @@ const ShopGridStandard = () => {
     const pageLimit = 15;
     let { pathname } = useLocation();
 
- useEffect(()=>{
-        dispatch(fetchProducts(dispatch));
-    },[]);
+//  useEffect(()=>{
+//         dispatch(fetchProducts(dispatch));
+//     },[]);
  
     
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -75,7 +75,7 @@ const ShopGridStandard = () => {
         .catch((error) => console.error('Error fetching data:', error));
 
         dispatch(fetchProducts());
-    }, [offset, sortValue, selectedCategories]);
+    }, [offset, selectedCategories]);
 
 
     return (

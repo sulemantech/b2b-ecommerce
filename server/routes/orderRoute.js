@@ -17,7 +17,7 @@ router.get('/', async (req, res) => {
         },
         {
           model: orderItemsModel,
-          attributes: ['orderItemId', 'productId', 'quantity','priceIndividual'],
+          attributes: [ 'productId', 'quantity','priceIndividual'],
         },
       ],
       
@@ -30,22 +30,48 @@ router.get('/', async (req, res) => {
 });
 
 // Add a new order
-router.post('/', verifyToken, async (req, res) => {
-  const {
-    //userId,
-    address,
-    orderDate,
-    totalPrice,
-    status,
-    discount,
-    paymentMethod,
-    trackingNumber,
-  } = req.body;
+// router.post('/', verifyToken, async (req, res) => {
+//   const {
+//     //userId,
+//     address,
+//     totalPrice,
+//     status,
+//     discount,
+//     paymentMethod,
+//     trackingNumber,
+//   } = req.body;
+  
+//   const userId = req.user.id.id;
+//   // const address= req.user.id.address
+//   const orderDate= req.user.id.createdAt
+// // console.log(req.user);
+//   try {
+//     const newOrder = await orderModel.create({
+//       userId,
+//       address,
+//       orderDate,
+//       totalPrice,
+//       status,
+//       discount,
+//       paymentMethod,
+//       trackingNumber,
+//     });
+//     res.json(newOrder);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Internal Server Error in order post' });
+//   }
+// });
 
-  const userId = req.user.id.id;
+router.post('/', verifyToken, async (req, res) => {
+  const { address, totalPrice, status, discount, paymentMethod, trackingNumber, cartItems } = req.body;//cartItems to orderitems
+  const userId = req.user.id.id;  
+  const orderDate = req.user.id.createdAt;
+console.log(cartItems);
 
   try {
-    const newOrder = await orderModel.create({
+    // Create a new order
+    const order = await orderModel.create({
       userId,
       address,
       orderDate,
@@ -55,7 +81,21 @@ router.post('/', verifyToken, async (req, res) => {
       paymentMethod,
       trackingNumber,
     });
-    res.json(newOrder);
+
+    // Create order items associated with the order
+    for (const cartItem of cartItems) {
+      await orderItemsModel.create({
+        orderId: order.orderId,
+        //shippingAddress
+        productId: cartItem.productId,
+        quantity: cartItem.quantity,
+        price: cartItem.price,
+        discount: cartItem.discount,
+        totalPrice: cartItem.totalPrice,
+      });
+    }
+
+    res.json({ message: 'Order placed successfully', order });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error in order post' });
