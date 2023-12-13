@@ -5,6 +5,8 @@ import { getDiscountPrice } from "../../helpers/product";
 import SEO from "../../components/seo";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
+import axios from 'axios';
+import { useEffect, useState } from "react";
 
 const Checkout = () => {
   let cartTotalPrice = 0;
@@ -12,9 +14,39 @@ const Checkout = () => {
   let { pathname } = useLocation();
   const currency = useSelector((state) => state.currency);
   const { cartItems } = useSelector((state) => state.cart);
-  // const { authState} = useSelector((state) => state.auth);
+  const storedToken = useSelector((state) => state.auth.token);
+  const [users, setUsers] = useState([]);
+  //////////////
+ 
 
-  // userEffect
+  const getUserInformation = async (storedToken) => {
+    try {
+      if (storedToken) {
+        const response = await fetch('http://localhost:5001/api/signin/user/profile', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${storedToken}`,
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+  
+        const data = await response.json();
+        console.log('User Information:', data);
+        setUsers(data);
+      }
+    } catch (error) {
+      console.error('Error fetching user information in myaccount:', error);
+    }
+  };
+  /////////////////
+
+  useEffect(() => {
+    getUserInformation(storedToken);
+  }, [storedToken]);
   return (
     <Fragment>
       <SEO
@@ -40,19 +72,19 @@ const Checkout = () => {
                       <div className="col-lg-6 col-md-6">
                         <div className="billing-info mb-20">
                           <label>First Name</label>
-                          <input type="text" />
+                          <input type="text" name="" value={users.firstname} />
                         </div>
                       </div>
                       <div className="col-lg-6 col-md-6">
                         <div className="billing-info mb-20">
                           <label>Last Name</label>
-                          <input type="text" />
+                          <input type="text" name="" value={users.lastname} />
                         </div>
                       </div>
                       <div className="col-lg-12">
                         <div className="billing-info mb-20">
                           <label>Company Name</label>
-                          <input type="text" />
+                          <input type="text" name="" value={users.companyName} />
                         </div>
                       </div>
                       <div className="col-lg-12">
@@ -75,6 +107,7 @@ const Checkout = () => {
                             className="billing-address"
                             placeholder="House number and street name"
                             type="text"
+                            name="" value={users.address}
                           />
                           <input
                             placeholder="Apartment, suite, unit etc."
@@ -103,13 +136,13 @@ const Checkout = () => {
                       <div className="col-lg-6 col-md-6">
                         <div className="billing-info mb-20">
                           <label>Phone</label>
-                          <input type="text" />
+                          <input type="text" name="" value={users.contactNumber} />
                         </div>
                       </div>
                       <div className="col-lg-6 col-md-6">
                         <div className="billing-info mb-20">
                           <label>Email Address</label>
-                          <input type="text" />
+                          <input type="text" name="" value={users.email}/>
                         </div>
                       </div>
                     </div>

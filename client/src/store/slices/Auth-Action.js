@@ -25,9 +25,7 @@ export const submitLoginAsync = (values, navigate) => async (dispatch) => {
     const result = response.data;
 
     if (result.token) {
-      dispatch(login({ user: result.userData, token: result.token }));
-      
-     
+      dispatch(login({ user: result.userData,token: result.token }));
       navigate('/');
     } else {
       alert(result.message);

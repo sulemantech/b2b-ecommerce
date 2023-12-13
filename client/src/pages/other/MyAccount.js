@@ -6,24 +6,52 @@ import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import { useState } from "react";
 import axios from 'axios';
+import { useSelector } from "react-redux";
 
 const MyAccount = () => {
   let { pathname } = useLocation();
+  const storedToken = useSelector((state) => state.auth.token);
   const [users, setUsers] = useState([]);
+  console.log(users);
 
+  // useEffect(() => {
+  //   const apiUrl = 'http://localhost:5001/api/signin/user/profile';
+  //   axios.get(apiUrl)
+  //   .then(response => {
+  //     const data = response.data;
+  //     setUsers(data);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching data:', error)
+  //     });
+  // }, []);
+const getUserInformation = async (storedToken) => {
+    try {
+      if (storedToken) {
+        const response = await fetch('http://localhost:5001/api/signin/user/profile', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${storedToken}`,
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+  
+        const data = await response.json();
+        console.log('User Information:', data);
+        setUsers(data);
+      }
+    } catch (error) {
+      console.error('Error fetching user information in myaccount:', error);
+    }
+  };
 
   useEffect(() => {
-    const apiUrl = 'http://localhost:5001/api/signin/get/registration';
-    axios.get(apiUrl)
-    .then(response => {
-      const data = response.data;
-      setUsers(data);
-      })
-      .catch(error => {
-        console.error('Error fetching data:', error)
-      });
-  }, []);
-
+    getUserInformation(storedToken);
+  }, [storedToken]);
 
   return (
     <Fragment>
@@ -56,13 +84,13 @@ const MyAccount = () => {
                               <h4>My Account Information</h4>
                               <h5>Your Personal Details</h5>
                             </div>
+                            
                             <div className="row">
-                            {users.map((user, index) => (
-                            <>                            
-                              <div className="col-lg-6 col-md-6" key={index}>
+                                                         
+                              <div className="col-lg-6 col-md-6" >
                                 <div className="billing-info">
                                   <label>First Name</label>
-                                  <input type="text"  required pattern="[A-Za-z]+" name="" value={user.firstname}/>
+                                  <input type="text"  required pattern="[A-Za-z]+" name="" value={users.firstname}/>
 
 
                                 </div>
@@ -70,38 +98,38 @@ const MyAccount = () => {
                               <div className="col-lg-6 col-md-6">
                                 <div className="billing-info">
                                   <label>Last Name</label>
-                                  <input type="text"  required pattern="[A-Za-z]+" name="" value={user.lastname} />
+                                  <input type="text"  required pattern="[A-Za-z]+" name="" value={users.lastname} />
                                   
                                 </div>
                               </div>
                               <div className="col-lg-12 col-md-12">
                                 <div className="billing-info">
                                   <label>Email Address</label>
-                                 <input type="email" placeholder="" required  name="" value={user.email}/>
+                                 <input type="email" placeholder="" required  name="" value={users.email}/>
 
                                 </div>
                               </div>
                               <div className="col-lg-6 col-md-6">
                                 <div className="billing-info">
                                   <label>Business Name</label>
-                                  <input type="text" required name="" value={user.businessName}/>
+                                  <input type="text" required name="" value={users.businessName}/>
                                 </div>
                               </div>
                               <div className="col-lg-6 col-md-6">
                                 <div className="billing-info">
                                   <label>Telephone</label>
-                                  <input type="number" required name="" value={user.contactNumber}/>
+                                  <input type="number" required name="" value={users.contactNumber}/>
                                 </div>
                               </div>
                               <div className="col-lg-12col-md-6">
                                 <div className="billing-info">
                                   <label>Address</label>
-                                  <input type="text" required name="" value={user.address}/>
+                                  <input type="text" required name="" value={users.address}/>
                                 </div>
                               </div>
-                            </>
-                            ))}
+                            
                             </div>
+                          
                             <div className="billing-back-btn">
                               <div className="billing-btn">
                                 <button type="submit">Continue</button>
