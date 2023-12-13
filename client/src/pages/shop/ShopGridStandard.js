@@ -108,8 +108,7 @@ const ShopGridStandard = () => {
                                  productCount={products.length}
                                   sortedProductCount={currentData.length}
                                    />
-                                  
-}                                {/* shop page content default */}
+                                                                {/* shop page content default */}
                                 <ShopProducts layout={layout} products={currentData} />
 
                                 {/* shop product pagination */}
