@@ -7,8 +7,6 @@ import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import { useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
-import axios from 'axios';
-import { useSelector } from "react-redux";
 
 const MyAccount = () => {
   let { pathname } = useLocation();
