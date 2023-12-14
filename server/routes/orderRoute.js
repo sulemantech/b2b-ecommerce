@@ -64,22 +64,18 @@ router.get('/', async (req, res) => {
 // });
 
 router.post('/', verifyToken, async (req, res) => {
-  const { address, totalPrice, status, discount, paymentMethod, trackingNumber, orderItems } = req.body;//cartItems to orderitems
+  const { address, totalPrice, status, discount, paymentMethod, trackingNumber,
+          name, email, contactNumber, zipCode, additionalInfo, city, country,
+           orderItems } = req.body;
   const userId = req.user.id.id;  
   const orderDate = req.user.id.createdAt;
-console.log(orderItems);
+// console.log(orderItems);
 
   try {
     // Create a new order
     const order = await orderModel.create({
-      userId,
-      address,
-      orderDate,
-      totalPrice,
-      status,
-      discount,
-      paymentMethod,
-      trackingNumber,
+      userId, address, orderDate, totalPrice, status, discount, paymentMethod,
+      trackingNumber,name, email, contactNumber, zipCode, additionalInfo, city, country
     });
 
     // Create order items associated with the order
