@@ -4,6 +4,7 @@ const registerationModel = require('../models/registerationModel');
 const { Op } = require('sequelize');
 const verifyToken = require('../middlewares/verifyToken')
 const orderItemsModel = require('../models/orderItemsModel');
+const validateOrderItem = require('../middlewares/validatorOrderItem');
 const router = express.Router();
 
 // Get all orders
@@ -67,6 +68,16 @@ router.post('/', verifyToken, async (req, res) => {
   const { address, totalPrice, status, discount, paymentMethod, trackingNumber,
           name, email, contactNumber, zipCode, additionalInfo, city, country,
            orderItems } = req.body;
+      //validator
+      try {
+        for (const cartItem of orderItems) {
+          validateOrderItem(cartItem);
+        }
+      } catch (validationError) {
+        return res.status(400).json({ error: validationError.message });
+      }
+
+
   const userId = req.user.id.id;  
   const orderDate = req.user.id.createdAt;
 // console.log(orderItems);
