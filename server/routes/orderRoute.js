@@ -67,7 +67,7 @@ router.post('/', verifyToken, async (req, res) => {
   const { address, totalPrice, status, discount, paymentMethod, trackingNumber, cartItems } = req.body;//cartItems to orderitems
   const userId = req.user.id.id;  
   const orderDate = req.user.id.createdAt;
-console.log(cartItems);
+console.log("carttttttttttttttttt",cartItems);
 
   try {
     // Create a new order
@@ -82,11 +82,9 @@ console.log(cartItems);
       trackingNumber,
     });
 
-    // Create order items associated with the order
     for (const cartItem of cartItems) {
       await orderItemsModel.create({
         orderId: order.orderId,
-        //shippingAddress
         productId: cartItem.productId,
         quantity: cartItem.quantity,
         price: cartItem.price,

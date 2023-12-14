@@ -16,93 +16,224 @@ const Checkout = () => {
   const { cartItems } = useSelector((state) => state.cart);
   const storedToken = useSelector((state) => state.auth.token);
   const [users, setUsers] = useState([]);
-
-/////////////////////////////////////
 const [orderPlaced, setOrderPlaced] = useState(false);
 console.log(cartItems);
-const handlePlaceOrder = async () => {
-  // Assuming you have the user's token stored in localStorage or any other way
+
+debugger
+// const handlePlaceOrder = async () => {
  
-console.log(storedToken);
-  // Assuming your backend API endpoint is 'https://your-backend-api.com/placeOrder'
-  const backendApiUrl = 'http://localhost:5001/api/order/';
+// console.log(storedToken);
+//   // Assuming your backend API endpoint is 'https://your-backend-api.com/placeOrder'
+//   const backendApiUrl = 'http://localhost:5001/api/order/';
 
-  // Extracting cart items data from the frontend code
-  const cartItemsData = cartItems.map(cartItem => ({
-    address: cartItem.name,
-    quantity: cartItem.quantity,
-    price: cartItem.price,
-    discount: cartItem.discount,
-    totalPrice: currency.currencySymbol +
-    cartTotalPrice.toFixed(2)
-  }));
+//   // Extracting cart items data from the frontend code
+//   const cartItemsData = cartItems.map(cartItem => ({
+//     address: cartItem.name,
+//     quantity: cartItem.quantity,
+//     price: cartItem.price,
+//     discount: cartItem.discount,
+//     totalPrice: currency.currencySymbol +
+//     cartTotalPrice.toFixed(2)
+//   }));
 
-  console.log("cart items data1",cartItemsData);
+//   console.log("cart items data1",cartItemsData);
 
-  // Building the request payload
-  const requestData = {
-    // orderDetails: {
-    //   // Include any other relevant data from your frontend here
-    //   totalPrice: currency.currencySymbol + cartTotalPrice.toFixed(2),
-    // },
-    cartItems: cartItemsData,
+//   // Building the request payload
+//   const requestData = {
+//     // orderDetails: {
+//     //   // Include any other relevant data from your frontend here
+//     //   totalPrice: currency.currencySymbol + cartTotalPrice.toFixed(2),
+//     // },
+//     cartItems: cartItemsData,
+//   };
+//   console.log("cartItemsDataloop",cartItemsData );
+
+//   // Configuring headers with the authorization token
+//   const headers = {
+//     Authorization: `Bearer ${storedToken}`,
+//     'Content-Type': 'application/json',
+//   };
+
+//   try {
+//     console.log("requested data", requestData.cartItems);
+//     // Sending the POST request to the backend API
+//     const response = await axios.post(backendApiUrl, requestData, { headers });
+
+//     console.log('Order placed successfully:', response.data);
+//   } catch (error) {
+//     console.error('Error placing order:', error.message);
+//   }
+// };
+
+
+  // const getUserInformation = async (storedToken) => {
+  //   try {
+  //     if (storedToken) {
+  //       const response = await fetch('http://localhost:5001/api/signin/user/profile', {
+  //         method: 'GET',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //           'Authorization': `Bearer ${storedToken}`,
+  //         },
+  //       });
+  
+  //       if (!response.ok) {
+  //         throw new Error(`HTTP error! Status: ${response.status}`);
+  //       }
+  
+  //       const data = await response.json();
+  //       console.log('User Information:', data);
+  //       setUsers(data);
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching user information in myaccount:', error);
+  //   }
+  // };
+  // /////////////////
+
+  // useEffect(() => {
+  //   getUserInformation(storedToken);
+    
+  // }, [storedToken]);
+
+
+
+// correctly working
+
+  // const handlePlaceOrder = async () => {
+  //   const backendApiUrl = "http://localhost:5001/api/order/";
+
+  //   const cartItemsData = cartItems.map((cartItem) => ({
+  //     productId: cartItem.productId,
+  //     quantity: cartItem.quantity,
+  //     price: cartItem.price,
+  //     discount: cartItem.discount,
+  //     totalPrice: (cartItem.price - cartItem.discount) * cartItem.quantity,
+  //   }));
+
+  //   const requestData = {
+  //     address: users.address,
+  //     totalPrice: cartTotalPrice.toFixed(2),
+  //     status: "Pending",
+  //     discount: 5,
+  //     paymentMethod: "Credit Card",
+  //     trackingNumber: Math.floor(Math.random() * 1000000),
+  //     cartItems: cartItemsData,
+  //     firstName: users.firstname,
+  //     lastName: users.lastname,
+  //     companyName: users.companyName,
+  //     country: "Your Country",
+  //     city: "Your City",
+  //     state: "Your State",
+  //     postcode: "Your Postcode",
+  //     phone: users.contactNumber,
+  //     email: users.email,
+  //     additionalInfo: "Additional information: " + users.address,
+  //   };
+
+  //   const headers = {
+  //     Authorization: `Bearer ${storedToken}`,
+  //     "Content-Type": "application/json",
+  //   };
+
+  //   try {
+  //     const response = await axios.post(backendApiUrl, requestData, {
+  //       headers,
+  //     });
+
+  //     console.log("Order placed successfully:", response.data);
+  //   } catch (error) {
+  //     console.error("Error placing order:", error.message);
+  //   }
+  // };
+
+  // second API
+
+  const handlePlaceOrder = async () => {
+    const backendApiUrl = "http://localhost:5001/api/order/";
+  
+    const cartItemsData = cartItems.map((cartItem) => ({
+      productId: cartItem.id,
+      quantity: cartItem.quantity,
+      price: cartItem.price,
+      discount: cartItem.discount,
+      totalPrice: (cartItem.price - cartItem.discount) * cartItem.quantity,
+    }));
+    console.log("cartItems",cartItemsData);
+  
+    const requestData = {
+      address: users.address,
+      totalPrice: cartTotalPrice.toFixed(2),
+      status: "Pending",
+      discount: 5,
+      paymentMethod: "Credit Card",
+      trackingNumber: Math.floor(Math.random() * 1000000),
+      cartItems: cartItemsData,
+      firstName: users.firstname,
+      lastName: users.lastname,
+      companyName: users.companyName,
+      country: "Your Country",
+      city: "Your City",
+      state: "Your State",
+      postcode: "Your Postcode",
+      phone: users.contactNumber,
+      email: users.email,
+      additionalInfo: "Additional information: " + users.address,
+    };
+  
+    const headers = {
+      Authorization: `Bearer ${storedToken}`,
+      "Content-Type": "application/json",
+    };
+  
+    try {
+      const response = await axios.post(backendApiUrl, requestData, {
+        headers,
+      });
+  
+      console.log("Order placed successfully:", response.data);
+    } catch (error) {
+      console.error("Error placing order:", error.message);
+    }
   };
-  console.log("cartItemsDataloop",cartItemsData );
-
-  // Configuring headers with the authorization token
-  const headers = {
-    Authorization: `Bearer ${storedToken}`,
-    'Content-Type': 'application/json',
-  };
-
-  try {
-    console.log("requested data", requestData.cartItems);
-    // Sending the POST request to the backend API
-    const response = await axios.post(backendApiUrl, requestData, { headers });
-
-    // Handle the response from the backend as needed
-    console.log('Order placed successfully:', response.data);
-  } catch (error) {
-    // Handle errors, such as network issues or backend errors
-    console.error('Error placing order:', error.message);
-  }
-};
 
 
 
-  // console.log("ccccccccccccccc",cartItems[0].name);
-  //////////////
- 
+
+
+
 
   const getUserInformation = async (storedToken) => {
     try {
       if (storedToken) {
-        const response = await fetch('http://localhost:5001/api/signin/user/profile', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${storedToken}`,
-          },
-        });
-  
+        const response = await fetch(
+          "http://localhost:5001/api/signin/user/profile",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${storedToken}`,
+            },
+          }
+        );
+
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
-  
+
         const data = await response.json();
-        console.log('User Information:', data);
+        console.log("User Information:", data);
         setUsers(data);
       }
     } catch (error) {
-      console.error('Error fetching user information in myaccount:', error);
+      console.error("Error fetching user information in myaccount:", error);
     }
   };
-  /////////////////
 
   useEffect(() => {
     getUserInformation(storedToken);
-    
   }, [storedToken]);
+
   return (
     <Fragment>
       <SEO
@@ -242,6 +373,8 @@ console.log(storedToken);
                                 discountedPrice * currency.currencyRate
                                 ).toFixed(2);
                                 console.log("finalDiscountedPrice",finalDiscountedPrice* cartItem.quantity);
+                                
+                                
 
                               discountedPrice != null
                                 ? (cartTotalPrice +=
@@ -253,6 +386,12 @@ console.log(storedToken);
                                   <span className="order-middle-left">
                                     {cartItem.name} X {cartItem.quantity}
                                   </span>{" "}
+                                  
+                                  <span>
+                                    {"hellllooo" + cartItem.id}
+
+                                  </span>
+                                  
                                   <span className="order-price">
                                     {discountedPrice !== null
                                       ? currency.currencySymbol +

@@ -38,14 +38,7 @@ const orderItemsModel = sequelize.define('orderItems', {
       // allowNull: false,
     },
  
-  quantity: {
-    type: DataTypes.INTEGER,
-    // allowNull: false,
-  },
-  // priceIndividual:{
-  //   type: DataTypes.INTEGER,
-  //   // allowNull: false,
-  // }
+
 });
 
 // orderItemsModel.belongsTo(orderModel, { foreignKey: 'orderId' });
