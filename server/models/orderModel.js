@@ -8,43 +8,34 @@ const orderModel = sequelize.define('orders', {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true,
-    // allowNull: false,
   },
   userId: {
     type: DataTypes.INTEGER,
-    // allowNull: false,
     references: {
-      model: registerationModel,
+      model: registerationModel, // Replace with your actual RegistrationModel
       key: 'id',
     },
   },
   address: {
     type: DataTypes.STRING,
-    // allowNull: false,
   },
   orderDate: {
     type: DataTypes.DATE,
-    // allowNull: false,
   },
   totalPrice: {
     type: DataTypes.DECIMAL(10, 2),
-    allowNull: false,
   },
   status: {
     type: DataTypes.STRING,
-    // allowNull: false,
   },
   discount: {
     type: DataTypes.INTEGER,
-    // allowNull: true,
   },
   paymentMethod: {
     type: DataTypes.STRING,
-    // allowNull: false,
   },
   trackingNumber: {
     type: DataTypes.INTEGER,
-    // allowNull: true,
   },
 });
 

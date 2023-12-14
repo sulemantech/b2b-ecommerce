@@ -5,7 +5,7 @@ const productImages =require('./routes/productImages');
 const categoryRoute= require('./routes/categoryRoute')
 const supplierRoute= require('./routes/supplierRoute')
 const cookieParser = require('cookie-parser');
-const signinRoute = require('./routes/signinRoute')
+const userRoute= require('./routes/userRoute')
 const stateRoute= require('./routes/stateRoute')
 const citiesRoute=require('./routes/citiesRoute')
 const addressRoute =require('./routes/addressRoute');
@@ -33,7 +33,7 @@ app.use('/api/products/', productRoutes);
 app.use('/api/suppliers', supplierRoute);
 
 //signin route
-app.use('/api/signin', signinRoute)
+app.use('/api/signin', userRoute)
 
 //productImagePost
 app.use('/productImages', productImages)

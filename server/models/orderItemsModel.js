@@ -4,12 +4,7 @@ const orderModel = require('./orderModel');
 const productModel = require('./productModel');
 
 const orderItemsModel = sequelize.define('orderItems', {
-  orderItemId: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true,
-    allowNull: false,
-  },
+  
   orderId: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -26,9 +21,26 @@ const orderItemsModel = sequelize.define('orderItems', {
       key: 'id',
     },
   },
+    quantity: {
+      type: DataTypes.INTEGER,
+      // allowNull: false,
+    },
+    price: {
+      type: DataTypes.FLOAT,
+      // allowNull: false,
+    },
+    discount: {
+      type: DataTypes.FLOAT,
+      // allowNull: false,
+    },
+    totalPrice: {
+      type: DataTypes.FLOAT, // or DataTypes.DECIMAL
+      // allowNull: false,
+    },
+ 
   quantity: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    // allowNull: false,
   },
   // priceIndividual:{
   //   type: DataTypes.INTEGER,

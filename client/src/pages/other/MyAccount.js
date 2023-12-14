@@ -7,13 +7,52 @@ import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import { useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import axios from 'axios';
+import { useSelector } from "react-redux";
 
 const MyAccount = () => {
   let { pathname } = useLocation();
+  const storedToken = useSelector((state) => state.auth.token);
   const [users, setUsers] = useState([]);
   const userToken = useSelector((state) => state.auth.token);
   console.log("User Token:", users);
 
+  console.log(users);
+
+  // useEffect(() => {
+  //   const apiUrl = 'http://localhost:5001/api/signin/user/profile';
+  //   axios.get(apiUrl)
+  //   .then(response => {
+  //     const data = response.data;
+  //     setUsers(data);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching data:', error)
+  //     });
+  // }, []);
+const getUserInformation = async (storedToken) => {
+    try {
+      if (storedToken) {
+        const response = await fetch('http://localhost:5001/api/signin/user/profile', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${storedToken}`,
+          },
+        });
+  
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+  
+        const data = await response.json();
+        console.log('User Information:', data);
+        setUsers(data);
+      }
+    } catch (error) {
+      console.error('Error fetching user information in myaccount:', error);
+    }
+  };
 
   useEffect(() => {
     const apiUrl = "http://localhost:5001/api/signin/user/profile";

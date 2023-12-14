@@ -15,14 +15,26 @@ router.get('/', async (req, res) => {
 
 // Add a new order item
 router.post('/', async (req, res) => {
-  const { orderId, productId, quantity } = req.body;
-
   try {
-    const newOrderItem = await orderItemsModel.create({ orderId, productId, quantity, });
-    res.json(newOrderItem);
+    // Extract order item details from the request body
+    const { orderId, productId, quantity, price, discount, totalPrice } = req.body;
+
+    // Create the order item using Sequelize model
+    const orderItem = await orderItemsModel.create({
+      
+      orderId,
+      productId,
+      quantity,
+      price,
+      discount,
+      totalPrice,
+    });
+
+    // Respond with the created order item
+    res.status(201).json({ message: 'Order item created successfully', orderItem });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal Server Error in order item post' });
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 });
 
