@@ -66,16 +66,28 @@ const ShopGridStandard = () => {
         setFilterSortValue(sortValue);
     }
 
-    useEffect(() => {
-        fetch(`http://localhost:5001/api/products/${selectedCategories.join(',')}`) 
-        .then((response) => response.json())
-        .then((data) => {   
-          setCurrentData(data);
-        })
-        .catch((error) => console.error('Error fetching data:', error));
+    // useEffect(() => {
+    //     fetch(`http://localhost:5001/api/products/${selectedCategories.join('')}`) 
+    //     .then((response) => response.json())
+    //     .then((data) => {   
+    //       setCurrentData(data);
+    //     })
+    //     .catch((error) => console.error('Error fetching data:', error));
 
-        dispatch(fetchProducts());
-    }, [offset, selectedCategories]);
+    //     dispatch(fetchProducts());
+    // }, [offset, sortValue, selectedCategories]);
+    useEffect(() => {
+        if (selectedCategories.length > 0) {
+            fetch(`http://localhost:5001/api/products/${selectedCategories.join(',')}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    setCurrentData(data);
+                })
+                .catch((error) => console.error('Error fetching data:', error));
+            dispatch(fetchProducts());
+        }
+    }, [offset, sortValue, selectedCategories]);
+    
 
 
     return (
@@ -108,8 +120,7 @@ const ShopGridStandard = () => {
                                  productCount={products.length}
                                   sortedProductCount={currentData.length}
                                    />
-                                  
-}                                {/* shop page content default */}
+                                                                {/* shop page content default */}
                                 <ShopProducts layout={layout} products={currentData} />
 
                                 {/* shop product pagination */}

@@ -54,23 +54,23 @@ router.post('/register', async (req, res) => {
 
 
   // get registration
-  // router.get('/get/registration', async (req, res) => {
-  //   try {
-  //     const allusers = await registerationModel.findAll();
-  //     res.status(200).json(allusers);
-  //   } catch (error) {
-  //     console.error('Error:', error.message);
-  //     res.status(500).json({ error: 'Internal Server Error' });
-  //   }
-  // });
+  router.get('/get/registration', async (req, res) => {
+    try {
+      const allusers = await registerationModel.findAll();
+      res.status(200).json(allusers);
+    } catch (error) {
+      console.error('Error:', error.message);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  });
 
 
   router.get('/user/profile', verifyToken, async (req, res) => {
     const userId = req.user.id.id; // Assuming the decoded token has an 'id' property
-  // console.log(req.user);
+  
     try {
       const user = await registerationModel.findByPk(userId);
-  // console.log("uuuuuuuuuuuu",user);
+  
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
       }
