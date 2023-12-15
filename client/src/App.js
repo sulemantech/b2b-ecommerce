@@ -1,6 +1,7 @@
 import { Suspense, lazy } from "react";
 import ScrollToTop from "./helpers/scroll-top";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Order from "./pages/other/Order";
 const ShopGridStandard = lazy(() => import("./pages/shop/ShopGridStandard"));
 
 // product pages
@@ -123,6 +124,10 @@ const App = () => {
               <Route
                 path={process.env.PUBLIC_URL + "/checkout"}
                 element={<Checkout/>}
+              /> 
+                <Route
+                path={process.env.PUBLIC_URL + "/my-Order"}
+                element={<Order/>}
               /> 
               <Route
                 path={process.env.PUBLIC_URL + "/logout"}

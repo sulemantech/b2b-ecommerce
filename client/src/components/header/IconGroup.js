@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import clsx from "clsx";
 import MenuCart from "./sub-components/MenuCart";
 import { logoutAsync } from "../../store/slices/Auth-Action";
+// import { logoutAsync } from "../../store/slices/API";
 
 const IconGroup = ({ iconWhiteClass }) => {
   const dispatch = useDispatch();
@@ -59,6 +60,12 @@ const IconGroup = ({ iconWhiteClass }) => {
                     My Account
                   </Link>
                 </li>
+                <li>
+                <Link to={process.env.PUBLIC_URL + "/my-Order"}>
+                    My Orders
+                  </Link>
+                </li>
+
                 <li>
                 <Link to={process.env.PUBLIC_URL + "/logout"} onClick={handleLogout}>
               logout

@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { submitLoginAsync } from "../../store/slices/Auth-Action";
-// import { logoutAsync } from "../../store/slices/Auth-Action";
+import { postRegistration} from "../../store/slices/API";
 
 const LoginRegister = () => {
   const dispatch = useDispatch();
@@ -24,37 +24,33 @@ const LoginRegister = () => {
     businessName: "",
   });
   const navigate = useNavigate();
-  const SubmitRegistration = (e) => {
+  
+
+  const SubmitRegistration = async (e) => {
     e.preventDefault();
-    fetch("http://localhost:5001/api/signin/register", {
-      method: "post",
-      headers: {
-        accept: "application/json",
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(values),
-    })
-      .then((res) => {
-        res.json().then((result) => {
-          setvalues({
-            firstname: "",
-            lastname: "",
-            email: "",
-            password: "",
-            address: "",
-            contactNumber: "",
-            businessName: "",
-          });
-        });
-        window.location.reload();
-      })
-      .catch((err) => console.log(err));
+    try {
+      const result = await postRegistration('/register', values);
+      console.log('Registration successful:', result);
+      setvalues({
+        firstname: "",
+        lastname: "",
+        email: "",
+        password: "",
+        address: "",
+        contactNumber: "",
+        businessName: "",
+      });
+      window.location.reload();
+    } catch (error) {
+      console.error('Error during registration:', error);
+    }
   };
 
- 
   const SubmitLogin = () => {
     dispatch(submitLoginAsync(values,navigate));
+    console.log("clickhelooooooo");
   };
+
 
   let { pathname } = useLocation();
 
