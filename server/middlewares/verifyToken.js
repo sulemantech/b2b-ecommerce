@@ -13,17 +13,12 @@ const verifyToken = (req, res, next) => {
   }
   
   const tokenValue = token.split(' ')[1];
-  console.log("token",token);
-    
 
     jwt.verify(tokenValue, process.env.JWT_SECRET, (err, decoded) => {
-      if (err) {
-        //console.log("error is  :", err)
+      if (err) {        
         return res.status(401).json({ message: 'Unauthorized: Invalid token' });
-      }
-  
-      req.user = decoded;
-      // console.log(req.user.id);
+      }  
+      req.user = decoded;   
       next();
     });
   };
