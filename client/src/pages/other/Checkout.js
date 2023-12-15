@@ -160,6 +160,8 @@ debugger
       totalPrice: (cartItem.price - cartItem.discount) * cartItem.quantity,
     }));
     console.log("cartItems",cartItemsData);
+     
+      
   
     const requestData = {
       address: users.address,
@@ -168,17 +170,17 @@ debugger
       discount: 5,
       paymentMethod: "Credit Card",
       trackingNumber: Math.floor(Math.random() * 1000000),
-      cartItems: cartItemsData,
-      firstName: users.firstname,
+      orderItems: cartItemsData,
+      name: users.firstname,
       lastName: users.lastname,
       companyName: users.companyName,
       country: "Your Country",
       city: "Your City",
       state: "Your State",
-      postcode: "Your Postcode",
-      phone: users.contactNumber,
+      zipCode: "Your Postcode",
+      contactNumber: users.contactNumber,
       email: users.email,
-      additionalInfo: "Additional information: " + users.address,
+      additionalInfo: "Additional information: "
     };
   
     const headers = {

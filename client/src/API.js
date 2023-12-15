@@ -1,7 +1,7 @@
 
 import axios from 'axios';
-
-const Login = 'http://localhost:5001/api/signin';
+const APIHost = "http://localhost:5001"
+const Login = '${APIHost}/api/signin';
 
 const api = axios.create({
   baseURL: Login,
@@ -24,7 +24,7 @@ export {post};
 
 
 
-const Registration= 'http://localhost:5001/api/signin/register';
+const Registration= '${APIHost}/api/signin/register';
 
 const API_Registration = axios.create({
   baseURL: Registration,

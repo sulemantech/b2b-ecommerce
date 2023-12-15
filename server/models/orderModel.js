@@ -64,6 +64,11 @@ const orderModel = sequelize.define('orders', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  
+    shippingAddress:{
+      type:DataTypes.STRING
+    }
+  
 });
 
 orderModel.belongsTo(registerationModel, { foreignKey: 'userId' }); // Establishing the foreign key relationship

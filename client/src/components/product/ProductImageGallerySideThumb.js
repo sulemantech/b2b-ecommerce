@@ -20,7 +20,7 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
   );
 
 
-debugger
+
 
   const gallerySwiperParams = {
     spaceBetween: 10,

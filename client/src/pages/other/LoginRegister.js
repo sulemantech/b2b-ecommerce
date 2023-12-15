@@ -9,7 +9,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { submitLoginAsync } from "../../store/slices/Auth-Action";
-import { postRegistration} from "../../store/slices/API";
+import { postRegistration} from "../../API";
 
 const LoginRegister = () => {
   const dispatch = useDispatch();

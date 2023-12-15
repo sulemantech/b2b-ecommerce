@@ -62,7 +62,7 @@ router.post('/', verifyToken, async (req, res) => {
           name, email, contactNumber, zipCode, additionalInfo, city, country,
            orderItems } = req.body;
 
-      //validator
+    console.log("cccccccccccccccccc",orderItems)
       try {
         for (const cartItem of orderItems) {
           validateOrderItem(cartItem);

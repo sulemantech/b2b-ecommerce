@@ -58,7 +58,7 @@
 import { login, logout } from './Auth-slice';
 import { deleteAllFromCart } from '../slices/cart-slice';
 import { deleteAllFromWishlist } from './wishlist-slice';
-import {post} from './API';
+import {post} from '../../API';
 
 export const navigateAction = (navigate, path) => {
   navigate(path);
