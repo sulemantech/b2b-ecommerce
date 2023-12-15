@@ -67,8 +67,7 @@ router.post('/', verifyToken, async (req, res) => {
   const { address, totalPrice, status, discount, paymentMethod, trackingNumber, orderItems } = req.body;//cartItems to orderitems
   const userId = req.user.id.id;  
   const orderDate = req.user.id.createdAt;
-console.log(orderItems);
-
+  console.log(orderItems);
   try {
     // Create a new order
     const order = await orderModel.create({
