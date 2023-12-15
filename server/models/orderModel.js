@@ -37,6 +37,33 @@ const orderModel = sequelize.define('orders', {
   trackingNumber: {
     type: DataTypes.INTEGER,
   },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  contactNumber: {
+    type: DataTypes.INTEGER, // Assuming it's a large integer
+    allowNull: false,
+  },
+  zipCode: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  additionalInfo: {
+    type: DataTypes.STRING,
+  },
+  city: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  country: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
 });
 
 orderModel.belongsTo(registerationModel, { foreignKey: 'userId' }); // Establishing the foreign key relationship

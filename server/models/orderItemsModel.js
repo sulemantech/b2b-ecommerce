@@ -4,7 +4,12 @@ const orderModel = require('./orderModel');
 const productModel = require('./productModel');
 
 const orderItemsModel = sequelize.define('orderItems', {
-  
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+    allowNull: false,
+  },  
   orderId: {
     type: DataTypes.INTEGER,
     allowNull: false,

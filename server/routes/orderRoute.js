@@ -4,6 +4,7 @@ const registerationModel = require('../models/registerationModel');
 const { Op } = require('sequelize');
 const verifyToken = require('../middlewares/verifyToken')
 const orderItemsModel = require('../models/orderItemsModel');
+const validateOrderItem = require('../middlewares/validatorOrderItem');
 const router = express.Router();
 
 // Get all orders
@@ -13,14 +14,14 @@ router.get('/', async (req, res) => {
       include: [
         {
           model: registerationModel,
-          attributes: ['id', 'firstname',"lastname","contactNumber","email"],
+          attributes: ['id', 'firstname', "lastname", "contactNumber", "email"],
         },
         {
           model: orderItemsModel,
-          attributes: [ 'productId', 'quantity','priceIndividual'],
+          attributes: ['productId', 'quantity', 'priceIndividual'],
         },
       ],
-      
+
     });
     res.json(orders);
   } catch (error) {
@@ -40,7 +41,7 @@ router.get('/', async (req, res) => {
 //     paymentMethod,
 //     trackingNumber,
 //   } = req.body;
-  
+
 //   const userId = req.user.id.id;
 //   // const address= req.user.id.address
 //   const orderDate= req.user.id.createdAt
@@ -64,21 +65,27 @@ router.get('/', async (req, res) => {
 // });
 
 router.post('/', verifyToken, async (req, res) => {
-  const { address, totalPrice, status, discount, paymentMethod, trackingNumber, orderItems } = req.body;//cartItems to orderitems
-  const userId = req.user.id.id;  
+  const { address, totalPrice, status, discount, paymentMethod, trackingNumber,
+    name, email, contactNumber, zipCode, additionalInfo, city, country,
+    orderItems } = req.body;
+  //validator
+  try {
+    for (const cartItem of orderItems) {
+      validateOrderItem(cartItem);
+    }
+  } catch (validationError) {
+    return res.status(400).json({ error: validationError.message });
+  }
+
+
+  const userId = req.user.id.id;
   const orderDate = req.user.id.createdAt;
   console.log(orderItems);
   try {
     // Create a new order
     const order = await orderModel.create({
-      userId,
-      address,
-      orderDate,
-      totalPrice,
-      status,
-      discount,
-      paymentMethod,
-      trackingNumber,
+      userId, address, orderDate, totalPrice, status, discount, paymentMethod,
+      trackingNumber, name, email, contactNumber, zipCode, additionalInfo, city, country
     });
 
     // Create order items associated with the order
