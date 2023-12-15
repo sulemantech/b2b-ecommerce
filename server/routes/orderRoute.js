@@ -68,7 +68,7 @@ router.post('/', verifyToken, async (req, res) => {
           validateOrderItem(cartItem);
         }
       } catch (validationError) {
-        return res.status(400).json({ error: validationError.message });
+        return res.status(400).json({ message:"orderRoute: ",error: validationError.message });
       }
 
 
@@ -85,7 +85,6 @@ router.post('/', verifyToken, async (req, res) => {
     for (const cartItem of orderItems) {
       await orderItemsModel.create({
         orderId: order.orderId,
-        shippingAddress: cartItem.shippingAddress,
         productId: cartItem.productId,
         quantity: cartItem.quantity,
         price: cartItem.price,
