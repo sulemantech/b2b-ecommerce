@@ -7,21 +7,21 @@ const orderItemsModel = require('../models/orderItemsModel');
 const validateOrderItem = require('../middlewares/validatorOrderItem');
 const router = express.Router();
 
-// Get all orders ///////////////////////////////////////////////////
+// Get all orders 
 router.get('/', async (req, res) => {
   try {
     const orders = await orderModel.findAll({
       include: [
         {
           model: registerationModel,
-          attributes: ['id', 'firstname',"lastname","contactNumber","email"],
+          attributes: ['id', 'firstname', "lastname", "contactNumber", "email"],
         },
         {
           model: orderItemsModel,
-          attributes: [ "orderId","price","discount","totalPrice",'productId', 'quantity',],
+          attributes: ["orderId", "price", "discount", "totalPrice", 'productId', 'quantity',],
         },
       ],
-      
+
     });
     res.json(orders);
   } catch (error) {
@@ -30,7 +30,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-//get specific orders of specific users through there id     /////////////
+//get specific orders of specific users through there id     
 router.get('/user', verifyToken, async (req, res) => {
   const userId = req.user.id.id;
 
@@ -56,29 +56,29 @@ router.get('/user', verifyToken, async (req, res) => {
   }
 });
 
-//POST API FOR ORDER    /////////////////////////////////////////////////////////////
+//POST API FOR ORDER    
 router.post('/', verifyToken, async (req, res) => {
   const { address, totalPrice, status, discount, paymentMethod, trackingNumber,
-          name, email, contactNumber, zipCode, additionalInfo, city, country,shippingAddress,
-           orderItems } = req.body;
+    name, email, contactNumber, zipCode, additionalInfo, city, country, shippingAddress,
+    orderItems } = req.body;
 
-    console.log("cccccccccccccccccc",orderItems)
-      // try {
-      //   for (const cartItem of orderItems) {
-      //     validateOrderItem(cartItem);
-      //   }
-      // } catch (validationError) {
-      //   return res.status(400).json({ error: validationError.message });
-      // }
-
-
-  const userId = req.user.id.id;  
+  //validator
+  try {
+    for (const cartItem of orderItems) {
+      validateOrderItem(cartItem);
+    }
+    validateOrderItem(address, totalPrice, status, discount, paymentMethod, trackingNumber,
+      name, email, contactNumber, zipCode, additionalInfo, city, country)
+  } catch (validationError) {
+    return res.status(400).json({ error: validationError.message });
+  }
+  const userId = req.user.id.id;
   const orderDate = req.user.id.createdAt;
   try {
     // Create a new order
     const order = await orderModel.create({
       userId, address, orderDate, totalPrice, status, discount, paymentMethod,
-      trackingNumber,name, email, contactNumber, zipCode, additionalInfo, city, country,shippingAddress
+      trackingNumber, name, email, contactNumber, zipCode, additionalInfo, city, country, shippingAddress
     });
 
     // Create order items associated with the order
