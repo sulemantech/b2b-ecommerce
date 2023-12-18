@@ -67,8 +67,10 @@ router.post('/', verifyToken, async (req, res) => {
         for (const cartItem of orderItems) {
           validateOrderItem(cartItem);
         }
+        validateOrderItem(address, totalPrice, status, discount, paymentMethod, trackingNumber,
+          name, email, contactNumber, zipCode, additionalInfo, city, country)
       } catch (validationError) {
-        return res.status(400).json({ message:"orderRoute: ",error: validationError.message });
+        return res.status(400).json({ error: validationError.message });
       }
 
 
