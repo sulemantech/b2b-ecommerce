@@ -51,7 +51,7 @@ const orderModel = sequelize.define('orders', {
   },
   zipCode: {
     type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull:true,
   },
   additionalInfo: {
     type: DataTypes.STRING,

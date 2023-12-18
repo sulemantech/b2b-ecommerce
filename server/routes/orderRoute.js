@@ -59,17 +59,17 @@ router.get('/user', verifyToken, async (req, res) => {
 //POST API FOR ORDER    /////////////////////////////////////////////////////////////
 router.post('/', verifyToken, async (req, res) => {
   const { address, totalPrice, status, discount, paymentMethod, trackingNumber,
-          name, email, contactNumber, zipCode, additionalInfo, city, country,
+          name, email, contactNumber, zipCode, additionalInfo, city, country,shippingAddress,
            orderItems } = req.body;
 
     console.log("cccccccccccccccccc",orderItems)
-      try {
-        for (const cartItem of orderItems) {
-          validateOrderItem(cartItem);
-        }
-      } catch (validationError) {
-        return res.status(400).json({ error: validationError.message });
-      }
+      // try {
+      //   for (const cartItem of orderItems) {
+      //     validateOrderItem(cartItem);
+      //   }
+      // } catch (validationError) {
+      //   return res.status(400).json({ error: validationError.message });
+      // }
 
 
   const userId = req.user.id.id;  
@@ -78,14 +78,13 @@ router.post('/', verifyToken, async (req, res) => {
     // Create a new order
     const order = await orderModel.create({
       userId, address, orderDate, totalPrice, status, discount, paymentMethod,
-      trackingNumber,name, email, contactNumber, zipCode, additionalInfo, city, country
+      trackingNumber,name, email, contactNumber, zipCode, additionalInfo, city, country,shippingAddress
     });
 
     // Create order items associated with the order
     for (const cartItem of orderItems) {
       await orderItemsModel.create({
         orderId: order.orderId,
-        shippingAddress: cartItem.shippingAddress,
         productId: cartItem.productId,
         quantity: cartItem.quantity,
         price: cartItem.price,

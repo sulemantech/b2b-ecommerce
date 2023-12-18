@@ -5,8 +5,9 @@ import { getDiscountPrice } from "../../helpers/product";
 import SEO from "../../components/seo";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
-import axios from 'axios';
 import { useEffect, useState } from "react";
+import { placeOrder } from "../../API";
+import { getUserInformation } from "../../API";
 
 const Checkout = () => {
   let cartTotalPrice = 0;
@@ -16,142 +17,18 @@ const Checkout = () => {
   const { cartItems } = useSelector((state) => state.cart);
   const storedToken = useSelector((state) => state.auth.token);
   const [users, setUsers] = useState([]);
-const [orderPlaced, setOrderPlaced] = useState(false);
 console.log(cartItems);
 
-debugger
-// const handlePlaceOrder = async () => {
- 
-// console.log(storedToken);
-//   // Assuming your backend API endpoint is 'https://your-backend-api.com/placeOrder'
-//   const backendApiUrl = 'http://localhost:5001/api/order/';
+const [formvalue,setvalue]= useState({
+  zipCode:"",
+  shippingAddress:"",
+  additionalInfo:"",
+  city:"",
+  country:"",
 
-//   // Extracting cart items data from the frontend code
-//   const cartItemsData = cartItems.map(cartItem => ({
-//     address: cartItem.name,
-//     quantity: cartItem.quantity,
-//     price: cartItem.price,
-//     discount: cartItem.discount,
-//     totalPrice: currency.currencySymbol +
-//     cartTotalPrice.toFixed(2)
-//   }));
-
-//   console.log("cart items data1",cartItemsData);
-
-//   // Building the request payload
-//   const requestData = {
-//     // orderDetails: {
-//     //   // Include any other relevant data from your frontend here
-//     //   totalPrice: currency.currencySymbol + cartTotalPrice.toFixed(2),
-//     // },
-//     cartItems: cartItemsData,
-//   };
-//   console.log("cartItemsDataloop",cartItemsData );
-
-//   // Configuring headers with the authorization token
-//   const headers = {
-//     Authorization: `Bearer ${storedToken}`,
-//     'Content-Type': 'application/json',
-//   };
-
-//   try {
-//     console.log("requested data", requestData.cartItems);
-//     // Sending the POST request to the backend API
-//     const response = await axios.post(backendApiUrl, requestData, { headers });
-
-//     console.log('Order placed successfully:', response.data);
-//   } catch (error) {
-//     console.error('Error placing order:', error.message);
-//   }
-// };
-
-
-  // const getUserInformation = async (storedToken) => {
-  //   try {
-  //     if (storedToken) {
-  //       const response = await fetch('http://localhost:5001/api/signin/user/profile', {
-  //         method: 'GET',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //           'Authorization': `Bearer ${storedToken}`,
-  //         },
-  //       });
-  
-  //       if (!response.ok) {
-  //         throw new Error(`HTTP error! Status: ${response.status}`);
-  //       }
-  
-  //       const data = await response.json();
-  //       console.log('User Information:', data);
-  //       setUsers(data);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching user information in myaccount:', error);
-  //   }
-  // };
-  // /////////////////
-
-  // useEffect(() => {
-  //   getUserInformation(storedToken);
-    
-  // }, [storedToken]);
-
-
-
-// correctly working
-
-  // const handlePlaceOrder = async () => {
-  //   const backendApiUrl = "http://localhost:5001/api/order/";
-
-  //   const cartItemsData = cartItems.map((cartItem) => ({
-  //     productId: cartItem.productId,
-  //     quantity: cartItem.quantity,
-  //     price: cartItem.price,
-  //     discount: cartItem.discount,
-  //     totalPrice: (cartItem.price - cartItem.discount) * cartItem.quantity,
-  //   }));
-
-  //   const requestData = {
-  //     address: users.address,
-  //     totalPrice: cartTotalPrice.toFixed(2),
-  //     status: "Pending",
-  //     discount: 5,
-  //     paymentMethod: "Credit Card",
-  //     trackingNumber: Math.floor(Math.random() * 1000000),
-  //     cartItems: cartItemsData,
-  //     firstName: users.firstname,
-  //     lastName: users.lastname,
-  //     companyName: users.companyName,
-  //     country: "Your Country",
-  //     city: "Your City",
-  //     state: "Your State",
-  //     postcode: "Your Postcode",
-  //     phone: users.contactNumber,
-  //     email: users.email,
-  //     additionalInfo: "Additional information: " + users.address,
-  //   };
-
-  //   const headers = {
-  //     Authorization: `Bearer ${storedToken}`,
-  //     "Content-Type": "application/json",
-  //   };
-
-  //   try {
-  //     const response = await axios.post(backendApiUrl, requestData, {
-  //       headers,
-  //     });
-
-  //     console.log("Order placed successfully:", response.data);
-  //   } catch (error) {
-  //     console.error("Error placing order:", error.message);
-  //   }
-  // };
-
-  // second API
+})
 
   const handlePlaceOrder = async () => {
-    const backendApiUrl = "http://localhost:5001/api/order/";
-  
     const cartItemsData = cartItems.map((cartItem) => ({
       productId: cartItem.id,
       quantity: cartItem.quantity,
@@ -159,41 +36,29 @@ debugger
       discount: cartItem.discount,
       totalPrice: (cartItem.price - cartItem.discount) * cartItem.quantity,
     }));
-    console.log("cartItems",cartItemsData);
-     
-      
-  
-    const requestData = {
+
+    const orderData = {
       address: users.address,
       totalPrice: cartTotalPrice.toFixed(2),
-      status: "Pending",
+      status: "processing",
       discount: 5,
-      paymentMethod: "Credit Card",
+      paymentMethod: "Cash on delivery",
       trackingNumber: Math.floor(Math.random() * 1000000),
       orderItems: cartItemsData,
       name: users.firstname,
       lastName: users.lastname,
-      companyName: users.companyName,
-      country: "Your Country",
-      city: "Your City",
-      state: "Your State",
-      zipCode: "Your Postcode",
+      country: formvalue.country,
+      city: formvalue.city,
+      zipCode: formvalue.zipCode,
       contactNumber: users.contactNumber,
       email: users.email,
-      additionalInfo: "Additional information: "
+      additionalInfo: formvalue.additionalInfo,
+      shippingAddress: formvalue.shippingAddress,
     };
-  
-    const headers = {
-      Authorization: `Bearer ${storedToken}`,
-      "Content-Type": "application/json",
-    };
-  
+
     try {
-      const response = await axios.post(backendApiUrl, requestData, {
-        headers,
-      });
-  
-      console.log("Order placed successfully:", response.data);
+      const response = await placeOrder(storedToken, orderData);
+      console.log("Order placed successfully:", response);
     } catch (error) {
       console.error("Error placing order:", error.message);
     }
@@ -201,39 +66,16 @@ debugger
 
 
 
-
-
-
-
-  const getUserInformation = async (storedToken) => {
-    try {
-      if (storedToken) {
-        const response = await fetch(
-          "http://localhost:5001/api/signin/user/profile",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${storedToken}`,
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log("User Information:", data);
-        setUsers(data);
-      }
-    } catch (error) {
-      console.error("Error fetching user information in myaccount:", error);
-    }
-  };
-
   useEffect(() => {
-    getUserInformation(storedToken);
+    const fetchUser = async () => {
+      try {
+        const userData = await getUserInformation(storedToken);
+        setUsers(userData);
+      } catch (error) {
+      }
+    };
+
+    fetchUser(); 
   }, [storedToken]);
 
   return (
@@ -270,14 +112,14 @@ debugger
                           <input type="text" name="" value={users.lastname} />
                         </div>
                       </div>
-                      <div className="col-lg-12">
+                      {/* <div className="col-lg-12">
                         <div className="billing-info mb-20">
                           <label>Company Name</label>
                           <input type="text" name="" value={users.companyName} />
                         </div>
-                      </div>
+                      </div> */}
                       <div className="col-lg-12">
-                        <div className="billing-select mb-20">
+                        {/* <div className="billing-select mb-20">
                           <label>Country</label>
                           <select>
                             <option>Select a country</option>
@@ -287,16 +129,18 @@ debugger
                             <option>Bangladesh</option>
                             <option>Barbados</option>
                           </select>
-                        </div>
+                        </div> */}
                       </div>
                       <div className="col-lg-12">
                         <div className="billing-info mb-20">
-                          <label>Street Address</label>
+                          <label>shippingAddress</label>
                           <input
                             className="billing-address"
                             placeholder="House number and street name"
                             type="text"
-                            name="" value={users.address}
+                            onChange={(e)=>setvalue({...formvalue,shippingAddress: e.target.value})}
+                            formvalue={formvalue.shippingAddress}
+                            // name="" value={users.address}
                           />
                           <input
                             placeholder="Apartment, suite, unit etc."
@@ -306,20 +150,31 @@ debugger
                       </div>
                       <div className="col-lg-12">
                         <div className="billing-info mb-20">
-                          <label>Town / City</label>
-                          <input type="text" />
+                          <label>city</label>
+                          <input type="text" 
+                          placeholder="city"
+                          onChange={(e)=>setvalue({...formvalue,city:e.target.value})}
+                          formvalue={formvalue.city}
+                          />
                         </div>
                       </div>
                       <div className="col-lg-6 col-md-6">
                         <div className="billing-info mb-20">
                           <label>State / County</label>
-                          <input type="text" />
+                          <input type="text" 
+                          onChange={(e)=>setvalue({...formvalue,country:e.target.value})}
+                          formvalue={formvalue.country}
+                          />
                         </div>
                       </div>
                       <div className="col-lg-6 col-md-6">
                         <div className="billing-info mb-20">
-                          <label>Postcode / ZIP</label>
-                          <input type="text" />
+                          <label>zipCode</label>
+                          <input type="text"    onChange={(e) =>
+                                setvalue({ ...formvalue, zipCode: e.target.value })
+                          }
+                                formvalue={formvalue.zipCode}
+                  />
                         </div>
                       </div>
                       <div className="col-lg-6 col-md-6">
@@ -337,12 +192,14 @@ debugger
                     </div>
 
                     <div className="additional-info-wrap">
-                      <h4>Additional information</h4>
+                      <h4>additionalInfo</h4>
                       <div className="additional-info">
                         <label>Order notes</label>
                         <textarea
                           placeholder="Notes about your order, e.g. special notes for delivery. "
                           name="message"
+                          onChange={(e)=>setvalue({...formvalue,additionalInfo:e.target.value})}
+                          formvalue={formvalue.additionalInfo}
                           defaultValue={""}
                         />
                       </div>

@@ -42,12 +42,6 @@ const orderItemsModel = sequelize.define('orderItems', {
       type: DataTypes.FLOAT, // or DataTypes.DECIMAL
       // allowNull: false,
     },
-    shippingAddress: {
-      type: DataTypes.STRING, // or DataTypes.DECIMAL
-      // allowNull: false,
-    },
- 
-
 });
 
 // orderItemsModel.belongsTo(orderModel, { foreignKey: 'orderId' });

@@ -29,7 +29,7 @@ const Cart = lazy(() => import("./pages/other/Cart"));
 const Wishlist = lazy(() => import("./pages/other/Wishlist"));
 const Compare = lazy(() => import("./pages/other/Compare"));
 const Checkout = lazy(() => import("./pages/other/Checkout"));
-const Logout = lazy(() => import("./pages/other/Logout"));
+// const Logout = lazy(() => import("./pages/other/Logout"));
 
 const NotFound = lazy(() => import("./pages/other/NotFound"));
 

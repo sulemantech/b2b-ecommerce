@@ -14,8 +14,8 @@ function validateOrderItem(item) {
     throw new Error('Invalid discount for order item. It must be a numeric value between 0 and 75.');
   }
   //totalPrice
-  if (!validator.isNumeric(item.totalPrice.toString()) || item.totalPrice <= 0) {
-    throw new Error('Invalid totalPrice for order item. It must be a numeric value greater than 0.');
+//   if (!validator.isNumeric(item.totalPrice.toString()) || item.totalPrice <= 0) {
+//     throw new Error('Invalid totalPrice for order item. It must be a numeric value greater than 0.');
 //   }
 // // address
 // if (!validator.isLength(item.address, { min: 5, max: 100 })) {
@@ -66,7 +66,7 @@ function validateOrderItem(item) {
 //   // orderItems
 //   if (!order.orderItems || !Array.isArray(order.orderItems) || order.orderItems.length === 0) {
 //     throw new Error('Invalid orderItems. It must be a non-empty array.');
-   }
+//   }
   return true;
 }
 
