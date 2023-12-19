@@ -10,7 +10,7 @@ import ShopSidebar from '../../wrappers/product/ShopSidebar';
 import ShopTopbar from '../../wrappers/product/ShopTopbar';
 import ShopProducts from '../../wrappers/product/ShopProducts';
 import { fetchProducts } from '../../store/slices/ProductsActions';
-// import { fetchCategory } from '../../store/slices/CategoryAction';
+import { fetchProductsByCategories } from '../../API';
 
 
 const ShopGridStandard = () => {
@@ -21,34 +21,25 @@ const ShopGridStandard = () => {
     const [filterSortType, setFilterSortType] = useState('');
     const [filterSortValue, setFilterSortValue] = useState('');
     const [offset, setOffset] = useState(0);
-    //  const [categories, setCategories] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [currentData, setCurrentData] = useState([]);
     const [sortedProducts, setSortedProducts] = useState([]);
     const { products } = useSelector((state) => state.product);
     const pageLimit = 15;
     let { pathname } = useLocation();
-
-//  useEffect(()=>{
-//         dispatch(fetchProducts(dispatch));
-//     },[]);
+    
  
     
   const [selectedCategories, setSelectedCategories] = useState([]);
   const handleSortParams = (type, value) => {
-    // Implement sorting logic as needed
     if (type === "category") {
       const updatedCategories = [...selectedCategories];
       const categoryIndex = updatedCategories.indexOf(value);
       if (categoryIndex !== -1) {
-        // Category is already selected, remove it
         updatedCategories.splice(categoryIndex, 1);
       } else {
-        // Category is not selected, add it
         updatedCategories.push(value);
       }
-      
-
       setSelectedCategories(updatedCategories);
     }
   };
@@ -66,28 +57,23 @@ const ShopGridStandard = () => {
         setFilterSortValue(sortValue);
     }
 
-    // useEffect(() => {
-    //     fetch(`http://localhost:5001/api/products/${selectedCategories.join('')}`) 
-    //     .then((response) => response.json())
-    //     .then((data) => {   
-    //       setCurrentData(data);
-    //     })
-    //     .catch((error) => console.error('Error fetching data:', error));
-
-    //     dispatch(fetchProducts());
-    // }, [offset, sortValue, selectedCategories]);
+  
     useEffect(() => {
         if (selectedCategories.length > 0) {
-            fetch(`http://localhost:5001/api/products/${selectedCategories.join(',')}`)
-                .then((response) => response.json())
-                .then((data) => {
-                    setCurrentData(data);
-                })
-                .catch((error) => console.error('Error fetching data:', error));
-            dispatch(fetchProducts());
+          const fetchData = async () => {
+            try {
+              const data = await fetchProductsByCategories(`${selectedCategories.join(',')}`, offset, sortValue);
+              setCurrentData(data);
+            } catch (error) {
+              console.error('Error fetching data:', error);
+            }
+          };
+          fetchData();
+          dispatch(fetchProducts());
         }
-    }, [offset, sortValue, selectedCategories]);
-    
+      }, [offset, sortValue, selectedCategories]);
+
+
 
 
     return (

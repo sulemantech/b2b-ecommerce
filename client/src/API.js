@@ -3,6 +3,27 @@ import axios from 'axios';
 const APIHost = "http://localhost:5001"
 
 
+
+
+const selectCategory= `${APIHost}/api/products/`;
+export const fetchProductsByCategories = async (selectedCategories, offset, sortValue) => {
+  try {
+    const response = await axios.get(`${selectCategory}/${selectedCategories}`, {
+      params: { offset, sortValue },
+    });
+    if (!response) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+    return response.data;
+    
+  } catch (error) {
+    console.error('Error fetching products by categories:', error);
+    throw error;
+  }
+};
+
+
+
 const Login = `${APIHost}/api/signin`;
 const api = axios.create({
   baseURL: Login,
@@ -30,7 +51,6 @@ const API_Registration = axios.create({
     'Content-Type': 'application/json',
   },
 });
-
  export const postRegistration = async (endpoint, data) => {
   try {
     const response = await API_Registration.post(endpoint, data);
@@ -122,5 +142,9 @@ export const getUserInformation = async (token) => {
     throw error;
   }
 };
+
+
+
+
 
 
