@@ -20,8 +20,7 @@ router.post('/', async (req, res) => {
     const { orderId, productId, quantity, price, discount, totalPrice } = req.body;
 
     // Create the order item using Sequelize model
-    const orderItem = await orderItemsModel.create({
-      
+    const orderItem = await orderItemsModel.create({      
       orderId,
       productId,
       quantity,
