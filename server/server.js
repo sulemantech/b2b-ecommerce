@@ -1,4 +1,5 @@
 const express=require('express');
+const { ApolloServer } = require('apollo-server-express');
 const cors =require('cors');
 const productRoutes = require('./routes/productRoutes');
 const productImages =require('./routes/productImages');
@@ -13,6 +14,9 @@ const addressRoute =require('./routes/addressRoute');
 const orderRoute=require('./routes/orderRoute')
 const orderItemsRoute=require('./routes/orderItemsRoute')
 const companiesRoute=require('./routes/companiesRoute')
+const searchRoute= require('./routes/searchRoute')
+const typeDefs = require('./schema/graphqlSchema');
+const resolvers = require('./resolvers/resolver');
 
 require('dotenv').config();
 
@@ -26,8 +30,18 @@ app.get('/', (req,res)=>{
     res.send("getting ")
 })
 
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+});
+
+
+// await server.start()
+//  server.applyMiddleware({ app, path: '/api/product/search' });
+
 //products
 app.use('/api/products/', productRoutes);
+
 
 //supplier
 app.use('/api/suppliers', supplierRoute);
@@ -58,7 +72,18 @@ app.use('/api/orderitems', orderItemsRoute)
 
 //companies
 app.use('/api/company',companiesRoute)
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+
+//searching
+const search='/api/product/'
+
+//Start the ApolloServer before applying middleware
+async function startApolloServer() {
+  await server.start();
+  server.applyMiddleware({ app, path: search });
+  app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+  });
+}
+startApolloServer()
+
+
