@@ -2,6 +2,7 @@ import { Suspense, lazy } from "react";
 import ScrollToTop from "./helpers/scroll-top";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Order from "./pages/other/Order";
+import ShopPage from "./components/product/ShopPage";
 const ShopGridStandard = lazy(() => import("./pages/shop/ShopGridStandard"));
 
 // product pages
