@@ -2,6 +2,10 @@ const { Op } = require('sequelize');
 const productModel = require('../models/productModel');
 const productImages = require('../models/productImages');
 const categoryModel = require('../models/categoryModel');
+const orderModel = require('../models/orderModel');
+const registerationModel = require('../models/registerationModel');
+const orderItemsModel = require('../models/orderItemsModel');
+
 
 const resolvers = {
   Query: {
@@ -71,10 +75,49 @@ const resolvers = {
           return categoryResult.products;
         }
 
-        // If neither product nor category found, return an empty array
-        return [];
+        // const ordersSearchResults = await orderModel.findAll(
+        //   {
+        //   include: [
+        //     {
+        //       model: registerationModel,
+        //       attributes: ['id', 'firstname', 'lastname', 'contactNumber', 'email'],
+        //     },
+        //     {
+        //       model: orderItemsModel,
+        //       attributes: ['orderId', 'productId', 'quantity', 'price', 'discount', 'totalPrice'],
+        //     },
+        //   ],
+        // }
+        // );
+        console.log(ordersSearchResults);
+
+        // Combine and return both product and order search results
+        return [...productSearchResults, ...ordersSearchResults];
       } catch (error) {
         console.error('Error during search:', error.message);
+        throw new Error('Internal Server Error');
+      }
+    },
+
+    ///////////////
+    getAllOrders: async () => {
+      try {
+        const orders = await orderModel.findAll({
+           include: [
+            {
+              model: registerationModel,
+              attributes: ['id', 'firstname', 'lastname', 'contactNumber', 'email'],
+            },
+            {
+              model: orderItemsModel,
+              attributes: ['orderId', 'productId', 'quantity', 'price', 'discount', 'totalPrice'],
+            },
+          ],
+        });
+
+        return orders;
+      } catch (error) {
+        console.error('Error fetching all orders:', error.message);
         throw new Error('Internal Server Error');
       }
     },
