@@ -22,6 +22,8 @@ const ProductGridListSingle = ({
   const [modalShow, setModalShow] = useState(false);
   const discountedPrice = getDiscountPrice(product.price, product.discount);
   const finalProductPrice = +(product.price * currency.currencyRate).toFixed(2);
+  const hasSearched = useSelector((state) => state.search.hasSearched);
+  const searchResults = useSelector((state) => state.search.searchResults);
   
   const finalDiscountedPrice = +(
     discountedPrice * currency.currencyRate

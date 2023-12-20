@@ -21,7 +21,6 @@ const ShopSearch = () => {
   };
 
   useEffect(() => {
-   
     return () => {
       dispatch(clearSearchState());
     };
