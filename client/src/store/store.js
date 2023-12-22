@@ -35,7 +35,7 @@ export const rootReducer = combineReducers({
     wishlist: wishlistReducer,
     category: CategoryReducer,
     auth: authReducer,
-    search:searchReducer,
+    searchpro:searchReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

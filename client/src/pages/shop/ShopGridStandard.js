@@ -25,17 +25,19 @@ const ShopGridStandard = () => {
     const [currentData, setCurrentData] = useState([]);
     const [sortedProducts, setSortedProducts] = useState([]);
     const { products } = useSelector((state) => state.product);
+    const searchResults = useSelector((state) => state.searchpro.searchResults.data)
+    
     const pageLimit = 15;
     let { pathname } = useLocation();
+    console.log("search",searchResults);
     
- 
     
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const handleSortParams = (type, value) => {
-    if (type === "category") {
-      const updatedCategories = [...selectedCategories];
-      const categoryIndex = updatedCategories.indexOf(value);
-      if (categoryIndex !== -1) {
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    const handleSortParams = (type, value) => {
+      if (type === "category") {
+        const updatedCategories = [...selectedCategories];
+        const categoryIndex = updatedCategories.indexOf(value);
+        if (categoryIndex !== -1) {
         updatedCategories.splice(categoryIndex, 1);
       } else {
         updatedCategories.push(value);
@@ -53,26 +55,30 @@ const ShopGridStandard = () => {
         setSortValue(sortValue);
     }
     const getFilterSortParams = (sortType, sortValue) => {
-        setFilterSortType(sortType);
-        setFilterSortValue(sortValue);
+      setFilterSortType(sortType);
+      setFilterSortValue(sortValue);
     }
-
-  
+    
+    
     useEffect(() => {
         if (selectedCategories.length > 0) {
           const fetchData = async () => {
             try {
               const data = await fetchProductsByCategories(`${selectedCategories.join(',')}`, offset, sortValue);
-              setCurrentData(data);
+              
+                setCurrentData(data);
             } catch (error) {
               console.error('Error fetching data:', error);
             }
           };
           fetchData();
           dispatch(fetchProducts());
-        }
-      }, [offset, sortValue, selectedCategories]);
 
+        }
+        setCurrentData(searchResults)
+        console.log("currrrrrrrrrrrrrrsssDs",searchResults);
+      }, [offset, sortValue, selectedCategories,searchResults]);
+console.log("currrrrrrrrrrrrrr",currentData);
 
 
 
@@ -104,11 +110,12 @@ const ShopGridStandard = () => {
                                 {/* shop topbar default */}
                                 <ShopTopbar getLayout={getLayout} getFilterSortParams={getFilterSortParams}
                                  productCount={products.length}
-                                  sortedProductCount={currentData.length}
+                                  // sortedProductCount={currentData.length}
                                    />
                                                                 {/* shop page content default */}
                                 <ShopProducts layout={layout} products={currentData} />
-
+{                                console.log("current.................",currentData)
+}
                                 {/* shop product pagination */}
                                 <div className="pro-pagination-style text-center mt-30">
                                     <Paginator

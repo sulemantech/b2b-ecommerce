@@ -18,7 +18,7 @@ const ProductImageGallery = ({ product }) => {
       key: `${i}_${j}`, // Using a combination of i and j as a unique key
     }))
   );
-  debugger
+  
 
   // swiper slider settings
   const gallerySwiperParams = {

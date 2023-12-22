@@ -3,19 +3,19 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   searchResults: [],
-  error: null,
-  loading: false,
+  // error: null,
+  // loading: false,
   hasSearched: false,
 };
 
 const searchSlice = createSlice({
-  name: 'search',
+  name: 'searchpro',
   initialState,
   reducers: {
     setSearchResults: (state, action) => {
       state.searchResults = action.payload;
-      state.error = null;
-      state.loading = false;
+      // state.error = null;
+      // state.loading = false;
       state.hasSearched = true;
     },
     setError: (state, action) => {

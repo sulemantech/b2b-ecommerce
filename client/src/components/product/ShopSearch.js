@@ -7,8 +7,8 @@ import { clearSearchState } from '../../store/slices/ShopSearch-Slice';
 const ShopSearch = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const dispatch = useDispatch();
-  const hasSearched = useSelector((state) => state.search.hasSearched);
-  const searchResults = useSelector((state) => state.search.searchResults);
+  // const hasSearched = useSelector((state) => state.search.hasSearched);
+  // const searchResults = useSelector((state) => state.search.searchResults);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -20,12 +20,18 @@ const ShopSearch = () => {
     console.log("searchProduct",searchTerm);
   };
 
-  useEffect(() => {
+   useEffect(() => {
+    const handleBeforeUnload = () => {
+      dispatch(clearSearchState());
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
     return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
       dispatch(clearSearchState());
     };
   }, [dispatch]);
 
+ 
   return (
     <div>
       <div className="sidebar-widget">
@@ -44,7 +50,7 @@ const ShopSearch = () => {
           </form>
         </div>
       </div>
-      {hasSearched && <ShopGridStandard searchResults={searchResults} />}
+      {/* {hasSearched && <ShopGridStandard searchResults={searchResults} />} */}
     </div>
   );
 };
