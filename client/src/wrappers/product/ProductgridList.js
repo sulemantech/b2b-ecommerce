@@ -14,7 +14,7 @@ const ProductGridList = ({
   
   return (
     <Fragment>
-      {products?.search?.map(product => {
+      {products?.map(product => {
         return (
           <div className="col-xl-4 col-sm-6" key={product.id}>
             <ProductGridListSingle
