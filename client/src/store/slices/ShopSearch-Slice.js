@@ -52,7 +52,7 @@ const searchSlice = createSlice({
   reducers: {
     setSearchResults: (state, action) => {
       state.searchResults = action.payload;
-      state.error = null; // Clear any previous errors
+      state.error = null; 
       state.loading = false;
       state.hasSearched = true;
     },
@@ -63,8 +63,7 @@ const searchSlice = createSlice({
     },
     setLoading: (state, action) => {
       state.loading = action.payload;
-      // state.hasSearched = false; // Removed this line
-      state.error = null; // Clear any previous errors
+      state.error = null;
     },
     clearSearchState: (state) => {
       return { ...initialState };

@@ -37,16 +37,7 @@ const ProductGridListSingle = ({
         
         
           
-            { hasSearched ?(
             
-            
-               <img
-                 className="default-img"
-                 src={process.env.PUBLIC_URL + searchResults?.data?.search[0]?.productImages[0].images}
-               />
-               
-            
-               ):(
         
             <Link to={process.env.PUBLIC_URL + "/product-tab-right/" + product.id}>
               <img
@@ -63,7 +54,7 @@ const ProductGridListSingle = ({
               )}
               
             </Link>
-            )}
+          
     
             {product.discount || product.new ? (
               <div className="product-img-badges">
