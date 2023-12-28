@@ -1,4 +1,3 @@
-
 const { gql } = require('apollo-server-express');
 
 const typeDefs = gql`
@@ -9,7 +8,7 @@ const typeDefs = gql`
     price: Float
     images: [String]
     sku: String
-    productImages:[ProductImage]
+    productImages: [ProductImage]
   }
   type ProductImage {
     date: String
@@ -21,9 +20,28 @@ const typeDefs = gql`
     products: [Product]
     
   }
+  type Order {
+    orderId: ID!
+    userId: ID!
+    address: String!
+    orderDate: String!
+    totalPrice: Float!
+    status: String!
+    discount: Int!
+    paymentMethod: String!
+    trackingNumber: Int!
+    name: String!
+    email: String!
+    contactNumber: Int!
+    zipCode: Int
+    additionalInfo: String
+    city: String!
+    country: String!
+  }
 
   type Query {
     search(query: String): [Product]
+    getAllOrders: [Order]
   }
 `;
 

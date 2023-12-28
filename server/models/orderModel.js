@@ -65,9 +65,7 @@ const orderModel = sequelize.define('orders', {
     allowNull: false,
   },
   
-    shippingAddress:{
-      type:DataTypes.STRING
-    }
+    
   
 });
 
