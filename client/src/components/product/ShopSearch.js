@@ -1,14 +1,11 @@
 import React, { useState,useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { searchProducts } from '../../store/slices/ShopSearch-Action'; 
-import ShopGridStandard from '../../pages/shop/ShopGridStandard';
 import { clearSearchState } from '../../store/slices/ShopSearch-Slice'; 
-
+import { setProducts } from '../../store/slices/product-slice';
 const ShopSearch = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const dispatch = useDispatch();
-  // const hasSearched = useSelector((state) => state.search.hasSearched);
-  // const searchResults = useSelector((state) => state.search.searchResults);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -16,20 +13,26 @@ const ShopSearch = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    dispatch(searchProducts(searchTerm));
-    console.log("searchProduct",searchTerm);
+    if (searchTerm.trim() !== '') {
+      dispatch(searchProducts(searchTerm));
+    }
+    dispatch(setProducts([]));
+    console.log("searchProduct", searchTerm);
   };
+  
 
-   useEffect(() => {
+  useEffect(() => {
     const handleBeforeUnload = () => {
       dispatch(clearSearchState());
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
+  
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
       dispatch(clearSearchState());
     };
   }, [dispatch]);
+  
 
  
   return (
@@ -44,13 +47,12 @@ const ShopSearch = () => {
               value={searchTerm}
               onChange={handleSearch}
             />
-            <button type="submit">
+            <button type='submit'>
               <i className="pe-7s-search" />
             </button>
           </form>
         </div>
       </div>
-      {/* {hasSearched && <ShopGridStandard searchResults={searchResults} />} */}
     </div>
   );
 };

@@ -36,8 +36,7 @@ const ProductGridListSingle = ({
         <div className={clsx("product-wrap", spaceBottomClass)}>
           <div className="product-img">
             <h2>{product.name}</h2>
-{            console.log(product)
-}            <Link to={process.env.PUBLIC_URL + "/product-tab-right/" + product.id}>
+            <Link to={process.env.PUBLIC_URL + "/product-tab-right/" + product.id}>
               <img
                 className="default-img"
                 src={process.env.PUBLIC_URL + product?.productImages[0]?.images[0]}

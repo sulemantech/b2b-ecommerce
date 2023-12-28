@@ -18,7 +18,7 @@ import { setSearchResults, setError, setLoading } from '../slices/ShopSearch-Sli
 //   }
 // };
 
-export const searchProducts = (searchTerm) => async (dispatch) => {
+export const searchProducts = (searchTerm,e) => async (dispatch) => {
   try {
     dispatch(setLoading(true));
 

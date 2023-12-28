@@ -14,30 +14,58 @@ const ProductGridList = ({
   
   return (
     <Fragment>
-      {products?.search?.map(product => {
-        return (
-          <div className="col-xl-4 col-sm-6" key={product.id}>
-            <ProductGridListSingle
-              spaceBottomClass={spaceBottomClass}
-              product={product}
-              currency={currency}
-              cartItem={
-                cartItems.find(cartItem => cartItem.id === product.id)
-              }
-              wishlistItem={
-                wishlistItems.find(
-                  wishlistItem => wishlistItem.id === product.id
-                )
-              }
-              compareItem={
-                compareItems.find(
-                  compareItem => compareItem.id === product.id
-                )
-              }
-            />
-          </div>
-        );
-      })}
+     
+      {products?.search ? (
+  products.search.map((product) => (
+    <div className="col-xl-4 col-sm-6" key={product.id}>
+      <ProductGridListSingle
+        spaceBottomClass={spaceBottomClass}
+        product={product}
+        currency={currency}
+        cartItem={cartItems.find((cartItem) => cartItem.id === product.id)}
+        wishlistItem={wishlistItems.find((wishlistItem) => wishlistItem.id === product.id)}
+        compareItem={compareItems.find((compareItem) => compareItem.id === product.id)}
+      />
+    </div>
+  ))
+) : (
+  products?.map((product) => (
+    <div className="col-xl-4 col-sm-6" key={product.id}>
+      <ProductGridListSingle
+        spaceBottomClass={spaceBottomClass}
+        product={product}
+        currency={currency}
+        cartItem={cartItems.find((cartItem) => cartItem.id === product.id)}
+        wishlistItem={wishlistItems.find((wishlistItem) => wishlistItem.id === product.id)}
+        compareItem={compareItems.find((compareItem) => compareItem.id === product.id)}
+      />
+    </div>
+  ))
+)}
+
+      {/* {products?.search?.map((product) => (
+        <div className="col-xl-4 col-sm-6" key={product.id}>
+          <ProductGridListSingle
+            spaceBottomClass={spaceBottomClass}
+            product={product}
+            currency={currency}
+            cartItem={cartItems.find((cartItem) => cartItem.id === product.id)}
+            wishlistItem={wishlistItems.find((wishlistItem) => wishlistItem.id === product.id)}
+            compareItem={compareItems.find((compareItem) => compareItem.id === product.id)}
+          />
+        </div>
+       )) || products?.map((product) => (
+        <div className="col-xl-4 col-sm-6" key={product.id}>
+          <ProductGridListSingle
+            spaceBottomClass={spaceBottomClass}
+            product={product}
+            currency={currency}
+            cartItem={cartItems.find((cartItem) => cartItem.id === product.id)}
+            wishlistItem={wishlistItems.find((wishlistItem) => wishlistItem.id === product.id)}
+            compareItem={compareItems.find((compareItem) => compareItem.id === product.id)}
+          />
+        </div>
+      ))} */}
     </Fragment>
   );
 };

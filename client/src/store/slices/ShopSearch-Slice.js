@@ -2,9 +2,9 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  searchResults: [],
-  // error: null,
-  // loading: false,
+  searchResults: [], // Set searchResults to an empty array by default
+  error: null,
+  loading: false,
   hasSearched: false,
 };
 
@@ -14,8 +14,8 @@ const searchSlice = createSlice({
   reducers: {
     setSearchResults: (state, action) => {
       state.searchResults = action.payload;
-      // state.error = null;
-      // state.loading = false;
+      state.error = null;
+      state.loading = false;
       state.hasSearched = true;
     },
     setError: (state, action) => {
@@ -28,9 +28,7 @@ const searchSlice = createSlice({
       state.error = null;
       state.hasSearched = false;
     },
-    clearSearchState: (state) => {
-      return { ...initialState };
-    },
+    clearSearchState: () => initialState, // Simplify the clearSearchState reducer
   },
 });
 

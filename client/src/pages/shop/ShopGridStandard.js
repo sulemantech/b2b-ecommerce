@@ -11,6 +11,7 @@ import ShopTopbar from '../../wrappers/product/ShopTopbar';
 import ShopProducts from '../../wrappers/product/ShopProducts';
 import { fetchProducts } from '../../store/slices/ProductsActions';
 import { fetchProductsByCategories } from '../../API';
+import { setProducts } from '../../store/slices/product-slice';
 
 
 const ShopGridStandard = () => {
@@ -60,24 +61,49 @@ const ShopGridStandard = () => {
     }
     
     
-    useEffect(() => {
-        if (selectedCategories.length > 0) {
-          const fetchData = async () => {
-            try {
-              const data = await fetchProductsByCategories(`${selectedCategories.join(',')}`, offset, sortValue);
+    // useEffect(() => {
+    //     if (selectedCategories.length > 0) {
+    //       const fetchData = async () => {
+    //         try {
+    //           const data = await fetchProductsByCategories(`${selectedCategories.join(',')}`, offset, sortValue);
               
-                setCurrentData(data);
-            } catch (error) {
-              console.error('Error fetching data:', error);
-            }
-          };
-          fetchData();
-          dispatch(fetchProducts());
+    //             setCurrentData(data);
+    //         } catch (error) {
+    //           console.error('Error fetching data:', error);
+    //         }
+    //       };
+    //       fetchData();
+    //       dispatch(fetchProducts());
 
+    //     }
+    //     setCurrentData(searchResults)
+
+    //   }, [offset, sortValue, selectedCategories,searchResults]);
+    const fetchData = async () => {
+      try {
+        let data;
+  
+        if (selectedCategories.length > 0) {
+          // Fetch data based on selectedCategories
+          data = await fetchProductsByCategories(`${selectedCategories.join(',')}`);
+          console.log("dataaaaaaaa",data);
+           dispatch(setProducts(data));
+        } else {
+          // If no selected categories, use searchResults directly
+          data = searchResults;
         }
-        setCurrentData(searchResults)
-        console.log("currrrrrrrrrrrrrrsssDs",searchResults);
-      }, [offset, sortValue, selectedCategories,searchResults]);
+  
+        setCurrentData(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+   useEffect(() => { 
+
+  fetchData(); // Always call fetchData, whether selectedCategories is empty or not
+}, [offset, sortValue,searchResults,selectedCategories ]);
+
+    
 console.log("currrrrrrrrrrrrrr",currentData);
 
 
