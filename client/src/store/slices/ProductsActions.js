@@ -12,6 +12,7 @@ export const fetchProducts = () => async (dispatch) => {
       });       
        
       dispatch(setProducts(productsData));
+      console.log("producttttttttt",productsData);
     } catch (error) {
       console.error('Error fetching products:', error);
       
