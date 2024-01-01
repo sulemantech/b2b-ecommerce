@@ -9,6 +9,7 @@ import ProductModal from "./ProductModal";
 import { addToCart } from "../../store/slices/cart-slice";
 import { addToWishlist } from "../../store/slices/wishlist-slice";
 import { addToCompare } from "../../store/slices/compare-slice";
+import { useSelector } from "react-redux";
 
 const ProductGridListSingle = ({
   product,
@@ -22,6 +23,8 @@ const ProductGridListSingle = ({
   const [modalShow, setModalShow] = useState(false);
   const discountedPrice = getDiscountPrice(product.price, product.discount);
   const finalProductPrice = +(product.price * currency.currencyRate).toFixed(2);
+  const hasSearched = useSelector((state) => state.searchpro.hasSearched);
+  const searchResults = useSelector((state) => state.searchpro.searchResults);
   
   const finalDiscountedPrice = +(
     discountedPrice * currency.currencyRate
@@ -31,6 +34,11 @@ const ProductGridListSingle = ({
     <Fragment>
         <div className={clsx("product-wrap", spaceBottomClass)}>
           <div className="product-img">
+        
+        
+          
+            
+        
             <Link to={process.env.PUBLIC_URL + "/product-tab-right/" + product.id}>
               <img
                 className="default-img"
@@ -44,7 +52,10 @@ const ProductGridListSingle = ({
               ) : (
                 ""
               )}
+              
             </Link>
+          
+    
             {product.discount || product.new ? (
               <div className="product-img-badges">
                 {product.discount ? (
@@ -324,3 +335,12 @@ ProductGridListSingle.propTypes = {
 };
 
 export default ProductGridListSingle;
+// {
+//     searchResults?.data.search?.map((result)=>(
+//       <div key={result.id}>
+//       <h3>{result.name}</h3>
+//       <p>{result.description}</p>
+//       <p>Price: {result.price}</p>
+//     </div>
+// ))
+// } 

@@ -8,7 +8,6 @@ import ProductImageGallerySideThumb from "../../components/product/ProductImageG
 import ProductImageFixed from "../../components/product/ProductImageFixed";
 
 const ProductImageDescription = ({ spaceTopClass, spaceBottomClass, galleryType, product }) => {
-  debugger
 
   const currency = useSelector((state) => state.currency);
   const { cartItems } = useSelector((state) => state.cart);

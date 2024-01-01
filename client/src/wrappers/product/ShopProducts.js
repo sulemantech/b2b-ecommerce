@@ -3,6 +3,11 @@ import clsx from "clsx";
 import ProductgridList from "./ProductgridList";
 
 const ShopProducts = ({ products, layout }) => {
+  //  console.log("resulttttttttttttttt",searchResults?.data?.search[0]?.name);
+  //  console.log("resulttttttttttttttt",searchResults?.data?.search[0]?.description);
+  //  console.log("resulttttttttttttttt",searchResults?.data?.search[0]?.productImages[0].images);
+
+
 
   return (
     <div className="shop-bottom-area mt-35">

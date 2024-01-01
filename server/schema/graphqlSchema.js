@@ -9,6 +9,11 @@ const typeDefs = gql`
     price: Float
     images: [String]
     sku: String
+    productImages:[ProductImage]
+  }
+  type ProductImage {
+    date: String
+    images: [String]
   }
 
   type Category {
