@@ -1,9 +1,11 @@
 import PropTypes from "prop-types";
 import { setActiveSort } from "../../helpers/product";
+import { useState } from "react";
 
 
 
 const ShopCategories = ({categories ,getSortParams,selectedCategories }) => {
+  const [checked, setChecked] = useState(true);
   return (
     <div className="sidebar-widget">
       <h4 className="pro-sidebar-title">Categories </h4>
@@ -14,10 +16,12 @@ const ShopCategories = ({categories ,getSortParams,selectedCategories }) => {
             <li>
               <div className="sidebar-widget-list-left">
                 <button
+                 defaultChecked={checked}
                   onClick={e => {
                     getSortParams("category", "1,2,3" );
                     setActiveSort(e);
                   }}
+          
                 >
                       <span className={`checkmark ${selectedCategories.length === 0 ? 'selected' : ''}`} /> All Categories
                 </button>

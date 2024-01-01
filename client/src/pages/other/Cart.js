@@ -17,6 +17,9 @@ const Cart = () => {
   
   const currency = useSelector((state) => state.currency);
   const { cartItems } = useSelector((state) => state.cart);
+  const { products } = useSelector((state) => state.product);
+  // console.log("kkkkkkkkkkkkkkkkkkkkkkkkk",products[0].stock);
+  
   
 
 
@@ -50,6 +53,7 @@ const Cart = () => {
                             <th>Product Name</th>
                             <th>Unit Price</th>
                             <th>Qty</th>
+                            <th>stock</th>
                             <th>Subtotal</th>
                             <th>action</th>
                           </tr>
@@ -178,6 +182,7 @@ const Cart = () => {
                                     </button>
                                   </div>
                                 </td>
+                                <td>{products[0].stock}</td>
                                 <td className="product-subtotal">
                                   {discountedPrice !== null
                                     ? currency.currencySymbol +

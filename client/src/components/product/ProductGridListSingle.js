@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import { Fragment, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
 import { getDiscountPrice } from "../../helpers/product";
@@ -9,6 +9,7 @@ import ProductModal from "./ProductModal";
 import { addToCart } from "../../store/slices/cart-slice";
 import { addToWishlist } from "../../store/slices/wishlist-slice";
 import { addToCompare } from "../../store/slices/compare-slice";
+import { useSelector } from "react-redux";
 
 const ProductGridListSingle = ({
   product,
@@ -22,10 +23,8 @@ const ProductGridListSingle = ({
   const [modalShow, setModalShow] = useState(false);
   const discountedPrice = getDiscountPrice(product.price, product.discount);
   const finalProductPrice = +(product.price * currency.currencyRate).toFixed(2);
-  // const searchResults = useSelector((state) => state.search.searchResults);
-
-
-  
+  const hasSearched = useSelector((state) => state.searchpro.hasSearched);
+  const searchResults = useSelector((state) => state.searchpro.searchResults);
   
   const finalDiscountedPrice = +(
     discountedPrice * currency.currencyRate
@@ -35,7 +34,11 @@ const ProductGridListSingle = ({
     <Fragment>
         <div className={clsx("product-wrap", spaceBottomClass)}>
           <div className="product-img">
-            <h2>{product.name}</h2>
+        
+        
+          
+            
+        
             <Link to={process.env.PUBLIC_URL + "/product-tab-right/" + product.id}>
               <img
                 className="default-img"
@@ -49,7 +52,10 @@ const ProductGridListSingle = ({
               ) : (
                 ""
               )}
+              
             </Link>
+          
+    
             {product.discount || product.new ? (
               <div className="product-img-badges">
                 {product.discount ? (
@@ -124,7 +130,6 @@ const ProductGridListSingle = ({
               </div>
             </div>
           </div>
-          
           <div className="product-content text-center">
             <h3>
               <Link to={process.env.PUBLIC_URL + "/product/" + product.id}>
@@ -152,7 +157,6 @@ const ProductGridListSingle = ({
             </div>
           </div>
         </div>
-
         <div className="shop-list-wrap mb-30">
           <div className="row">
             <div className="col-xl-4 col-md-5 col-sm-6">
@@ -163,31 +167,30 @@ const ProductGridListSingle = ({
                       className="default-img img-fluid"
                       src={process.env.PUBLIC_URL + product?.productImages[0]?.images[0]}
                       alt=""
-                      />
+                    />
                     {product.productImages.length > 1 ? (
                       <img
-                      className="hover-img img-fluid"
-                      src={process.env.PUBLIC_URL +product?.productImages[0]?.images[0]}
-                      alt=""
+                        className="hover-img img-fluid"
+                        src={process.env.PUBLIC_URL +product?.productImages[0]?.images[0]}
+                        alt=""
                       />
-                      ) : (
-                        ""
-                        )}
+                    ) : (
+                      ""
+                    )}
                   </Link>
                   {product.discount || product.new ? (
                     <div className="product-img-badges">
                       {product.discount ? (
                         <span className="pink">-{product.discount}%</span>
-                        ) : (
-                          ""
-                          )}
+                      ) : (
+                        ""
+                      )}
                       {product.new ? <span className="purple">New</span> : ""}
                     </div>
                   ) : (
                     ""
-                    )}
+                  )}
                 </div>
-                
               </div>
             </div>
             <div className="col-xl-8 col-md-7 col-sm-6">
@@ -209,7 +212,7 @@ const ProductGridListSingle = ({
                     </Fragment>
                   ) : (
                     <span>{currency.currencySymbol + finalProductPrice} </span>
-                    )}
+                  )}
                 </div>
                 {product.rating && product.rating > 0 ? (
                   <div className="rating-review">
@@ -319,7 +322,6 @@ const ProductGridListSingle = ({
         compareItem={compareItem}
       />
     </Fragment>
-  
   );
 };
 
@@ -333,7 +335,6 @@ ProductGridListSingle.propTypes = {
 };
 
 export default ProductGridListSingle;
-
 // {
 //     searchResults?.data.search?.map((result)=>(
 //       <div key={result.id}>

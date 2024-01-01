@@ -1,11 +1,26 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { searchProducts } from '../../store/slices/ShopSearch-Action'; 
-import { clearSearchState } from '../../store/slices/ShopSearch-Slice'; 
-import { setProducts } from '../../store/slices/product-slice';
+import { searchProducts } from '../../store/slices/ShopSearch-Action';
+import ShopGridStandard from '../../pages/shop/ShopGridStandard';
+import { clearSearchState } from '../../store/slices/ShopSearch-Slice';
+
 const ShopSearch = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const dispatch = useDispatch();
+ 
+
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (searchTerm.trim() !== '') {
+        dispatch(searchProducts(searchTerm));
+      }
+      else{
+        dispatch(clearSearchState());
+      }
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTerm, dispatch]);
 
   const handleSearch = (event) => {
     setSearchTerm(event.target.value);
@@ -13,11 +28,6 @@ const ShopSearch = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (searchTerm.trim() !== '') {
-      dispatch(searchProducts(searchTerm));
-    }
-    dispatch(setProducts([]));
-    console.log("searchProduct", searchTerm);
   };
   
 
@@ -34,7 +44,6 @@ const ShopSearch = () => {
   }, [dispatch]);
   
 
- 
   return (
     <div>
       <div className="sidebar-widget">
