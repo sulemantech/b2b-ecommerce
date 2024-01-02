@@ -8,11 +8,12 @@ const productModel = require('../models/productModel');
 const productImages= require('../models/productImages');
 const categoryModel=require('../models/categoryModel');
 
+
 //post API    ///////////////////////////////////////////////////////////////////
 router.post('/', async(req, res) => {
   try {
     
-    const { id,name,description,price,quantity, manufacturer,dateAdded,quantityInStock,sku,discount, new: isNew, rating, saleCount,  category_id, tag, stock, } = req.body;
+    const {id,name,description,price,quantity, manufacturer,dateAdded,quantityInStock,sku,discount, new: isNew, rating, saleCount,  category_id, tag, stock,supplier_id, categoryName } = req.body;
     
   
     const newData = await productModel.create({ 
@@ -31,16 +32,15 @@ router.post('/', async(req, res) => {
       saleCount,
       category_id,
        tag,
-      stock, 
+      stock, supplier_id, categoryName
     });
-
     const category = await categoryModel.findByPk(category_id);
-
+    
     if (category) {
       // Associate the product with the category
       await newData.addCategory(category, { through: { id: category_id } });
-      // Assuming that you have an 'id' field in your through model (productCategoriesModel)
-      res.status(201).json({ message: 'Product created and associated with category.',  newData });
+      
+      res.status(201).json({ message: 'Product created and associated with category.', newData });
     } else {
       res.status(404).json({ message: 'Category not found.' });
     }
