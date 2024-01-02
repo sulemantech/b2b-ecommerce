@@ -8,8 +8,30 @@ import SwitcherFour from '../../components/SwitcherFour';
 import SwitcherOne from '../../components/SwitcherOne';
 import SwitcherThree from '../../components/SwitcherThree';
 import SwitcherTwo from '../../components/SwitcherTwo';
+import { useState } from 'react';
 
 const FormElements = () => {
+  const [value,setvalues]=useState({
+    name:"",
+    description:"",
+    price:"",
+    quantity:"",
+    manufacturer:"",
+    dateAdded:"", 
+    discount:"", 
+    new:"",
+    rating:"", 
+    saleCount:"",
+    tag:"",
+    stock:"",
+    quantityInStock:"",
+    sku:"",
+    category_id:""
+
+  });
+  
+console.log("valuess",value);
+
   return (
     <>
       <Breadcrumb pageName="FormElements" />
@@ -20,43 +42,209 @@ const FormElements = () => {
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="border-b border-stroke py-4 px-6.5 dark:border-strokedark">
               <h3 className="font-medium text-black dark:text-white">
-                Input Fields
+                Product Details
               </h3>
             </div>
             <div className="flex flex-col gap-5.5 p-6.5">
               <div>
-                <label className="mb-3 block text-black dark:text-white">
-                  Default Input
-                </label>
+               
                 <input
                   type="text"
-                  placeholder="Default Input"
-                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                  placeholder="name"
+                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+                   py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+                   disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark 
+                   dark:bg-form-input dark:focus:border-primary"
+                   onChange={(e)=>setvalues({...value,name: e.target.value})}
+                   value={value.name}
                 />
               </div>
-
               <div>
-                <label className="mb-3 block text-black dark:text-white">
-                  Active Input
-                </label>
+               
                 <input
                   type="text"
-                  placeholder="Active Input"
-                  className="w-full rounded-lg border-[1.5px] border-primary bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input"
+                  placeholder="description"
+                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+                   py-3 px-5 font-medium outline-none transition focus:border-primary
+                    active:border-primary disabled:cursor-default disabled:bg-whiter 
+                    dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    onChange={(e)=>setvalues({...value,description: e.target.value})}
+                   value={value.description}
                 />
               </div>
-
               <div>
-                <label className="mb-3 block font-medium text-black dark:text-white">
-                  Disabled label
-                </label>
+               
                 <input
                   type="text"
-                  placeholder="Disabled label"
-                  disabled
-                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary dark:disabled:bg-black"
+                  placeholder="price"
+                  className="w-full rounded-lg border-[1.5px] border-stroke 
+                  bg-transparent py-3 px-5 font-medium outline-none transition 
+                  focus:border-primary active:border-primary disabled:cursor-default 
+                  disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                  onChange={(e)=>setvalues({...value,price: e.target.value})}
+                   value={value.price}
                 />
               </div>
+              <div>
+               
+                <input
+                  type="text"
+                  placeholder="quantity"
+                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent 
+                  py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary
+                   disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input 
+                   dark:focus:border-primary"
+                   onChange={(e)=>setvalues({...value,quantity: e.target.value})}
+                   value={value.quantity}
+                />
+              </div>
+              <div>
+              
+                <input
+                  type="text"
+                  placeholder="manufacturer"
+                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+                   py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+                   disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+                    dark:focus:border-primary"
+                    onChange={(e)=>setvalues({...value,manufacturer: e.target.value})}
+                   value={value.manufacturer}
+                />
+              </div>
+              <div>
+               
+                <input
+                  type="text"
+                  placeholder="dateAdded"
+                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+                   py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary
+                    disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+                     dark:focus:border-primary"
+                     onChange={(e)=>setvalues({...value,dateAdded: e.target.value})}
+                   value={value.dateAdded}
+                />
+              </div>
+              <div>
+               
+                <input
+                  type="text"
+                  placeholder="discount"
+                  className="w-full rounded-lg border-[1.5px] border-stroke
+                   bg-transparent py-3 px-5 font-medium outline-none transition 
+                   focus:border-primary active:border-primary disabled:cursor-default
+                    disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    onChange={(e)=>setvalues({...value,discount: e.target.value})}
+                   value={value.discount}
+                />
+              </div>
+              <div>
+                
+                <input
+                  type="text"
+                  placeholder="new"
+                  className="w-full rounded-lg border-[1.5px] border-stroke
+                   bg-transparent py-3 px-5 font-medium outline-none transition 
+                   focus:border-primary active:border-primary disabled:cursor-default
+                    disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    onChange={(e)=>setvalues({...value,new: e.target.value})}
+                   value={value.new}
+                />
+              </div>
+              <div>
+             
+                <input
+                  type="text"
+                  placeholder="rating"
+                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+                   py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary
+                    disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+                     dark:focus:border-primary"
+                     onChange={(e)=>setvalues({...value,rating: e.target.value})}
+                   value={value.rating}
+                />
+              </div>
+              <div>
+              
+                <input
+                  type="text"
+                  placeholder="saleCount"
+                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent 
+                  py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary
+                   disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+                    dark:focus:border-primary"
+                    onChange={(e)=>setvalues({...value,saleCount: e.target.value})}
+                   value={value.saleCount}
+                />
+              </div>
+              <div>
+               
+                <input
+                  type="text"
+                  placeholder="tag"
+                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent 
+                  py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary
+                   disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                   onChange={(e)=>setvalues({...value,tag: e.target.value})}
+                   value={value.tag}
+                />
+              </div>
+              <div>
+              
+                <input
+                  type="text"
+                  placeholder="stock"
+                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent 
+                  py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary
+                   disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+                    dark:focus:border-primary"
+                    onChange={(e)=>setvalues({...value,stock: e.target.value})}
+                   value={value.stock}
+                />
+              </div>
+              <div>
+               
+                <input
+                  type="text"
+                  placeholder="quantityInStock"
+                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+                   py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+                   disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                   onChange={(e)=>setvalues({...value,quantityInStock: e.target.value})}
+                  value={value.quantityInStock}
+                />
+              </div>
+              <div>
+               
+               <input
+                 type="text"
+                 placeholder="sku"
+                 className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+                  py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+                  disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+                   dark:focus:border-primary"
+                   onChange={(e)=>setvalues({...value,sku: e.target.value})}
+                   value={value.sku}
+               />
+             </div>
+             <div>
+               
+               <input
+                 type="text"
+                 placeholder="category_id"
+                 className="w-full rounded-lg border-[1.5px] border-stroke
+                  bg-transparent py-3 px-5 font-medium outline-none transition
+                   focus:border-primary active:border-primary disabled:cursor-default 
+                   disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                   onChange={(e)=>setvalues({...value,category_id: e.target.value})}
+                   value={value.category_id}
+               />
+             </div>
+             <div style={{border:"20px",padding:"10px"}}>
+              <button style={{border:"20px",padding:"10px", background:"#ADD8E6"}} >Submite</button>
+
+             </div>
+             
+              
             </div>
           </div>
 
