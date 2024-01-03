@@ -64,36 +64,78 @@ router.post('/register', async (req, res) => {
     }
   });
 
+//get specific user data that is login
+router.get('/user/profile', verifyToken, async (req, res) => {
+  const userId = req.user.id.id; // Assuming the decoded token has an 'id' property
 
-  router.get('/user/profile', verifyToken, async (req, res) => {
-    const userId = req.user.id.id; // Assuming the decoded token has an 'id' property
-  
-    try {
-      const user = await registerationModel.findByPk(userId);
-  
-      if (!user) {
-        return res.status(404).json({ message: 'User not found' });
-      }
-  
-      // You can customize the user data you want to send in the response
-      const userData = {
-        id: user.id,
-        firstname: user.firstname,
-        lastname: user.lastname,
-        email: user.email,
-        address: user.address,
-        contactNumber: user.contactNumber,
-        businessName: user.businessName
-        // Add other fields as needed
-      };
-  
-      res.status(200).json(userData);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Internal Server Error in user profile route' });
+  try {
+    const user = await registerationModel.findByPk(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
     }
-  });
-  
+
+    // You can customize the user data you want to send in the response
+    const userData = {
+      id: user.id,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      email: user.email,
+      address: user.address,
+      contactNumber: user.contactNumber,
+      businessName: user.businessName
+      // Add other fields as needed
+    };
+
+    res.status(200).json(userData);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Internal Server Error in user profile route' });
+  }
+});
+
+// Update user profile
+router.put('/user/profile/update', verifyToken, async (req, res) => {
+const userId = req.user.id.id; 
+
+try {
+  const user = await registerationModel.findByPk(userId);
+
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  // Update user information 
+    user.firstname = req.body.firstname || user.firstname;
+    user.lastname = req.body.lastname || user.lastname;
+    user.email = req.body.email || user.email;
+    user.address = req.body.address || user.address;
+    user.contactNumber = req.body.contactNumber || user.contactNumber;
+    user.businessName = req.body.businessName || user.businessName;
+    user.createdAt = new Date(); 
+    user.updatedAt = new Date();
+
+  await user.save();
+
+  const updatedUserData = {
+    id: user.id,
+    firstname: user.firstname,
+    lastname: user.lastname,
+    email: user.email,
+    address: user.address,
+    contactNumber: user.contactNumber,
+    businessName: user.businessName,
+    createdAt: user.createdAt,
+    updatedAt: user.updatedAt
+
+  };
+
+  res.status(200).json({ message: 'User profile updated successfully', updatedUserData });
+} catch (error) {
+  console.error(error);
+  res.status(500).json({ error: 'Internal Server Error in user profile update route' });
+}
+});
 
 
 
