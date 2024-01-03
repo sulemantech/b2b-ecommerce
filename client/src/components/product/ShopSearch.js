@@ -26,20 +26,23 @@ const ShopSearch = () => {
     setSearchTerm(event.target.value);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
   };
+  
 
   useEffect(() => {
     const handleBeforeUnload = () => {
       dispatch(clearSearchState());
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
+  
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
       dispatch(clearSearchState());
     };
   }, [dispatch]);
+  
 
   return (
     <div>
@@ -53,15 +56,15 @@ const ShopSearch = () => {
               value={searchTerm}
               onChange={handleSearch}
             />
-            <button type="submit">
+            <button type='submit'>
               <i className="pe-7s-search" />
             </button>
           </form>
         </div>
       </div>
-      {/* {hasSearched && <ShopGridStandard searchResults={searchResults} />} */}
     </div>
   );
 };
 
 export default ShopSearch;
+

@@ -4,8 +4,9 @@ import axios from "axios";
 
 
 
-export const fetchProducts = () => async (dispatch) => {
+export const fetchProducts = (e) => async (dispatch) => {
     try {
+      // e.preventDefault()
       const productsData = await axios.get(`http://localhost:5001/api/products/all` ).then((res) => {
         return res?.data;
     

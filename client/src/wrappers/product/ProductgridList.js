@@ -43,7 +43,6 @@ const ProductGridList = ({ products, spaceBottomClass }) => {
   ))
 )}
 
-
     </Fragment>
   );
 };

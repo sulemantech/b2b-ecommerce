@@ -65,9 +65,7 @@ const searchSlice = createSlice({
       state.loading = action.payload;
       state.error = null;
     },
-    clearSearchState: (state) => {
-      return { ...initialState };
-    },
+    clearSearchState: () => initialState, // Simplify the clearSearchState reducer
   },
 });
 

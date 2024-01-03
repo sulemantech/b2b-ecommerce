@@ -11,6 +11,7 @@ import ShopTopbar from '../../wrappers/product/ShopTopbar';
 import ShopProducts from '../../wrappers/product/ShopProducts';
 import { fetchProducts } from '../../store/slices/ProductsActions';
 import { fetchProductsByCategories } from '../../API';
+import { setProducts } from '../../store/slices/product-slice';
 
 
 const ShopGridStandard = () => {

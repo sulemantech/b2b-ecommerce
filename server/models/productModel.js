@@ -78,6 +78,14 @@ const productModel = sequelize.define('products', {
     allowNull: false,
     // unique: true,
   },
+  supplier_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  categoryName: {
+    type: DataTypes.STRING,
+    // allowNull: false,
+  },
  
 });
 

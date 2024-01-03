@@ -12,10 +12,7 @@ router.get('/', async (req, res) => {
   try {
     const orders = await orderModel.findAll({
       include: [
-        {
-          model: registerationModel,
-          attributes: ['id', 'firstname', "lastname", "contactNumber", "email"],
-        },
+       
         {
           model: orderItemsModel,
           attributes: ["orderId", "price", "discount", "totalPrice", 'productId', 'quantity',],
@@ -99,5 +96,62 @@ router.post('/', verifyToken, async (req, res) => {
     res.status(500).json({ message: 'Internal Server Error in order post' });
   }
 });
+
+//update api
+router.put('/update', verifyToken, async (req, res) => {
+  const userId = req.user.id.id;
+  const { address, totalPrice, status, discount, paymentMethod, trackingNumber,
+    name, email, contactNumber, zipCode, additionalInfo, city, country, shippingAddress,
+     } = req.body;
+  try {
+    const updatedOrder = await orderModel.update(
+      {
+        address, totalPrice, status, discount, paymentMethod, trackingNumber,
+        name, email, contactNumber, zipCode, additionalInfo, city, country, shippingAddress
+      },
+      {
+        where: { userId }
+      }
+    );
+
+  
+
+    res.json({ message: 'Order updated successfully', updatedOrder });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error in order update' });
+  }
+});
+
+//delete api
+
+router.delete('/:orderId', verifyToken, async (req, res) => {
+  const userId = req.user.id.id; // Assuming this is the user ID of the authenticated user
+  const orderIdToDelete = req.params.orderId;
+
+  try {
+    // Check if the order belongs to the authenticated user before deleting
+    const orderToDelete = await orderModel.findOne({
+      where: { orderId: orderIdToDelete, userId: userId }
+    });
+
+    if (!orderToDelete) {
+      return res.status(403).json({ message: 'Unauthorized: Order does not belong to the authenticated user' });
+    }
+
+    // Delete order items associated with the order
+    await orderItemsModel.destroy({ where: { orderId: orderIdToDelete } });
+
+    // Delete the order itself
+    const deletedOrder = await orderModel.destroy({ where: { orderId: orderIdToDelete } });
+
+    res.json({ message: 'Order deleted successfully', deletedOrder });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error in order deletion' });
+  }
+});
+
+
 
 module.exports = router;

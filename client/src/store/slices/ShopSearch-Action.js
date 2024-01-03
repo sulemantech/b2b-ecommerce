@@ -20,7 +20,7 @@
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 import { setSearchResults, setError, setLoading } from '../slices/ShopSearch-Slice';
 
-export const searchProducts = (searchTerm) => async (dispatch) => {
+export const searchProducts = (searchTerm,e) => async (dispatch) => {
   try {
     dispatch(setLoading(true));
 

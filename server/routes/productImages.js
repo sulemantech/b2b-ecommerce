@@ -6,7 +6,7 @@ const productImages = require('../models/productImages');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, '../../b2b-ecommerce/client/public/assets/products/sku_4');
+    cb(null, '../client/public/assets/products/');
   },
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -32,10 +32,10 @@ const upload = multer({
 // POST API
 router.post('/', upload, async (req, res) => {
   try {
-    const {productId}= req.body;
+    const {productId,id}= req.body;
     const images = req.files.map(file => file.path);
 
-    const newProductImage = await productImages.create({ images,productId });
+    const newProductImage = await productImages.create({ images,productId,id });
     res.status(201).json(newProductImage);
   } catch (error) {
     console.error('Error creating product image:', error);
