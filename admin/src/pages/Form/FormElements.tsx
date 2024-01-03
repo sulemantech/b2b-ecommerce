@@ -9,8 +9,12 @@ import SwitcherOne from '../../components/SwitcherOne';
 import SwitcherThree from '../../components/SwitcherThree';
 import SwitcherTwo from '../../components/SwitcherTwo';
 import { useState } from 'react';
+import axios from 'axios';
+
 
 const FormElements = () => {
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [file, setFile] = useState<File | null>(null);
   const [value,setvalues]=useState({
     name:"",
     description:"",
@@ -22,15 +26,69 @@ const FormElements = () => {
     new:"",
     rating:"", 
     saleCount:"",
-    tag:"",
+    tag:[]as string[],
     stock:"",
     quantityInStock:"",
     sku:"",
-    category_id:""
+    category_id:"",
+    supplier_id:"",
+    categoryName:"",
+    productId:""
 
   });
   
-console.log("valuess",value);
+
+ 
+  const handleFormSubmit = async () => {
+  try {
+    const response = await axios.post('http://localhost:5001/api/products/', value);
+    console.log('Product created:', response.data);
+  } catch (error) {
+    console.error('Error creating product:', error);
+  }
+  console.log( "imageeeee",imageupload());
+  
+ 
+};
+
+console.log("values before submission", value);
+
+
+
+
+
+const imageupload = async () => {
+  try {
+    const formData = new FormData();
+    formData.append('productId', value.productId);
+    formData.append('id', value.productId);
+    if (selectedFile) {
+      formData.append('file', selectedFile);
+    } else {
+      console.error('No file selected'); 
+    }
+
+    const response = await axios.post('http://localhost:5001/productImages', formData);
+    console.log('Product created:', response.data);
+  } catch (error) {
+    console.error('Error creating product:', error);
+  }
+};
+
+const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const fileInput = e.target as HTMLInputElement;
+  const files = fileInput.files;
+
+  if (files && files.length > 0) {
+    const selectedFile = files[0];
+    setFile(selectedFile);
+  } else {
+    setFile(null);
+  }
+};
+
+
+
 
   return (
     <>
@@ -46,6 +104,8 @@ console.log("valuess",value);
               </h3>
             </div>
             <div className="flex flex-col gap-5.5 p-6.5">
+              <form    className="form"
+            >
               <div>
                
                 <input
@@ -184,8 +244,8 @@ console.log("valuess",value);
                   className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent 
                   py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary
                    disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                   onChange={(e)=>setvalues({...value,tag: e.target.value})}
-                   value={value.tag}
+                   onChange={(e) => setvalues({ ...value, tag: [e.target.value] })}
+                   value={value.tag.join(',')}
                 />
               </div>
               <div>
@@ -239,14 +299,44 @@ console.log("valuess",value);
                    value={value.category_id}
                />
              </div>
+             <div>
+               
+               <input
+                 type="text"
+                 placeholder="supplier_id"
+                 className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+                  py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+                  disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+                   dark:focus:border-primary"
+                   onChange={(e)=>setvalues({...value,supplier_id: e.target.value})}
+                   value={value.supplier_id}
+               />
+             </div>
+             <div>
+               
+               <input
+                 type="text"
+                 placeholder=" categoryName"
+                 className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+                  py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+                  disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+                   dark:focus:border-primary"
+                   onChange={(e)=>setvalues({...value, categoryName: e.target.value})}
+                   value={value. categoryName}
+               />
+             </div>
              <div style={{border:"20px",padding:"10px"}}>
-              <button style={{border:"20px",padding:"10px", background:"#ADD8E6"}} >Submite</button>
+              <button style={{border:"20px",padding:"10px", background:"#ADD8E6"}}
+              onClick={handleFormSubmit}
+              >Submite</button>
 
              </div>
+
              
-              
+             </form>
             </div>
           </div>
+            
 
           {/* <!-- Toggle switch input --> */}
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -311,7 +401,14 @@ console.log("valuess",value);
                 </label>
                 <input
                   type="file"
-                  className="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke bg-transparent font-medium outline-none transition file:mr-5 file:border-collapse file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke file:bg-whiter file:py-3 file:px-5 file:hover:bg-primary file:hover:bg-opacity-10 focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark dark:file:bg-white/30 dark:file:text-white dark:focus:border-primary"
+                  className="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke
+                   bg-transparent font-medium outline-none transition file:mr-5 file:border-collapse 
+                   file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke
+                    file:bg-whiter file:py-3 file:px-5 file:hover:bg-primary file:hover:bg-opacity-10 
+                    focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter
+                     dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark 
+                     dark:file:bg-white/30 dark:file:text-white dark:focus:border-primary"
+                     onChange={handleFileChange}
                 />
               </div>
 
@@ -321,6 +418,7 @@ console.log("valuess",value);
                 </label>
                 <input
                   type="file"
+                  onChange={handleFileChange}
                   className="w-full rounded-md border border-stroke p-3 outline-none transition file:mr-4 file:rounded file:border-[0.5px] file:border-stroke file:bg-[#EEEEEE] file:py-1 file:px-2.5 file:text-sm file:font-medium focus:border-primary file:focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-strokedark dark:file:bg-white/30 dark:file:text-white"
                 />
               </div>

@@ -27,7 +27,7 @@ const upload = multer({
     }
     cb('Give proper file');
   }
-}).array('images', 3); // 'images' should match the field name used in your form or request
+}).array('images', 3); 
 
 // POST API
 router.post('/', upload, async (req, res) => {
