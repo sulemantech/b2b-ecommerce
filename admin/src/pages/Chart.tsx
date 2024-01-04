@@ -1,4 +1,5 @@
 import Breadcrumb from '../components/Breadcrumb.tsx';
+import ChartFive from '../components/ChartFive.tsx';
 import ChartFour from '../components/ChartFour';
 import ChartOne from '../components/ChartOne.tsx';
 import ChartThree from '../components/ChartThree.tsx';
@@ -16,6 +17,7 @@ const Chart = () => {
         <ChartOne />
         <ChartTwo />
         <ChartThree />
+        <ChartFive/>
       </div>
     </>
   );

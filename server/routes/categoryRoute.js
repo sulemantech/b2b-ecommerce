@@ -10,7 +10,14 @@ const router = express.Router();
 //get all category list///////////////////////////////////////////////////////
 router.get('/all', async (req, res) => {
   try {
-    const categoryList = await categoryModel.findAll();
+    const categoryList = await categoryModel.findAll({
+      include: [
+        {
+          model: productModel, // Assuming this is your Product model
+          attributes: ['id', 'name', 'price'], // Adjust attributes as needed
+        },
+      ],
+    });
     res.status(200).json(categoryList);
   } catch (error) {
     console.error('Error:', error.message);

@@ -4,7 +4,7 @@
   "version": "1.0.5",
   "type": "module",
   "scripts": {
-    "start":"vite",
+    "start": "vite",
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview"
@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "apexcharts": "^3.41.0",
+    "axios": "^1.6.4",
     "headlessui": "^0.0.0",
     "jsvectormap": "^1.5.3",
     "match-sorter": "^6.3.1",
