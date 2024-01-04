@@ -13,15 +13,16 @@ import axios from 'axios';
 
 
 const FormElements = () => {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [file, setFile] = useState<File | null>(null);
+  const [productId, setProductId] = useState('');
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  
   const [value,setvalues]=useState({
     name:"",
     description:"",
     price:"",
     quantity:"",
     manufacturer:"",
-    dateAdded:"", 
+    // dateAdded:"", 
     discount:"", 
     new:"",
     rating:"", 
@@ -43,10 +44,12 @@ const FormElements = () => {
   try {
     const response = await axios.post('http://localhost:5001/api/products/', value);
     console.log('Product created:', response.data);
+
+  
   } catch (error) {
     console.error('Error creating product:', error);
   }
-  console.log( "imageeeee",imageupload());
+
   
  
 };
@@ -56,38 +59,50 @@ console.log("values before submission", value);
 
 
 
+const handleSubmit = async () => {
+  handleFormSubmit();
+  if (!productId) {
+    console.error('Product ID is required.');
+    return;
+  }
 
-const imageupload = async () => {
+  const formData = new FormData();
+  formData.append('productId', productId);
+
+  if (imageFile) {
+    formData.append('images', imageFile);
+  } else {
+    console.error('Image file is required.');
+    return;
+  }
+
   try {
-    const formData = new FormData();
-    formData.append('productId', value.productId);
-    formData.append('id', value.productId);
-    if (selectedFile) {
-      formData.append('file', selectedFile);
-    } else {
-      console.error('No file selected'); 
+    const response = await fetch('http://localhost:5001/productImages', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
     }
 
-    const response = await axios.post('http://localhost:5001/productImages', formData);
-    console.log('Product created:', response.data);
+    const result = await response.json();
+    console.log('Image posted successfully:', result);
   } catch (error) {
-    console.error('Error creating product:', error);
-  }
-};
-
-const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  const fileInput = e.target as HTMLInputElement;
-  const files = fileInput.files;
-
-  if (files && files.length > 0) {
-    const selectedFile = files[0];
-    setFile(selectedFile);
-  } else {
-    setFile(null);
+    console.error('Error posting image:', error);
   }
 };
 
 
+const handleProductIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  setProductId(e.target.value);
+};
+
+const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  if (e.target.files && e.target.files.length > 0) {
+    setImageFile(e.target.files[0] as File);
+  }
+};
 
 
   return (
@@ -104,8 +119,7 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
               </h3>
             </div>
             <div className="flex flex-col gap-5.5 p-6.5">
-              <form    className="form"
-            >
+            
               <div>
                
                 <input
@@ -171,7 +185,7 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                    value={value.manufacturer}
                 />
               </div>
-              <div>
+              {/* <div>
                
                 <input
                   type="text"
@@ -180,10 +194,10 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                    py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary
                     disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
                      dark:focus:border-primary"
-                     onChange={(e)=>setvalues({...value,dateAdded: e.target.value})}
-                   value={value.dateAdded}
+                  //    onChange={(e)=>setvalues({...value,dateAdded: e.target.value})}
+                  //  value={value.dateAdded}
                 />
-              </div>
+              </div> */}
               <div>
                
                 <input
@@ -327,13 +341,16 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
              </div>
              <div style={{border:"20px",padding:"10px"}}>
               <button style={{border:"20px",padding:"10px", background:"#ADD8E6"}}
-              onClick={handleFormSubmit}
+              // onClick={handleFormSubmit}
+              onClick={handleSubmit}
+
+              
               >Submite</button>
 
              </div>
 
              
-             </form>
+             
             </div>
           </div>
             
@@ -401,6 +418,7 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                 </label>
                 <input
                   type="file"
+                  onChange={handleImageFileChange}
                   className="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke
                    bg-transparent font-medium outline-none transition file:mr-5 file:border-collapse 
                    file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke
@@ -408,17 +426,15 @@ const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                     focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter
                      dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark 
                      dark:file:bg-white/30 dark:file:text-white dark:focus:border-primary"
-                     onChange={handleFileChange}
                 />
               </div>
 
               <div>
-                <label className="mb-3 block text-black dark:text-white">
-                  Attach file
-                </label>
                 <input
-                  type="file"
-                  onChange={handleFileChange}
+                  type="text"
+                  placeholder='ProductId'
+                  value={productId}
+                  onChange={handleProductIdChange}
                   className="w-full rounded-md border border-stroke p-3 outline-none transition file:mr-4 file:rounded file:border-[0.5px] file:border-stroke file:bg-[#EEEEEE] file:py-1 file:px-2.5 file:text-sm file:font-medium focus:border-primary file:focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-strokedark dark:file:bg-white/30 dark:file:text-white"
                 />
               </div>
