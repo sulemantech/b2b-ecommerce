@@ -1,7 +1,7 @@
 import Breadcrumb from '../components/Breadcrumb';
-import TableOne from '../components/TableOne';
 import TableThree from '../components/TableThree';
 import TableTwo from '../components/TableTwo';
+import TableFour from '../components/TableFour';
 
 const Tables = () => {
   return (
@@ -9,9 +9,11 @@ const Tables = () => {
       <Breadcrumb pageName="Tables" />
 
       <div className="flex flex-col gap-10">
-        <TableOne />
+        <TableFour/>
+        {/* <TableOne /> */}
         <TableTwo />
         <TableThree />
+
       </div>
     </>
   );
