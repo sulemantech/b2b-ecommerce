@@ -4,13 +4,17 @@ const multer = require('multer');
 const path = require('path');
 const productImages = require('../models/productImages');
 
+
+
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, '../client/public/assets/products/');
+    cb(null, 'images');
   },
   filename: (req, file, cb) => {
+   const name=file.originalname;
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+    cb(null, name);
   },
 });
 
@@ -29,19 +33,26 @@ const upload = multer({
   }
 }).array('images', 3); 
 
-// POST API
+// post images API
 router.post('/', upload, async (req, res) => {
   try {
-    const {productId,id}= req.body;
-    const images = req.files.map(file => file.path);
+    const { productId, id } = req.body;
+    const images = req.files.map(file => '/'+ file.path.replace(/\\/g, '/'));
 
-    const newProductImage = await productImages.create({ images,productId,id });
+    const newProductImage = await productImages.create({
+      images, // Use the correct variable name here
+      productId,
+      id,
+    });
+
     res.status(201).json(newProductImage);
   } catch (error) {
     console.error('Error creating product image:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+
 
 
 //getimages

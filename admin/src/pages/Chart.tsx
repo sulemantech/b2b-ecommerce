@@ -2,6 +2,7 @@ import Breadcrumb from '../components/Breadcrumb.tsx';
 import ChartFive from '../components/ChartFive.tsx';
 import ChartFour from '../components/ChartFour';
 import ChartOne from '../components/ChartOne.tsx';
+import ChartSix from '../components/ChartSix.tsx';
 import ChartThree from '../components/ChartThree.tsx';
 import ChartTwo from '../components/ChartTwo.tsx';
 
@@ -17,7 +18,10 @@ const Chart = () => {
         <ChartOne />
         <ChartTwo />
         <ChartThree />
-        <ChartFive/>
+        <ChartFive/><br/><br/><br/><br/><br/><br/>
+        <div className='col-span-10'>
+          <ChartSix/>
+        </div>
       </div>
     </>
   );

@@ -17,7 +17,6 @@ const ChartFive = () => {
         setData(response.data);
       } catch (error) {
         console.error('Error fetching data:', (error as Error).message);
-
       }
       
     };
