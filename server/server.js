@@ -77,8 +77,8 @@ app.use('/api/company',companiesRoute)
 //searching
 const search='/api/product/'
 
-// Serve static files from the 'images' directory
-app.use('/assets',express.static(path.join(__dirname, './images')));
+// Serve static files from the 'images' directory   http://localhost:5001/assets/products/images-1704183525093-867535339.png
+app.use('/assets',express.static(path.join(__dirname, 'assets')));
 
 //Start the ApolloServer before applying middleware
 async function startApolloServer() {

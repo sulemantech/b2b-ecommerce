@@ -9,7 +9,7 @@ const productImages = require('../models/productImages');
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, 'images');
+    cb(null, '/assets/products');
   },
   filename: (req, file, cb) => {
    const name=file.originalname;
