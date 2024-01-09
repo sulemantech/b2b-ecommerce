@@ -2,15 +2,46 @@ import { lazy } from 'react';
 
 const Calendar = lazy(() => import('../pages/Calendar'));
 const Chart = lazy(() => import('../pages/Chart'));
-const FormElements = lazy(() => import('../pages/Form/FormElements'));
-const FormLayout = lazy(() => import('../pages/Form/FormLayout'));
+const FormElements = lazy(() => import('../pages/Form/AddProducts'));
+const FormLayout = lazy(() => import('../pages/Form/Login'));
 const Profile = lazy(() => import('../pages/Profile'));
 const Settings = lazy(() => import('../pages/Settings'));
 const Tables = lazy(() => import('../pages/Tables'));
 const Alerts = lazy(() => import('../pages/UiElements/Alerts'));
 const Buttons = lazy(() => import('../pages/UiElements/Buttons'));
+const Products =lazy(()=>import('../pages/Dashboard/Products'));
+const Users =lazy(()=>import('../pages/Dashboard/Users'));
+const Orders =lazy(()=>import('../pages/Dashboard/Oders'));
+const UpdateProducts =lazy(()=>import('../components/UpdateProducts'));
+
+
+
 
 const coreRoutes = [
+  {
+    path: '/products',
+    title: 'products',
+    component:Products,
+
+  },
+  {
+    path: '/UpdateProducts',
+    title: 'UpdateProducts',
+    component:UpdateProducts,
+
+  },
+  {
+    path: '/users',
+    title: 'users',
+    component:Users,
+
+  },
+  {
+    path: '/orders',
+    title: 'orders',
+    component:Orders,
+
+  },
   {
     path: '/calendar',
     title: 'Calender',
