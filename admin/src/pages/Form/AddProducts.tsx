@@ -322,8 +322,6 @@ const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
               <button style={{border:"20px",padding:"10px", background:"#ADD8E6"}}
               // onClick={handleFormSubmit}
               onClick={handleSubmit}
-
-              
               >Submite</button>
 
              </div>
