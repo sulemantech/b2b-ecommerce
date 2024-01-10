@@ -101,6 +101,31 @@ router.get('/:category_id', async (req, res) => {
   }
 });
 
+// GET API to get a specific product by ID
+router.get('/specific/:id', async (req, res) => {
+  const productId = req.params.id;
+
+  try {
+    const product = await productModel.findByPk(productId, {
+      include: {
+        model: productImages,
+        where: { productId: { [Op.col]: 'products.id' } },
+        attributes: ['date', 'images'],
+      },
+    });
+
+    if (product) {
+      res.status(200).json(product);
+    } else {
+      res.status(404).json({ error: 'Product not found' });
+    }
+  } catch (error) {
+    console.error('Error:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
 
 
 
