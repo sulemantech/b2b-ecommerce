@@ -51,16 +51,28 @@ router.post('/', async(req, res) => {
   }
 });
 
-// GET API    ///////////////////////////////////////////////////////////////////
+// Common function to handle pagination
+const paginateResults = (page = 1, pageSize = 20) => ({
+  offset: (page - 1) * pageSize,
+  limit: pageSize,
+});
+// GET API with pagination ///////////////////////////////////////////////////////
 router.get('/all', async (req, res) => {
+  const page = req.query.page || 1;
+  const pageSize = req.query.pageSize || 20;
+
   try {
+    const { offset, limit } = paginateResults(page, pageSize);
+
     const allProducts = await productModel.findAll({
       include: {
         model: productImages,
-        where: { productId: { [Op.col]: 'products.id' } }, 
+        where: { productId: { [Op.col]: 'products.id' } },
         attributes: ['date', 'images'],
       },
+      ...paginateResults(page, pageSize),
     });
+
     res.status(200).json(allProducts);
   } catch (error) {
     console.error('Error:', error.message);
@@ -89,6 +101,31 @@ router.get('/:category_id', async (req, res) => {
   }
 });
 
+// GET API to get a specific product by ID
+router.get('/specific/:id', async (req, res) => {
+  const productId = req.params.id;
+
+  try {
+    const product = await productModel.findByPk(productId, {
+      include: {
+        model: productImages,
+        where: { productId: { [Op.col]: 'products.id' } },
+        attributes: ['date', 'images'],
+      },
+    });
+
+    if (product) {
+      res.status(200).json(product);
+    } else {
+      res.status(404).json({ error: 'Product not found' });
+    }
+  } catch (error) {
+    console.error('Error:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
 
 
 
@@ -115,7 +152,36 @@ router.put('/:id', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-//searching api based on name
+
+
+// DELETE API    ///////////////////////////////////////////////////////////////////
+router.delete('/:id', async (req, res) => {
+  try {
+    const productId = req.params.id;
+    const product = await productModel.findByPk(productId);
+
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+    const deletedProductDetails = {
+      id: product.id,
+      name: product.name,
+      price: product.price
+    };
+
+    // Delete the product
+    await product.destroy();
+
+    res.status(200).json({
+      message: 'Product deleted successfully',
+      deletedProduct: deletedProductDetails,
+    });
+  } catch (error) {
+    console.error('Error deleting product:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
 
 
 
