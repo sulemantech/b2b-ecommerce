@@ -98,7 +98,7 @@ const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
   return (
     <>
-      <Breadcrumb pageName="FormElements" />
+      <Breadcrumb pageName="Products" />
 
       <div className="grid grid-cols-1 gap-9 sm:grid-cols-1">
         <div className="flex flex-col gap-9">

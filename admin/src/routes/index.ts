@@ -25,7 +25,7 @@ const coreRoutes = [
 
   },
   {
-    path: '/UpdateProducts',
+    path: '/UpdateProducts/:id',
     title: 'UpdateProducts',
     component:UpdateProducts,
 
