@@ -45,7 +45,7 @@ router.delete('/:id', async (req, res) => {
     const { id } = req.params;
 
     // Check if the product image exists
-    const existingProductImage = await productImages.findByPk(id);
+    const existingProductImage = await productImages.findByPk(productId);
     if (!existingProductImage) {
       return res.status(404).json({ error: 'Product image not found' });
     }

@@ -2,18 +2,19 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Breadcrumb from '../components/Breadcrumb';
 import { useParams,useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 
 interface UpdateProductProps {
   productId: string;
+  
 }
 
 const UpdateProduct: React.FC<UpdateProductProps> = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   
-  const [productImages, setProductImages] = useState<string[]>([]);
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -31,6 +32,8 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
   const [category_id, setCategoryId] = useState('');
   const [supplier_id, setSupplierId] = useState('');
   const [categoryName, setCategoryName] = useState('');
+  const [productImages, setProductImages] = useState<[]>([]);
+
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -54,7 +57,9 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
         setCategoryId(product.category_id || '');
         setSupplierId(product.supplier_id || '');
         setCategoryName(product.categoryName || '');
-          setProductImages(product.productImages?.images || []);
+        // setProductImages(product.productImages[0]?.images[0] || []);
+        setProductImages(product.productImages[0]?.images || []);
+// console.log("imggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg",product.productImages[0]?.images[0] );
 
       } catch (error) {
         console.error('Error fetching product:', error);
@@ -95,11 +100,29 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
     }
   };
 
-  console.log("imagggggggggggggggggggggggggggggggggggg",productImages[0]);
+  
 
 
 
+// ****DEleteImage***********
+const handleDeleteImage = async () => {
+  try {
+    const response = await fetch(`http://localhost:5001/productImages/${id}`, {
+      method: 'DELETE',
+    });
 
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    console.log('Image deleted successfully:', result);
+
+  } catch (error) {
+    console.error('Error deleting image:', error);
+    // Handle error cases
+  }
+};
 
   
     
@@ -370,31 +393,42 @@ return (
 
       <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1">
       <div className="max-w-full overflow-x-auto">
-        {/* <table className="w-full table-auto">
+        <table className="w-full table-auto">
           <thead>
             <tr className="bg-gray-2 text-left dark:bg-meta-4">
               <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
-                <img src={Product?.productImages?.images[0]} alt="" />
+                Image
               </th>
               <th className="min-w-[150px] py-4 px-4 font-medium text-black dark:text-white">
-                Invoice date
+                Remove
               </th>
               <th className="py-4 px-4 font-medium text-black dark:text-white">
-                Actions
+                AddNew
               </th>
             </tr>
           </thead>
           <tbody>
          <tr>
               <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-                <img src="" alt="" />
-             
+              {/* {productImages.map((imageUrl, index) => (
+                  <img key={index} src={imageUrl} alt={`Product Image ${index + 1}`} />
+                ))} */}
+                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+        <div className="h-12.5 w-15 rounded-md">
+        {productImages.map((imageUrl, index) => (
+                  <img key={index} src={imageUrl} alt={`Product Image ${index + 1}`} />
+                ))}
+        
+        </div>
+        <p className="text-sm text-black dark:text-white">
+          {name}
+        </p>
+      </div>
               </td>
               <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                <h1>productId</h1>   
-              </td>
-              <td>
-              <button className="hover:text-primary">
+              <button className="hover:text-primary"
+              onClick={handleDeleteImage}
+                >
                     <svg
                       className="fill-current"
                       width="18"
@@ -421,36 +455,19 @@ return (
                       />
                     </svg>
                   </button>
+              </td>
+              <td>
+              <Link to={`/forms/form-elements/`} className="bg-blue hover:bg-blue-700 font-bold py-2 px-4 rounded-full">
+        AddNew
+      </Link>
                   </td>
              
             </tr>
           </tbody>
-        </table> */}
-         <table className="w-full table-auto">
-          <thead>
-            <tr className="bg-gray-2 text-left dark:bg-meta-4">
-              <th className="min-w-[220px] py-4 px-4 font-medium text-black dark:text-white xl:pl-11">
-            
-                  <img src={productImages[0]} alt="Product" className="max-w-full h-auto" />
-              </th>
-              {/* ... other table headers ... */}
-            </tr>
-            
-          </thead>
-          <tbody>
-            <tr>
-              <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark xl:pl-11">
-            </td>
-             
-            </tr>
-          </tbody>
         </table>
+
       </div>
     </div>
-  
-
-
-  
       </div>
   </>
 );

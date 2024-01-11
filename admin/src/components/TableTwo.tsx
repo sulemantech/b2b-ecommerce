@@ -5,17 +5,17 @@ import { Link } from 'react-router-dom';
 
 
 const TableTwo: React.FC  = () => {
-  const [products,setProducts]=useState<Product[]>([]);
-  interface Product {
+  const [products,setProducts]=useState<Products[]>([]);
+  interface Products {
     id: number;
-    productId:number;
+    productId: number;
     name: string;
     price: number;
-    categoryName:string;
-    discount:number;
-    productImages?: { date: string; images: string[] }[];
+    categoryName: string;
+    discount: number;
+    productImages: Array<{ date: string; images: string[] }>;
+    // productImages?: { date: string; images: string[] }[] | undefined;
   }
-
 const fetchAllProducts = () => {
   fetch(`http://localhost:5001/api/products/all`)
     .then(response => {
@@ -36,6 +36,7 @@ const fetchAllProducts = () => {
 useEffect(() => {
   fetchAllProducts();
 }, []);
+
 
 
 
@@ -69,15 +70,18 @@ useEffect(() => {
         </div>
       </div>
       
-      {products.map((product, index) => (
-  <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5" key={index} id={`${product.id}`}>
+      {products.map((product) => (
+  <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5"  id={`${product.id}`}>
     <div className="col-span-3 flex items-center">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-        {/* <div className="h-12.5 w-15 rounded-md">
-          <img src={product?.productImages[0]?.images} alt="Product" />
-        </div> */}
+        <div className="h-12.5 w-15 rounded-md">
+        <img src={product.productImages[0]?.images[0]} alt="" />
+        {/* {console.log("pppppppppppppppppp",product.productImages[0]?.images[0])
+        } */}
+        </div>
         <p className="text-sm text-black dark:text-white">
           {product.name}
+          {/* {product.id} */}
         </p>
       </div>
     </div>
@@ -105,10 +109,7 @@ useEffect(() => {
     </div>
   </div>
 ))}
-
-
-
-    </div>
+</div>
   </>
   );
 };
