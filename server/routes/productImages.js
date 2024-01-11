@@ -3,35 +3,8 @@ const router = express.Router();
 const multer = require('multer');
 const path = require('path');
 const productImages = require('../models/productImages');
+const { upload } = require('../middlewares/multerMiddleware');
 
-
-
-
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, '/assets/products');
-  },
-  filename: (req, file, cb) => {
-   const name=file.originalname;
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, name);
-  },
-});
-
-const upload = multer({ 
-  storage: storage,
-  limits: { fileSize: 100000000 },
-  fileFilter: (req, file, cb) => {
-    const fileTypes = /jpeg|jpg|png|gif/;
-    const mimeType = fileTypes.test(file.mimetype);
-    const extname = fileTypes.test(path.extname(file.originalname));
-
-    if (mimeType && extname) {
-      return cb(null, true);
-    }
-    cb('Give proper file');
-  }
-}).array('images', 3); 
 
 // post images API
 router.post('/', upload, async (req, res) => {
@@ -65,5 +38,59 @@ router.get('/get', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
  });
+
+ // Delete image API
+router.delete('/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Check if the product image exists
+    const existingProductImage = await productImages.findByPk(id);
+    if (!existingProductImage) {
+      return res.status(404).json({ error: 'Product image not found' });
+    }
+
+    // Delete the product image
+    await existingProductImage.destroy();
+
+    res.json({ message: 'Product image deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting product image:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+// Update image API
+router.put('/:id', upload, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { productId } = req.body;
+    
+    const existingProductImage = await productImages.findByPk(id);
+
+    if (!existingProductImage) {
+      return res.status(404).json({ error: 'Product image not found' });
+    }
+    const updatedImages = req.files.map(file => '/' + file.path.replace(/\\/g, '/'));
+
+    existingProductImage.images = updatedImages;
+    existingProductImage.productId = productId;
+
+    await existingProductImage.save();
+
+    res.json(existingProductImage);
+  } catch (error) {
+    console.error('Error updating product image:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+
+
+
+
+
 
 module.exports = router;

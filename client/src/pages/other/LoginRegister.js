@@ -130,10 +130,6 @@ const LoginRegister = () => {
                                   onClick={SubmitLogin}
                                   value="Login"
                                 />
-
-                                {/* <button type="submit">
-                                  <span>Login</span>
-                                </button> */}
                               </div>
                             </form>
                           </div>
@@ -229,12 +225,7 @@ const LoginRegister = () => {
                                 onClick={SubmitRegistration}
                                 value="Register"
                               />
-                              {/* <div className="button-box">
-                                <button type="submit">
-                                  <span>Register</span>
-                                  
-                                </button>
-                              </div> */}
+                              
                             </form>
                           </div>
                         </div>
