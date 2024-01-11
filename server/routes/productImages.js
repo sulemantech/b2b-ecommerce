@@ -40,7 +40,7 @@ router.get('/get', async (req, res) => {
  });
 
  // Delete image API
-router.delete('/:id', async (req, res) => {
+router.delete('/:productId', async (req, res) => {
   try {
     const { productId } = req.params;
 
@@ -48,15 +48,6 @@ router.delete('/:id', async (req, res) => {
     const existingProductImage = await productImages.findByPk(productId);
     if (!existingProductImage) {
       return res.status(404).json({ error: 'Product image not found' });
-    // Check if any product images exist for the given productId
-    const existingProductImages = await productImages.findAll({
-      where: {
-        productId: productId
-      }
-    });
-
-    if (!existingProductImages || existingProductImages.length === 0) {
-      return res.status(404).json({ error: 'No product images found for the specified productId' });
     }
 
     // Delete all product images for the given productId
