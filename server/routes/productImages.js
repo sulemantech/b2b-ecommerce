@@ -39,26 +39,37 @@ router.get('/get', async (req, res) => {
   }
  });
 
- // Delete image API
-router.delete('/:id', async (req, res) => {
-  try {
-    const { id } = req.params;
 
-    // Check if the product image exists
-    const existingProductImage = await productImages.findByPk(id);
-    if (!existingProductImage) {
-      return res.status(404).json({ error: 'Product image not found' });
+// Delete image API by productId
+router.delete('/:productId', async (req, res) => {
+  try {
+    const { productId } = req.params;
+
+    // Check if any product images exist for the given productId
+    const existingProductImages = await productImages.findAll({
+      where: {
+        productId: productId
+      }
+    });
+
+    if (!existingProductImages || existingProductImages.length === 0) {
+      return res.status(404).json({ error: 'No product images found for the specified productId' });
     }
 
-    // Delete the product image
-    await existingProductImage.destroy();
+    // Delete all product images for the given productId
+    await productImages.destroy({
+      where: {
+        productId: productId
+      }
+    });
 
-    res.json({ message: 'Product image deleted successfully' });
+    res.json({ message: 'Product images deleted successfully for the specified productId' });
   } catch (error) {
-    console.error('Error deleting product image:', error);
+    console.error('Error deleting product images:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 
 // Update image API
