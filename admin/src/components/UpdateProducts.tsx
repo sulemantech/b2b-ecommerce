@@ -7,7 +7,8 @@ import { Link } from 'react-router-dom';
 
 
 interface UpdateProductProps {
-  productId: string;
+ 
+  
   
 }
 

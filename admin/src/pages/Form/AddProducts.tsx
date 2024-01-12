@@ -1,6 +1,8 @@
 import Breadcrumb from '../../components/Breadcrumb';
 import { useState } from 'react';
 import axios from 'axios';
+import SheetJSApp from '../../components/ExcelFile';
+
 
 
 const FormElements = () => {
@@ -369,8 +371,10 @@ const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
               </div>
             </div>
           </div>
-  
-
+          <div className="flex flex-col gap-10">
+        {/* Render the SheetJSApp component here */}
+        <SheetJSApp />
+      </div>
     
         </div>
       </div>
