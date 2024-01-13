@@ -51,6 +51,47 @@ router.post('/', async(req, res) => {
   }
 });
 
+// Bulk post API
+router.post('/bulk', async (req, res) => {
+  try {
+    const products = req.body; // Assuming req.body is an array of products
+console.log("rrrrrrrrrrrrrrrrrrrrrrrrrP",products);
+    // Validate that products is an array
+    if (!Array.isArray(products)) {
+      return res.status(400).json({ error: 'Invalid input. Expected an array of products.' });
+    }
+
+    // Use Promise.all to asynchronously create all products
+    const createdProducts = await Promise.all(products.map(async (product) => {
+      const {
+        id, name, description, price, quantity, manufacturer, dateAdded, quantityInStock, sku,
+        discount, new: isNew, rating, saleCount, category_id, tag, stock, supplier_id, categoryName
+      } = product;
+
+      const newData = await productModel.create({
+        id, name, description, price, quantity, manufacturer, dateAdded, quantityInStock, sku,
+        discount, new: isNew, rating, saleCount, category_id, tag, stock, supplier_id, categoryName
+      });
+
+      const category = await categoryModel.findByPk(category_id);
+
+      if (category) {
+        // Associate the product with the category
+        await newData.addCategory(category, { through: { id: category_id } });
+        return newData;
+      } else {
+        throw new Error(`Category not found for product with id: ${id}`);
+      }
+    }));
+
+    res.status(201).json({ message: 'Products created and associated with categories.', createdProducts });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
 // Common function to handle pagination
 const paginateResults = (page = 1, pageSize = 20) => ({
   offset: (page - 1) * pageSize,
