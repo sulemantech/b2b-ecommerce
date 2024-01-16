@@ -54,9 +54,8 @@ router.post('/', async(req, res) => {
 // Bulk post API
 router.post('/bulk', async (req, res) => {
   try {
-    const products = req.body; // Assuming req.body is an array of products
-console.log("rrrrrrrrrrrrrrrrrrrrrrrrrP",products);
-    // Validate that products is an array
+    const products = req.body; 
+    
     if (!Array.isArray(products)) {
       return res.status(400).json({ error: 'Invalid input. Expected an array of products.' });
     }
@@ -97,20 +96,33 @@ const paginateResults = (page = 1, pageSize = 20) => ({
   offset: (page - 1) * pageSize,
   limit: pageSize,
 });
+
 // GET API with pagination ///////////////////////////////////////////////////////
+
 router.get('/all', async (req, res) => {
   const page = req.query.page || 1;
   const pageSize = req.query.pageSize || 20;
-
+  const status = req.query.status; // assuming you pass 'active' or 'pending' as query parameter
+console.log("page....",page, "pageSize",pageSize);
   try {
     const { offset, limit } = paginateResults(page, pageSize);
 
+    const whereClause = {};
+    
+    // If status is provided, add it to the where clause
+    if (status) {
+      whereClause.status = status.toLowerCase();
+    }
+    console.log("whereClause.status....",whereClause.status);
+
     const allProducts = await productModel.findAll({
+      where: whereClause,
       include: {
         model: productImages,
         where: { productId: { [Op.col]: 'products.id' } },
         attributes: ['date', 'images'],
       },
+      order: [['id', 'ASC']],
       ...paginateResults(page, pageSize),
     });
 
@@ -120,6 +132,8 @@ router.get('/all', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+
 
 // GET API    ///////////////////////////////////////////////////////////////////
 router.get('/:category_id', async (req, res) => {
