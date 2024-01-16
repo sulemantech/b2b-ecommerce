@@ -1,12 +1,6 @@
-/* xlsx.js (C) 2013-present  SheetJS -- http://sheetjs.com */
-/* Notes:
-   - usage: `ReactDOM.render( <SheetJSApp />, document.getElementById('app') );`
-   - xlsx.full.min.js is loaded in the head of the HTML page
-   - this script should be referenced with type="text/babel"
-   - babel.js in-browser transpiler should be loaded before this script
-*/
-import React, { ChangeEvent } from "react";
+import React, { ChangeEvent } from 'react';
 import * as XLSX from 'xlsx';
+import { Link } from 'react-router-dom';
 
 
 
@@ -35,7 +29,7 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
     // console.log("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaa",this.data)
     
   }
-  componentDidUpdate(prevProps: SheetJSAppProps, prevState: SheetJSAppState) {
+  componentDidUpdate( prevState: SheetJSAppState) {
     // Check if the data state has changed
     if (prevState.data !== this.state.data) {
       console.log('Data has been updated:', this.state.data);
@@ -96,10 +90,7 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
         <div className="row">
           <div className="col-xs-12">
             <OutTable data={this.state.data} cols={this.state.cols} />
-         
-            
           </div>
-          
         </div>
       </DragDropFile>
     );
@@ -114,38 +105,38 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
     handleFile(file:File):void;
 */
 class DragDropFile extends React.Component<{
-    handleFile: (file: File) => void;
-    children?: React.ReactNode; // Add this line to define the children prop
-  }> {
-    constructor(props: { handleFile: (file: File) => void }) {
-      super(props);
-      this.onDrop = this.onDrop.bind(this);
-    }
-  
-    suppress(evt: React.DragEvent<HTMLDivElement>) {
-      evt.stopPropagation();
-      evt.preventDefault();
-    }
-  
-    onDrop(evt: React.DragEvent<HTMLDivElement>) {
-      evt.stopPropagation();
-      evt.preventDefault();
-      const files = evt.dataTransfer.files;
-      if (files && files[0]) this.props.handleFile(files[0]);
-    }
-  
-    render() {
-      return (
-        <div
-          onDrop={this.onDrop}
-          onDragEnter={this.suppress}
-          onDragOver={this.suppress}
-        >
-          {this.props.children}
-        </div>
-      );
-    }
+  handleFile: (file: File) => void;
+  children?: React.ReactNode; // Add this line to define the children prop
+}> {
+  constructor(props: { handleFile: (file: File) => void }) {
+    super(props);
+    this.onDrop = this.onDrop.bind(this);
   }
+
+  suppress(evt: React.DragEvent<HTMLDivElement>) {
+    evt.stopPropagation();
+    evt.preventDefault();
+  }
+
+  onDrop(evt: React.DragEvent<HTMLDivElement>) {
+    evt.stopPropagation();
+    evt.preventDefault();
+    const files = evt.dataTransfer.files;
+    if (files && files[0]) this.props.handleFile(files[0]);
+  }
+
+  render() {
+    return (
+      <div
+        onDrop={this.onDrop}
+        onDragEnter={this.suppress}
+        onDragOver={this.suppress}
+      >
+        {this.props.children}
+      </div>
+    );
+  }
+}
 
 /*
   Simple HTML5 file input wrapper
@@ -181,242 +172,255 @@ class DataInput extends React.Component<{ handleFile: (file: File) => void }> {
   }
 }
 
-// ... (previous code)
-
-/*
-  Simple HTML Table
-  usage: <OutTable data={data} cols={cols} />
-    data:Array<Array<any> >;
-    cols:Array<{name:string, key:number|string}>;
-*/
-// class OutTable extends React.Component<{ data: any[], cols: any[] }> {
-//     render() {
-//       return (
-//         <div className="table-responsive">
-//           <table className="table table-striped">
-//             <thead>
-//               <tr>
-//                 {this.props.cols.map(c => (
-//                   <th key={c.key}>{c.name}</th>
-//                 ))}
-//               </tr>
-//             </thead>
-//             <tbody>
-//               {this.props.data.map((r, i) => (
-//                 <tr key={i}>
-//                   {this.props.cols.map(c => (
-//                     <td key={c.key}>{r[c.key]}</td>
-//                   ))}
-//                 </tr>
-//               ))}
-//             </tbody>
-//           </table>
-//         </div>
-//       );
-//     }
+// interface RowData {
+//   id?: number; // Note: The ID might not be available when creating a new product
+//   name: string;
+//   description: string;
+//   price: number;
+//   quantity?: number;
+//   manufacturer: string;
+//   dateAdded?: Date;
+//   discount: number;
+//   new: boolean;
+//   rating: number;
+//   saleCount: number;
+//   tag: string[];
+//   stock: number;
+//   quantityInStock: number;
+//   sku: string;
+//   category_id: number;
+//   supplier_id: number;
+//   categoryName: string;
 //   }
-
-interface RowData {
-    id: number;
-    name: string;
-    // Add other properties as needed
-  }
-// class OutTable extends React.Component<{ data: any[], cols: any[] }> {
-//     handleSave(rowData:RowData) {
-//         // Extract the specific data you want to send to the server
-//         const postData = {
-//           id: rowData.id,
-//           name: rowData.name,
-//         };
-      
-      
-//         fetch('your-api-endpoint', {
-//           method: 'POST',
-//           headers: {
-//             'Content-Type': 'application/json',
-//           },
-//           body: JSON.stringify(postData),
-//         })
-//           .then(response => response.json())
-//           .then(result => {
-//             console.log('Post saved successfully:', result);
-//           })
-//           .catch(error => {
-//             console.error('Error saving post:', error);
-//           });
-//       }
-      
- 
-//     render() {
-        
-// //         console.log('Columns:', this.props.cols);
-// //   console.log('Data:', this.props.data);
-//       return (
-//         <div className="table-responsive">
-//           <table className="table table-striped" style={{ border: '1px solid black' }}>
-//             <thead style={{border:"1px solid black"}}>
-//               <tr style={{ border: '1px solid black' }}>
-//                 {this.props.cols.map(c => (
-//                   <th key={c.key} style={{ border: '1px solid black' }}>
-//                     {c.name}
-//                     {/* <button
-//                       onClick={() => this.handleSave(this.props.data[0][c.key])}
-//                     >
-//                       Save
-//                     </button> */}
-//                   </th>
-//                 ))}
-//               </tr>
-//             </thead>
-//             <tbody  >
-//             {this.props.data.map((r, i) => (
-//               <tr key={i} style={{border:"1px solid black"}}>
-//                 {this.props.cols.map(c => (
-//                   <td key={c.key} style={{ border: '1px solid black' }}>{r[c.key]}</td>
-//                 ))}
-//                 <td style={{border:"1px solid black"}}>
-//                   <button onClick={() => this.handleSave(r)}  style={{backgroundColor:"lightblue",
-//                   padding:"px",border:"1px solid black"}}>
-//                     Save
-//                     </button>
-//                 </td>
-//               </tr>
-//             ))}
-//             </tbody>
-//           </table>
-//         </div>
-//       );
-//     }
-//   }
-  // ... (imports and interfaces)
 
 interface SheetJSAppState {
-    data: any[];
-    cols: any[];
-    [key: string]: any; // Allow any additional properties in state
+  data: any[];
+  cols: any[];
+  [key: string]: any;
+}
+
+class OutTable extends React.Component<
+  { data: any[]; cols: any[] },
+  SheetJSAppState
+> {
+  handleSave(rowData: any[]) {
+    const postData = {
+      id:rowData,
+      name: rowData[0],
+      description: rowData[1],
+      price: rowData[2],
+      quantity: rowData[3],
+      country: rowData[4],
+      weight: rowData[5],
+      available: rowData[6],
+      minQuantity: rowData[7],
+      maxQuantity: rowData[8],
+      tag: Array.isArray(rowData[9]) ? rowData[9] : [],
+      width: rowData[10],
+      height: rowData[11],
+      sku: rowData[12],
+      category_id: rowData[13],
+      supplier_id: rowData[14],
+      category_name: rowData[15],
+    };
+
+    // console.log("skuuuuuuuuuuuu",id:rowData,);
+
+    fetch('http://localhost:5001/api/products', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(postData),
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        console.log('Post saved successfully:', result);
+        console.log('Save data:', rowData);
+      })
+      .catch((error) => {
+        console.error('Error saving post:', error);
+      });
   }
-  
-  class OutTable extends React.Component<{ data: any[], cols: any[] }, SheetJSAppState> {
-    constructor(props: { data: any[]; cols: any[] }) {
-      super(props);
-      this.state = {
-        data: props.data,
-        cols: props.cols,
-        selectedRows: new Set<number>(),
-      };
+
+  constructor(props: { data: any[]; cols: any[] }) {
+    super(props);
+    this.state = {
+      data: props.data,
+      cols: props.cols,
+      selectedRows: new Set<number>(),
+    };
+  }
+  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  handleMultiple = () => {
+    const { selectedRows } = this.state;
+
+    // Filter the selected rows
+    const selectedProducts = this.props.data.filter(
+      (_, i) => selectedRows?.has(i),
+    );
+
+    // Check if any products are selected
+    if (selectedProducts.length === 0) {
+      console.log('No products selected.');
+      return;
     }
+
+    // Create an array of products with only the required properties
+    const postData = selectedProducts.map((product) => ({
+      name: product[0],
+      description: product[1],
+      price: product[2],
+      quantity: product[3],
+      manufacturer: product[4],
+      discount: product[5],
+      new: product[6],
+      rating: product[7],
+      saleCount: product[8],
+      // tag: product[9],
+      stock: product[10],
+      quantityInStock: product[11],
+      sku: product[12],
+      category_id: product[13],
+      supplier_id: product[14],
+      categoryName: product[15],
+    }));
+
+    // Send bulk request to the backend API
+    fetch('http://localhost:5001/api/products/bulk', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(postData),
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Error saving products');
+        }
+      })
+      .then((result) => {
+        console.log('Products saved successfully:', result);
+        // Handle success as needed
+      })
+      .catch((error) => {
+        console.error('Error saving products:', error);
+      });
+  };
+
+  handleCheckboxChange = (rowIndex: number) => {
+    const { selectedRows } = this.state;
+    if (selectedRows?.has(rowIndex)) {
+      selectedRows.delete(rowIndex);
+    } else {
+      selectedRows?.add(rowIndex);
+    }
+    this.setState({ selectedRows });
+  };
   
-    handleSave = (rowData: any) => {
-      
-      console.log('Save data:', rowData);
+  
+  //////////////////////////////////////////////////////////////////updateAPI///////////////////////////////////////////////////////
+  
+  
+  render() {
+    const { selectedRows } = this.state;
+    // console.log("selctttttttttttttttt",selectedRows);
     
-    };
-  
-    handleCheckboxChange = (rowIndex: number) => {
-      const { selectedRows } = this.state;
-      if (selectedRows?.has(rowIndex)) {
-        selectedRows.delete(rowIndex);
-      } else {
-        selectedRows?.add(rowIndex);
-      }
-      this.setState({ selectedRows });
-    };
-  
-    render() {
-      const { selectedRows } = this.state;
-  
-      return (
-        <div className="table-responsive">
-          <table className="table table-striped" style={{ border: '1px solid black' }}>
-            <thead style={{ border: '1px solid black' }}>
-              <tr style={{ border: '1px solid black' }}>
-                {/* <th>Selected</th> */}
-                {this.props.cols.map(c => (
-                  <th key={c.key} style={{ border: '1px solid black' }}>
-                    {c.name}
-                  </th>
-                ))}
-                <th>Actions</th>
-              </tr>
-            </thead>
+
+    return (
+      <div>
+        <div>
+          <button
+            onClick={this.handleMultiple}
+            className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold  py-2 px-4 border
+                 border-blue-500  rounded"
+          >
+            SelectedProducts
+          </button>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white">
+            <thead className="bg-gray-100 "></thead>
             <tbody>
               {this.props.data.map((r, i) => (
-                <tr key={i} style={{ border: '1px solid black' }}>
-                  <td style={{ border: '1px solid black' }}>
+                <tr key={i} className="border-b border-gray p-2 ">
+                  <td className="">
                     <input
                       type="checkbox"
                       checked={selectedRows?.has(i)}
                       onChange={() => this.handleCheckboxChange(i)}
                     />
                   </td>
-                  {this.props.cols.map(c => (
-                    <td key={c.key} style={{ border: '1px solid black' }}>
+                  {this.props.cols.map((c) => (
+                    <td key={c.key} className=" p-2">
                       {r[c.key]}
                     </td>
                   ))}
-                  <td style={{ border: '1px solid black' }}>
+                  <td className="p-2">
                     <button
                       onClick={() => this.handleSave(r)}
-                      style={{ backgroundColor: 'lightblue', padding: 'px', border: '1px solid black' }}
+                      className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold  py-2 px-4 border"
                     >
                       Save
                     </button>
+                    {/* <Link to={`/UpdateProducts/${}`} className="bg-blue hover:bg-blue-700 font-bold py-2 px-4 rounded-full">
+        Edit
+      </Link> */}
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-      );
+      </div>
+    );
+  }
+}
+
+// ... (rest of the code)
+
+/* list of supported file types */
+const SheetJSFT = [
+  'xlsx',
+  'xlsb',
+  'xlsm',
+  'xls',
+  'xml',
+  'csv',
+  'txt',
+  'ods',
+  'fods',
+  'uos',
+  'sylk',
+  'dif',
+  'dbf',
+  'prn',
+  'qpw',
+  '123',
+  'wb*',
+  'wq*',
+  'html',
+  'htm',
+]
+  .map(function (x) {
+    return '.' + x;
+  })
+  .join(',');
+
+/* generate an array of column objects */
+const make_cols = (refstr: string) => {
+  let o = [],
+    C = XLSX.utils.decode_range(refstr).e.c + 1;
+
+  for (var i = 0; i < C; ++i) {
+    if (i < 21) {
+      o[i] = { name: XLSX.utils.encode_col(i), key: i };
     }
   }
-  
-  // ... (rest of the code)
-  
-  
-  /* list of supported file types */
-  const SheetJSFT = [
-    "xlsx",
-    "xlsb",
-    "xlsm",
-    "xls",
-    "xml",
-    "csv",
-    "txt",
-    "ods",
-    "fods",
-    "uos",
-    "sylk",
-    "dif",
-    "dbf",
-    "prn",
-    "qpw",
-    "123",
-    "wb*",
-    "wq*",
-    "html",
-    "htm"
-  ]
-    .map(function(x) {
-      return "." + x;
-    })
-    .join(",");
-  
-  /* generate an array of column objects */
-  const make_cols = (refstr: string) => {
-    let o = [],
-      C = XLSX.utils.decode_range(refstr).e.c + 1;
-  
-    for (var i = 0; i < C; ++i) {
-      // Exclude the extra column if it's present at the end
-      if (i < 19) {
-        o[i] = { name: XLSX.utils.encode_col(i), key: i };
-      }
-    }
-  
-    return o;
-  };
-  
-    
 
-  export default SheetJSApp;
+  return o;
+};
+
+export default SheetJSApp;

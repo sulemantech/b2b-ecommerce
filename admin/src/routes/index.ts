@@ -3,6 +3,7 @@ import { lazy } from 'react';
 const Calendar = lazy(() => import('../pages/Calendar'));
 const Chart = lazy(() => import('../pages/Chart'));
 const FormElements = lazy(() => import('../pages/Form/AddProducts'));
+const ImportProducts=lazy(()=>import('../pages/Form/Import'))
 const FormLayout = lazy(() => import('../pages/Form/Login'));
 const Profile = lazy(() => import('../pages/Profile'));
 const Settings = lazy(() => import('../pages/Settings'));
@@ -56,6 +57,11 @@ const coreRoutes = [
     path: '/forms/form-elements',
     title: 'Forms Elements',
     component: FormElements,
+  },
+  {
+    path: '/import',
+    title: 'import',
+    component:ImportProducts,
   },
   {
     path: '/forms/form-layout',
