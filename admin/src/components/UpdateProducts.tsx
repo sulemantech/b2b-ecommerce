@@ -33,6 +33,7 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
   const [category_id, setCategoryId] = useState('');
   const [supplier_id, setSupplierId] = useState('');
   const [categoryName, setCategoryName] = useState('');
+  const [status, setStatus] = useState('');
   const [productImages, setProductImages] = useState<[]>([]);
 
 
@@ -58,9 +59,8 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
         setCategoryId(product.category_id || '');
         setSupplierId(product.supplier_id || '');
         setCategoryName(product.categoryName || '');
-        // setProductImages(product.productImages[0]?.images[0] || []);
+        setStatus(product.status || '');
         setProductImages(product.productImages[0]?.images || []);
-// console.log("imggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg",product.productImages[0]?.images[0] );
 
       } catch (error) {
         console.error('Error fetching product:', error);
@@ -89,6 +89,7 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
         sku,
         category_id,
         supplier_id,
+        status,
         categoryName,
       });
 
@@ -378,6 +379,21 @@ return (
                  
              />
            </div>
+           <div>
+        <label>Status:</label>
+        <select
+          value={status}
+          onChange={(e) => setStatus(e.target.value)}
+          className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+            py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+            disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+            dark:focus:border-primary"
+        >
+          <option value="pending">Pending</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+        </select>
+      </div>
            <div style={{border:"20px",padding:"10px"}}>
             <button style={{border:"20px",padding:"10px", background:"#ADD8E6"}}
             // onClick={handleFormSubmit}

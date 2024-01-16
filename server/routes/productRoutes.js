@@ -13,7 +13,7 @@ const categoryModel=require('../models/categoryModel');
 router.post('/', async(req, res) => {
   try {
     
-    const {id,name,description,price,quantity, manufacturer,dateAdded,quantityInStock,sku,discount, new: isNew, rating, saleCount,  category_id, tag, stock,supplier_id, categoryName } = req.body;
+    const {id,name,description,price,quantity, manufacturer,dateAdded,quantityInStock,sku,discount, new: isNew, rating, saleCount,  category_id, tag, stock,supplier_id, categoryName,status } = req.body;
     
   
     const newData = await productModel.create({ 
@@ -32,7 +32,9 @@ router.post('/', async(req, res) => {
       saleCount,
       category_id,
        tag,
-      stock, supplier_id, categoryName
+      stock, supplier_id, 
+      categoryName,
+      status,
     });
     const category = await categoryModel.findByPk(category_id);
     
@@ -64,12 +66,12 @@ router.post('/bulk', async (req, res) => {
     const createdProducts = await Promise.all(products.map(async (product) => {
       const {
         id, name, description, price, quantity, manufacturer, dateAdded, quantityInStock, sku,
-        discount, new: isNew, rating, saleCount, category_id, tag, stock, supplier_id, categoryName
+        discount, new: isNew, rating, saleCount, category_id, tag, stock, supplier_id, categoryName,status
       } = product;
 
       const newData = await productModel.create({
         id, name, description, price, quantity, manufacturer, dateAdded, quantityInStock, sku,
-        discount, new: isNew, rating, saleCount, category_id, tag, stock, supplier_id, categoryName
+        discount, new: isNew, rating, saleCount, category_id, tag, stock, supplier_id, categoryName,status
       });
 
       const category = await categoryModel.findByPk(category_id);
@@ -121,6 +123,7 @@ console.log("page....",page, "pageSize",pageSize);
         model: productImages,
         where: { productId: { [Op.col]: 'products.id' } },
         attributes: ['date', 'images'],
+        required:false,
       },
       order: [['id', 'ASC']],
       ...paginateResults(page, pageSize),
@@ -166,6 +169,7 @@ router.get('/specific/:id', async (req, res) => {
         model: productImages,
         where: { productId: { [Op.col]: 'products.id' } },
         attributes: ['date', 'images'],
+        required:false
       },
     });
 
