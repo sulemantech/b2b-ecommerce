@@ -98,12 +98,10 @@ const paginateResults = (page = 1, pageSize = 20) => ({
 });
 
 // GET API with pagination ///////////////////////////////////////////////////////
-
 router.get('/all', async (req, res) => {
   const page = req.query.page || 1;
   const pageSize = req.query.pageSize || 20;
-  const status = req.query.status; // assuming you pass 'active' or 'pending' as query parameter
-console.log("page....",page, "pageSize",pageSize);
+  const status = req.query.status; 
   try {
     const { offset, limit } = paginateResults(page, pageSize);
 
@@ -113,14 +111,13 @@ console.log("page....",page, "pageSize",pageSize);
     if (status) {
       whereClause.status = status.toLowerCase();
     }
-    console.log("whereClause.status....",whereClause.status);
-
     const allProducts = await productModel.findAll({
       where: whereClause,
       include: {
         model: productImages,
         where: { productId: { [Op.col]: 'products.id' } },
         attributes: ['date', 'images'],
+        required: false,
       },
       order: [['id', 'ASC']],
       ...paginateResults(page, pageSize),
@@ -236,9 +233,6 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-
-
 
 
 
