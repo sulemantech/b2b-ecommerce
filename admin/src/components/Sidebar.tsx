@@ -16,7 +16,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
   const storedSidebarExpanded = localStorage.getItem('sidebar-expanded');
   const [sidebarExpanded, setSidebarExpanded] = useState(
-    storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true'
+    storedSidebarExpanded === null ? false : storedSidebarExpanded === 'true',
   );
 
   // close on click outside
@@ -64,7 +64,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       {/* <!-- SIDEBAR HEADER --> */}
       <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
         <NavLink to="/">
-          <h1 style={{color:"white"}}>N5 STORE</h1>
+          <h1 style={{ color: 'white' }}>N5 STORE</h1>
         </NavLink>
 
         <button
@@ -168,7 +168,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           />
                         </svg>
                       </NavLink>
-                      {/* <!-- Dropdown Menu Start --> */}
                       <div
                         className={`translate transform overflow-hidden ${
                           !open && 'hidden'
@@ -186,35 +185,95 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               eCommerce
                             </NavLink>
                           </li>
-                          <li>
-                          <NavLink
-                              to="/products"
-                             
-                            >
-                              Products
-                              </NavLink>
-
-                          </li>
-                          <li>
-                          <NavLink
-                              to="/users"
-                             
-                            >
-                              Users
-                              </NavLink>
-
-                          </li>
-                          <li>
-                          <NavLink
-                              to="/orders"
-                             
-                            >
-                              Orders
-                              </NavLink>
-
-                          </li>
                         </ul>
                       </div>
+                      <div
+                        className={`translate transform overflow-hidden ${
+                          !open && 'hidden'
+                        }`}
+                      >
+                        <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
+                          <li>
+                            <div className="disabled group relative flex items-center gap-2.5 rounded-md px-4  text-xl   duration-300 ease-in-out text-white ">
+                              Products
+                            </div>
+                            <li className='ml-5'>
+                              <NavLink
+                                to="new/products"
+                                className={({ isActive }) =>
+                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                  (isActive && '!text-white')
+                                }
+                              >
+                                New Products
+                              </NavLink>
+                            </li>
+                            <li className='ml-5'>
+                              <NavLink
+                                to="/products"
+                                className={({ isActive }) =>
+                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                  (isActive && '!text-white')
+                                }
+                              >
+                                Final Products
+                              </NavLink>
+                            </li>
+                            <li className='ml-5'>
+                              <NavLink
+                                to="/import"
+                                className={({ isActive }) =>
+                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                  (isActive && '!text-white')
+                                }
+                              >
+                                Import
+                              </NavLink>
+                            </li>
+
+                            <li className='ml-5'>
+                              <NavLink
+                                to="/users"
+                                className={({ isActive }) =>
+                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                  (isActive && '!text-white')
+                                }
+                              >
+                                Users
+                              </NavLink>
+                            </li>
+                            <li className='ml-5'>
+                              <NavLink
+                                to="/orders"
+                                className={({ isActive }) =>
+                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                  (isActive && '!text-white')
+                                }
+                              >
+                                Order
+                              </NavLink>
+                            </li>
+                          </li>
+                        </ul>
+                        <ul>
+                          <li>
+                          <div className="disabled group relative flex items-center gap-2.5 rounded-md px-4  text-xl   duration-300 ease-in-out text-white ">
+                              Supplier
+                            </div>
+                            <li className='ml-5'>
+                            <NavLink
+                              to="/auth/signup"
+                              className={({ isActive }) =>
+                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                (isActive && '!text-white')
+                              }
+                            >
+                              Sign Up
+                            </NavLink>
+                          </li>
+                          </li>
+                        </ul>
+                        </div>
                       {/* <!-- Dropdown Menu End --> */}
                     </React.Fragment>
                   );
@@ -331,7 +390,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             fill="white"
                           />
                         </svg>
-                        Products
+                        Form
                         <svg
                           className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
                             open && 'rotate-180'
@@ -358,34 +417,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       >
                         <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
                           <li>
-                            <NavLink
-                              to="/forms/form-elements"
-                              className={({ isActive }) =>
-                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                (isActive && '!text-white')
-                              }
-                            >
-                              Add Products
-                            </NavLink>
-                          </li>
-                          <li>
-                            <NavLink
-                              to="/import"
-                              className={({ isActive }) =>
-                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                (isActive && '!text-white')
-                              }
-                            >
-                              Import
-                            </NavLink>
-                          </li>
-                          <li>
-                            <NavLink
-                              to="/forms/form-layout"
-                          
-                            >
-                              Login
-                            </NavLink>
+                            <NavLink to="/forms/form-layout">Login</NavLink>
                           </li>
                         </ul>
                       </div>
@@ -726,17 +758,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               Sign In
                             </NavLink>
                           </li>
-                          <li>
-                            <NavLink
-                              to="/auth/signup"
-                              className={({ isActive }) =>
-                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                (isActive && '!text-white')
-                              }
-                            >
-                              Sign Up
-                            </NavLink>
-                          </li>
+                         
                         </ul>
                       </div>
                       {/* <!-- Dropdown Menu End --> */}

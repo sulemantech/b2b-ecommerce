@@ -7,7 +7,7 @@ const Products = () => {
   
   return (
     <>
-      <Breadcrumb pageName="Tables" />
+      <Breadcrumb pageName="FinalList" />
 
       <div className="flex flex-col gap-10">
         

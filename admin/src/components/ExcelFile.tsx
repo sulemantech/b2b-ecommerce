@@ -2,10 +2,6 @@ import React, { ChangeEvent } from 'react';
 import * as XLSX from 'xlsx';
 import { Link } from 'react-router-dom';
 
-
-
-
-
 interface Products {
   id: number;
   productId: number;
@@ -14,13 +10,10 @@ interface Products {
   categoryName: string;
   discount: number;
   status: string;
+  manufacturer:string;
   productImages: Array<{ date: string; images: string[] }>;
   // productImages?: { date: string; images: string[] }[] | undefined;
 }
-
-
-
-
 
 interface SheetJSAppProps {}
 
@@ -38,12 +31,6 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
       products: [],
     };
 
-
-    
-    
-    
-    
-    
     this.handleFile = this.handleFile.bind(this);
     this.exportFile = this.exportFile.bind(this);
     // console.log("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaa",this.data)
@@ -51,22 +38,21 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
   componentDidMount() {
     const fetchPendingProducts = () => {
       fetch('http://localhost:5001/api/products/all')
-        .then(response => {
+        .then((response) => {
           if (!response.ok) {
             console.log('Network error');
           }
           return response.json();
         })
-        .then(data => {
+        .then((data) => {
           const pendingProducts = data.filter(
-            (product: Products) => product.status === 'pending'
+            (product: Products) => product.status === 'pending',
             // (product: Products) =>console.log("helooooooooooooooooooooo",product.status === 'pending')
-
           );
           this.setState({ products: pendingProducts });
           console.log('Pending products:', pendingProducts);
         })
-        .catch(error => {
+        .catch((error) => {
           console.error('Error fetching pending products:', error.message);
         });
     };
@@ -74,20 +60,12 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
     fetchPendingProducts();
   }
 
-
- 
-
-
-
-
-  componentDidUpdate( prevState: SheetJSAppState) {
+  componentDidUpdate(prevState: SheetJSAppState) {
     // Check if the data state has changed
     if (prevState.data !== this.state.data) {
       // console.log('Data has been updated:', this.state.data);
     }
   }
-
-
 
   handleFile(file: File) {
     /* Boilerplate to set up FileReader */
@@ -96,7 +74,7 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
     reader.onload = (e: ProgressEvent<FileReader>) => {
       /* Parse data */
       const bstr = e.target?.result as string;
-      const wb = XLSX.read(bstr, { type: rABS ? "binary" : "array" });
+      const wb = XLSX.read(bstr, { type: rABS ? 'binary' : 'array' });
       /* Get the first worksheet */
       const wsname = wb.SheetNames[0];
       const ws = wb.Sheets[wsname];
@@ -104,9 +82,8 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
       /* Convert array of arrays */
       const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
       /* Update state */
-    //   this.setState({ data: data, cols: make_cols(refstr) });
-    this.setState({ data: data, cols: make_cols(ws["!ref"]!) });
-
+      //   this.setState({ data: data, cols: make_cols(refstr) });
+      this.setState({ data: data, cols: make_cols(ws['!ref']!) });
     };
     if (rABS) reader.readAsBinaryString(file);
     else reader.readAsArrayBuffer(file);
@@ -116,9 +93,9 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
     /* Convert state to workbook */
     const ws = XLSX.utils.aoa_to_sheet(this.state.data);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "SheetJS");
+    XLSX.utils.book_append_sheet(wb, ws, 'SheetJS');
     /* Generate XLSX file and send to the client */
-    XLSX.writeFile(wb, "sheetjs.xlsx");
+    XLSX.writeFile(wb, 'sheetjs.xlsx');
   }
 
   render() {
@@ -130,98 +107,112 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
           </div>
         </div>
         <div className="row">
+          <br />
+        
           <div className="col-xs-12">
             <button
               disabled={!this.state.data.length}
-              className="btn btn-success"
+              className="inline-flex items-center justify-center w-1 h-2  rounded-md bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
               onClick={this.exportFile}
             >
               Export
             </button>
           </div>
         </div>
-        {/* <div className="row">
-          <div className="col-xs-12">
-          {this.state.products.map((product: Products) => (
-              <div key={product.id}>
-            
-                <p>{product.status}</p>
-              
-              </div>
-            ))}
-          </div>
-        </div> */}
+        <br />
+        <br />
+        {this.state.products.length > 0 ? (
           <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5">
-        <div className="col-span-3 flex items-center">
-          <p className="font-medium">Product Name</p>
-        </div>
-        <div className="col-span-2 hidden items-center sm:flex">
-          <p className="font-medium">Category</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="font-medium">Price</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="font-medium">discount</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="font-medium">status</p>
-        </div>
-         <div className="col-span-1 flex items-center">
-          <p className="font-medium">Edit</p>
-        </div>
-        <div className="col-span-1 flex items-center">
-          <p className="font-medium">delete</p>
-        </div>
-        
-      </div>
-      {this.state.products.map((product: Products)=> (
-  <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5"  id={`${product.id}`}>
-    <div className="col-span-3 flex items-center">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-        <div className="h-12.5 w-15 rounded-md">
-        <img src={product.productImages[0]?.images[0]} alt="" />
-        </div>
-        <p className="text-sm text-black dark:text-white">
-          {product.name}
-          {/* {product.id} */}
-        </p>
-      </div>
-    </div>
-    <div className="col-span-2 hidden items-center sm:flex">
-      <p className="text-sm text-black dark:text-white">{product.categoryName}</p>
-    </div>
-    <div className="col-span-1 flex items-center">
-      <p className="text-sm text-black dark:text-white">{product.price}</p>
-    </div>
-    <div className="col-span-1 flex items-center">
-      <p className="text-sm text-black dark:text-white">{product.discount}</p>
-    </div>
-    <div className="col-span-1 flex items-center">
-      <p className="text-sm text-black dark:text-white">{product.status}</p>
-    </div>
-    
-    <div className="col-span-1 flex items-center">
-      <div>
-        <Link to={`/UpdateProducts/${product.id}`} className="bg-blue hover:bg-blue-700 font-bold py-2 px-4 rounded-full">
-        Edit
-      </Link>
+            <div className="col-span-2 flex items-center">
+              <p className="font-medium text-black">Product Name</p>
+            </div>
+            <div className="col-span-1 hidden items-center sm:flex">
+              <p className="font-medium text-black">Category</p>
+            </div>
+            <div className="col-span-1 flex items-center">
+              <p className="font-medium text-black">Price</p>
+            </div>
+            <div className="col-span-1 flex items-center">
+              <p className="font-medium text-black">Discount</p>
+            </div>
 
-      </div>
-    </div>
-    <div className="col-span-1 flex items-center">
+            <div className="col-span-1 flex items-center">
+              <p className="font-medium text-black">manufacturer</p>
+            </div>
+           
+            <div className="col-span-1 flex items-center">
+              <p className="font-medium text-black">Status</p>
+            </div>
+            <div className="col-span-2 flex items-center">
+              <p className="font-medium text-black">Edit</p>
+            </div>
+          </div>
+        ) : null}
+        {this.state.products.map((product: Products) => (
+          <div
+            className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5"
+            id={`${product.id}`}
+          >
+            <div className="col-span-2 flex items-center">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+                {/* <div className="h-12.5 w-15 rounded-md">
+                  <img src={product.productImages[0]?.images[0]} alt="" />
+                </div> */}
+                <p className="text-sm text-black dark:text-white">
+                  {product.name}
+                  {/* {product.id} */}
+                </p>
+              </div>
+            </div>
+            <div className="col-span-1 hidden items-center sm:flex">
+              <p className="text-sm text-black dark:text-white">
+                {product.categoryName}
+              </p>
+            </div>
+            <div className="col-span-1 flex items-center">
+              <p className="text-sm text-black dark:text-white">
+                {product.price}
+              </p>
+            </div>
+            <div className="col-span-1 flex items-center">
+              <p className="text-sm text-black dark:text-white">
+                {product.discount}
+              </p>
+            </div>
+            <div className="col-span-1 flex items-center">
+              <p className="text-sm text-black dark:text-white">
+                {product.manufacturer}
+              </p>
+            </div>
+           
+            <div className="col-span-1 flex items-center">
+              <p className="text-sm text-black dark:text-white">
+                {product.status}
+              </p>
+            </div>
+
+            <div className="col-span-2 flex items-center">
+              <div>
+                <Link
+                  to={`/UpdateProducts/${product.id}`}
+                  className="bg-blue hover:bg-blue-700 font-bold py-2 px-4 rounded-full"
+                >
+                  edit
+                </Link>
+              </div>
+            </div>
+            {/* <div className="col-span-1 flex items-center">
       <Link to={`/forms/form-elements/`} className="bg-blue hover:bg-blue-700 font-bold py-2 px-4 rounded-full">
         delete
       </Link>
-    </div>
-  </div>
-))}
-            <OutTable data={this.state.data} cols={this.state.cols} />
+    </div> */}
+          </div>
+        ))}
+        <OutTable data={this.state.data} cols={this.state.cols} />
       </DragDropFile>
     );
   }
 }
-
 
 class DragDropFile extends React.Component<{
   handleFile: (file: File) => void;
@@ -277,14 +268,21 @@ class DataInput extends React.Component<{ handleFile: (file: File) => void }> {
     return (
       <form className="form-inline">
         <div className="form-group">
-          <label htmlFor="file">Spreadsheet</label>
-          <input
-            type="file"
-            className="form-control"
-            id="file"
-            accept={SheetJSFT}
-            onChange={this.handleChange}
-          />
+          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            Spreadsheet
+          </label>
+           <input
+                  type="file"
+                  accept={SheetJSFT}
+                  onChange={this.handleChange}
+                  className="w-1/3cursor-pointer rounded-lg border-[1.5px] border-stroke
+                   bg-transparent font-medium outline-none transition file:mr-5 file:border-collapse 
+                   file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke
+                    file:bg-whiter file:py-3 file:px-5 file:hover:bg-primary file:hover:bg-opacity-10 
+                    focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter
+                     dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark 
+                     dark:file:bg-white/30 dark:file:text-white dark:focus:border-primary"
+                />
         </div>
       </form>
     );
@@ -324,7 +322,6 @@ class OutTable extends React.Component<
 > {
   handleSave(rowData: any[]) {
     const postData = {
-    
       name: rowData[0],
       description: rowData[1],
       price: rowData[2],
@@ -341,7 +338,7 @@ class OutTable extends React.Component<
       category_id: rowData[13],
       supplier_id: rowData[14],
       category_name: rowData[15],
-      status:rowData[16],
+      status: rowData[16],
     };
 
     // console.log("skuuuuuuuuuuuu",rowData[16],);
@@ -404,7 +401,7 @@ class OutTable extends React.Component<
       category_id: product[13],
       supplier_id: product[14],
       categoryName: product[15],
-      status:product[16],
+      status: product[16],
     }));
 
     // Send bulk request to the backend API
@@ -440,29 +437,24 @@ class OutTable extends React.Component<
     }
     this.setState({ selectedRows });
   };
-  
-  
-  //////////////////////////////////////////////////////////////////GETAPI WITH STATUS//////////////////////////////////////////////////////
 
-  
-  
+
+
   render() {
-
-
     const { selectedRows } = this.state;
     // console.log("selctttttttttttttttt",selectedRows);
-    
 
     return (
       <div>
         <div>
-          <button
-            onClick={this.handleMultiple}
-            className="inline-flex items-center justify-center rounded-full bg-primary
-               py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
-          >
-            SelectedProducts
-          </button>
+      
+            <button
+              onClick={this.handleMultiple}
+              className="inline-flex items-center justify-center rounded-md bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+            >
+              SelectedProducts
+            </button>
+      
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white">
@@ -500,15 +492,10 @@ class OutTable extends React.Component<
         </div>
       </div>
     );
-    
-  
   }
 }
 
 
-// ... (rest of the code)
-
-/* list of supported file types */
 const SheetJSFT = [
   'xlsx',
   'xlsb',

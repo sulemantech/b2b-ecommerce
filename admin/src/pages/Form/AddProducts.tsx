@@ -111,7 +111,6 @@ const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
               </h3>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-5.5 p-6.5">
-  
               <div>
                
                 <input
@@ -380,11 +379,10 @@ const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                 File upload
               </h3>
             </div>
-            <div className="flex flex-col gap-5.5 p-6.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5.5 p-6.5">
+            
               <div>
-                <label className="mb-3 block text-black dark:text-white">
-                  Attach file
-                </label>
+              
                 <input
                   type="file"
                   onChange={handleImageFileChange}
@@ -396,9 +394,8 @@ const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                      dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark 
                      dark:file:bg-white/30 dark:file:text-white dark:focus:border-primary"
                 />
-              </div>
-
-              <div>
+                </div>
+                   <div>
                 <input
                   type="text"
                   placeholder='ProductId'
@@ -407,7 +404,7 @@ const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                   className="w-full rounded-md border border-stroke p-3 outline-none transition file:mr-4 file:rounded file:border-[0.5px] file:border-stroke file:bg-[#EEEEEE] file:py-1 file:px-2.5 file:text-sm file:font-medium focus:border-primary file:focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:file:border-strokedark dark:file:bg-white/30 dark:file:text-white"
                 />
               </div>
-            </div>
+              </div>
           </div>
           <div className="flex flex-col gap-10">
         {/* Render the SheetJSApp component here */}

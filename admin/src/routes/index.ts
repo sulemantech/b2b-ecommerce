@@ -54,7 +54,7 @@ const coreRoutes = [
     component: Profile,
   },
   {
-    path: '/forms/form-elements',
+    path: '/new/products',
     title: 'Forms Elements',
     component: FormElements,
   },
