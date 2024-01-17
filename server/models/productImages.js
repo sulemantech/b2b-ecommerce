@@ -13,6 +13,7 @@ const productImages = sequelize.define('productImages', {
   },
   images: {
     type: DataTypes.ARRAY(DataTypes.STRING),
+    allowNull: false,
   },
   productId: { // Change the column name to "productId"
     type: DataTypes.INTEGER,

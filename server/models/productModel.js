@@ -86,6 +86,11 @@ const productModel = sequelize.define('products', {
     type: DataTypes.STRING,
     // allowNull: false,
   },
+  status: {
+    type: DataTypes.STRING,
+    allowNull: true, 
+    defaultValue: 'active', 
+  },
  
 });
 

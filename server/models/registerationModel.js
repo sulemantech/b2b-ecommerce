@@ -35,6 +35,10 @@ const registerationModel = sequelize.define('user', {
       businessName: {
         type: DataTypes.STRING,
       },
+      role: {
+        type: DataTypes.STRING, 
+        defaultValue: 'user', 
+      }
 });
 
 module.exports =  registerationModel;

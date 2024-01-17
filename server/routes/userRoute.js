@@ -19,12 +19,12 @@ router.post('/login', async (req, res) => {
 
     if (user) {
       if (bcrypt.compareSync(password, user.password)) {
-        const token = jwt.sign({ id: user }, process.env.JWT_SECRET, {
+        const token = jwt.sign({ id: user, role: user.role }, process.env.JWT_SECRET, {
           expiresIn: 86400,
         });
 
         res.cookie('token', token, { httpOnly: true });
-        res.status(200).send({ auth: true, token });
+        res.status(200).send({ auth: true, token,role: user.role });
       } else {
         res.status(401).send({ auth: false, message: 'Incorrect password' });
       }
