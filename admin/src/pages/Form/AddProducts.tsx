@@ -3,6 +3,7 @@ import { useState } from 'react';
 import axios from 'axios';
 
 
+
 const FormElements = () => {
   const [productId, setProductId] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -98,7 +99,7 @@ const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 
   return (
     <>
-      <Breadcrumb pageName="FormElements" />
+      <Breadcrumb pageName="Products" />
 
       <div className="grid grid-cols-1 gap-9 sm:grid-cols-1">
         <div className="flex flex-col gap-9">
@@ -109,8 +110,8 @@ const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                 Product Details
               </h3>
             </div>
-            <div className="flex flex-col gap-5.5 p-6.5">
-            
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5.5 p-6.5">
+  
               <div>
                
                 <input
@@ -126,30 +127,37 @@ const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
               </div>
               <div>
                
-                <input
-                  type="text"
-                  placeholder="description"
-                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
-                   py-3 px-5 font-medium outline-none transition focus:border-primary
-                    active:border-primary disabled:cursor-default disabled:bg-whiter 
-                    dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                    onChange={(e)=>setvalues({...value,description: e.target.value})}
-                   value={value.description}
-                />
-              </div>
+               <input
+                 type="text"
+                 placeholder=" categoryName"
+                 className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+                  py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+                  disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+                   dark:focus:border-primary"
+                   onChange={(e)=>setvalues({...value, categoryName: e.target.value})}
+                   value={value. categoryName}
+               />
+             </div>
+
               <div>
                
-                <input
-                  type="text"
-                  placeholder="price"
-                  className="w-full rounded-lg border-[1.5px] border-stroke 
-                  bg-transparent py-3 px-5 font-medium outline-none transition 
-                  focus:border-primary active:border-primary disabled:cursor-default 
-                  disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                  onChange={(e)=>setvalues({...value,price: e.target.value})}
-                   value={value.price}
-                />
+               <input
+                 type="text"
+                 placeholder="price"
+                 className="w-full rounded-lg border-[1.5px] border-stroke 
+                 bg-transparent py-3 px-5 font-medium outline-none transition 
+                 focus:border-primary active:border-primary disabled:cursor-default 
+                 disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                 onChange={(e)=>setvalues({...value,price: e.target.value})}
+                  value={value.price}
+               />
+             </div>
+            
+              
               </div>
+            
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5.5 p-6.5">
+             
               <div>
                
                 <input
@@ -190,6 +198,9 @@ const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                    value={value.discount}
                 />
               </div>
+              </div>
+            
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5.5 p-6.5">
               <div>
                 
                 <input
@@ -218,17 +229,22 @@ const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
               </div>
               <div>
               
-                <input
-                  type="text"
-                  placeholder="saleCount"
-                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent 
-                  py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary
-                   disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
-                    dark:focus:border-primary"
-                    onChange={(e)=>setvalues({...value,saleCount: e.target.value})}
-                   value={value.saleCount}
-                />
+              <input
+                type="text"
+                placeholder="saleCount"
+                className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent 
+                py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary
+                 disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+                  dark:focus:border-primary"
+                  onChange={(e)=>setvalues({...value,saleCount: e.target.value})}
+                 value={value.saleCount}
+              />
+            </div>
+              
               </div>
+              
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5.5 p-6.5">
+             
               <div>
                
                 <input
@@ -243,29 +259,34 @@ const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
               </div>
               <div>
               
-                <input
-                  type="text"
-                  placeholder="stock"
-                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent 
-                  py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary
-                   disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
-                    dark:focus:border-primary"
-                    onChange={(e)=>setvalues({...value,stock: e.target.value})}
-                   value={value.stock}
-                />
+              <input
+                type="text"
+                placeholder="stock"
+                className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent 
+                py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary
+                 disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+                  dark:focus:border-primary"
+                  onChange={(e)=>setvalues({...value,stock: e.target.value})}
+                 value={value.stock}
+              />
+            </div>
+            <div>
+             
+              <input
+                type="text"
+                placeholder="quantityInStock"
+                className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+                 py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+                 disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                 onChange={(e)=>setvalues({...value,quantityInStock: e.target.value})}
+                value={value.quantityInStock}
+              />
+            </div>
               </div>
-              <div>
-               
-                <input
-                  type="text"
-                  placeholder="quantityInStock"
-                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
-                   py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary 
-                   disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                   onChange={(e)=>setvalues({...value,quantityInStock: e.target.value})}
-                  value={value.quantityInStock}
-                />
-              </div>
+              
+            
+            
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5.5 p-6.5">
               <div>
                
                <input
@@ -305,35 +326,52 @@ const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
                    value={value.supplier_id}
                />
              </div>
-             <div>
-               
-               <input
-                 type="text"
-                 placeholder=" categoryName"
-                 className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
-                  py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary 
-                  disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
-                   dark:focus:border-primary"
-                   onChange={(e)=>setvalues({...value, categoryName: e.target.value})}
-                   value={value. categoryName}
-               />
              </div>
-             <div style={{border:"20px",padding:"10px"}}>
-              <button style={{border:"20px",padding:"10px", background:"#ADD8E6"}}
-              // onClick={handleFormSubmit}
-              onClick={handleSubmit}
+          
+             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5.5 p-6.5">
+             <div>
+                <input
+                  type="text"
+                  placeholder="description"
+                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+                   py-3 px-5 font-medium outline-none transition focus:border-primary
+                    active:border-primary disabled:cursor-default disabled:bg-whiter 
+                    dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                    onChange={(e)=>setvalues({...value,description: e.target.value})}
+                   value={value.description}
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  placeholder="Text area"
+                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+                   py-3 px-5 font-medium outline-none transition focus:border-primary
+                    active:border-primary disabled:cursor-default disabled:bg-whiter 
+                    dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                  //   onChange={(e)=>setvalues({...value,description: e.target.value})}
+                  //  value={value.description}
+                />
+              </div>
+             </div>
 
+             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5.5 p-6.5">
+             <div style={{border:"20px",padding:"10px"}}>
+              <button
+              className="inline-flex items-center justify-center rounded-md bg-primary py-4 px-10 text-center 
+              font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
               
+          
+              onClick={handleSubmit}
               >Submite</button>
 
              </div>
 
-             
-             
             </div>
+            
           </div>
         </div>
-
+ 
         <div className="flex flex-col gap-9">
           {/* <!-- File Upload --> */}
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -371,8 +409,9 @@ const handleImageFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
               </div>
             </div>
           </div>
-  
-
+          <div className="flex flex-col gap-10">
+        {/* Render the SheetJSApp component here */}
+      </div>
     
         </div>
       </div>
