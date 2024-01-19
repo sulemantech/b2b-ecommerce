@@ -79,7 +79,8 @@ useEffect(() => {
     <div className="col-span-2 flex items-center">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
         <div className="h-12.5 w-15 rounded-md">
-        <img src={product.productImages[0]?.images[0]} alt="" />
+        {/* <img src={process.env.RESOURCE_SERVER_HOST + product.productImages[0]?.images[0]} alt="" /> */}
+        <img src={process.env.PUBLIC_URL + product?.productImages[0]?.images[0]}/>
         {/* {console.log("pppppppppppppppppp",product.productImages[0]?.images[0])
         } */}
         </div>

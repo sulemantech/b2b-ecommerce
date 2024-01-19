@@ -1,6 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import SidebarLinkGroup from './SidebarLinkGroup';
+// import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
+
+
 
 interface SidebarProps {
   sidebarOpen: boolean;
@@ -10,6 +14,9 @@ interface SidebarProps {
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const location = useLocation();
   const { pathname } = location;
+  // const navigate = useNavigate();
+  const isLogin = Cookies.get('token');
+  
 
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
@@ -53,6 +60,17 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       document.querySelector('body')?.classList.remove('sidebar-expanded');
     }
   }, [sidebarExpanded]);
+
+
+
+  const handleLogout = (): void => {
+
+    Cookies.remove('token');
+    Cookies.remove('role');
+    console.log("logout session");
+    
+  };
+  
 
   return (
     <aside
@@ -747,6 +765,21 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         }`}
                       >
                         <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
+                        {isLogin ?( 
+                          <li>
+                          <NavLink
+                              to="/auth/signin"
+                              onClick={handleLogout}
+                              className={({ isActive }) =>
+                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                (isActive && '!text-white')
+                              }
+                            >
+                              Logout
+                            </NavLink>
+                           
+                          </li>
+                        ):(
                           <li>
                             <NavLink
                               to="/auth/signin"
@@ -758,6 +791,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               Sign In
                             </NavLink>
                           </li>
+                        )}
                          
                         </ul>
                       </div>
