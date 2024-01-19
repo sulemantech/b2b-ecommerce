@@ -1,4 +1,4 @@
-# B2B and B2C Custom Ecommerce Application in MERN Stack 
+# B2B Ecommerce Application in MERN Stack and TypeScript
 
 ## Overview
 
