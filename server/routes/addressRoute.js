@@ -1,3 +1,34 @@
+/**
+ * @swagger
+ * /api/address/create:
+ *   post:
+ *     summary: Create a new address
+ *     tags:
+ *       - Address
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               address:
+ *                 type: string
+ *               city:
+ *                 type: string
+ *               stateId:
+ *                 type: string
+ *               zipCode:
+ *                 type: string
+ *               country:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Address created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Address'
+ */
 const express = require('express');
 const router = express.Router();
 const addressModel = require('../models/addressModel');
