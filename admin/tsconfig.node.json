@@ -4,8 +4,11 @@
     "composite": true,
     "skipLibCheck": true,
     "module": "ESNext",
+    "target": "es6",
     "moduleResolution": "bundler",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "types": ["vite"]
   },
-  "include": ["vite.config.ts"]
+  "include": ["src/**/*.ts", "vite.config.ts"],
+  "exclude": []
 }

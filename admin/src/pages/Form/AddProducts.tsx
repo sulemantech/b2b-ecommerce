@@ -46,7 +46,6 @@ const FormElements = () => {
  
 };
 
-console.log("values before submission", value);
 
 
 

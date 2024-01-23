@@ -4,13 +4,24 @@ import { Link } from 'react-router-dom';
 
 interface Products {
   id: number;
-  productId: number;
   name: string;
+  description: string;
   price: number;
-  categoryName: string;
+  quantity?: number;
+  manufacturer: string;
+  dateAdded?: Date;
   discount: number;
-  status: string;
-  manufacturer:string;
+  new: boolean;
+  rating: number;
+  saleCount: number;
+  tag: string[];
+  stock: number;
+  status:string;
+  quantityInStock: number;
+  sku: string;
+  category_id: number;
+  supplier_id: number;
+  categoryName: string;
   productImages: Array<{ date: string; images: string[] }>;
   // productImages?: { date: string; images: string[] }[] | undefined;
 }
@@ -37,7 +48,7 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
   }
   componentDidMount() {
     const fetchPendingProducts = () => {
-      fetch('http://localhost:5001/api/products/all')
+      fetch('http://localhost:5001/api/products/all?page=1&pageSize=500&status=pending')
         .then((response) => {
           if (!response.ok) {
             console.log('Network error');
@@ -47,10 +58,9 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
         .then((data) => {
           const pendingProducts = data.filter(
             (product: Products) => product.status === 'pending',
-            // (product: Products) =>console.log("helooooooooooooooooooooo",product.status === 'pending')
           );
           this.setState({ products: pendingProducts });
-          console.log('Pending products:', pendingProducts);
+          // console.log('Pending products:', pendingProducts);
         })
         .catch((error) => {
           console.error('Error fetching pending products:', error.message);
@@ -66,28 +76,72 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
       // console.log('Data has been updated:', this.state.data);
     }
   }
-
   handleFile(file: File) {
-    /* Boilerplate to set up FileReader */
     const reader = new FileReader();
     const rABS = !!reader.readAsBinaryString;
+
     reader.onload = (e: ProgressEvent<FileReader>) => {
-      /* Parse data */
       const bstr = e.target?.result as string;
       const wb = XLSX.read(bstr, { type: rABS ? 'binary' : 'array' });
-      /* Get the first worksheet */
       const wsname = wb.SheetNames[0];
       const ws = wb.Sheets[wsname];
-      console.log(rABS, wb);
-      /* Convert array of arrays */
       const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
-      /* Update state */
-      //   this.setState({ data: data, cols: make_cols(refstr) });
+      this.postBulkData(data);
+      console.log("dataaaaaaaaaaaaaaaaaa",data);
       this.setState({ data: data, cols: make_cols(ws['!ref']!) });
     };
+
     if (rABS) reader.readAsBinaryString(file);
     else reader.readAsArrayBuffer(file);
   }
+
+  // Add this method to your class
+  postBulkData(data: any[]) {
+    fetch('http://localhost:5001/api/products/bulk', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data.map(rowData => ({
+        name: rowData[0],
+        description: rowData[1],
+        price: rowData[2],
+        quantity: rowData[3],
+        manufacture:rowData[4],
+        discount: rowData[5],
+        new:rowData[6],
+        rating: rowData[7],
+        saleCount:rowData[8],
+        tag: Array.isArray(rowData[9]) ? rowData[9] : [],
+        stock: rowData[10],
+        qunatityInStock:rowData[11],
+        sku: rowData[12],
+        category_id: rowData[13],
+        supplier_id: rowData[14],
+        category_name: rowData[15],
+        status: rowData[16],
+      }))),
+      
+    })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error('Error sending bulk data');
+      }
+    })
+    .then((result) => {
+      console.log('Bulk data sent successfully:', result);
+      
+      // Handle success as needed
+    })
+    .catch((error) => {
+      console.error('Error sending bulk data:', error);
+    });
+  }
+  
+  
+  
 
   exportFile() {
     /* Convert state to workbook */
@@ -137,7 +191,7 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
             </div>
 
             <div className="col-span-1 flex items-center">
-              <p className="font-medium text-black">manufacturer</p>
+              <p className="font-medium text-black">Manufacturer</p>
             </div>
            
             <div className="col-span-1 flex items-center">
@@ -248,11 +302,6 @@ class DragDropFile extends React.Component<{
   }
 }
 
-/*
-  Simple HTML5 file input wrapper
-  usage: <DataInput handleFile={callback} />
-    handleFile(file:File):void;
-*/
 class DataInput extends React.Component<{ handleFile: (file: File) => void }> {
   constructor(props: { handleFile: (file: File) => void }) {
     super(props);
@@ -368,7 +417,7 @@ class OutTable extends React.Component<
       selectedRows: new Set<number>(),
     };
   }
-  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  /////////////////////////////////////////////////HandleMultiple/////////////////////////////////////////////////////////////////////////////
   handleMultiple = () => {
     const { selectedRows } = this.state;
 
@@ -427,6 +476,8 @@ class OutTable extends React.Component<
         console.error('Error saving products:', error);
       });
   };
+
+  
 
   handleCheckboxChange = (rowIndex: number) => {
     const { selectedRows } = this.state;

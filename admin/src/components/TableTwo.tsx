@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 
 const TableTwo: React.FC  = () => {
+  // console.log(import.meta.env)
   const [products,setProducts]=useState<Products[]>([]);
   interface Products {
     id: number;
@@ -18,21 +19,24 @@ const TableTwo: React.FC  = () => {
     // productImages?: { date: string; images: string[] }[] | undefined;
   }
 const fetchAllProducts = () => {
-  fetch(`http://localhost:5001/api/products/all`)
+  const API_Urlfetch=`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products/all`;
+  console.log("product API",API_Urlfetch)
+  fetch(API_Urlfetch)
     .then(response => {
       if (!response.ok) {
-        console.log("network error");
+        console.log("Network error");
       }
       return response.json();
     })
     .then(data => {
       setProducts(data);
-      console.log("productxxxxxxxxxxxxxxxxxxxxxxxxxx", data);
+      console.log("Products", data);
     })
     .catch(error => {
       console.error('Error fetching all products:', error.message);
     });
 };
+
 
 useEffect(() => {
   fetchAllProducts();
@@ -75,14 +79,15 @@ useEffect(() => {
       </div>
       
       {products.map((product) => (
-  <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5"  id={`${product.id}`}>
+        <div  key={product.id}
+        className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5"  id={`${product.id}`}>
     <div className="col-span-2 flex items-center">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
         <div className="h-12.5 w-15 rounded-md">
         {/* <img src={process.env.RESOURCE_SERVER_HOST + product.productImages[0]?.images[0]} alt="" /> */}
-        <img src={process.env.PUBLIC_URL + product?.productImages[0]?.images[0]}/>
-        {/* {console.log("pppppppppppppppppp",product.productImages[0]?.images[0])
-        } */}
+        <img src={`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}${product?.productImages[0]?.images[0]}`} />
+
+           {/* console.log("pppppppppppppppppp",)   */}
         </div>
         <p className="text-sm text-black dark:text-white">
           {product.name}
@@ -118,6 +123,8 @@ useEffect(() => {
   </div>
 ))}
 </div>
+{/* {console.log("process.env.RESOURCE_SERVER_HOST ", )} */}
+
   </>
   );
 };

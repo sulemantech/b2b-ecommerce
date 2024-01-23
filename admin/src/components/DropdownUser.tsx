@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { FaRegUserCircle } from "react-icons/fa";
 import Cookies from 'js-cookie';
 
+
 // import jwt_decode from 'jwt-decode';
 
 interface TokenData {
@@ -81,7 +82,7 @@ useEffect(() => {
     setTokenData(undefined);
   }
 }, []);
-console.log("dataaaaaaa",tokenData);
+// console.log("dataaaaaaa",tokenData);
 
 
 
