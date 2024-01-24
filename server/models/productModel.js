@@ -90,20 +90,7 @@ const productModel = sequelize.define('products', {
     type: DataTypes.STRING,
     allowNull: true, 
     // defaultValue: 'active', 
-  },
-  type: {
-    type: DataTypes.STRING,
-    allowNull: true, // You can adjust this based on your requirements
-  },
-  weight: {
-    type: DataTypes.FLOAT,
-    allowNull: true,
-  },
-  unit: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
- 
+  }
 });
 
 

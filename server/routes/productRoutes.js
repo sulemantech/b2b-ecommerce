@@ -7,51 +7,49 @@ const path = require('path');
 const productModel = require('../models/productModel');
 const productImages= require('../models/productImages');
 const categoryModel=require('../models/categoryModel');
-
+const productVariantModel=require('../models/productVariantModel')
+const { validateProduct, validateVariants } = require('../middlewares/validateVariantsMiddleware');
 
 //post API    ///////////////////////////////////////////////////////////////////
-router.post('/', async(req, res) => {
+router.post('/',validateProduct, validateVariants, async (req, res) => {
   try {
-    
-    const {id,name,description,price,quantity, manufacturer,dateAdded,quantityInStock,sku,discount, new: isNew, rating, saleCount,  category_id, tag, stock,supplier_id, categoryName,status } = req.body;
-    
-  
-    const newData = await productModel.create({ 
-      id,
-      name,
-      description,
-      price,
-      quantity,
-      manufacturer,
-      dateAdded,
-      quantityInStock,
-      sku,      
-      discount,
-      new: isNew,
-      rating,
-      saleCount,
-      category_id,
-       tag,
-      stock, supplier_id, 
-      categoryName,
-      status,
-    });
-    const category = await categoryModel.findByPk(category_id);
-    
+    const { products, variants } = req.body;
+    // Create product record
+    const Product = await productModel.create(products);
+    // Associate product with category
+    const category = await categoryModel.findByPk(products.category_id);
     if (category) {
-      // Associate the product with the category
-      await newData.addCategory(category, { through: { id: category_id } });
-      
-      res.status(201).json({ message: 'Product created and associated with category.', newData });
+      await Product.addCategory(category, { through: { id: products.category_id } });
     } else {
-      res.status(404).json({ message: 'Category not found.' });
+      return res.status(404).json({ message: 'Category not found.' });
     }
-    
+
+    // Create variant records
+    const Variants = await Promise.all(
+      variants.map(async ({ key, values,optionValues, ...rest }) => {
+        return await productVariantModel.create({
+          ...rest,
+          key,
+          value: values,optionValues,
+          productId: Product.id, 
+        });
+      })
+    );
+
+    res.status(201).json({
+      message: 'Product and Variants created and associated with category.',
+      Product,
+      Variants,
+    });
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+
+
+
 
 // Bulk post API
 router.post('/bulk', async (req, res) => {
@@ -131,6 +129,39 @@ router.get('/all', async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+// GET API with pagination ///////////////////////////////////////////////////////
+// router.get('/all', async (req, res) => {
+//   const page = req.query.page || 1;
+//   const pageSize = req.query.pageSize || 20;
+//   const status = req.query.status; 
+//   try {
+//     const { offset, limit } = paginateResults(page, pageSize);
+
+//     const whereClause = {};
+    
+//     // If status is provided, add it to the where clause
+//     if (status) {
+//       whereClause.status = status.toLowerCase();
+//     }
+//     const allProducts = await productModel.findAll({
+//       where: whereClause,
+//       include: {
+//         model: productImages,
+//         where: { productId: { [Op.col]: 'products.id' } },
+//         attributes: ['date', 'images'],
+//         required: false,
+//       },
+//       order: [['id', 'ASC']],
+//       ...paginateResults(page, pageSize),
+//     });
+
+//     res.status(200).json(allProducts);
+//   } catch (error) {
+//     console.error('Error:', error.message);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// });
 
 
 

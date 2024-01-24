@@ -3,7 +3,7 @@ const router = express.Router();
 const businessModel = require('../models/businessModel');
 
 // POST request to create a new business
-router.post('/addBusiness', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
       console.log('Raw Request Body:', req.body);
   
