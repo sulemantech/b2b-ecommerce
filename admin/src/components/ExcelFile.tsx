@@ -16,7 +16,7 @@ interface Products {
   saleCount: number;
   tag: string[];
   stock: number;
-  status:string;
+  status: string;
   quantityInStock: number;
   sku: string;
   category_id: number;
@@ -48,7 +48,9 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
   }
   componentDidMount() {
     const fetchPendingProducts = () => {
-      fetch('http://localhost:5001/api/products/all?page=1&pageSize=500&status=pending')
+      fetch(
+        'http://localhost:5001/api/products/all?page=1&pageSize=500&status=pending',
+      )
         .then((response) => {
           if (!response.ok) {
             console.log('Network error');
@@ -87,7 +89,7 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
       const ws = wb.Sheets[wsname];
       const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
       this.postBulkData(data);
-      console.log("dataaaaaaaaaaaaaaaaaa",data);
+      console.log('dataaaaaaaaaaaaaaaaaa', data);
       this.setState({ data: data, cols: make_cols(ws['!ref']!) });
     };
 
@@ -102,46 +104,44 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(data.map(rowData => ({
-        name: rowData[0],
-        description: rowData[1],
-        price: rowData[2],
-        quantity: rowData[3],
-        manufacture:rowData[4],
-        discount: rowData[5],
-        new:rowData[6],
-        rating: rowData[7],
-        saleCount:rowData[8],
-        tag: Array.isArray(rowData[9]) ? rowData[9] : [],
-        stock: rowData[10],
-        qunatityInStock:rowData[11],
-        sku: rowData[12],
-        category_id: rowData[13],
-        supplier_id: rowData[14],
-        category_name: rowData[15],
-        status: rowData[16],
-      }))),
-      
+      body: JSON.stringify(
+        data.map((rowData) => ({
+          name: rowData[0],
+          description: rowData[1],
+          price: rowData[2],
+          quantity: rowData[3],
+          manufacture: rowData[4],
+          discount: rowData[5],
+          new: rowData[6],
+          rating: rowData[7],
+          saleCount: rowData[8],
+          tag: Array.isArray(rowData[9]) ? rowData[9] : [],
+          stock: rowData[10],
+          qunatityInStock: rowData[11],
+          sku: rowData[12],
+          category_id: rowData[13],
+          supplier_id: rowData[14],
+          category_name: rowData[15],
+          status: rowData[16],
+        })),
+      ),
     })
-    .then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
-        throw new Error('Error sending bulk data');
-      }
-    })
-    .then((result) => {
-      console.log('Bulk data sent successfully:', result);
-      
-      // Handle success as needed
-    })
-    .catch((error) => {
-      console.error('Error sending bulk data:', error);
-    });
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Error sending bulk data');
+        }
+      })
+      .then((result) => {
+        console.log('Bulk data sent successfully:', result);
+
+        // Handle success as needed
+      })
+      .catch((error) => {
+        console.error('Error sending bulk data:', error);
+      });
   }
-  
-  
-  
 
   exportFile() {
     /* Convert state to workbook */
@@ -162,7 +162,7 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
         </div>
         <div className="row">
           <br />
-        
+
           <div className="col-xs-12">
             <button
               disabled={!this.state.data.length}
@@ -193,7 +193,7 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
             <div className="col-span-1 flex items-center">
               <p className="font-medium text-black">Manufacturer</p>
             </div>
-           
+
             <div className="col-span-1 flex items-center">
               <p className="font-medium text-black">Status</p>
             </div>
@@ -238,7 +238,7 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
                 {product.manufacturer}
               </p>
             </div>
-           
+
             <div className="col-span-1 flex items-center">
               <p className="text-sm text-black dark:text-white">
                 {product.status}
@@ -320,18 +320,18 @@ class DataInput extends React.Component<{ handleFile: (file: File) => void }> {
           <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
             Spreadsheet
           </label>
-           <input
-                  type="file"
-                  accept={SheetJSFT}
-                  onChange={this.handleChange}
-                  className="w-1/3cursor-pointer rounded-lg border-[1.5px] border-stroke
+          <input
+            type="file"
+            accept={SheetJSFT}
+            onChange={this.handleChange}
+            className="w-1/3cursor-pointer rounded-lg border-[1.5px] border-stroke
                    bg-transparent font-medium outline-none transition file:mr-5 file:border-collapse 
                    file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke
                     file:bg-whiter file:py-3 file:px-5 file:hover:bg-primary file:hover:bg-opacity-10 
                     focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter
                      dark:border-form-strokedark dark:bg-form-input dark:file:border-form-strokedark 
                      dark:file:bg-white/30 dark:file:text-white dark:focus:border-primary"
-                />
+          />
         </div>
       </form>
     );
@@ -422,8 +422,8 @@ class OutTable extends React.Component<
     const { selectedRows } = this.state;
 
     // Filter the selected rows
-    const selectedProducts = this.props.data.filter(
-      (_, i) => selectedRows?.has(i),
+    const selectedProducts = this.props.data.filter((_, i) =>
+      selectedRows?.has(i),
     );
 
     // Check if any products are selected
@@ -477,8 +477,6 @@ class OutTable extends React.Component<
       });
   };
 
-  
-
   handleCheckboxChange = (rowIndex: number) => {
     const { selectedRows } = this.state;
     if (selectedRows?.has(rowIndex)) {
@@ -489,8 +487,6 @@ class OutTable extends React.Component<
     this.setState({ selectedRows });
   };
 
-
-
   render() {
     const { selectedRows } = this.state;
     // console.log("selctttttttttttttttt",selectedRows);
@@ -498,14 +494,12 @@ class OutTable extends React.Component<
     return (
       <div>
         <div>
-      
-            <button
-              onClick={this.handleMultiple}
-              className="inline-flex items-center justify-center rounded-md bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
-            >
-              SelectedProducts
-            </button>
-      
+          <button
+            onClick={this.handleMultiple}
+            className="inline-flex items-center justify-center rounded-md bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+          >
+            SelectedProducts
+          </button>
         </div>
         <div className="overflow-x-auto">
           <table className="min-w-full bg-white">
@@ -545,7 +539,6 @@ class OutTable extends React.Component<
     );
   }
 }
-
 
 const SheetJSFT = [
   'xlsx',
