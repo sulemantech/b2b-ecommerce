@@ -41,7 +41,7 @@ router.post('/',validateProduct, validateVariants, async (req, res) => {
 });
 
 // Bulk post API and its variants 
-router.post('/bulk', async (req, res) => {
+router.post('/bulk',validateProduct, validateVariants, async (req, res) => {
   try {
     const products = req.body;
 

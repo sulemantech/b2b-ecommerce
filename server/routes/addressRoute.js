@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const addressModel = require('../models/addressModel');
-
+const validateApiKey = require('../middlewares/validateApiKey');
 // router.post('/create', ...) - Updated version
-router.post('/create', async (req, res) => {
+router.post('/create',validateApiKey, async (req, res) => {
     try {
       const { address, city, stateId, zipCode, country } = req.body;
   
@@ -24,7 +24,7 @@ router.post('/create', async (req, res) => {
   
 
 // Get all addresses
-router.get('/getAll', async (req, res) => {
+router.get('/getAll',validateApiKey, async (req, res) => {
   try {
     const allAddresses = await addressModel.findAll();
     res.status(200).json(allAddresses);
