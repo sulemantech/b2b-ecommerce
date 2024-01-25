@@ -19,5 +19,4 @@ const citiesModel = sequelize.define('cities', {
   }
 });
 
-
 module.exports = citiesModel;

@@ -42,5 +42,4 @@ const productVariantModel = sequelize.define('productVariants', {
   timestamps: false, 
 });
 
-
 module.exports = productVariantModel;

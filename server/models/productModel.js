@@ -97,19 +97,8 @@ const productModel = sequelize.define('products', {
 // Define association
 productModel.hasMany(productImages, { foreignKey: 'productId' });
 productModel.belongsTo(supplierModel, { foreignKey: 'supplier_id' });
-// productModel.hasMany(supplierModel, { foreignKey: 'supplier_id' });
 productModel.belongsToMany(categoryModel, { through: productCategoriesModel });
 categoryModel.belongsToMany(productModel, { through: productCategoriesModel }); 
-
-sequelize.sync()
-  .then(() => {
-    console.log('Product model synced with database');
-  })
-  .catch((error) => {
-    console.error('Error syncing product model:', error);
-  });
-
- 
 
 module.exports = productModel;
 
