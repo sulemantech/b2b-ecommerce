@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import SidebarLinkGroup from './SidebarLinkGroup';
+import { IoMdPricetag } from "react-icons/io";
 // import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 
@@ -66,13 +67,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
   return (
     <aside
+    style={{backgroundColor:"lightgray"}}
       ref={sidebar}
-      className={`absolute left-0 top-0 z-9999 border-10 flex h-screen w-72.5 flex-col overflow-y-hidden  duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
+      className={` left-0 top-0  border-10 flex h-screen  w-72.5 flex-col overflow-y-hidden  duration-300 ease-linear lg:static lg:translate-x-0 ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
       {/* <!-- SIDEBAR HEADER --> */}
-      <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
+      {/* <div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
         <NavLink to="/">
           <h1 style={{ color: 'black', font: 'bold', fontSize: '30px' }}>
             N5 STORE
@@ -100,14 +102,15 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
             />
           </svg>
         </button>
-      </div>
+      </div> */}
 
       <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
-        <nav className=" py-4 px-4 lg:mt-9 lg:px-6">
+        <nav className="px-4 lg:mt-9 lg:px-6">
           <div>
-            <h3 className="mb-4 ml-4  font-semibold text-xl text-black">
-              MENU
-            </h3>
+            <h1 className="mb-4 ml-4  font-semibold  text-black bg-white p-2  rounded-full">
+              Home
+              
+            </h1>
 
             <ul className="mb-6 flex flex-col gap-1.5">
               {/* <!-- Menu Item Dashboard --> */}
@@ -123,8 +126,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         to="#"
                         className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out hover:bg-bodydark1  dark:hover:bg-meta-4 ${
                           (pathname === '/' ||
-                            pathname.includes('dashboard')) &&
-                          'bg-graydark dark:bg-meta-4'
+                            pathname.includes('dashboard')) 
+                          
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
@@ -182,7 +185,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           !open && 'hidden'
                         }`}
                       >
-                        <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
+                        <ul className="mt-4 mb-2 flex flex-col gap-2.5 pl-6">
                           <li>
                             <NavLink
                               to="/"
@@ -201,64 +204,79 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           !open && 'hidden'
                         }`}
                       >
-                        <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
+                        <ul className="mb-5.5 flex flex-col gap-2.5 pl-6">
                           <li>
-                            <div className="disabled group relative flex items-center gap-2.5 rounded-md px-4  text-xl   duration-300 ease-in-out text-black ">
-                              Products
+                            <div className="group relative flex items-center gap-2.5 rounded-md px-4 font-medium
+                             text-black duration-300 ease-in-out hover:bg-bodydark1">
+                             <IoMdPricetag />
+                             <h1>
+                             Products
+
+                             </h1>
                             </div>
-                            <li className="ml-5">
+                            <li >
                               <NavLink
                                 to="new/products"
                                 className={({ isActive }) =>
-                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium  duration-300 ease-in-out hover:bg-bodydark1 ' +
+                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-bodydark1 ' +
                                   (isActive && '!text-black-2')
                                 }
                               >
+                                 <span className="opacity-0 group-hover:opacity-100 ">&#8594;</span>
+
                                 New Products
                               </NavLink>
                             </li>
-                            <li className="ml-5">
+                            <li>
                               <NavLink
                                 to="/products"
                                 className={({ isActive }) =>
-                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:bg-bodydark1 ' +
+                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2  hover:text-black duration-300 ease-in-out hover:bg-bodydark1 ' +
                                   (isActive && '!text-black-2')
                                 }
                               >
+                                 <span className="opacity-0 group-hover:opacity-100">&#8594;</span>
+
                                 Final Products
                               </NavLink>
                             </li>
-                            <li className="ml-5">
+                            <li >
                               <NavLink
                                 to="/import"
                                 className={({ isActive }) =>
-                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:bg-bodydark1 ' +
-                                  (isActive && '!text-white')
+                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-bodydark1 ' +
+                                  (isActive && '!text-black-2')
                                 }
                               >
+                                 <span className="opacity-0 group-hover:opacity-100">&#8594;</span>
+
                                 Import
                               </NavLink>
                             </li>
 
-                            <li className="ml-5">
+                            <li>
                               <NavLink
                                 to="/users"
                                 className={({ isActive }) =>
-                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:bg-bodydark1 ' +
-                                  (isActive && '!text-white')
+                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium hover:text-black text-bodydark2 duration-300 ease-in-out hover:bg-bodydark1 ' +
+                                  (isActive && '!text-black-2')
                                 }
                               >
+                                 <span className="opacity-0 group-hover:opacity-100">&#8594;</span>
+
                                 Users
                               </NavLink>
                             </li>
-                            <li className="ml-5">
+                            <li >
                               <NavLink
                                 to="/orders"
                                 className={({ isActive }) =>
-                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:bg-bodydark1  ' +
-                                  (isActive && '!text-white')
+                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium hover:text-black  text-bodydark2 duration-300 ease-in-out hover:bg-bodydark1  ' +
+                                  (isActive && '!text-black-2')
                                 }
                               >
+                                 <span className="opacity-0 group-hover:opacity-100">&#8594;</span>
+                                 
                                 Order
                               </NavLink>
                             </li>
@@ -266,17 +284,23 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         </ul>
                         <ul>
                           <li>
-                            <div className="disabled group relative flex items-center gap-2.5 rounded-md px-4  text-xl   duration-300 ease-in-out text-black ">
+                            <div className=" group relative flex items-center gap-2.5 rounded-md px-4 font-medium ml-4
+                             text-black duration-300 ease-in-out hover:bg-bodydark1">
+                              <h1 >
                               Supplier
+
+                              </h1>
                             </div>
-                            <li className="ml-5">
+                            <li className="ml-3">
                               <NavLink
                                 to="/auth/signup"
                                 className={({ isActive }) =>
-                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:bg-bodydark1  ' +
-                                  (isActive && '!text-white')
+                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:bg-bodydark1  hover:text-black ' +
+                                  (isActive && '!text-black-2')
                                 }
                               >
+                                 <span className="opacity-0 group-hover:opacity-100">&#8594;</span>
+
                                 Sign Up
                               </NavLink>
                             </li>
@@ -322,7 +346,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <NavLink
                   to="/profile"
                   className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out hover:bg-bodydark1 dark:hover:bg-meta-4 ${
-                    pathname.includes('profile') && 'bg-graydark dark:bg-meta-4'
+                    pathname.includes('profile')
                   }`}
                 >
                   <svg
@@ -360,8 +384,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         to="#"
                         className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out hover:bg-bodydark1 dark:hover:bg-meta-4 ${
                           (pathname === '/forms' ||
-                            pathname.includes('forms')) &&
-                          'bg-graydark dark:bg-meta-4'
+                            pathname.includes('forms')) 
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
@@ -426,7 +449,18 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       >
                         <ul className="mt-4 mb-5.5 flex flex-col gap-2.5 pl-6">
                           <li>
-                            <NavLink to="/forms/form-layout">Login</NavLink>
+                          <NavLink
+                                to="/forms/form-layout"
+                                className={({ isActive }) =>
+                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-bodydark1  ' +
+                                  (isActive && '!text-white')
+                                }
+                              >
+                                 <span className="opacity-0 group-hover:opacity-100">&#8594;</span>
+
+                                 Login
+                              </NavLink>
+                          
                           </li>
                         </ul>
                       </div>
@@ -579,8 +613,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <NavLink
                         to="#"
                         className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out hover:bg-bodydark1 dark:hover:bg-meta-4 ${
-                          (pathname === '/ui' || pathname.includes('ui')) &&
-                          'bg-graydark dark:bg-meta-4'
+                          (pathname === '/ui' || pathname.includes('ui'))
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
@@ -652,10 +685,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <NavLink
                               to="/ui/alerts"
                               className={({ isActive }) =>
-                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-black duration-300 ease-in-out hover:bg-bodydark1' +
+                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-bodydark1' +
                                 (isActive && '!text-white')
                               }
                             >
+                                 <span className="opacity-0 group-hover:opacity-100">&#8594;</span>
+
+                               
                               Alerts
                             </NavLink>
                           </li>
@@ -663,10 +699,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <NavLink
                               to="/ui/buttons"
                               className={({ isActive }) =>
-                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2  hover:text-black duration-300 ease-in-out' +
                                 (isActive && '!text-white')
                               }
                             >
+                                 <span className="opacity-0 group-hover:opacity-100">&#8594;</span>
+
                               Buttons
                             </NavLink>
                           </li>
@@ -762,10 +800,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 to="/auth/signin"
                                 onClick={handleLogout}
                                 className={({ isActive }) =>
-                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-black ' +
                                   (isActive && '!text-white')
                                 }
                               >
+                                 <span className="opacity-0 group-hover:opacity-100">&#8594;</span>
+
                                 Logout
                               </NavLink>
                             </li>
@@ -774,10 +814,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               <NavLink
                                 to="/auth/signin"
                                 className={({ isActive }) =>
-                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-black ' +
                                   (isActive && '!text-white')
                                 }
                               >
+                                 <span className="opacity-0 group-hover:opacity-100">&#8594;</span>
+
                                 Sign In
                               </NavLink>
                             </li>

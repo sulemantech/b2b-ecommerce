@@ -15,6 +15,7 @@
     "url": "https://tailadmin.com"
   },
   "dependencies": {
+    "@shopify/polaris": "^12.10.0",
     "@types/react-router-dom": "^5.3.3",
     "apexcharts": "^3.41.0",
     "axios": "^1.6.4",

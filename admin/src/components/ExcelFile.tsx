@@ -26,6 +26,7 @@ interface Products {
   // productImages?: { date: string; images: string[] }[] | undefined;
 }
 
+
 interface SheetJSAppProps {}
 
 interface SheetJSAppState {
@@ -89,7 +90,7 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
       const ws = wb.Sheets[wsname];
       const data = XLSX.utils.sheet_to_json(ws, { header: 1 });
       this.postBulkData(data);
-      console.log('dataaaaaaaaaaaaaaaaaa', data);
+      // console.log('dataaaaaaaaaaaaaaaaaa', data);
       this.setState({ data: data, cols: make_cols(ws['!ref']!) });
     };
 
@@ -160,7 +161,7 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
             <DataInput handleFile={this.handleFile} />
           </div>
         </div>
-        <div className="row">
+        {/* <div className="row">
           <br />
 
           <div className="col-xs-12">
@@ -172,7 +173,7 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
               Export
             </button>
           </div>
-        </div>
+        </div> */}
         <br />
         <br />
         {this.state.products.length > 0 ? (
@@ -313,13 +314,15 @@ class DataInput extends React.Component<{ handleFile: (file: File) => void }> {
     if (files && files[0]) this.props.handleFile(files[0]);
   }
 
+ 
+
   render() {
     return (
-      <form className="form-inline">
-        <div className="form-group">
-          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+      <form className="form-inline flex justify-end">
+        <div className="form-group ">
+          {/* <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
             Spreadsheet
-          </label>
+          </label> */}
           <input
             type="file"
             accept={SheetJSFT}
@@ -333,31 +336,21 @@ class DataInput extends React.Component<{ handleFile: (file: File) => void }> {
                      dark:file:bg-white/30 dark:file:text-white dark:focus:border-primary"
           />
         </div>
+          <div className=' ml-4'>
+            <button
+              // disabled={!this.state.data.length}
+              className="inline-flex items-center justify-center w-1 h-2  rounded-md bg-primary py-6 text-center
+               font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+              // onClick={this.exportFile}
+            >
+              Export
+            </button>
+          </div>
       </form>
     );
   }
 }
 
-// interface RowData {
-//   id?: number; // Note: The ID might not be available when creating a new product
-//   name: string;
-//   description: string;
-//   price: number;
-//   quantity?: number;
-//   manufacturer: string;
-//   dateAdded?: Date;
-//   discount: number;
-//   new: boolean;
-//   rating: number;
-//   saleCount: number;
-//   tag: string[];
-//   stock: number;
-//   quantityInStock: number;
-//   sku: string;
-//   category_id: number;
-//   supplier_id: number;
-//   categoryName: string;
-//   }
 
 interface SheetJSAppState {
   data: any[];
@@ -390,7 +383,6 @@ class OutTable extends React.Component<
       status: rowData[16],
     };
 
-    // console.log("skuuuuuuuuuuuu",rowData[16],);
 
     fetch('http://localhost:5001/api/products', {
       method: 'POST',
@@ -489,7 +481,7 @@ class OutTable extends React.Component<
 
   render() {
     const { selectedRows } = this.state;
-    // console.log("selctttttttttttttttt",selectedRows);
+   
 
     return (
       <div>
