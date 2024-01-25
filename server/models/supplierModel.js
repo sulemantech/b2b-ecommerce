@@ -34,6 +34,4 @@ const supplierModel = sequelize.define('supplier', {
       },
 });
 
-
-
 module.exports = supplierModel;

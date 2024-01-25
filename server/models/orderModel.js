@@ -69,6 +69,7 @@ const orderModel = sequelize.define('orders', {
   
 });
 
-orderModel.belongsTo(registerationModel, { foreignKey: 'userId' }); // Establishing the foreign key relationship
+orderModel.belongsTo(registerationModel, { foreignKey: 'userId' }); 
 orderModel.hasMany(orderItemsModel, { foreignKey: 'orderId' });
+
 module.exports = orderModel;

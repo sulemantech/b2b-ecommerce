@@ -1,5 +1,7 @@
 const sequelize = require('../database/db');
 const { DataTypes } = require('sequelize');
+const customerModel = require('./customerModel');
+const businessModel = require('./businessModel');
 
 const registerationModel = sequelize.define('user', {
       id: {
@@ -38,7 +40,30 @@ const registerationModel = sequelize.define('user', {
       role: {
         type: DataTypes.STRING, 
         defaultValue: 'user', 
-      }
+      },
+      customerId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'customer', 
+          key: 'id',
+        },
+        allowNull: true, 
+        unique: true, 
+      },
+      businessId: { // Update the foreign key here
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'business', 
+          key: 'id',
+        },
+        allowNull: true,
+        unique: true,
+      },
 });
+
+// Add the association to define a one-to-one relationship
+registerationModel.belongsTo(customerModel, { foreignKey: 'customerId' });
+// Update the association to use the new foreign key
+registerationModel.belongsTo(businessModel, { foreignKey: 'businessId' });
 
 module.exports =  registerationModel;

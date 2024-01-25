@@ -7,85 +7,73 @@ const path = require('path');
 const productModel = require('../models/productModel');
 const productImages= require('../models/productImages');
 const categoryModel=require('../models/categoryModel');
-
+const productVariantModel=require('../models/productVariantModel')
+const { validateProduct, validateVariants } = require('../middlewares/validateVariantsMiddleware');
 
 //post API    ///////////////////////////////////////////////////////////////////
-router.post('/', async(req, res) => {
+router.post('/',validateProduct, validateVariants, async (req, res) => {
   try {
-    
-    const {id,name,description,price,quantity, manufacturer,dateAdded,quantityInStock,sku,discount, new: isNew, rating, saleCount,  category_id, tag, stock,supplier_id, categoryName,status } = req.body;
-    
-  
-    const newData = await productModel.create({ 
-      id,
-      name,
-      description,
-      price,
-      quantity,
-      manufacturer,
-      dateAdded,
-      quantityInStock,
-      sku,      
-      discount,
-      new: isNew,
-      rating,
-      saleCount,
-      category_id,
-       tag,
-      stock, supplier_id, 
-      categoryName,
-      status,
+    const { products, variants } = req.body;
+    // Create product record
+    const Product = await productModel.create(products);
+   
+    // Create variant records
+    const Variants = await Promise.all(
+      variants.map(async ({ key, values,optionValues, ...rest }) => {
+        return await productVariantModel.create({
+          ...rest,
+          key,
+          value: values,optionValues,
+          productId: Product.id, 
+        });
+      })
+    );
+
+    res.status(201).json({
+      message: 'Product and Variants created.',
+      Product,
+      Variants,
     });
-    const category = await categoryModel.findByPk(category_id);
-    
-    if (category) {
-      // Associate the product with the category
-      await newData.addCategory(category, { through: { id: category_id } });
-      
-      res.status(201).json({ message: 'Product created and associated with category.', newData });
-    } else {
-      res.status(404).json({ message: 'Category not found.' });
-    }
-    
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
-// Bulk post API
+// Bulk post API and its variants 
 router.post('/bulk', async (req, res) => {
   try {
-    const products = req.body; 
-    
+    const products = req.body;
+
     if (!Array.isArray(products)) {
       return res.status(400).json({ error: 'Invalid input. Expected an array of products.' });
     }
 
     // Use Promise.all to asynchronously create all products
-    const createdProducts = await Promise.all(products.map(async (product) => {
-      const {
-        id, name, description, price, quantity, manufacturer, dateAdded, quantityInStock, sku,
-        discount, new: isNew, rating, saleCount, category_id, tag, stock, supplier_id, categoryName,status
-      } = product;
+    const createdProducts = await Promise.all(products.map(async (productData) => {
+      const { variants, optionValues, ...rest } = productData;
 
-      const newData = await productModel.create({
-        id, name, description, price, quantity, manufacturer, dateAdded, quantityInStock, sku,
-        discount, new: isNew, rating, saleCount, category_id, tag, stock, supplier_id, categoryName,status
-      });
+      // Create product record
+      const newProduct = await productModel.create({ ...rest });
 
-      const category = await categoryModel.findByPk(category_id);
+      // Create variant records for the product
+      const newVariants = await Promise.all(variants.map(async (variantData) => {
+        const { optionValues: variantOptionValues, ...variantRest } = variantData;
 
-      if (category) {
-        // Associate the product with the category
-        await newData.addCategory(category, { through: { id: category_id } });
-        return newData;
-      } else {
-        throw new Error(`Category not found for product with id: ${id}`);
-      }
+        // Create variant record
+        const newVariant = await productVariantModel.create({
+          ...variantRest,
+          productId: newProduct.id,
+          optionValues: variantOptionValues, // Include optionValues directly in the creation
+        });
+
+        return { ...newVariant.toJSON() };
+      }));
+
+      return { product: newProduct.toJSON(), variants: newVariants };
     }));
 
-    res.status(201).json({ message: 'Products created and associated with categories.', createdProducts });
+    res.status(201).json({ message: 'Products created.', createdProducts });
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -134,7 +122,6 @@ router.get('/all', async (req, res) => {
 
 
 
-// GET API    ///////////////////////////////////////////////////////////////////
 router.get('/:category_id', async (req, res) => {
   const category_id = req.params.category_id;
 
@@ -181,62 +168,90 @@ router.get('/specific/:id', async (req, res) => {
 });
 
 
-
-
-
-
 // PUT API    ///////////////////////////////////////////////////////////////////
-router.put('/:id', async (req, res) => {
+router.put('/:productId',  async (req, res) => {
   try {
-    const productId = req.params.id;
-    const updatedProductData = req.body;
+    const productId = req.params.productId;
+    const { products, variants } = req.body;
 
-    // Find the product by ID
-    const product = await productModel.findByPk(productId);
-
-    if (!product) {
-      return res.status(404).json({ error: 'Product not found' });
+    // Check if the product exists
+    const existingProduct = await productModel.findByPk(productId);
+    if (!existingProduct) {
+      return res.status(404).json({ message: 'Product not found.' });
     }
 
-    // Update the product with new data
-    await product.update(updatedProductData);
+    // Update product data
+    await existingProduct.update(products);
 
-    res.status(200).json({ message: 'Product updated successfully', updatedProduct: product });
-  } catch (error) {
-    console.error('Error updating product:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
+    // Update or create variant records
+    const updatedVariants = await Promise.all(
+      variants.map(async ({ id, key, values, optionValues, ...rest }) => {
+        // Check if the variant exists
+        const existingVariant = await productVariantModel.findByPk(id);
 
+        if (existingVariant) {
+          // Update existing variant data
+          await existingVariant.update({
+            ...rest,
+            key,
+            value: values,
+            optionValues,
+            productId,
+          });
+        } else {
+          // Create new variant if it doesn't exist
+          const newVariant = await productVariantModel.create({
+            ...rest,
+            key,
+            value: values,
+            optionValues,
+            productId,
+          });
 
-// DELETE API    ///////////////////////////////////////////////////////////////////
-router.delete('/:id', async (req, res) => {
-  try {
-    const productId = req.params.id;
-    const product = await productModel.findByPk(productId);
-
-    if (!product) {
-      return res.status(404).json({ error: 'Product not found' });
-    }
-    const deletedProductDetails = {
-      id: product.id,
-      name: product.name,
-      price: product.price
-    };
-
-    // Delete the product
-    await product.destroy();
+          return newVariant.toJSON();
+        }
+      })
+    );
 
     res.status(200).json({
-      message: 'Product deleted successfully',
-      deletedProduct: deletedProductDetails,
+      message: 'Product and Variants updated successfully.',
+      updatedProduct: existingProduct.toJSON(),
+      updatedVariants,
     });
   } catch (error) {
-    console.error('Error deleting product:', error);
+    console.error('Error:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+  
 
+// Delete product and its variants by ID ///////////////////////////////////////////////////////////////////
+router.delete('/:productId', async (req, res) => {
+  try {
+    const productId = req.params.productId;
+
+    // Check if the product exists
+    const existingProduct = await productModel.findByPk(productId);
+    if (!existingProduct) {
+      return res.status(404).json({ message: 'Product not found.' });
+    }
+
+    // Delete associated variants
+    await productVariantModel.destroy({
+      where: {
+        productId: existingProduct.id,
+      },
+    });
+
+    // Delete the product
+    await existingProduct.destroy();
+
+    res.status(200).json({ message: 'Product and Variants deleted successfully.' });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 
 module.exports = router;

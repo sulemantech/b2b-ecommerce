@@ -18,6 +18,8 @@ const searchRoute= require('./routes/searchRoute')
 const typeDefs = require('./schema/graphqlSchema');
 const resolvers = require('./resolvers/resolver');
 const path = require('path');
+const customerRoute=require('./routes/customerRoute')
+const businessRoute=require('./routes/businessRoute')
 
 require('dotenv').config();
 
@@ -74,10 +76,16 @@ app.use('/api/orderitems', orderItemsRoute)
 //companies
 app.use('/api/company',companiesRoute)
 
+//customer
+app.use('/api/customer',customerRoute)
+
+app.use('/api/business',businessRoute)
+
 //searching
 const search='/api/product/'
 
-// Serve static files from the 'images' directory   http://localhost:5001/assets/products/images-1704183525093-867535339.png
+
+// Serve static files from the 'images' directory 
 app.use('/assets',express.static(path.join(__dirname, 'assets')));
 
 //Start the ApolloServer before applying middleware
