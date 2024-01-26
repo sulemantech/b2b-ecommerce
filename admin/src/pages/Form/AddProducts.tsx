@@ -737,24 +737,26 @@ const handleSubmit = async () => {
       </div>
 
       {showTable && (
-        <div className="mt-8">
-          <h1 className="font-bold">Variants Table</h1>
-          <table className="border-collapse border border-stroke mt-3">
+         <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+         <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5">
+        
+          <table className="border-collapse border border-stroke mt-3 m-auto">
             <thead>
               <tr>
-                <th className="border border-stroke p-2">Name</th>
-                <th className="border border-stroke p-2">Values</th>
+                <th className="border font-bold border-stroke p-2">Key</th>
+                <th className="border font-bold border-stroke p-2">Values</th>
               </tr>
             </thead>
             <tbody>
               {variants.map((variant, index) => (
                 <tr key={index}>
-                  <td className="border border-stroke p-2">{variant.optionName}</td>
-                  <td className="border border-stroke p-2">{variant.optionValues.join(', ')}</td>
+                  <td className="border font-bold border-stroke p-2">{variant.optionName}</td>
+                  <td className="border font-bold border-stroke p-2">{variant.optionValues.join(', ')}</td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
         </div>
       )}
     </div>

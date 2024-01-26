@@ -216,7 +216,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             </div>
                             <li >
                               <NavLink
-                                to="new/products"
+                                to="/product"
                                 className={({ isActive }) =>
                                   'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-bodydark1 ' +
                                   (isActive && '!text-black-2')

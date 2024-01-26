@@ -14,6 +14,7 @@ const Products =lazy(()=>import('../pages/Dashboard/Products'));
 const Users =lazy(()=>import('../pages/Dashboard/Users'));
 const Orders =lazy(()=>import('../pages/Dashboard/Oders'));
 const UpdateProducts =lazy(()=>import('../components/UpdateProducts'));
+const ProductNavigate=lazy(()=>import('../components/PoductNavigator'));
 
 
 
@@ -23,6 +24,12 @@ const coreRoutes = [
     path: '/products',
     title: 'products',
     component:Products,
+
+  },
+  {
+    path: '/product',
+    title: 'product',
+    component:ProductNavigate,
 
   },
   {
@@ -54,7 +61,7 @@ const coreRoutes = [
     component: Profile,
   },
   {
-    path: '/new/products',
+    path: '/new/product',
     title: 'Forms Elements',
     component: FormElements,
   },

@@ -9,6 +9,6 @@
     "allowSyntheticDefaultImports": true,
     "types": ["vite"]
   },
-  "include": ["src/**/*.ts", "vite.config.ts"],
+  "include": [ "vite.config.ts","tsconfig.node.json"],
   "exclude": []
 }
