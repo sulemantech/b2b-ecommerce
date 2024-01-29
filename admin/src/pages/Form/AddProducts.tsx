@@ -1,7 +1,10 @@
-// import Breadcrumb from '../../components/Breadcrumb';
-import { useState } from 'react';
+
 import axios from 'axios';
-import TextArea from '../../components/TextArea';
+import { useState } from 'react';
+import  { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { Link } from 'react-router-dom';
+
 
 
 
@@ -318,17 +321,25 @@ import TextArea from '../../components/TextArea';
 const FormElements = () => {
     const [productId, setProductId] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
-
-
   const [optionName, setOptionName] = useState('Size');
   const [optionValues, setOptionValues] = useState('');
   const [variants, setVariants] = useState<Array<{ optionName: string; optionValues: string[] }>>([]);
   const [showTable, setShowTable] = useState(false);
+  const [editorContent, setEditorContent] = useState('');
+
+
+  const handleEditorReady = (editor: any) => {
+    console.log('Editor is ready to use!', editor);
+  };
+  const handleEditorChange = (_: any, editor: any) => {
+    const content = editor.getData();
+    setEditorContent(content);
+  };
+
 
   const handleOptionNameChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setOptionName(e.target.value);
   };
-
   const handleOptionValuesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setOptionValues(e.target.value);
   };
@@ -366,14 +377,18 @@ const FormElements = () => {
     supplier_id:"",
     categoryName:"",
     productId:"",
+    variants: [] as Array<{ optionName: string; optionValues: string[] }>,
     status:""
 
   });
+  
+
   const handleFormSubmit = async () => {
     try {
-      const response = await axios.post('http://localhost:5001/api/products/', value);
+      const updatedValue = { ...value, description: editorContent };
+      const response = await axios.post('http://localhost:5001/api/products/', updatedValue);
       console.log('Product created:', response.data);
-  
+      
     } catch (error) {
       console.error('Error creating product:', error);
     }
@@ -388,16 +403,17 @@ const handleSubmit = async () => {
     console.error('Product ID is required.');
     return;
   }
-
+  
   const formData = new FormData();
   formData.append('productId', productId);
-
+  
   if (imageFile) {
     formData.append('images', imageFile);
   } else {
     console.error('Image file is required.');
     return;
   }
+  formData.append('variants', JSON.stringify(value.variants));
 
   try {
     const response = await fetch('http://localhost:5001/productImages', {
@@ -454,7 +470,13 @@ const handleSubmit = async () => {
             <br />
             <div className="ml-5 font-bold">
               <label htmlFor="">Desccription</label>
-              <TextArea />
+              <CKEditor
+        editor={ClassicEditor}
+        config={{/* Your CKEditor config options here */}}
+        onReady={handleEditorReady}
+        onChange={handleEditorChange}
+      />
+      
             </div>
           </div>
           <div className="flex flex-col gap-9 ">
@@ -480,21 +502,6 @@ const handleSubmit = async () => {
                 >
 
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                    {/* <svg
-                      className="w-8 h-8 mb-4 text-gray-500 dark:text-gray-400"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 20 16"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"
-                      />
-                    </svg> */}
                     <input
                       type="file"
                       onChange={handleImageFileChange}
@@ -672,6 +679,8 @@ const handleSubmit = async () => {
                 </label>
                 <div>
                   <input
+                  value={value.weight}
+                  onChange={(e)=>setvalues({...value,weight: e.target.value})}
                     type="number"
                     placeholder="0.0"
                     className="w-30 rounded-lg border-[1.5px] border-stroke bg-transparent 
@@ -745,13 +754,33 @@ const handleSubmit = async () => {
               <tr>
                 <th className="border font-bold border-stroke p-2">Key</th>
                 <th className="border font-bold border-stroke p-2">Values</th>
+                <th className="border font-bold border-stroke p-2">Action</th>
+                <th className="border font-bold border-stroke p-2">Delete</th>
+
+
+
               </tr>
             </thead>
             <tbody>
-              {variants.map((variant, index) => (
+              {variants?.map((variant, index) => (
                 <tr key={index}>
                   <td className="border font-bold border-stroke p-2">{variant.optionName}</td>
                   <td className="border font-bold border-stroke p-2">{variant.optionValues.join(', ')}</td>
+                  <td className="border font-bold border-stroke p-2">
+                    <Link
+                    to={'#'}
+                    >
+                    Edite
+                    </Link>
+                  </td>
+                  <td className="border font-bold border-stroke p-2">
+                    <Link
+                    to={'#'}
+                    >
+                    Remove
+                    </Link>
+                  </td>
+
                 </tr>
               ))}
             </tbody>
@@ -829,9 +858,32 @@ const handleSubmit = async () => {
                    onChange={(e)=>setvalues({...value,categoryName: e.target.value})}
                    value={value.categoryName}
                 />
+                <label htmlFor="">category_id</label>
+                <input
+                 type="text"
+                 placeholder="category_id"
+                 className="w-full rounded-lg border-[1.5px] border-stroke
+                  bg-transparent py-3 px-5 font-medium outline-none transition
+                   focus:border-primary active:border-primary disabled:cursor-default
+                   disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                   onChange={(e)=>setvalues({...value,category_id: e.target.value})}
+                   value={value.category_id}
+                   />
 
+    
                 <br />
-                <br />
+                <label htmlFor="">productId</label>
+                <input
+                 type="text"
+                 placeholder="category_id"
+                 className="w-full rounded-lg border-[1.5px] border-stroke
+                  bg-transparent py-3 px-5 font-medium outline-none transition
+                   focus:border-primary active:border-primary disabled:cursor-default
+                   disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                   onChange={(e)=>setvalues({...value,productId: e.target.value})}
+                   value={value.productId}
+                   />
+                   <br />
                 <label className="font-bold" htmlFor="">
                 quantityInStock
                 </label>
@@ -916,3 +968,6 @@ const handleSubmit = async () => {
   );
 };
 export default FormElements;
+
+
+
