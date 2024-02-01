@@ -11,7 +11,7 @@ const productVariantModel=require('../models/productVariantModel')
 const { validateProduct, validateVariants } = require('../middlewares/validateVariantsMiddleware');
 
 //post API    ///////////////////////////////////////////////////////////////////
-router.post('/',validateProduct, validateVariants, async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const { products, variants } = req.body;
     // Create product record

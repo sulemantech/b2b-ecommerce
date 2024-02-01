@@ -1,116 +1,36 @@
-// import axios from 'axios';
+import axios from 'axios';
 import { useState } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-interface FormData {
-  selectedOption: string;
-  inputValue: string;
-  dynamicFields: string[];
-}
+// interface ProductVariant {
+//   key: string;
+//   values: string[];
+//   type: string;
+//   weight: number;
+//   unit: string;
+//   availableQuantity: number;
+//   variantPrice: number;
+//   variantSku: string;
+//   optionValues: {
+//     id: string;
+//     name: string;
+//     variantSku: string[];
+//   };
+// }
 
 const FormElements = () => {
   const [productId, setProductId] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [key, setkey] = useState('Size');
+  const [optionValues, setOptionValues] = useState('');
+  const [showTable, setShowTable] = useState(false);
   const [editorContent, setEditorContent] = useState('');
-  const [uniqueValuesSet, setUniqueValuesSet] = useState<Set<string>>(
-    new Set(),
-  );
+  const [varian, setVariants] = useState<Array<{ key: string, optionValues: Array<{ id: string; name: string; variantSku: string[] }> }>>([]);
 
-  const [formData, setFormData] = useState<FormData>({
-    selectedOption: '',
-    inputValue: '',
-    dynamicFields: [],
-  });
 
-  const [submittedData, setSubmittedData] = useState<{
-    [key: string]: string[];
-  }>({});
 
-  const handleDropdownChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFormData({
-      selectedOption: e.target.value,
-      inputValue: '',
-      dynamicFields: [],
-    });
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      inputValue: e.target.value,
-    }));
-
-    // Check if the input value is not empty
-    if (e.target.value.trim() !== '') {
-      // Add a new dynamic field if the last dynamic field is not empty or if there are no dynamic fields
-      if (
-        formData.dynamicFields.length === 0 ||
-        formData.dynamicFields.slice(-1)[0].trim() !== ''
-      ) {
-        setFormData((prevData) => ({
-          ...prevData,
-          dynamicFields: [...prevData.dynamicFields, ''],
-        }));
-      }
-    }
-  };
-
-  const handleDynamicFieldChange = (index: number, value: string) => {
-    const updatedFields = [...formData.dynamicFields];
-
-    // Check if the value is empty
-    if (value.trim() === '') {
-      // Remove the field if it's not the last one
-      if (updatedFields.length > 1) {
-        updatedFields.splice(index, 1);
-      }
-    } else {
-      updatedFields[index] = value;
-
-      // Add a new dynamic field if the last field is not empty
-      if (value.length === 1 && index === updatedFields.length - 1) {
-        updatedFields.push('');
-      }
-    }
-
-    setFormData({
-      ...formData,
-      dynamicFields: updatedFields,
-    });
-  };
-
-  const handleSubmit = () => {
-    const { selectedOption, inputValue, dynamicFields } = formData;
-
-    // Check if the value already exists for the selected option in the form
-    const isDuplicateInForm = (dynamicFields || []).includes(inputValue);
-
-    // Check if the value already exists for the selected option in the submitted data
-    const isDuplicateInSubmittedData = (
-      submittedData[selectedOption] || []
-    ).includes(inputValue);
-
-    if (isDuplicateInForm || isDuplicateInSubmittedData) {
-      console.log(`Duplicate value for ${selectedOption}: ${inputValue}`);
-    } else {
-      setSubmittedData((prevData) => ({
-        ...prevData,
-        [selectedOption]: [
-          ...(prevData[selectedOption] || []),
-          inputValue,
-          ...dynamicFields,
-        ],
-      }));
-
-      // Add the value to the Set to keep track of unique values
-      setUniqueValuesSet(
-        (prevValues) => new Set([...prevValues, inputValue, ...dynamicFields]),
-      );
-    }
-  };
- 
 
   const handleEditorReady = (editor: any) => {
     console.log('Editor is ready to use!', editor);
@@ -119,6 +39,33 @@ const FormElements = () => {
     const content = editor.getData();
     setEditorContent(content);
   };
+
+  const handlekeyChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setkey(e.target.value);
+  };
+  const handleOptionValuesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setOptionValues(e.target.value);
+  };
+
+  const handleAddVariant = () => {
+    if (optionValues.trim() !== '') {
+      const newVariant = {
+        key,
+        optionValues: [
+          {
+            id: '1',
+            name: optionValues,
+
+            variantSku: [`ABC1239-${optionValues.toLowerCase()}`],
+          },
+        ],
+      };
+      setVariants([...varian, newVariant]);
+      setShowTable(true);
+      setOptionValues('');
+    }
+  };
+
 
   const [value, setvalues] = useState({
     name: '',
@@ -144,6 +91,8 @@ const FormElements = () => {
     status: '',
   });
 
+  console.log(varian);
+
   // const handleFormSubmit = async () => {
 
   //   try {
@@ -163,71 +112,71 @@ const FormElements = () => {
   //     console.error('Error creating product:', error);
   //   }
   // };
-  // const handleFormSubmit = async () => {
-  //   try {
-  //     // Assuming Variant is the type/interface of your variant objects
-  //     const va = varian.filter((variant) => variant.optionValues.length > 0);
-  //     console.log('Request Data:', varian);
-  //     const { variantsss, ...products } = {
-  //       ...value,
-  //       description: editorContent,
-  //       variantsss: va,
-  //     };
+  const handleFormSubmit = async () => {
+    try {
+      // Assuming Variant is the type/interface of your variant objects
+      const va = varian.filter((variant) => variant.optionValues.length > 0);
+      console.log('Request Data:', varian);
+      const { variantsss, ...products } = {
+        ...value,
+        description: editorContent,
+        variantsss: va,
+      };
 
-  //     // Create requestData object
-  //     const requestData = {
-  //       products: { ...products },
-  //       variants: [...variantsss],
-  //     };
+      // Create requestData object
+      const requestData = {
+        products: { ...products },
+        variants: [...variantsss],
+      };
 
-  //     console.log('Request Data:', requestData);
+      console.log('Request Data:', requestData);
 
-  //     // Assuming you have axios imported
-  //     const response = await axios.post(
-  //       'http://localhost:5001/api/products/',
-  //       requestData,
-  //     );
+      // Assuming you have axios imported
+      const response = await axios.post(
+        'http://localhost:5001/api/products/',
+        requestData,
+      );
 
-  //     console.log('Product created:', response.data);
-  //   } catch (error) {
-  //     console.error('Error creating product:', error);
-  //   }
-  // };
+      console.log('Product created:', response.data);
+    } catch (error) {
+      console.error('Error creating product:', error);
+    }
+  };
 
-  // const handleSubmit = async () => {
-  //   handleFormSubmit();
-  //   if (!productId) {
-  //     console.error('Product ID is required.');
-  //     return;
-  //   }
+  const handleSubmit = async () => {
+    handleFormSubmit();
+    if (!productId) {
+      console.error('Product ID is required.');
+      return;
+    }
 
-  //   const formData = new FormData();
-  //   formData.append('productId', productId);
+    const formData = new FormData();
+    formData.append('productId', productId);
 
-  //   if (imageFile) {
-  //     formData.append('images', imageFile);
-  //   } else {
-  //     console.error('Image file is required.');
-  //     return;
-  //   }
-  //   formData.append('variants', JSON.stringify(varian));
+    if (imageFile) {
+      formData.append('images', imageFile);
+    } else {
+      console.error('Image file is required.');
+      return;
+    }
+    formData.append('variants', JSON.stringify(varian));
 
-  //   try {
-  //     const response = await fetch('http://localhost:5001/productImages', {
-  //       method: 'POST',
-  //       body: formData,
-  //     });
+    try {
+      const response = await fetch('http://localhost:5001/productImages', {
+        method: 'POST',
+        body: formData,
+      });
 
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! Status: ${response.status}`);
-  //     }
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
 
-  //     const result = await response.json();
-  //     console.log('Image posted successfully:', result);
-  //   } catch (error) {
-  //     console.error('Error posting image:', error);
-  //   }
-  // };
+      const result = await response.json();
+      console.log('Image posted successfully:', result);
+    } catch (error) {
+      console.error('Error posting image:', error);
+    }
+  };
 
   const handleProductIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setProductId(e.target.value);
@@ -457,214 +406,237 @@ const FormElements = () => {
               </div>
             </div>
           </div>
-
           <div className="flex flex-col gap-9 ">
             <div className="rounded-xl border-stroke  bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-5">
-              <h1 className="font-bold">Variants</h1>
-              <hr />
-              <div className="mt-5 border-bodydark border-opacity-20 border-4 p-5"> 
-                <h1>
-                  Option name
-                </h1>
-                <select
-                  id="dropdown"
-                  value={formData.selectedOption}
-                  onChange={handleDropdownChange}
-                  className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
-        px-5 font-medium outline-none transition focus:border-primary active:border-primary 
-        disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
-        dark:focus:border-primary"
-                >
-                  <option value="color">select-</option>
-                  <option value="color">Color</option>
-                  <option value="size">Size</option>
-                  {/* Add more options as needed */}
-                </select>
+              <div className="ml-5">
+                <h1 className="font-bold">Shipping</h1>
                 <br />
-                <br />
-
-                {formData.selectedOption === 'color' ||
-                formData.selectedOption === 'size' ? (
-                  <div>
-                    <h1 className="font-bold">
-
-                    Option Value
-                    </h1>
-                    <input
-                      type="text"
-                      className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
-            px-5 font-medium outline-none transition focus:border-primary active:border-primary 
-            disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
-            dark:focus:border-primary"
-                      id="valueInput"
-                      name="value"
-                      value={formData.inputValue}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                ) : null}
-
-                {formData.dynamicFields.map((field, index) => (
-                  <div key={index}>
-                    <input
-                      type="text"
-                      placeholder='Add another value'
-                      className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
-            px-5 font-medium outline-none transition focus:border-primary active:border-primary 
-            disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
-            dark:focus:border-primary"
-                      value={field}
-                      onChange={(e) =>
-                        handleDynamicFieldChange(index, e.target.value)
-                      }
-                    />
-                  </div>
-                ))}
-                <br />
-                <br />
-
-                <button
-                  type="button"
-                  className="inline-flex items-center justify-center rounded-md
-        bg-black p-1  text-center font-medium text-white hover:bg-opacity-90 "
-                  onClick={handleSubmit}
-                >
-                  Done
-                </button>
-                <br />
-                <br />
+                <div className="flex">
+                  <input type="checkbox" className="w-4" />
+                  <h3 className="ml-2">This is a physical product</h3>
                 </div>
-
-               <div className='Parent '>
-                <div className='table mt-5' >
-                {Object.keys(submittedData).length > 0 && (
-                  <div>
-                   
-   <table>
-      <thead>
-        <tr>
-          {/* <th className="border font-bold border-stroke p-2">
-            key
-          </th> */}
-          <th className="border font-bold border-stroke p-2">
-            values
-          </th>
-          <th className="border font-bold border-stroke p-2">
-          type
-          </th>
-          <th className="border font-bold border-stroke p-2">
-          weight
-          </th>
-          <th className="border font-bold border-stroke p-2">
-          unit
-          </th>
-          <th className="border font-bold border-stroke p-2">
-          availableQuantity
-          </th>
-         
-          <th className="border font-bold border-stroke p-2">
-          VarientPrice
-          </th>
-          <th className="border font-bold border-stroke p-2">
-          variantSku
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {Object.entries(submittedData).map(([option, values], index) => (
-          values.map((value, innerIndex) => (
-            <tr key={`${index}-${innerIndex}`}>
-              {/* <td className="border font-bold border-stroke p-2">
-                {option}
-              </td> */}
-              <td className="border font-bold border-stroke p-2">
-                {value}
-              </td>
-              <td className="border font-bold border-stroke p-2">
-               
-              <input
-                    type="text"
-                    placeholder="type"
-                    className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
-                    px-5 font-medium outline-none transition focus:border-primary active:border-primary
-                   disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
-                   dark:bg-form-input dark:focus:border-primary"
-                   
+                <br />
+                <label htmlFor="" className="font-bold">
+                  Weight
+                </label>
+                <div>
+                  <input
+                    value={value.weight}
+                    onChange={(e) =>
+                      setvalues({ ...value, weight: e.target.value })
+                    }
+                    type="number"
+                    placeholder="0.0"
+                    className="w-30 rounded-lg border-[1.5px] border-stroke bg-transparent 
+              px-5 font-medium outline-none transition focus:border-primary active:border-primary
+             disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+              dark:focus:border-primary"
                   />
-              </td>
-              <td className="border font-bold border-stroke p-2">
-               
-               <input
-                     type="text"
-                     placeholder="0.00"
-                     className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
-                     px-5 font-medium outline-none transition focus:border-primary active:border-primary
-                    disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
-                    dark:bg-form-input dark:focus:border-primary"
-                    
-                   />
-               </td>
-               <td className="border font-bold border-stroke p-2">
-               
-               <input
-                     type="text"
-                     placeholder="Kg"
-                     className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
-                     px-5 font-medium outline-none transition focus:border-primary active:border-primary
-                    disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
-                    dark:bg-form-input dark:focus:border-primary"
-                    
-                   />
-               </td>
-               <td className="border font-bold border-stroke p-2">
-               
-               <input
-                     type="text"
-                     placeholder="RS 0.00"
-                     className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
-                     px-5 font-medium outline-none transition focus:border-primary active:border-primary
-                    disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
-                    dark:bg-form-input dark:focus:border-primary"
-                    
-                   />
-               </td>
-               <td className="border font-bold border-stroke p-2">
-               
-               <input
-                     type="text"
-                     placeholder="Sku"
-                     className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
-                     px-5 font-medium outline-none transition focus:border-primary active:border-primary
-                    disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
-                    dark:bg-form-input dark:focus:border-primary"
-                    
-                   />
-               </td>
-               <td className="border font-bold border-stroke p-2">
-               
-               <input
-                     type="text"
-                     placeholder="RS 0.00"
-                     className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
-                     px-5 font-medium outline-none transition focus:border-primary active:border-primary
-                    disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
-                    dark:bg-form-input dark:focus:border-primary"
-                    
-                   />
-               </td>
-            </tr>
-          ))
-        ))}
-      </tbody>
-    </table>
-                    
-                  </div>
-                )}
                 </div>
-                </div>
-          
+              </div>
             </div>
           </div>
+
+          <div className="flex flex-col gap-9">
+            <div className="rounded-xl border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-5">
+              
+              {/* <div className="ml-5">
+                <h1 className="font-bold">Variants</h1>
+                <br />
+                <div className="ml-5">
+                  <label htmlFor="">Option name</label>
+                  <div className="p-5">
+                    <select
+                      value={key}
+                      onChange={handlekeyChange}
+                      className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
+                px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+                disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+                dark:focus:border-primary"
+                    >
+                      <option value="type">type</option>
+                      <option value="Size">Size</option>
+                      <option value="Color">Color</option>
+                      <option value="weight">weight</option>
+                      <option value="unit">unit</option>
+                      <option value="variantPrice">variantPrice</option>
+                      <option value="availableQuantity">
+                        availableQuantity
+                      </option>
+                    </select>
+                  </div>
+                  <br />
+                  <label htmlFor="" className="font-bold">
+                    Option values
+                  </label>
+                  <div>
+                    <input
+                      value={optionValues}
+                      onChange={handleOptionValuesChange}
+                      className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
+                px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+                disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+                dark:focus:border-primary"
+                    />
+                  </div>
+                </div>
+              </div> */}
+              <div className="ml-5">
+      <h1 className="font-bold">Variants</h1>
+      <br />
+      <div className="ml-5">
+        <label htmlFor="">Option name</label>
+        <div className="p-5">
+          <select
+            value={key}
+            onChange={handlekeyChange}
+            className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
+                px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+                disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+                dark:focus:border-primary"
+          >
+            <option value="type">type</option>
+            <option value="Size">Size</option>
+            <option value="Color">Color</option>
+            <option value="weight">weight</option>
+            <option value="unit">unit</option>
+            <option value="variantPrice">variantPrice</option>
+            <option value="availableQuantity">availableQuantity</option>
+          </select>
+        </div>
+        <br />
+        <label htmlFor="" className="font-bold">
+          Option values
+        </label>
+        <div>
+          <input
+            value={optionValues}
+            onChange={handleOptionValuesChange}
+            className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
+                px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+                disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+                dark:focus:border-primary"
+          />
+        </div>
+
+        {/* Add new fields */}
+        <div>
+          <label htmlFor="" className="font-bold">
+            New Unit Field
+          </label>
+          <input
+            // Add appropriate state and onChange handler
+            className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
+                px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+                disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+                dark:focus:border-primary"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="" className="font-bold">
+            Weight
+          </label>
+          <input
+            // Add appropriate state and onChange handler
+            className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
+                px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+                disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+                dark:focus:border-primary"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="" className="font-bold">
+            Available Quantity
+          </label>
+          <input
+            // Add appropriate state and onChange handler
+            className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
+                px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+                disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+                dark:focus:border-primary"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="" className="font-bold">
+            Variant Price
+          </label>
+          <input
+            // Add appropriate state and onChange handler
+            className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
+                px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+                disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+                dark:focus:border-primary"
+          />
+        </div>
+      </div>
+    </div>
+              <div>
+                <button
+                  onClick={handleAddVariant}
+                  className="bg-primary text-white px-4 py-2 rounded-md mt-4"
+                >
+                  Add Variant
+                </button>
+              </div>
+            </div>
+
+            {showTable && (
+              <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+                <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5">
+                  <table className="border-collapse border border-stroke mt-3 m-auto">
+                    <thead>
+                      <tr>
+                        <th className="border font-bold border-stroke p-2">
+                          Key
+                        </th>
+                        <th className="border font-bold border-stroke p-2">
+                          Values
+                        </th>
+                        <th className="border font-bold border-stroke p-2">
+                          Action
+                        </th>
+                        <th className="border font-bold border-stroke p-2">
+                          Delete
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {varian?.map((variant, index) => (
+                        <tr key={index}>
+                          <td className="border font-bold border-stroke p-2">
+                            {variant.key}
+                          </td>
+                          <td className="border font-bold border-stroke p-2">
+  {typeof variant.optionValues[0] === 'object' && 'name' in variant.optionValues[0] ? (
+    variant.optionValues[0].name
+  ) : (
+    '\u00a0' // Non-breaking space if the condition is not met
+  )}
+</td>
+
+                       
+
+                          <td className="border font-bold border-stroke p-2">
+                            <Link to={'#'}>Edite</Link>
+                          </td>
+                          <td className="border font-bold border-stroke p-2">
+                            <Link to={'#'}>Remove</Link>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+          </div>
+
+
+
+
         </div>
 
         {/* //////////////////////////////////////second column/////////////////////////////////////////////////////////////////////////////////////////// */}
@@ -845,7 +817,7 @@ const FormElements = () => {
           <button
             className="inline-flex items-center justify-center rounded-md bg-primary py-4 px-10 text-center
               font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
-            // onClick={handleSubmit}
+            onClick={handleSubmit}
           >
             Submite
           </button>
