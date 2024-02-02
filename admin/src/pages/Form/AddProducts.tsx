@@ -1,4 +1,4 @@
-// import axios from 'axios';
+import axios from 'axios';
 import { useState } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -14,19 +14,19 @@ const FormElements = () => {
   const [productId, setProductId] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [editorContent, setEditorContent] = useState('');
-  const [uniqueValuesSet, setUniqueValuesSet] = useState<Set<string>>(
-    new Set(),
-  );
+  const [submittedData, setSubmittedData] = useState<{[key: string]: string[]; }>({});
+  const [uniqueValuesSet, setUniqueValuesSet] = useState<Set<string>>( new Set(),);
+  const [dropdownVisible, setDropdownVisible] = useState<boolean>(true);
+  const [tableInputValues, setTableInputValues] = useState<Array<{ [key: string]: string }> >([]);
+  // const [tableInputValues, setTableInputValues] = useState<{ [key: string]: { [property: string]: string } }>({});
+
+  
 
   const [formData, setFormData] = useState<FormData>({
     selectedOption: '',
     inputValue: '',
     dynamicFields: [],
   });
-
-  const [submittedData, setSubmittedData] = useState<{
-    [key: string]: string[];
-  }>({});
 
   const handleDropdownChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFormData({
@@ -41,10 +41,7 @@ const FormElements = () => {
       ...prevData,
       inputValue: e.target.value,
     }));
-
-    // Check if the input value is not empty
     if (e.target.value.trim() !== '') {
-      // Add a new dynamic field if the last dynamic field is not empty or if there are no dynamic fields
       if (
         formData.dynamicFields.length === 0 ||
         formData.dynamicFields.slice(-1)[0].trim() !== ''
@@ -58,18 +55,13 @@ const FormElements = () => {
   };
 
   const handleDynamicFieldChange = (index: number, value: string) => {
-    const updatedFields = [...formData.dynamicFields];
-
-    // Check if the value is empty
+    const updatedFields = [...formData.dynamicFields]
     if (value.trim() === '') {
-      // Remove the field if it's not the last one
       if (updatedFields.length > 1) {
         updatedFields.splice(index, 1);
       }
     } else {
       updatedFields[index] = value;
-
-      // Add a new dynamic field if the last field is not empty
       if (value.length === 1 && index === updatedFields.length - 1) {
         updatedFields.push('');
       }
@@ -81,17 +73,32 @@ const FormElements = () => {
     });
   };
 
+  const handleTableInputChange = (
+    outerIndex: number,
+    property: string,
+    value: string,
+  ) => {
+    const updatedInputValues = [...tableInputValues];
+    if (!updatedInputValues[outerIndex]) {
+      updatedInputValues[outerIndex] = {};
+    }
+    updatedInputValues[outerIndex][property] = value;
+    setTableInputValues(updatedInputValues);
+    console.log('Table Input Values:', tableInputValues);
+  };
+
+  
+
+
   const handleSubmit = () => {
     const { selectedOption, inputValue, dynamicFields } = formData;
-
-    // Check if the value already exists for the selected option in the form
     const isDuplicateInForm = (dynamicFields || []).includes(inputValue);
-
-    // Check if the value already exists for the selected option in the submitted data
     const isDuplicateInSubmittedData = (
       submittedData[selectedOption] || []
     ).includes(inputValue);
-
+    const nonEmptyDynamicFields = dynamicFields.filter(
+      (field) => field.trim() !== '',
+    );
     if (isDuplicateInForm || isDuplicateInSubmittedData) {
       console.log(`Duplicate value for ${selectedOption}: ${inputValue}`);
     } else {
@@ -100,17 +107,17 @@ const FormElements = () => {
         [selectedOption]: [
           ...(prevData[selectedOption] || []),
           inputValue,
-          ...dynamicFields,
+          ...nonEmptyDynamicFields,
         ],
       }));
-
-      // Add the value to the Set to keep track of unique values
       setUniqueValuesSet(
-        (prevValues) => new Set([...prevValues, inputValue, ...dynamicFields]),
+        (prevValues) =>
+          new Set([...prevValues, inputValue, ...nonEmptyDynamicFields]),
       );
+      setDropdownVisible(false);
+      setTableInputValues([]);
     }
   };
- 
 
   const handleEditorReady = (editor: any) => {
     console.log('Editor is ready to use!', editor);
@@ -140,61 +147,86 @@ const FormElements = () => {
     supplier_id: '',
     categoryName: '',
     productId: '',
-    // variant: [] as Array<{ key: string; optionValues: string[] }>,
     status: '',
   });
 
-  // const handleFormSubmit = async () => {
 
-  //   try {
-  //     const variantsWithoutEmptyValues: Variant[] = variants.filter(variant => variant.optionValues.length > 0);
-  //     const updatedValue = { ...value, description: editorContent, variants: variantsWithoutEmptyValues };
-  //     const { variants, ...products } = updatedValue;
-  //     const requestData = {
-  //       products: { ...products },
-  //       variants: [...variants],
-  //     };
-  //     console.log('Request Data:', variants);
 
-  //     const response = await axios.post('http://localhost:5001/api/products/', requestData);
+  const handleFormSubmit = async () => {
+    try {
+      // Prepare product data (assuming value object contains other product details)
+     
+  
+    
+      // const variantsData = Object.entries(submittedData).map(
+      //   ([option, values], index) => {
+      //     return {
+      //       key: option,
+      //       values: values,
+      //       type: tableInputValues[index]?.type || "", // Adjust the property name as needed
+      //       weight: tableInputValues[index]?.weight || 0, // Adjust the property name as needed
+      //       unit: tableInputValues[index]?.unit || "", // Adjust the property name as needed
+      //       availableQuantity: tableInputValues[index]?.availableQuantity || 0, // Adjust the property name as needed
+      //       variantPrice: tableInputValues[index]?.variantPrice || 0, // Adjust the property name as needed
+      //       variantSku: tableInputValues[index]?.variantSku || "", // Adjust the property name as needed
+      //       optionValues: values.map((name, id) => {
+      //         return {
+      //           id: id.toString(),
+      //           name: name,
+      //           variantSku: [`${value.sku}-${name.toLowerCase()}`],
+      //         };
+      //       }),
+      //     };
+      //   }
+      // );
+      const variantsData = Object.entries(submittedData).map(
+        ([option, values], index) => {
+          const tableInput = tableInputValues[index]; // Fix the variable name here
+  
+          return {
+            key: option,
+            values: values,
+            type: tableInput?.type || undefined,
+            weight: tableInput?.weight || undefined,
+            unit: tableInput?.unit || undefined,
+            availableQuantity: tableInput?.availableQuantity || undefined,
+            variantPrice: tableInput?.variantPrice || undefined,
+            variantSku: tableInput?.variantSku || "",
+            optionValues: values.map((name, id) => {
+              return {
+                id: id.toString(),
+                name: name,
+                variantSku: [`${value.sku}-${name.toLowerCase()}`],
+              };
+            }),
+          };
+        }
+      );
+  
+      // Prepare the full request data
+      const requestData = {
+        products: value,
+        variants: variantsData,
+      };
+  
+      // Make the API request
+      const response = await axios.post(
+        'http://localhost:5001/api/products/',
+        requestData
+      );
 
-  //     console.log('Product created:', response.data);
-  //   } catch (error) {
-  //     console.error('Error creating product:', error);
-  //   }
-  // };
-  // const handleFormSubmit = async () => {
-  //   try {
-  //     // Assuming Variant is the type/interface of your variant objects
-  //     const va = varian.filter((variant) => variant.optionValues.length > 0);
-  //     console.log('Request Data:', varian);
-  //     const { variantsss, ...products } = {
-  //       ...value,
-  //       description: editorContent,
-  //       variantsss: va,
-  //     };
+      console.log('Product and Variants created:', response.data);
+    } catch (error) {
+      console.error('Error creating product and variants:', error);
+    }
+  };
+  
 
-  //     // Create requestData object
-  //     const requestData = {
-  //       products: { ...products },
-  //       variants: [...variantsss],
-  //     };
 
-  //     console.log('Request Data:', requestData);
 
-  //     // Assuming you have axios imported
-  //     const response = await axios.post(
-  //       'http://localhost:5001/api/products/',
-  //       requestData,
-  //     );
 
-  //     console.log('Product created:', response.data);
-  //   } catch (error) {
-  //     console.error('Error creating product:', error);
-  //   }
-  // };
 
-  // const handleSubmit = async () => {
+  // const handleSubmitImage = async () => {
   //   handleFormSubmit();
   //   if (!productId) {
   //     console.error('Product ID is required.');
@@ -462,10 +494,8 @@ const FormElements = () => {
             <div className="rounded-xl border-stroke  bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-5">
               <h1 className="font-bold">Variants</h1>
               <hr />
-              <div className="mt-5 border-bodydark border-opacity-20 border-4 p-5"> 
-                <h1>
-                  Option name
-                </h1>
+              <div className="mt-5 border-bodydark border-opacity-20 border-4 p-5">
+                <h1>Option name</h1>
                 <select
                   id="dropdown"
                   value={formData.selectedOption}
@@ -486,10 +516,7 @@ const FormElements = () => {
                 {formData.selectedOption === 'color' ||
                 formData.selectedOption === 'size' ? (
                   <div>
-                    <h1 className="font-bold">
-
-                    Option Value
-                    </h1>
+                    <h1 className="font-bold">Option Value</h1>
                     <input
                       type="text"
                       className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
@@ -508,7 +535,7 @@ const FormElements = () => {
                   <div key={index}>
                     <input
                       type="text"
-                      placeholder='Add another value'
+                      placeholder="Add another value"
                       className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
             px-5 font-medium outline-none transition focus:border-primary active:border-primary 
             disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
@@ -533,136 +560,143 @@ const FormElements = () => {
                 </button>
                 <br />
                 <br />
-                </div>
+              </div>
 
-               <div className='Parent '>
-                <div className='table mt-5' >
-                {Object.keys(submittedData).length > 0 && (
-                  <div>
-                   
-   <table>
-      <thead>
-        <tr>
-          {/* <th className="border font-bold border-stroke p-2">
+              <div className="Parent ">
+                <div className="table mt-5">
+                  {Object.keys(submittedData).length > 0 && (
+                    <div>
+                      <table>
+                        <thead>
+                          <tr>
+                            {/* <th className="border font-bold border-stroke p-2">
             key
           </th> */}
-          <th className="border font-bold border-stroke p-2">
-            values
-          </th>
-          <th className="border font-bold border-stroke p-2">
-          type
-          </th>
-          <th className="border font-bold border-stroke p-2">
-          weight
-          </th>
-          <th className="border font-bold border-stroke p-2">
-          unit
-          </th>
-          <th className="border font-bold border-stroke p-2">
-          availableQuantity
-          </th>
-         
-          <th className="border font-bold border-stroke p-2">
-          VarientPrice
-          </th>
-          <th className="border font-bold border-stroke p-2">
-          variantSku
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {Object.entries(submittedData).map(([option, values], index) => (
-          values.map((value, innerIndex) => (
-            <tr key={`${index}-${innerIndex}`}>
-              {/* <td className="border font-bold border-stroke p-2">
-                {option}
-              </td> */}
-              <td className="border font-bold border-stroke p-2">
-                {value}
-              </td>
-              <td className="border font-bold border-stroke p-2">
-               
-              <input
-                    type="text"
-                    placeholder="type"
-                    className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
-                    px-5 font-medium outline-none transition focus:border-primary active:border-primary
-                   disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
-                   dark:bg-form-input dark:focus:border-primary"
-                   
-                  />
-              </td>
-              <td className="border font-bold border-stroke p-2">
-               
-               <input
-                     type="text"
-                     placeholder="0.00"
-                     className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
-                     px-5 font-medium outline-none transition focus:border-primary active:border-primary
-                    disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
-                    dark:bg-form-input dark:focus:border-primary"
-                    
-                   />
-               </td>
-               <td className="border font-bold border-stroke p-2">
-               
-               <input
-                     type="text"
-                     placeholder="Kg"
-                     className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
-                     px-5 font-medium outline-none transition focus:border-primary active:border-primary
-                    disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
-                    dark:bg-form-input dark:focus:border-primary"
-                    
-                   />
-               </td>
-               <td className="border font-bold border-stroke p-2">
-               
-               <input
-                     type="text"
-                     placeholder="RS 0.00"
-                     className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
-                     px-5 font-medium outline-none transition focus:border-primary active:border-primary
-                    disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
-                    dark:bg-form-input dark:focus:border-primary"
-                    
-                   />
-               </td>
-               <td className="border font-bold border-stroke p-2">
-               
-               <input
-                     type="text"
-                     placeholder="Sku"
-                     className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
-                     px-5 font-medium outline-none transition focus:border-primary active:border-primary
-                    disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
-                    dark:bg-form-input dark:focus:border-primary"
-                    
-                   />
-               </td>
-               <td className="border font-bold border-stroke p-2">
-               
-               <input
-                     type="text"
-                     placeholder="RS 0.00"
-                     className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
-                     px-5 font-medium outline-none transition focus:border-primary active:border-primary
-                    disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
-                    dark:bg-form-input dark:focus:border-primary"
-                    
-                   />
-               </td>
-            </tr>
-          ))
-        ))}
-      </tbody>
-    </table>
-                    
-                  </div>
-                )}
+                            <th className="border font-bold border-stroke p-2">
+                              values
+                            </th>
+                            <th className="border font-bold border-stroke p-2">
+                              type
+                            </th>
+                            <th className="border font-bold border-stroke p-2">
+                              weight
+                            </th>
+                            <th className="border font-bold border-stroke p-2">
+                              unit
+                            </th>
+                            <th className="border font-bold border-stroke p-2">
+                              availableQuantity
+                            </th>
+
+                            <th className="border font-bold border-stroke p-2">
+                              VarientPrice
+                            </th>
+                            <th className="border font-bold border-stroke p-2">
+                              variantSku
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          //{' '}
+                          {Object.entries(submittedData).map(
+                            ([option, values], index) =>
+                              values.map((value, innerIndex) => (
+                                <tr key={`${index}-${innerIndex}`}>
+                                  {/* <td className="border font-bold border-stroke p-2">
+{option}
+</td> */}
+                                  <td className="border font-bold border-stroke p-2">
+                                    {value}
+                                  </td>
+                                  <td className="border font-bold border-stroke p-2">
+                                    <input
+                                      type="text"
+                                      placeholder="type"
+                                      className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+px-5 font-medium outline-none transition focus:border-primary active:border-primary
+disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
+dark:bg-form-input dark:focus:border-primary"
+onChange={(e) =>
+  handleTableInputChange(innerIndex, 'type', e.target.value)
+}
+                                    />
+                                  </td>
+                                  <td className="border font-bold border-stroke p-2">
+                                    <input
+                                      type="number"
+                                      placeholder="0.00"
+                                      className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+px-5 font-medium outline-none transition focus:border-primary active:border-primary
+disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
+dark:bg-form-input dark:focus:border-primary"
+onChange={(e) =>
+  handleTableInputChange(innerIndex, 'type', e.target.value)
+}
+                                    />
+                                  </td>
+                                  <td className="border font-bold border-stroke p-2">
+                                    <input
+                                      type="text"
+                                      placeholder="Kg"
+                                      className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+px-5 font-medium outline-none transition focus:border-primary active:border-primary
+disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
+dark:bg-form-input dark:focus:border-primary"
+onChange={(e) =>
+  handleTableInputChange(innerIndex, 'type', e.target.value)
+}
+                                    />
+                                  </td>
+                                  <td className="border font-bold border-stroke p-2">
+                                    <input
+                                      type="number"
+                                      placeholder="RS 0.00"
+                                      className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+px-5 font-medium outline-none transition focus:border-primary active:border-primary
+disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
+dark:bg-form-input dark:focus:border-primary"
+onChange={(e) =>
+  handleTableInputChange(innerIndex, 'type', e.target.value)
+}
+                                    />
+                                  </td>
+                                  <td className="border font-bold border-stroke p-2">
+                                    <input
+                                      type="number"
+                                      placeholder="0.0"
+                                      className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+px-5 font-medium outline-none transition focus:border-primary active:border-primary
+disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
+dark:bg-form-input dark:focus:border-primary"
+onChange={(e) =>
+  handleTableInputChange(
+    innerIndex,
+    'type',
+    e.target.value,)}
+                                    />
+                                  </td>
+                                  <td className="border font-bold border-stroke p-2">
+                                    <input
+                                      type="text"
+                                      placeholder="sku"
+                                      className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+px-5 font-medium outline-none transition focus:border-primary active:border-primary
+disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
+dark:bg-form-input dark:focus:border-primary"
+onChange={(e) =>
+  handleTableInputChange(innerIndex, 'type', e.target.value)
+}
+                                    />
+                                  </td>
+                                </tr>
+                              )),
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
                 </div>
-                </div>
-          
+              </div>
             </div>
           </div>
         </div>
@@ -845,7 +879,7 @@ const FormElements = () => {
           <button
             className="inline-flex items-center justify-center rounded-md bg-primary py-4 px-10 text-center
               font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
-            // onClick={handleSubmit}
+            onClick={handleFormSubmit}
           >
             Submite
           </button>
