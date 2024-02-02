@@ -8,6 +8,7 @@ const productModel = require('../models/productModel');
 const productImages= require('../models/productImages');
 const categoryModel=require('../models/categoryModel');
 const productVariantModel=require('../models/productVariantModel')
+
 const { validateProduct, validateVariants } = require('../middlewares/validateVariantsMiddleware');
 
 //post API    ///////////////////////////////////////////////////////////////////
@@ -87,7 +88,7 @@ const paginateResults = (page = 1, pageSize = 20) => ({
   limit: pageSize,
 });
 
-// GET API with pagination ///////////////////////////////////////////////////////
+// GET API with pagination /////////////////////////////////////////////
 router.get('/all', async (req, res) => {
   const page = req.query.page || 1;
   const pageSize = req.query.pageSize || 20;
@@ -103,12 +104,24 @@ router.get('/all', async (req, res) => {
     }
     const allProducts = await productModel.findAll({
       where: whereClause,
-      include: {
-        model: productImages,
-        where: { productId: { [Op.col]: 'products.id' } },
-        attributes: ['date', 'images'],
-        required: false,
-      },
+      include: [
+        {
+          model: productImages,
+          where: { productId: { [Op.col]: 'products.id' } },
+          attributes: ['date', 'images'],
+          required: false,
+        },
+        {
+          model: productVariantModel,
+          attributes: ['type', 'weight', 'unit', 'key', 'value', 'availableQuantity', 'optionValues'],
+          required: false, // Use false if you want left join
+        },
+        // {
+        //   model: optionValueModel,
+        //   attributes: ['id', 'name', 'variantSku'],
+        //   required: false, // Use false if you want left join
+        // },
+      ],
       order: [['id', 'ASC']],
       ...paginateResults(page, pageSize),
     });
