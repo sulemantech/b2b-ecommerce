@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 // import { Link } from 'react-router-dom';
@@ -9,7 +9,11 @@ interface FormData {
   inputValue: string;
   dynamicFields: string[];
 }
-
+interface Category {
+  id: number;
+  name: string;
+  
+}
 const FormElements = () => {
   const [productId, setProductId] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -18,6 +22,7 @@ const FormElements = () => {
   const [uniqueValuesSet, setUniqueValuesSet] = useState<Set<string>>( new Set(),);
   const [dropdownVisible, setDropdownVisible] = useState<boolean>(true);
   const [tableInputValues, setTableInputValues] = useState<Array<{ [key: string]: string }> >([]);
+  const [categoryList, setCategoryList] = useState<Category[]>([]);
   // const [tableInputValues, setTableInputValues] = useState<{ [key: string]: { [property: string]: string } }>({});
 
   
@@ -87,6 +92,8 @@ const FormElements = () => {
     console.log('Table Input Values:', tableInputValues);
   };
 
+
+
   
 
 
@@ -131,6 +138,7 @@ const FormElements = () => {
     name: '',
     description: '',
     price: '',
+    
     // quantity:20,
     // manufacturer:"china",
     // dateAdded:"",
@@ -153,32 +161,8 @@ const FormElements = () => {
 
 
   const handleFormSubmit = async () => {
+    handleSubmitImage();
     try {
-      // Prepare product data (assuming value object contains other product details)
-     
-  
-    
-      // const variantsData = Object.entries(submittedData).map(
-      //   ([option, values], index) => {
-      //     return {
-      //       key: option,
-      //       values: values,
-      //       type: tableInputValues[index]?.type || "", // Adjust the property name as needed
-      //       weight: tableInputValues[index]?.weight || 0, // Adjust the property name as needed
-      //       unit: tableInputValues[index]?.unit || "", // Adjust the property name as needed
-      //       availableQuantity: tableInputValues[index]?.availableQuantity || 0, // Adjust the property name as needed
-      //       variantPrice: tableInputValues[index]?.variantPrice || 0, // Adjust the property name as needed
-      //       variantSku: tableInputValues[index]?.variantSku || "", // Adjust the property name as needed
-      //       optionValues: values.map((name, id) => {
-      //         return {
-      //           id: id.toString(),
-      //           name: name,
-      //           variantSku: [`${value.sku}-${name.toLowerCase()}`],
-      //         };
-      //       }),
-      //     };
-      //   }
-      // );
       const variantsData = Object.entries(submittedData).map(
         ([option, values], index) => {
           const tableInput = tableInputValues[index]; // Fix the variable name here
@@ -214,52 +198,57 @@ const FormElements = () => {
         'http://localhost:5001/api/products/',
         requestData
       );
-
       console.log('Product and Variants created:', response.data);
+    // window.location.reload();
+
     } catch (error) {
       console.error('Error creating product and variants:', error);
     }
   };
   
 
+  
+  
+  
+  
 
 
 
 
-  // const handleSubmitImage = async () => {
-  //   handleFormSubmit();
-  //   if (!productId) {
-  //     console.error('Product ID is required.');
-  //     return;
-  //   }
 
-  //   const formData = new FormData();
-  //   formData.append('productId', productId);
+  const handleSubmitImage = async () => {
+    if (!productId) {
+      console.error('Product ID is required.');
+      return;
+    }
 
-  //   if (imageFile) {
-  //     formData.append('images', imageFile);
-  //   } else {
-  //     console.error('Image file is required.');
-  //     return;
-  //   }
-  //   formData.append('variants', JSON.stringify(varian));
+    const formData = new FormData();
+    formData.append('productId', productId);
 
-  //   try {
-  //     const response = await fetch('http://localhost:5001/productImages', {
-  //       method: 'POST',
-  //       body: formData,
-  //     });
+    if (imageFile) {
+      formData.append('images', imageFile);
+    } else {
+      console.error('Image file is required.');
+      return;
+    }
+    // formData.append('variants', JSON.stringify(varian));
 
-  //     if (!response.ok) {
-  //       throw new Error(`HTTP error! Status: ${response.status}`);
-  //     }
+    try {
+      const response = await fetch('http://localhost:5001/productImages', {
+        method: 'POST',
+        body: formData,
+      });
 
-  //     const result = await response.json();
-  //     console.log('Image posted successfully:', result);
-  //   } catch (error) {
-  //     console.error('Error posting image:', error);
-  //   }
-  // };
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log('Image posted successfully:', result);
+    } catch (error) {
+      console.error('Error posting image:', error);
+    }
+  };
 
   const handleProductIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setProductId(e.target.value);
@@ -271,12 +260,41 @@ const FormElements = () => {
     }
   };
 
+
+
+///////////////////////////////////////////////////////////categoriesAPI//////////////////////////////
+
+useEffect(() => {
+  fetch('http://localhost:5001/api/categories/all')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      setCategoryList(data); 
+      console.log("dataaaaaaaaaaa",data);
+    })
+    .catch(error => {
+      console.error('Fetch Error:', error);
+    });
+}, []); // Empty dependency array ensures this effect runs only once, on component mount
+
+
+
+
+
+
+
   return (
     <>
       <div className="grid grid-cols-1 gap-9 sm:grid-cols-[2fr,1fr]">
         <div className="flex flex-col gap-9">
           <div className="rounded-xl border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-5">
             <label className="ml-5 font-bold">Title</label>
+            
+
             <div className="ml-5">
               <input
                 type="text"
@@ -468,19 +486,15 @@ const FormElements = () => {
                    px-5 font-medium outline-none transition focus:border-primary active:border-primary
                   disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
                    dark:focus:border-primary"
+                   onChange={(e) => setvalues({ ...value, name: e.target.value })}
+                   value={value.name}
                     />
                   </div>
                 </div>
                 <br />
 
-                <div className="flex">
-                  <input type="checkbox" className="w-4" />
-                  <h3 className="ml-2">Continue selling when out of stock</h3>
-                </div>
-                <p className=" ml-4">
-                  This won't affect Staff will see a warning, but can complete
-                  sales when available inventory reaches zero and below.
-                </p>
+                
+              
                 <br />
                 <div className="flex">
                   <input type="checkbox" className="w-4" />
@@ -497,11 +511,12 @@ const FormElements = () => {
               <div className="mt-5 border-bodydark border-opacity-20 border-4 p-5">
                 <h1>Option name</h1>
                 <select
+                style={{background:"lightgray"}}
                   id="dropdown"
                   value={formData.selectedOption}
                   onChange={handleDropdownChange}
                   className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
-        px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+        px-5  bg-black font-medium outline-none transition focus:border-primary active:border-primary 
         disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
         dark:focus:border-primary"
                 >
@@ -518,9 +533,11 @@ const FormElements = () => {
                   <div>
                     <h1 className="font-bold">Option Value</h1>
                     <input
+                style={{background:"lightgray"}}
+
                       type="text"
                       className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
-            px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+            px-3 font-medium outline-none transition focus:border-primary active:border-primary 
             disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
             dark:focus:border-primary"
                       id="valueInput"
@@ -533,7 +550,9 @@ const FormElements = () => {
 
                 {formData.dynamicFields.map((field, index) => (
                   <div key={index}>
-                    <input
+                   <input
+                style={{background:"lightgray"}}
+
                       type="text"
                       placeholder="Add another value"
                       className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
@@ -545,6 +564,7 @@ const FormElements = () => {
                         handleDynamicFieldChange(index, e.target.value)
                       }
                     />
+                  
                   </div>
                 ))}
                 <br />
@@ -597,7 +617,7 @@ const FormElements = () => {
                           </tr>
                         </thead>
                         <tbody>
-                          //{' '}
+                          {' '}
                           {Object.entries(submittedData).map(
                             ([option, values], index) =>
                               values.map((value, innerIndex) => (
@@ -725,7 +745,7 @@ onChange={(e) =>
             <div className="rounded-xl border-stroke  bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
               <div className=" ml-5 mt-3">
                 <h1 className="font-semibold">Publishing</h1>
-                <ul className="list-disc">
+                <ul className="list-disc mx-5">
                   <li>Online Store</li>
                   <li>Point of Sale</li>
                   <p>
@@ -756,46 +776,47 @@ onChange={(e) =>
                   product Category
                 </label>
 
-                <input
+                {/* <input
                   type="text"
                   placeholder="CategoryName"
                   className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-1
-                    px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+                  px-2 font-medium outline-none transition focus:border-primary active:border-primary 
                    disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark 
                    dark:bg-form-input dark:focus:border-primary"
                   onChange={(e) =>
                     setvalues({ ...value, categoryName: e.target.value })
                   }
                   value={value.categoryName}
-                />
-                <label htmlFor="">category_id</label>
-                <input
-                  type="text"
-                  placeholder="category_id"
-                  className="w-full rounded-lg border-[1.5px] border-stroke
-                  bg-transparent py-3 px-5 font-medium outline-none transition
-                   focus:border-primary active:border-primary disabled:cursor-default
-                   disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                  onChange={(e) =>
-                    setvalues({ ...value, category_id: e.target.value })
-                  }
-                  value={value.category_id}
-                />
+                /> */}
+                {/* <select
+  onChange={(e) => setvalues({ ...value, category_id: e.target.value })}
+  value={value.category_id}
+  className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+>
+  {categoryList.map(category => (
+    <option key={category.id} value={category.id}>{category.name}</option>
+  ))}
+</select> */}
+<select
+  onChange={(e) => {
+    const selectedCategory = categoryList.find(category => category.id === parseInt(e.target.value));
+    if (selectedCategory) {
+      setvalues({ ...value, category_id: String(selectedCategory.id), categoryName: selectedCategory.name });
+    }
+  }}
+  value={value.category_id}
+  className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+>
+  {categoryList.map(category => (
+    <option key={category.id} value={category.id}>{category.name}</option>
+  ))}
+</select>
 
-                <br />
-                <label htmlFor="">productId</label>
-                <input
-                  type="text"
-                  placeholder="category_id"
-                  className="w-full rounded-lg border-[1.5px] border-stroke
-                  bg-transparent py-3 px-5 font-medium outline-none transition
-                   focus:border-primary active:border-primary disabled:cursor-default
-                   disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                  onChange={(e) =>
-                    setvalues({ ...value, productId: e.target.value })
-                  }
-                  value={value.productId}
-                />
+
+
+              
+              
+             <br />
                 <br />
                 <label className="font-bold" htmlFor="">
                   quantityInStock
@@ -805,7 +826,7 @@ onChange={(e) =>
                   type="text"
                   placeholder="quantityInStock"
                   className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-1
-                    px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+                    px-2 font-medium outline-none transition focus:border-primary active:border-primary 
                    disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark 
                    dark:bg-form-input dark:focus:border-primary"
                   onChange={(e) =>
@@ -823,7 +844,7 @@ onChange={(e) =>
                   type="text"
                   placeholder="Supplier_id"
                   className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-1
-                    px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+                    px-2 font-medium outline-none transition focus:border-primary active:border-primary 
                    disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark 
                    dark:bg-form-input dark:focus:border-primary"
                   onChange={(e) =>
@@ -841,7 +862,7 @@ onChange={(e) =>
                   type="text"
                   placeholder="Sku"
                   className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-1
-                    px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+                    px-2 font-medium outline-none transition focus:border-primary active:border-primary 
                    disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark 
                    dark:bg-form-input dark:focus:border-primary"
                   onChange={(e) => setvalues({ ...value, sku: e.target.value })}
@@ -857,7 +878,7 @@ onChange={(e) =>
                   type="text"
                   placeholder="Tags"
                   className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-1
-                    px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+                    px-2 font-medium outline-none transition focus:border-primary active:border-primary 
                    disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark 
                    dark:bg-form-input dark:focus:border-primary"
                   onChange={(e) =>
@@ -880,6 +901,9 @@ onChange={(e) =>
             className="inline-flex items-center justify-center rounded-md bg-primary py-4 px-10 text-center
               font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
             onClick={handleFormSubmit}
+            
+
+            
           >
             Submite
           </button>

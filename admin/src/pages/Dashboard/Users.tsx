@@ -576,3 +576,142 @@ export default DropdownFields;
 
 // export default App;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{/* <tbody>
+{Object.entries(submittedData).map(
+  ([option, values], index) =>
+    values.map((value, innerIndex) => (
+      <tr key={`${index}-${innerIndex}`}>
+        <td className="border font-bold border-stroke p-2">
+          {value}
+        </td>
+        <td className="border font-bold border-stroke p-2">
+          <input
+            type="text"
+            placeholder="type"
+            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+px-5 font-medium outline-none transition focus:border-primary active:border-primary
+disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
+dark:bg-form-input dark:focus:border-primary"
+            onChange={(e) =>
+              handleTableInputChange(
+                innerIndex,
+                'type',
+                e.target.value,
+              )
+            }
+          />
+        </td>
+        <td className="border font-bold border-stroke p-2">
+          <input
+            type="text"
+            placeholder="type"
+            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+px-5 font-medium outline-none transition focus:border-primary active:border-primary
+disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
+dark:bg-form-input dark:focus:border-primary"
+            onChange={(e) =>
+              handleTableInputChange(
+                innerIndex,
+                'type',
+                e.target.value,
+              )
+            }
+          />
+        </td>
+        <td className="border font-bold border-stroke p-2">
+          <input
+            type="text"
+            placeholder="0.00"
+            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+px-5 font-medium outline-none transition focus:border-primary active:border-primary
+disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
+dark:bg-form-input dark:focus:border-primary"
+            onChange={(e) =>
+              handleTableInputChange(
+                innerIndex,
+                'type',
+                e.target.value,
+              )
+            }
+          />
+        </td>
+        <td className="border font-bold border-stroke p-2">
+          <input
+            type="text"
+            placeholder="Kg"
+            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+px-5 font-medium outline-none transition focus:border-primary active:border-primary
+disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
+dark:bg-form-input dark:focus:border-primary"
+            onChange={(e) =>
+              handleTableInputChange(
+                innerIndex,
+                'type',
+                e.target.value,
+              )
+            }
+          />
+        </td>
+        <td className="border font-bold border-stroke p-2">
+          <input
+            type="text"
+            placeholder="RS 0.00"
+            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+px-5 font-medium outline-none transition focus:border-primary active:border-primary
+disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
+dark:bg-form-input dark:focus:border-primary"
+            onChange={(e) =>
+              handleTableInputChange(
+                innerIndex,
+                'type',
+                e.target.value,
+              )
+            }
+          />
+        </td>
+        <td className="border font-bold border-stroke p-2">
+          <input
+            type="text"
+            placeholder="Sku"
+            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
+px-5 font-medium outline-none transition focus:border-primary active:border-primary
+disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
+dark:bg-form-input dark:focus:border-primary"
+            onChange={(e) =>
+              handleTableInputChange(
+                innerIndex,
+                'type',
+                e.target.value,
+              )
+            }
+          />
+        </td>
+       
+      </tr>
+    )),
+)}
+</tbody> */}

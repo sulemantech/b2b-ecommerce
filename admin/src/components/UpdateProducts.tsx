@@ -53,6 +53,7 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
       try {
         const response = await axios.get(`http://localhost:5001/api/products/specific/${id}`);
         const product = response.data;
+        console.log("product",product);
 
         setName(product.name || '');
         setDescription(product.description || '');
