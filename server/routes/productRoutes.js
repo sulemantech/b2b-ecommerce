@@ -161,12 +161,19 @@ router.get('/specific/:id', async (req, res) => {
 
   try {
     const product = await productModel.findByPk(productId, {
-      include: {
-        model: productImages,
-        where: { productId: { [Op.col]: 'products.id' } },
-        attributes: ['date', 'images'],
-        required:false
-      },
+      include: [
+        {
+          model: productImages,
+          where: { productId: { [Op.col]: 'products.id' } },
+          attributes: ['date', 'images'],
+          required:false
+        },
+        {
+          model: productVariantModel,
+          attributes: ['type', 'weight', 'unit', 'key', 'value', 'availableQuantity', 'optionValues'],
+          required: false, // Use false if you want left join
+        }
+      ]
     });
 
     if (product) {
