@@ -10,6 +10,10 @@ yarn.lock
 _SpecRunner.html
 __benchmarks__
 build/
+firebase
+/firebase
+/firebaseA.js
+/firebaseA
 remote-repo/
 coverage/
 .module-cache

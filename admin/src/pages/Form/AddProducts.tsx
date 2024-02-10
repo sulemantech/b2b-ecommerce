@@ -14,6 +14,11 @@ interface Category {
   name: string;
   
 }
+interface supplier {
+  id: number;
+  name: string;
+  
+}
 const FormElements = () => {
   const [productId, setProductId] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -23,7 +28,8 @@ const FormElements = () => {
   const [dropdownVisible, setDropdownVisible] = useState<boolean>(true);
   const [tableInputValues, setTableInputValues] = useState<Array<{ [key: string]: string }> >([]);
   const [categoryList, setCategoryList] = useState<Category[]>([]);
-  // const [tableInputValues, setTableInputValues] = useState<{ [key: string]: { [property: string]: string } }>({});
+  const [suppliers, setSuppliers] = useState<supplier[]>([]);
+
 
   
 
@@ -78,19 +84,19 @@ const FormElements = () => {
     });
   };
 
+ 
   const handleTableInputChange = (
     outerIndex: number,
     property: string,
     value: string,
   ) => {
     const updatedInputValues = [...tableInputValues];
-    if (!updatedInputValues[outerIndex]) {
-      updatedInputValues[outerIndex] = {};
-    }
+    updatedInputValues[outerIndex] = {...updatedInputValues[outerIndex]};
     updatedInputValues[outerIndex][property] = value;
     setTableInputValues(updatedInputValues);
     console.log('Table Input Values:', tableInputValues);
   };
+  
 
 
 
@@ -138,17 +144,9 @@ const FormElements = () => {
     name: '',
     description: '',
     price: '',
-    
-    // quantity:20,
-    // manufacturer:"china",
-    // dateAdded:"",
-    // discount:10,
     weight: '',
-    // new:"true",
     rating: 5,
-    // saleCount:100,
     tag: [] as string[],
-    // stock:200,
     quantityInStock: '',
     sku: '',
     category_id: '',
@@ -165,8 +163,9 @@ const FormElements = () => {
     try {
       const variantsData = Object.entries(submittedData).map(
         ([option, values], index) => {
-          const tableInput = tableInputValues[index]; // Fix the variable name here
-  
+          const tableInput = tableInputValues[index];
+          
+        
           return {
             key: option,
             values: values,
@@ -186,20 +185,43 @@ const FormElements = () => {
           };
         }
       );
-  
-      // Prepare the full request data
+
       const requestData = {
         products: value,
         variants: variantsData,
       };
   
-      // Make the API request
       const response = await axios.post(
         'http://localhost:5001/api/products/',
         requestData
       );
       console.log('Product and Variants created:', response.data);
-    // window.location.reload();
+      setFormData({
+        selectedOption: '',
+        inputValue: '',
+        dynamicFields: [],
+      });
+  
+      setSubmittedData({});
+    
+
+      setvalues({
+        name: '',
+        description: '',
+        price: '',
+        weight: '',
+        rating: 5,
+        tag: [],
+        quantityInStock: '',
+        sku: '',
+        category_id: '',
+        supplier_id: '',
+        categoryName: '',
+        productId: '',
+        status: '',
+      });
+      
+      
 
     } catch (error) {
       console.error('Error creating product and variants:', error);
@@ -231,7 +253,6 @@ const FormElements = () => {
       console.error('Image file is required.');
       return;
     }
-    // formData.append('variants', JSON.stringify(varian));
 
     try {
       const response = await fetch('http://localhost:5001/productImages', {
@@ -262,7 +283,7 @@ const FormElements = () => {
 
 
 
-///////////////////////////////////////////////////////////categoriesAPI//////////////////////////////
+                                                                  //categoriesAPI//
 
 useEffect(() => {
   fetch('http://localhost:5001/api/categories/all')
@@ -274,12 +295,32 @@ useEffect(() => {
     })
     .then(data => {
       setCategoryList(data); 
-      console.log("dataaaaaaaaaaa",data);
     })
     .catch(error => {
       console.error('Fetch Error:', error);
     });
-}, []); // Empty dependency array ensures this effect runs only once, on component mount
+}, []);
+                                                            //Vendor/
+
+useEffect(() => {
+  fetch('http://localhost:5001/api/suppliers/all') 
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      return response.json();
+    })
+    .then(data => {
+      setSuppliers(data);
+      console.log("dataaaaaaaaaaa",data);
+
+
+    })
+    .catch(error => {
+      console.error('Fetch Error:', error);
+    });
+}, []);
+
 
 
 
@@ -289,7 +330,7 @@ useEffect(() => {
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-9 sm:grid-cols-[2fr,1fr]">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-[2fr,1fr]">
         <div className="flex flex-col gap-9">
           <div className="rounded-xl border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-5">
             <label className="ml-5 font-bold">Title</label>
@@ -504,7 +545,7 @@ useEffect(() => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-9 ">
+          <div className="flex flex-col">
             <div className="rounded-xl border-stroke  bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-5">
               <h1 className="font-bold">Variants</h1>
               <hr />
@@ -586,7 +627,7 @@ useEffect(() => {
                 <div className="table mt-5">
                   {Object.keys(submittedData).length > 0 && (
                     <div>
-                      <table>
+                      <table >
                         <thead>
                           <tr>
                             {/* <th className="border font-bold border-stroke p-2">
@@ -617,106 +658,83 @@ useEffect(() => {
                           </tr>
                         </thead>
                         <tbody>
-                          {' '}
-                          {Object.entries(submittedData).map(
-                            ([option, values], index) =>
-                              values.map((value, innerIndex) => (
-                                <tr key={`${index}-${innerIndex}`}>
-                                  {/* <td className="border font-bold border-stroke p-2">
-{option}
-</td> */}
-                                  <td className="border font-bold border-stroke p-2">
-                                    {value}
-                                  </td>
-                                  <td className="border font-bold border-stroke p-2">
-                                    <input
-                                      type="text"
-                                      placeholder="type"
-                                      className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
-px-5 font-medium outline-none transition focus:border-primary active:border-primary
-disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
-dark:bg-form-input dark:focus:border-primary"
-onChange={(e) =>
-  handleTableInputChange(innerIndex, 'type', e.target.value)
-}
-                                    />
-                                  </td>
-                                  <td className="border font-bold border-stroke p-2">
-                                    <input
-                                      type="number"
-                                      placeholder="0.00"
-                                      className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
-px-5 font-medium outline-none transition focus:border-primary active:border-primary
-disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
-dark:bg-form-input dark:focus:border-primary"
-onChange={(e) =>
-  handleTableInputChange(innerIndex, 'type', e.target.value)
-}
-                                    />
-                                  </td>
-                                  <td className="border font-bold border-stroke p-2">
-                                    <input
-                                      type="text"
-                                      placeholder="Kg"
-                                      className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
-px-5 font-medium outline-none transition focus:border-primary active:border-primary
-disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
-dark:bg-form-input dark:focus:border-primary"
-onChange={(e) =>
-  handleTableInputChange(innerIndex, 'type', e.target.value)
-}
-                                    />
-                                  </td>
-                                  <td className="border font-bold border-stroke p-2">
-                                    <input
-                                      type="number"
-                                      placeholder="RS 0.00"
-                                      className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
-px-5 font-medium outline-none transition focus:border-primary active:border-primary
-disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
-dark:bg-form-input dark:focus:border-primary"
-onChange={(e) =>
-  handleTableInputChange(innerIndex, 'type', e.target.value)
-}
-                                    />
-                                  </td>
-                                  <td className="border font-bold border-stroke p-2">
-                                    <input
-                                      type="number"
-                                      placeholder="0.0"
-                                      className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
-px-5 font-medium outline-none transition focus:border-primary active:border-primary
-disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
-dark:bg-form-input dark:focus:border-primary"
-onChange={(e) =>
-  handleTableInputChange(
-    innerIndex,
-    'type',
-    e.target.value,)}
-                                    />
-                                  </td>
-                                  <td className="border font-bold border-stroke p-2">
-                                    <input
-                                      type="text"
-                                      placeholder="sku"
-                                      className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
-px-5 font-medium outline-none transition focus:border-primary active:border-primary
-disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
-dark:bg-form-input dark:focus:border-primary"
-onChange={(e) =>
-  handleTableInputChange(innerIndex, 'type', e.target.value)
-}
-                                    />
-                                  </td>
-                                </tr>
-                              )),
-                          )}
-                        </tbody>
+  {Object.entries(submittedData).map(([_, values], index) => (
+    values.map((value, innerIndex) => (
+      <tr key={`${index}-${innerIndex}`}>
+        <td className="border font-bold border-stroke p-2">
+          {value}
+        </td>
+        <td className="border font-bold border-stroke p-2">
+          <input
+            type="text"
+            placeholder="type"
+            className="w-full min-w-30 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+            onChange={(e) =>
+              handleTableInputChange(innerIndex, 'type', e.target.value)
+            }
+          />
+        </td>
+        <td className="border font-bold border-stroke p-2">
+          <input
+            type="number"
+            placeholder="0.0"
+            className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+            onChange={(e) =>
+              handleTableInputChange(innerIndex, 'weight', e.target.value)
+            }
+          />
+        </td>
+        <td className="border font-bold border-stroke p-2">
+          <input
+            type="text"
+            placeholder="Kg"
+            className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+            onChange={(e) =>
+              handleTableInputChange(innerIndex, 'unit', e.target.value)
+            }
+          />
+        </td>
+        <td className="border font-bold border-stroke p-2">
+          <input
+            type="number"
+            placeholder="0.0"
+            className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+            onChange={(e) =>
+              handleTableInputChange(innerIndex, 'availableQuantity', e.target.value)
+            }
+          />
+        </td>
+        <td className="border font-bold border-stroke p-2">
+          <input
+            type="number"
+            placeholder="0.0"
+            className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+            onChange={(e) =>
+              handleTableInputChange(innerIndex, 'variantPrice', e.target.value)
+            }
+          />
+        </td>
+        <td className="border font-bold border-stroke p-2">
+          <input
+            type="text"
+            placeholder="sku"
+            className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+            onChange={(e) =>
+              handleTableInputChange(innerIndex, 'variantSku', e.target.value)
+            }
+          />
+        </td>
+      </tr>
+    ))
+  ))}
+</tbody>
+
                       </table>
                     </div>
                   )}
                 </div>
               </div>
+        
             </div>
           </div>
         </div>
@@ -775,28 +793,6 @@ onChange={(e) =>
                 <label className="font-bold" htmlFor="">
                   product Category
                 </label>
-
-                {/* <input
-                  type="text"
-                  placeholder="CategoryName"
-                  className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-1
-                  px-2 font-medium outline-none transition focus:border-primary active:border-primary 
-                   disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark 
-                   dark:bg-form-input dark:focus:border-primary"
-                  onChange={(e) =>
-                    setvalues({ ...value, categoryName: e.target.value })
-                  }
-                  value={value.categoryName}
-                /> */}
-                {/* <select
-  onChange={(e) => setvalues({ ...value, category_id: e.target.value })}
-  value={value.category_id}
-  className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
->
-  {categoryList.map(category => (
-    <option key={category.id} value={category.id}>{category.name}</option>
-  ))}
-</select> */}
 <select
   onChange={(e) => {
     const selectedCategory = categoryList.find(category => category.id === parseInt(e.target.value));
@@ -838,7 +834,16 @@ onChange={(e) =>
                 <br />
                 <label className="font-bold" htmlFor="">
                   Vendor
-                </label>
+                 </label>
+      {/* <select
+        onChange={(e) => console.log('Selected Supplier:', e.target.value)}
+        className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+      >
+        <option value="">Select a Supplier</option>
+        {suppliers.map(supplier => (
+          <option key={supplier.id} value={supplier.id}>{supplier.name}</option>
+        ))}
+      </select>  */}
 
                 <input
                   type="text"

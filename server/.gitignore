@@ -14,6 +14,10 @@ _SpecRunner.html
 __benchmarks__
 build/
 remote-repo/
+swagger_output.json
+/swagger_output.json
+serviceAccount.json
+/serviceAccount.json
 coverage/
 .module-cache
 fixtures/dom/public/react-dom.js

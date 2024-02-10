@@ -20,7 +20,8 @@ const resolvers = require('./resolvers/resolver');
 const path = require('path');
 const customerRoute=require('./routes/customerRoute')
 const businessRoute=require('./routes/businessRoute')
-
+const swaggerUi = require('swagger-ui-express');
+const authRoutes = require('./routes/authRoutes');
 require('dotenv').config();
 
 const app = express();
@@ -39,8 +40,11 @@ const server = new ApolloServer({
 });
 
 
-// await server.start()
-//  server.applyMiddleware({ app, path: '/api/product/search' });
+//authRoute firebase
+app.use('/verify-id-token', authRoutes);
+
+//swagger Api's
+app.use('/n5store', swaggerUi.serve, swaggerUi.setup(require('./swagger_output.json')));
 
 //products
 app.use('/api/products/', productRoutes);
