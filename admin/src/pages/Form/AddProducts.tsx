@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useState,useEffect } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-// import { Link } from 'react-router-dom';
 
 interface FormData {
   selectedOption: string;
@@ -24,11 +23,11 @@ const FormElements = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [editorContent, setEditorContent] = useState('');
   const [submittedData, setSubmittedData] = useState<{[key: string]: string[]; }>({});
-  const [uniqueValuesSet, setUniqueValuesSet] = useState<Set<string>>( new Set(),);
-  const [dropdownVisible, setDropdownVisible] = useState<boolean>(true);
+  const [, setUniqueValuesSet] = useState<Set<string>>( new Set(),);
+  const [, setDropdownVisible] = useState<boolean>(true);
   const [tableInputValues, setTableInputValues] = useState<Array<{ [key: string]: string }> >([]);
   const [categoryList, setCategoryList] = useState<Category[]>([]);
-  const [suppliers, setSuppliers] = useState<supplier[]>([]);
+  const [, setSuppliers] = useState<supplier[]>([]);
 
 
   
@@ -133,7 +132,7 @@ const FormElements = () => {
   };
 
   const handleEditorReady = (editor: any) => {
-    console.log('Editor is ready to use!', editor);
+    console.log( editor);
   };
   const handleEditorChange = (_: any, editor: any) => {
     const content = editor.getData();
@@ -158,14 +157,15 @@ const FormElements = () => {
 
 
 
+  
   const handleFormSubmit = async () => {
     handleSubmitImage();
     try {
+      const updatedValue = { ...value, description: editorContent };
+  
       const variantsData = Object.entries(submittedData).map(
         ([option, values], index) => {
           const tableInput = tableInputValues[index];
-          
-        
           return {
             key: option,
             values: values,
@@ -179,15 +179,15 @@ const FormElements = () => {
               return {
                 id: id.toString(),
                 name: name,
-                variantSku: [`${value.sku}-${name.toLowerCase()}`],
+                variantSku: [`${updatedValue.sku}-${name.toLowerCase()}`], // Use updatedValue here
               };
             }),
           };
         }
       );
-
+  
       const requestData = {
-        products: value,
+        products: updatedValue, // Use updatedValue here
         variants: variantsData,
       };
   
@@ -201,34 +201,11 @@ const FormElements = () => {
         inputValue: '',
         dynamicFields: [],
       });
-  
-      setSubmittedData({});
-    
-
-      setvalues({
-        name: '',
-        description: '',
-        price: '',
-        weight: '',
-        rating: 5,
-        tag: [],
-        quantityInStock: '',
-        sku: '',
-        category_id: '',
-        supplier_id: '',
-        categoryName: '',
-        productId: '',
-        status: '',
-      });
-      
-      
-
     } catch (error) {
-      console.error('Error creating product and variants:', error);
+      console.error('Error creating product:', error);
     }
   };
   
-
   
   
   
@@ -312,7 +289,7 @@ useEffect(() => {
     })
     .then(data => {
       setSuppliers(data);
-      console.log("dataaaaaaaaaaa",data);
+      console.log("data",data);
 
 
     })
@@ -637,23 +614,23 @@ useEffect(() => {
                               values
                             </th>
                             <th className="border font-bold border-stroke p-2">
-                              type
+                              Type
                             </th>
                             <th className="border font-bold border-stroke p-2">
-                              weight
+                              Weight
                             </th>
                             <th className="border font-bold border-stroke p-2">
-                              unit
+                              Unit
                             </th>
                             <th className="border font-bold border-stroke p-2">
-                              availableQuantity
+                              AvailableQuantity
                             </th>
 
                             <th className="border font-bold border-stroke p-2">
                               VarientPrice
                             </th>
                             <th className="border font-bold border-stroke p-2">
-                              variantSku
+                              VariantSku
                             </th>
                           </tr>
                         </thead>
@@ -791,7 +768,7 @@ useEffect(() => {
                 <h1 className="font-semibold">Product organization</h1>
                 <br />
                 <label className="font-bold" htmlFor="">
-                  product Category
+                  Product Category
                 </label>
 <select
   onChange={(e) => {
@@ -815,7 +792,7 @@ useEffect(() => {
              <br />
                 <br />
                 <label className="font-bold" htmlFor="">
-                  quantityInStock
+                  QuantityInStock
                 </label>
 
                 <input

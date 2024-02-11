@@ -30,7 +30,6 @@ const fetchAllProducts = () => {
     })
     .then(data => {
       setProducts(data);
-      console.log("Products", data);
     })
     .catch(error => {
       console.error('Error fetching all products:', error.message);

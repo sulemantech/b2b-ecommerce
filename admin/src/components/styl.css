@@ -1,25 +1,11 @@
-.sidebar {
-    width: 200px;
-    height: 100%;
-    background-color: #333;
-    position: fixed;
-    top: 0;
-    left: 0;
-    overflow-y: auto; /* Add scroll for vertical overflow */
-  }
-  
-  ul {
-    list-style-type: none;
-    padding: 0;
-  }
-  
-  li {
-    padding: 10px;
-    color: white;
-    cursor: pointer;
-  }
-  
-  li:hover {
-    background-color: #555;
-  }
-  
+.sidebar::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Background color of the scrollbar track */
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: #888; /* Color of the scrollbar thumb */
+}
