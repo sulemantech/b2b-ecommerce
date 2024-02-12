@@ -5,7 +5,7 @@ const serviceAccount = require("../serviceAccount.json");
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://otp-generator-app-default-rtdb.firebaseio.com"
+  // databaseURL: "https://otp-generator-app-default-rtdb.firebaseio.com"
 });
 
 const auth = admin.auth();

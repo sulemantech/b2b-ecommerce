@@ -54,7 +54,8 @@ router.get('/', async (req, res) => {
 // });
 router.get('/byrole', verifyToken, async (req, res) => {
   try {
-    const userRole = req.user.id.role;
+    console.log("req.user.id",req.user.role);
+    const userRole = req.user.role;
 
     if (userRole === 'admin') {
       // Admin can view all orders without any filtering
