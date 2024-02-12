@@ -22,6 +22,7 @@ const customerRoute=require('./routes/customerRoute')
 const businessRoute=require('./routes/businessRoute')
 const swaggerUi = require('swagger-ui-express');
 const authRoutes = require('./routes/authRoutes');
+const notificationRoute=require('./routes/notificationRoute')
 require('dotenv').config();
 
 const app = express();
@@ -42,6 +43,9 @@ const server = new ApolloServer({
 
 //authRoute firebase
 app.use('/verify-id-token', authRoutes);
+
+//notification
+app.use('/send-notification',notificationRoute)
 
 //swagger Api's
 app.use('/n5store', swaggerUi.serve, swaggerUi.setup(require('./swagger_output.json')));

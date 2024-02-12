@@ -170,7 +170,7 @@ router.get('/specific/:id', async (req, res) => {
         },
         {
           model: productVariantModel,
-          attributes: ['type', 'weight', 'unit', 'key', 'value', 'availableQuantity', 'optionValues'],
+          attributes: ['id','type', 'weight', 'unit', 'key', 'value', 'availableQuantity', 'optionValues'],
           required: false, // Use false if you want left join
         }
       ]
