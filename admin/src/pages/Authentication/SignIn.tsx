@@ -13,7 +13,7 @@ interface LoginResponse {
 }
 
 interface LoginCredentials {
-  firstname: string;
+  email: string;
   password: string;
 }
 
@@ -21,13 +21,13 @@ interface LoginCredentials {
 const SignIn: React.FC = () => {
 
   const navigate = useNavigate();
-  const [firstname, setFirstname] = useState('');
+  const [email, setemail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = event.target;
-    if (name === 'firstname') {
-      setFirstname(value);
+    if (name === 'email') {
+      setemail(value);
     } else if (name === 'password') {
       setPassword(value);
       // console.log("firstttt",value);
@@ -39,7 +39,7 @@ const SignIn: React.FC = () => {
     event.preventDefault();
 
     try {
-      const credentials: LoginCredentials = { firstname, password };
+      const credentials: LoginCredentials = { email, password };
       const response: AxiosResponse<LoginResponse> = await axios.post('http://localhost:5001/api/signin/login', credentials);
 
       if (response.status === 200) {
@@ -228,9 +228,9 @@ const SignIn: React.FC = () => {
                   
                   <div className="relative">
                     <input
-                      id="firstnameInput"
-                      name="firstname"
-                      value={firstname}
+                      id="emailInput"
+                      name="email"
+                      value={email}
                       onChange={handleInputChange}
                       placeholder="Enter your email"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"

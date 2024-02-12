@@ -1,104 +1,126 @@
-import React, { useState } from 'react';
 
-const YourComponent = () => {
-  const [optionName, setOptionName] = useState('Size');
-  const [optionValues, setOptionValues] = useState('');
-  const [variants, setVariants] = useState<Array<{ optionName: string; optionValues: string[] }>>([]);
-  const [showTable, setShowTable] = useState(false);
+import { useEffect,useState } from 'react';
+import { Link } from 'react-router-dom';
 
-  const handleOptionNameChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setOptionName(e.target.value);
-  };
 
-  const handleOptionValuesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setOptionValues(e.target.value);
-  };
 
-  const handleAddVariant = () => {
-    if (optionValues.trim() !== '') {
-      const newVariant = {
-        optionName,
-        optionValues: optionValues.split(',').map((value) => value.trim()),
-      };
-      setVariants([...variants, newVariant]);
-      setShowTable(true);
-      setOptionValues('');
-    }
-  };
+const TableTwo: React.FC  = () => {
+  // console.log(import.meta.env)
+  const [products,setProducts]=useState<Products[]>([]);
+  interface Products {
+    id: number;
+    productId: number;
+    name: string;
+    price: number;
+    categoryName: string;
+    discount: number;
+    manufacturer:string;
+    productImages: Array<{ date: string; images: string[] }>;
+    // productImages?: { date: string; images: string[] }[] | undefined;
+  }
+const fetchAllProducts = () => {
+  const API_Urlfetch=`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products/all`;
+  console.log("product API",API_Urlfetch)
+  fetch(API_Urlfetch)
+    .then(response => {
+      if (!response.ok) {
+        console.log("Network error");
+      }
+      return response.json();
+    })
+    .then(data => {
+      setProducts(data);
+    })
+    .catch(error => {
+      console.error('Error fetching all products:', error.message);
+    });
+};
+
+
+useEffect(() => {
+  fetchAllProducts();
+}, []);
+
+
+
 
   return (
-    <div className="flex flex-col gap-9">
-      {/* Your existing form code here */}
-      <div className="rounded-xl border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-5">
-        <div className="ml-5">
-          <h1 className="font-bold">Variants</h1>
-          <br />
-          <div className="ml-5">
-            <label htmlFor="">Option name</label>
-            <div className="p-5">
-              <select
-                value={optionName}
-                onChange={handleOptionNameChange}
-                className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
-                px-5 font-medium outline-none transition focus:border-primary active:border-primary 
-                disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
-                dark:focus:border-primary"
-              >
-                <option value="Size">Size</option>
-                <option value="Color">Color</option>
-                <option value="Material">Material</option>
-                <option value="style">style</option>
-              </select>
-            </div>
-            <br />
-            <label htmlFor="" className="font-bold">
-              Option values
-            </label>
-            <div>
-              <input
-                value={optionValues}
-                onChange={handleOptionValuesChange}
-                className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
-                px-5 font-medium outline-none transition focus:border-primary active:border-primary 
-                disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
-                dark:focus:border-primary"
-              />
-            </div>
-          </div>
+    <>
+    <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+
+      <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5">
+        <div className="col-span-2 flex items-center">
+          <p className="font-medium text-black">Order Date</p>
         </div>
-        <div>
-          <button
-            onClick={handleAddVariant}
-            className="bg-primary text-white px-4 py-2 rounded-md mt-4"
-          >
-            Add Variant
-          </button>
+        <div className="col-span-2 hidden items-center sm:flex">
+          <p className="font-medium text-black">Total Price</p>
+        </div>
+        <div className="col-span-1 flex items-center">
+          <p className="font-medium text-black">Discount</p>
+        </div>
+        <div className="col-span-1 flex items-center">
+          <p className="font-medium text-black">Status</p>
+        </div>
+        <div className="col-span-1 flex items-center">
+          <p className="font-medium text-black">Shipping Address</p>
+        </div>
+         <div className="col-span-1 flex items-center">
+          <p className="font-medium text-black">Payment Method</p>
+        </div>
+        <div className="col-span-1 flex items-center">
+          <p className="font-medium text-black">Tracking Number</p>
         </div>
       </div>
+      
+      {products.map((product) => (
+        <div  key={product.id}
+        className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5"  id={`${product.id}`}>
+    <div className="col-span-2 flex items-center">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+        <div className="h-12.5 w-15 rounded-md">
+        {/* <img src={process.env.RESOURCE_SERVER_HOST + product.productImages[0]?.images[0]} alt="" /> */}
+        <img src={`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}${product?.productImages[0]?.images[0]}`} />
 
-      {showTable && (
-        <div className="mt-8">
-          <h1 className="font-bold">Variants Table</h1>
-          <table className="border-collapse border border-stroke mt-3">
-            <thead>
-              <tr>
-                <th className="border border-stroke p-2">Option Name</th>
-                <th className="border border-stroke p-2">Option Values</th>
-              </tr>
-            </thead>
-            <tbody>
-              {variants.map((variant, index) => (
-                <tr key={index}>
-                  <td className="border border-stroke p-2">{variant.optionName}</td>
-                  <td className="border border-stroke p-2">{variant.optionValues.join(', ')}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+           {/* console.log("pppppppppppppppppp",)   */}
         </div>
-      )}
+        <p className="text-sm text-black dark:text-white">
+          {product.name}
+          {/* {product.id} */}
+        </p>
+      </div>
     </div>
+    <div className="col-span-2 hidden items-center sm:flex">
+      <p className="text-sm text-black dark:text-white">{product.categoryName}</p>
+    </div>
+    <div className="col-span-1 flex items-center">
+      <p className="text-sm text-black dark:text-white">{product.price}</p>
+    </div>
+    <div className="col-span-1 flex items-center">
+      <p className="text-sm text-black dark:text-white">{product.discount}</p>
+    </div>
+    <div className="col-span-1 flex items-center">
+      <p className="text-sm text-black dark:text-white">{product.manufacturer}</p>
+    </div>
+    <div className="col-span-1 flex items-center">
+      <div>
+        <Link to={`/UpdateProducts/${product.id}`} className="bg-blue hover:bg-blue-700 font-bold py-2 px-4 rounded-full">
+        Edit
+      </Link>
+
+      </div>
+    </div>
+    <div className="col-span-1 flex items-center">
+      <Link to={`/forms/form-elements/`} className="bg-blue hover:bg-blue-700 font-bold py-2 px-4 rounded-full">
+        AddNew
+      </Link>
+    </div>
+  </div>
+))}
+</div>
+{/* {console.log("process.env.RESOURCE_SERVER_HOST ", )} */}
+
+  </>
   );
 };
 
-export default YourComponent;
+export default TableTwo;

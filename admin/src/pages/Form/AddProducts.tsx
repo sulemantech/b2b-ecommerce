@@ -1,7 +1,8 @@
 import axios from 'axios';
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import { log } from 'console';
 
 interface FormData {
   selectedOption: string;
@@ -11,26 +12,27 @@ interface FormData {
 interface Category {
   id: number;
   name: string;
-  
 }
 interface supplier {
   id: number;
   name: string;
-  
+  supplier_id:number;
+  supplier_name:string;
 }
 const FormElements = () => {
   const [productId, setProductId] = useState('');
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [editorContent, setEditorContent] = useState('');
-  const [submittedData, setSubmittedData] = useState<{[key: string]: string[]; }>({});
-  const [, setUniqueValuesSet] = useState<Set<string>>( new Set(),);
+  const [, setEditorContent] = useState('');
+  const [submittedData, setSubmittedData] = useState<{
+    [key: string]: string[];
+  }>({});
+  const [, setUniqueValuesSet] = useState<Set<string>>(new Set());
   const [, setDropdownVisible] = useState<boolean>(true);
-  const [tableInputValues, setTableInputValues] = useState<Array<{ [key: string]: string }> >([]);
+  const [tableInputValues, setTableInputValues] = useState<
+    Array<{ [key: string]: string }>
+  >([]);
   const [categoryList, setCategoryList] = useState<Category[]>([]);
-  const [, setSuppliers] = useState<supplier[]>([]);
-
-
-  
+  const [suppliers, setSuppliers] = useState<supplier[]>([]);
 
   const [formData, setFormData] = useState<FormData>({
     selectedOption: '',
@@ -65,7 +67,7 @@ const FormElements = () => {
   };
 
   const handleDynamicFieldChange = (index: number, value: string) => {
-    const updatedFields = [...formData.dynamicFields]
+    const updatedFields = [...formData.dynamicFields];
     if (value.trim() === '') {
       if (updatedFields.length > 1) {
         updatedFields.splice(index, 1);
@@ -83,24 +85,17 @@ const FormElements = () => {
     });
   };
 
- 
   const handleTableInputChange = (
     outerIndex: number,
     property: string,
     value: string,
   ) => {
     const updatedInputValues = [...tableInputValues];
-    updatedInputValues[outerIndex] = {...updatedInputValues[outerIndex]};
+    updatedInputValues[outerIndex] = { ...updatedInputValues[outerIndex] };
     updatedInputValues[outerIndex][property] = value;
     setTableInputValues(updatedInputValues);
     console.log('Table Input Values:', tableInputValues);
   };
-  
-
-
-
-  
-
 
   const handleSubmit = () => {
     const { selectedOption, inputValue, dynamicFields } = formData;
@@ -132,7 +127,7 @@ const FormElements = () => {
   };
 
   const handleEditorReady = (editor: any) => {
-    console.log( editor);
+    console.log(editor);
   };
   const handleEditorChange = (_: any, editor: any) => {
     const content = editor.getData();
@@ -154,18 +149,21 @@ const FormElements = () => {
     productId: '',
     status: '',
   });
+  console.log(value);
 
 
-
-  
+ 
+ 
+ 
+ 
   const handleFormSubmit = async () => {
     handleSubmitImage();
     try {
-      const updatedValue = { ...value, description: editorContent };
-  
       const variantsData = Object.entries(submittedData).map(
         ([option, values], index) => {
           const tableInput = tableInputValues[index];
+
+  
           return {
             key: option,
             values: values,
@@ -179,41 +177,52 @@ const FormElements = () => {
               return {
                 id: id.toString(),
                 name: name,
-                variantSku: [`${updatedValue.sku}-${name.toLowerCase()}`], // Use updatedValue here
+                variantSku: [`${value.sku}-${name.toLowerCase()}`],
               };
             }),
           };
         }
       );
   
+      // Prepare the full request data
       const requestData = {
-        products: updatedValue, // Use updatedValue here
+        products: value,
         variants: variantsData,
       };
-  
       const response = await axios.post(
         'http://localhost:5001/api/products/',
         requestData
       );
       console.log('Product and Variants created:', response.data);
+      setTableInputValues([]);
+      setSubmittedData({});
+      setvalues({
+        name: '',
+        description: '',
+        price: '',
+        weight: '',
+        rating: 5,
+        tag: [],
+        quantityInStock: '',
+        sku: '',
+        category_id: '',
+        supplier_id: '',
+        categoryName: '',
+        productId: '',
+        status: '',
+      });
+
       setFormData({
         selectedOption: '',
         inputValue: '',
         dynamicFields: [],
       });
+  
     } catch (error) {
-      console.error('Error creating product:', error);
+      console.error('Error creating product and variants:', error);
     }
   };
   
-  
-  
-  
-  
-
-
-
-
 
   const handleSubmitImage = async () => {
     if (!productId) {
@@ -258,52 +267,40 @@ const FormElements = () => {
     }
   };
 
+  //categoriesAPI//
 
+  useEffect(() => {
+    fetch('http://localhost:5001/api/categories/all')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setCategoryList(data);
+      })
+      .catch((error) => {
+        console.error('Fetch Error:', error);
+      });
+  }, []);
+  //Vendor/
 
-                                                                  //categoriesAPI//
-
-useEffect(() => {
-  fetch('http://localhost:5001/api/categories/all')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      setCategoryList(data); 
-    })
-    .catch(error => {
-      console.error('Fetch Error:', error);
-    });
-}, []);
-                                                            //Vendor/
-
-useEffect(() => {
-  fetch('http://localhost:5001/api/suppliers/all') 
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then(data => {
-      setSuppliers(data);
-      console.log("data",data);
-
-
-    })
-    .catch(error => {
-      console.error('Fetch Error:', error);
-    });
-}, []);
-
-
-
-
-
-
-
+  useEffect(() => {
+    fetch('http://localhost:5001/api/suppliers/all')
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setSuppliers(data);
+      })
+      .catch((error) => {
+        console.error('Fetch Error:', error);
+      });
+  }, []);
 
   return (
     <>
@@ -311,7 +308,6 @@ useEffect(() => {
         <div className="flex flex-col gap-9">
           <div className="rounded-xl border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-5">
             <label className="ml-5 font-bold">Title</label>
-            
 
             <div className="ml-5">
               <input
@@ -504,15 +500,15 @@ useEffect(() => {
                    px-5 font-medium outline-none transition focus:border-primary active:border-primary
                   disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
                    dark:focus:border-primary"
-                   onChange={(e) => setvalues({ ...value, name: e.target.value })}
-                   value={value.name}
+                      onChange={(e) =>
+                        setvalues({ ...value, name: e.target.value })
+                      }
+                      value={value.name}
                     />
                   </div>
                 </div>
                 <br />
 
-                
-              
                 <br />
                 <div className="flex">
                   <input type="checkbox" className="w-4" />
@@ -529,7 +525,7 @@ useEffect(() => {
               <div className="mt-5 border-bodydark border-opacity-20 border-4 p-5">
                 <h1>Option name</h1>
                 <select
-                style={{background:"lightgray"}}
+                  style={{ background: 'lightgray' }}
                   id="dropdown"
                   value={formData.selectedOption}
                   onChange={handleDropdownChange}
@@ -551,8 +547,7 @@ useEffect(() => {
                   <div>
                     <h1 className="font-bold">Option Value</h1>
                     <input
-                style={{background:"lightgray"}}
-
+                      style={{ background: 'lightgray' }}
                       type="text"
                       className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
             px-3 font-medium outline-none transition focus:border-primary active:border-primary 
@@ -568,9 +563,8 @@ useEffect(() => {
 
                 {formData.dynamicFields.map((field, index) => (
                   <div key={index}>
-                   <input
-                style={{background:"lightgray"}}
-
+                    <input
+                      style={{ background: 'lightgray' }}
                       type="text"
                       placeholder="Add another value"
                       className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
@@ -582,7 +576,6 @@ useEffect(() => {
                         handleDynamicFieldChange(index, e.target.value)
                       }
                     />
-                  
                   </div>
                 ))}
                 <br />
@@ -604,7 +597,7 @@ useEffect(() => {
                 <div className="table mt-5">
                   {Object.keys(submittedData).length > 0 && (
                     <div>
-                      <table >
+                      <table>
                         <thead>
                           <tr>
                             {/* <th className="border font-bold border-stroke p-2">
@@ -635,83 +628,106 @@ useEffect(() => {
                           </tr>
                         </thead>
                         <tbody>
-  {Object.entries(submittedData).map(([_, values], index) => (
-    values.map((value, innerIndex) => (
-      <tr key={`${index}-${innerIndex}`}>
-        <td className="border font-bold border-stroke p-2">
-          {value}
-        </td>
-        <td className="border font-bold border-stroke p-2">
-          <input
-            type="text"
-            placeholder="type"
-            className="w-full min-w-30 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-            onChange={(e) =>
-              handleTableInputChange(innerIndex, 'type', e.target.value)
-            }
-          />
-        </td>
-        <td className="border font-bold border-stroke p-2">
-          <input
-            type="number"
-            placeholder="0.0"
-            className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-            onChange={(e) =>
-              handleTableInputChange(innerIndex, 'weight', e.target.value)
-            }
-          />
-        </td>
-        <td className="border font-bold border-stroke p-2">
-          <input
-            type="text"
-            placeholder="Kg"
-            className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-            onChange={(e) =>
-              handleTableInputChange(innerIndex, 'unit', e.target.value)
-            }
-          />
-        </td>
-        <td className="border font-bold border-stroke p-2">
-          <input
-            type="number"
-            placeholder="0.0"
-            className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-            onChange={(e) =>
-              handleTableInputChange(innerIndex, 'availableQuantity', e.target.value)
-            }
-          />
-        </td>
-        <td className="border font-bold border-stroke p-2">
-          <input
-            type="number"
-            placeholder="0.0"
-            className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-            onChange={(e) =>
-              handleTableInputChange(innerIndex, 'variantPrice', e.target.value)
-            }
-          />
-        </td>
-        <td className="border font-bold border-stroke p-2">
-          <input
-            type="text"
-            placeholder="sku"
-            className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-            onChange={(e) =>
-              handleTableInputChange(innerIndex, 'variantSku', e.target.value)
-            }
-          />
-        </td>
-      </tr>
-    ))
-  ))}
-</tbody>
-
+                          {Object.entries(submittedData).map(
+                            ([_, values], index) =>
+                              values.map((value, innerIndex) => (
+                                <tr key={`${index}-${innerIndex}`}>
+                                  <td className="border font-bold border-stroke p-2">
+                                    {value}
+                                  </td>
+                                  <td className="border font-bold border-stroke p-2">
+                                    <input
+                                      type="text"
+                                      placeholder="type"
+                                      className="w-full min-w-30 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                      onChange={(e) =>
+                                        handleTableInputChange(
+                                          innerIndex,
+                                          'type',
+                                          e.target.value,
+                                        )
+                                      }
+                                    />
+                                  </td>
+                                  <td className="border font-bold border-stroke p-2">
+                                    <input
+                                      type="number"
+                                      placeholder="0.0"
+                                      className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                      onChange={(e) =>
+                                        handleTableInputChange(
+                                          innerIndex,
+                                          'weight',
+                                          e.target.value,
+                                        )
+                                      }
+                                    />
+                                  </td>
+                                  <td className="border font-bold border-stroke p-2">
+                                    <input
+                                      type="text"
+                                      placeholder="Kg"
+                                      className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                      onChange={(e) =>
+                                        handleTableInputChange(
+                                          innerIndex,
+                                          'unit',
+                                          e.target.value,
+                                        )
+                                      }
+                                    />
+                                  </td>
+                                  <td className="border font-bold border-stroke p-2">
+                                    <input
+                                      type="number"
+                                      placeholder="0.0"
+                                      className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                      onChange={(e) =>
+                                        handleTableInputChange(
+                                          innerIndex,
+                                          'availableQuantity',
+                                          e.target.value,
+                                        )
+                                      }
+                                    />
+                                  </td>
+                                  <td className="border font-bold border-stroke p-2">
+                                    <input
+                                      type="number"
+                                      placeholder="0.0"
+                                      className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                      onChange={(e) =>
+                                        handleTableInputChange(
+                                          innerIndex,
+                                          'variantPrice',
+                                          e.target.value,
+                                        )
+                                      }
+                                    />
+                                  </td>
+                                  <td className="border font-bold border-stroke p-2">
+                                    <input
+                                      type="text"
+                                      placeholder="sku"
+                                      className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                      onChange={(e) =>
+                                        handleTableInputChange(
+                                          innerIndex,
+                                          'variantSku',
+                                          e.target.value,
+                                        )
+                                      }
+                                    />
+                                  </td>
+                                </tr>
+                              )),
+                          )}
+                        </tbody>
                       </table>
                     </div>
                   )}
                 </div>
               </div>
-        
             </div>
           </div>
         </div>
@@ -770,26 +786,30 @@ useEffect(() => {
                 <label className="font-bold" htmlFor="">
                   Product Category
                 </label>
-<select
-  onChange={(e) => {
-    const selectedCategory = categoryList.find(category => category.id === parseInt(e.target.value));
-    if (selectedCategory) {
-      setvalues({ ...value, category_id: String(selectedCategory.id), categoryName: selectedCategory.name });
-    }
-  }}
-  value={value.category_id}
-  className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
->
-  {categoryList.map(category => (
-    <option key={category.id} value={category.id}>{category.name}</option>
-  ))}
-</select>
+                <select
+                  onChange={(e) => {
+                    const selectedCategory = categoryList.find(
+                      (category) => category.id === parseInt(e.target.value),
+                    );
+                    if (selectedCategory) {
+                      setvalues({
+                        ...value,
+                        category_id: String(selectedCategory.id),
+                        categoryName: selectedCategory.name,
+                      });
+                    }
+                  }}
+                  value={value.category_id}
+                  className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                >
+                  {categoryList.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
 
-
-
-              
-              
-             <br />
+                <br />
                 <br />
                 <label className="font-bold" htmlFor="">
                   QuantityInStock
@@ -811,18 +831,41 @@ useEffect(() => {
                 <br />
                 <label className="font-bold" htmlFor="">
                   Vendor
-                 </label>
-      {/* <select
-        onChange={(e) => console.log('Selected Supplier:', e.target.value)}
-        className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-      >
-        <option value="">Select a Supplier</option>
-        {suppliers.map(supplier => (
-          <option key={supplier.id} value={supplier.id}>{supplier.name}</option>
-        ))}
-      </select>  */}
+                </label>
+                {/* <select
+  onChange={(e) => console.log('Selected Supplier:', e.target.value)}
+  className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+>
+  <option value="">Selected Vendor</option>
+  {suppliers.map(supplier => (
+    <option key={supplier.id} value={supplier.supplier_id}>{supplier.supplier_id}</option>
+  ))}
+</select> */}
+<select
+  onChange={(e) => {
+    const selectedSupplier = suppliers.find(
+      (supplier) => supplier.supplier_id === parseInt(e.target.value)
+    );
+    if (selectedSupplier) {
+      setvalues({
+        ...value,
+        supplier_id: String(selectedSupplier.supplier_id),
+      
+      });
+    }
+  }}
+  value={value.supplier_id} 
+  className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+>
+  <option value="">Selected Vendor</option>
+  {suppliers.map((supplier) => (
+    <option key={supplier.id} value={supplier.supplier_id}>
+      {supplier.supplier_name}
+    </option>
+  ))}
+</select>
 
-                <input
+                {/* <input
                   type="text"
                   placeholder="Supplier_id"
                   className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-1
@@ -833,7 +876,7 @@ useEffect(() => {
                     setvalues({ ...value, supplier_id: e.target.value })
                   }
                   value={value.supplier_id}
-                />
+                /> */}
                 <br />
                 <br />
                 <label className="font-bold" htmlFor="">
@@ -883,9 +926,6 @@ useEffect(() => {
             className="inline-flex items-center justify-center rounded-md bg-primary py-4 px-10 text-center
               font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
             onClick={handleFormSubmit}
-            
-
-            
           >
             Submite
           </button>

@@ -73,11 +73,15 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
 
 
 
-  const handleVariantChange = (e: ChangeEvent<HTMLInputElement>, index: number, field: string) => {
-    const updatedVariants = [...variants];
-    updatedVariants[index][field] = e.target.value;
-    setVariants(updatedVariants);
+  const handleVariantChange = (e: React.ChangeEvent<HTMLInputElement>, index: number, fieldName: string) => {
+    const newValue = e.target.value;
+    setVariants(prevVariants => {
+      const updatedVariants = [...prevVariants];
+      updatedVariants[index][fieldName] = newValue.split(', '); // Split the string into an array
+      return updatedVariants;
+    });
   };
+  
 
   const handleOptionChange = (e: ChangeEvent<HTMLInputElement>, variantIndex: number, optionIndex: number, field: keyof OptionValue) => {
     const updatedVariants = [...variants];
@@ -126,7 +130,7 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
               }[];
           }) => ({
               key: variant.key || '',
-              options: variant.value ? variant.value.join(', ') : '',
+              options: Array.isArray(variant.value) ? variant.value.join(', ') : '', // Check if variant.value is an array
               availableQuantity: variant.availableQuantity || '',
               optionValues: variant.optionValues || []
           }));
@@ -146,7 +150,7 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
  
   const handleUpdate = async () => {
     try {
-      const response = await axios.put(`http://localhost:5001/api/products/${559}`, {
+      const response = await axios.put(`http://localhost:5001/api/products/${id}`, {
         name,
               description,
               price,
@@ -426,6 +430,7 @@ return (
 
             <div>
               <input
+              value={quantity}
                 type="number"
                 placeholder="0"
                 className="w-30 rounded-lg border-[1.5px] border-stroke bg-transparent 
@@ -437,15 +442,8 @@ return (
           </div>
           <br />
 
-          <div className="flex">
-            <input type="checkbox" className="w-4" />
-            <h3 className="ml-2">Continue selling when out of stock</h3>
-          </div>
-          <p className=" ml-4">
-            This won't affect{' '}
-            Staff will see a warning, but can complete sales when
-            available inventory reaches zero and below.
-          </p>
+          
+        
           <br />
           <div className="flex">
             <input type="checkbox" className="w-4" />
@@ -574,7 +572,7 @@ return (
       <div className="rounded-xl border-stroke  bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className=" ml-5 mt-3">
           <h1 className="font-semibold">Publishing</h1>
-          <ul className="list-disc">
+          <ul className="list-disc mx-4">
             <li>Online Store</li>
             <li>Point of Sale</li>
             <p>

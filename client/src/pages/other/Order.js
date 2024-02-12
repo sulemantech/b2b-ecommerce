@@ -18,12 +18,18 @@ const Order = () => {
       try {
         const ordersData = await fetchUserOrders(storedToken);
         setOrders(ordersData);
+        console.log("order",ordersData)
       } catch (error) {
         console.error('Error fetching orders:', error);
       }
     };
     fetchData();
   }, [storedToken]);
+
+
+
+
+
 
   useEffect(() => {
     const lowercasedInput = searchInput.toLowerCase();

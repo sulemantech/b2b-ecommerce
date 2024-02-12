@@ -8,7 +8,7 @@ yarn.lock
 *.pyc
 .grunt
 _SpecRunner.html
-__benchmarks__
+_benchmarks_
 build/
 firebase
 /firebase
@@ -20,7 +20,7 @@ coverage/
 fixtures/dom/public/react-dom.js
 fixtures/dom/public/react.js
 test/the-files-to-test.generated.js
-*.log*
+.log
 chrome-user-data
 *.sublime-project
 *.sublime-workspace
