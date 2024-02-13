@@ -2,6 +2,8 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database/db');
 const notificationTypeModel = require('./notificationTypeModel');
+
+
 const notificationModel = sequelize.define('notification', {
   id: {
     type: DataTypes.INTEGER,

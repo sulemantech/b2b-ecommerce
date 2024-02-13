@@ -9,7 +9,7 @@ const productImages= require('../models/productImages');
 const categoryModel=require('../models/categoryModel');
 const productVariantModel=require('../models/productVariantModel')
 
-const { validateProduct, validateVariants } = require('../middlewares/validateVariantsMiddleware');
+const { validateProduct, validateVariants,validateBulkProducts } = require('../middlewares/validateVariantsMiddleware');
 
 //post API    ///////////////////////////////////////////////////////////////////
 router.post('/',validateProduct, validateVariants, async (req, res) => {
@@ -42,7 +42,7 @@ router.post('/',validateProduct, validateVariants, async (req, res) => {
 });
 
 // Bulk post API and its variants 
-router.post('/bulk',validateProduct, validateVariants, async (req, res) => {
+router.post('/bulk',validateBulkProducts, async (req, res) => {
   try {
     const products = req.body;
 
@@ -267,6 +267,27 @@ router.delete('/:productId', async (req, res) => {
     await existingProduct.destroy();
 
     res.status(200).json({ message: 'Product and Variants deleted successfully.' });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+// DELETE API to delete a specific variant by ID
+router.delete('/variants/:variantId', async (req, res) => {
+  try {
+    const variantId = req.params.variantId;
+
+    // Check if the variant exists
+    const existingVariant = await productVariantModel.findByPk(variantId);
+    if (!existingVariant) {
+      return res.status(404).json({ message: 'Variant not found.' });
+    }
+
+    // Delete the variant
+    await existingVariant.destroy();
+
+    res.status(200).json({ message: 'Variant deleted successfully.' });
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ error: 'Internal Server Error' });

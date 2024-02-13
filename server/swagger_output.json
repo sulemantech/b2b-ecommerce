@@ -994,8 +994,37 @@
         }
       }
     },
+    "/variants/{variantId}": {
+      "delete": {
+        "tags": ["Products"],
+        "summary": "Delete a variant by ID",
+        "description": "Deletes a variant by its ID.",
+        "parameters": [
+          {
+            "name": "variantId",
+            "in": "path",
+            "description": "ID of the variant to delete",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Variant deleted successfully"
+          },
+          "404": {
+            "description": "Variant not found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },    
    
-    "/api/products//bulk": {
+    "/api/products/bulk": {
       "post": {
         "description": "",
         "tags": ["Products"],
