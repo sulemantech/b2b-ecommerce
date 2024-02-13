@@ -15,6 +15,11 @@ This repository contains the codebase for a comprehensive B2B and B2C E-commerce
   - Advanced product search and filtering capabilities.
   - User authentication and authorization for personalized experiences.
   - Cart management and order processing functionality.
+ 
+  - ![Client Application](./screen_shots/Client_Capture6.PNG)
+  - ![Client Application](./screen_shots/Client_Capture10.PNG)
+  - ![Client Application](./screen_shots/Client_Capture13.PNG)
+    
 
 - **Server Application (API):**
   - Robust backend architecture powered by NodeJS and Express.
