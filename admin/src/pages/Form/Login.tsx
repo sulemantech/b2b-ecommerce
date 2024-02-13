@@ -1,6 +1,7 @@
-import Breadcrumb from '../../components/Breadcrumb';
+import Breadcrumb from "../../components/Breadcrumb";
 
 const FormLayout = () => {
+ 
   return (
     <>
       <Breadcrumb pageName="Login" />
@@ -21,8 +22,10 @@ const FormLayout = () => {
                     Email
                   </label>
                   <input
-                    type="email"
-                    placeholder="Enter your email address"
+                    type="Firstname"
+                
+                  
+                    placeholder="firstname"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />
                 </div>
@@ -33,6 +36,7 @@ const FormLayout = () => {
                   </label>
                   <input
                     type="password"
+                 
                     placeholder="Enter password"
                     className="w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                   />

@@ -12,7 +12,7 @@ const productVariantModel=require('../models/productVariantModel')
 const { validateProduct, validateVariants,validateBulkProducts } = require('../middlewares/validateVariantsMiddleware');
 
 //post API    ///////////////////////////////////////////////////////////////////
-router.post('/',validateProduct, validateVariants, async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const { products, variants } = req.body;
     // Create product record
@@ -171,7 +171,7 @@ router.get('/specific/:id', async (req, res) => {
         {
           model: productVariantModel,
           attributes: ['id','type', 'weight', 'unit', 'key', 'value', 'availableQuantity', 'optionValues'],
-          required: false, // Use false if you want left join
+          required: false, 
         }
       ]
     });

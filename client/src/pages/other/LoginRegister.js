@@ -48,7 +48,7 @@ const LoginRegister = () => {
 
   const SubmitLogin = () => {
     dispatch(submitLoginAsync(values,navigate));
-    console.log("clickhelooooooo");
+
   };
 
 
@@ -96,14 +96,14 @@ const LoginRegister = () => {
                             <form className="form" onSubmit={SubmitLogin}>
                               <input
                                 type="text"
-                                placeholder="firstname"
+                                placeholder="email"
                                 onChange={(e) =>
                                   setvalues({
                                     ...values,
-                                    firstname: e.target.value,
+                                    email: e.target.value,
                                   })
                                 }
-                                name={values.firstname}
+                                name={values.email}
                               />
                               <input
                                 type="password"

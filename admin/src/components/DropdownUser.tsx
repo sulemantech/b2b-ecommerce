@@ -1,31 +1,48 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaRegUserCircle } from "react-icons/fa";
+import Cookies from 'js-cookie';
+
+
+// import jwt_decode from 'jwt-decode';
+
+interface TokenData {
+  id: {
+    id: number;
+    firstname: string;
+    lastName: string;
+    email: string;
+    password: string;
+    address: string;
+    // token:string;
+
+    contactNumber: number;
+    businessName: string;
+    role: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  role: string;
+  iat: number;
+  exp: number;
+}
+
+
+
+
+
 
 const DropdownUser = () => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
+  const [tokenData, setTokenData] = useState<TokenData|undefined>();
+ 
+  
 
-  // close on click outside
   useEffect(() => {
-    const clickHandler = ({ target }: MouseEvent) => {
-      if (!dropdown.current) return;
-      if (
-        !dropdownOpen ||
-        dropdown.current.contains(target) ||
-        trigger.current.contains(target)
-      )
-        return;
-      setDropdownOpen(false);
-    };
-    document.addEventListener('click', clickHandler);
-    return () => document.removeEventListener('click', clickHandler);
-  });
 
-  // close if the esc key is pressed
-  useEffect(() => {
+  
     const keyHandler = ({ keyCode }: KeyboardEvent) => {
       if (!dropdownOpen || keyCode !== 27) return;
       setDropdownOpen(false);
@@ -33,6 +50,67 @@ const DropdownUser = () => {
     document.addEventListener('keydown', keyHandler);
     return () => document.removeEventListener('keydown', keyHandler);
   });
+
+
+ // Inside the useEffect block
+//  useEffect(() => {
+//   const token =
+//     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6eyJpZCI6MywiZmlyc3RuYW1lIjoic2FoaWJ6YWRhIiwibGFzdG5hbWUiOiJIYW16YSBzYXJkYXIiLCJlbWFpbCI6InNoYW16YXNhcmRhcjM2QGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJiJDEwJEhYanliSGNTTHplTm1HZFptSWk0SE9wN2UyclVDaGMwbWVKZDB2S3lVZVRkRWp2aUQvQ1cyIiwiYWRkcmVzcyI6Ik5hc2lyIEJhZ2ggcm9hZCBjYW5hbCB0b3duIHN0cmVldCA0QSBob3UgZW1haWwgaXMgIiwiY29udGFjdE51bWJlciI6MjY3ODgsImJ1c2luZXNzTmFtZSI6InNob2VzIiwicm9sZSI6IkFkbWluIiwiY3JlYXRlZEF0IjoiMjAyMy0xMi0wN1QwODowMDo0My42ODlaIiwidXBkYXRlZEF0IjoiMjAyMy0xMi0wN1QwODowMDo0My42ODlaIn0sInJvbGUiOiJBZG1pbiIsImlhdCI6MTcwNTY0NzQ4NywiZXhwIjoxNzA1NzMzODg3fQ.8SkzQiIQRS8TiROhF4cl3VTDeh9BP62QROh7X9hfo2A';
+//   const payload = token.split('.')[1];
+//   const tokenData = urlBase64Decode(payload);
+
+//   try {
+//     setTokenData(JSON.parse(tokenData) as TokenData);
+//   } catch (e) {
+//     setTokenData(undefined);
+//   }
+// }, []);
+useEffect(() => {
+  const token = Cookies.get('token');
+
+  if (token) {
+    const payload = token.split('.')[1];
+    const tokenData = urlBase64Decode(payload);
+
+    try {
+      setTokenData(JSON.parse(tokenData) as TokenData);
+    } catch (e) {
+      setTokenData(undefined);
+    }
+  } else {
+    // Handle the case where the token is not present in the cookies
+    setTokenData(undefined);
+  }
+}, []);
+// console.log("dataaaaaaa",tokenData);
+
+
+
+
+  const urlBase64Decode = (str: string): string => {
+    var output = str.replace(/-/g, '+').replace(/_/g, '/');
+    switch (output.length % 4) {
+      case 0:
+        break;
+      case 2:
+        output += '==';
+        break;
+      case 3:
+        output += '=';
+        break;
+      default:
+        throw new Error('Illegal base64url string!');
+    }
+    return decodeURIComponent(window.escape(atob(output)));
+  };
+  
+  
+
+
+
+
+
+  
 
   return (
     <div className="relative">
@@ -44,9 +122,9 @@ const DropdownUser = () => {
       >
         <span className="hidden text-right lg:block">
           <span className="block text-sm font-medium text-black dark:text-white">
-            Sahibzada Hamza
+           {tokenData?.id.email}
           </span>
-          <span className="block text-xs">Admin</span>
+          <span className="block text-xs">{tokenData?.role}</span>
         </span>
 
         <span className="h-12 w-12 rounded-full">

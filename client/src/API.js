@@ -64,7 +64,7 @@ const API_Registration = axios.create({
 
 
 
-const userOrder = `${APIHost}/api/order/user`;
+const userOrder = `${APIHost}/api/order/byrole`;
 export const fetchUserOrders = async (token) => {
   try {
     const response = await fetch(userOrder, {

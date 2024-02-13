@@ -7,6 +7,7 @@ import SignIn from './pages/Authentication/SignIn';
 import SignUp from './pages/Authentication/SignUp';
 import Loader from './common/Loader';
 import routes from './routes';
+import Cookies from 'js-cookie';
 
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'));
 
@@ -16,6 +17,7 @@ function App() {
   useEffect(() => {
     setTimeout(() => setLoading(false), 1000);
   }, []);
+  
 
   return loading ? (
     <Loader />
