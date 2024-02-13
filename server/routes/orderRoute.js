@@ -4,7 +4,7 @@ const registerationModel = require('../models/registerationModel');
 const { Op } = require('sequelize');
 const verifyToken = require('../middlewares/verifyToken')
 const orderItemsModel = require('../models/orderItemsModel');
-const validateOrderItem = require('../middlewares/validatorOrderItem');
+const validateOrder = require('../middlewares/validateOrder');
 const router = express.Router();
 
 // Get all orders 
@@ -94,21 +94,11 @@ router.get('/byrole', verifyToken, async (req, res) => {
 
 
 //POST API FOR ORDER    
-router.post('/', verifyToken, async (req, res) => {
+router.post('/', verifyToken,validateOrder, async (req, res) => {
   const { address, totalPrice, status, discount, paymentMethod, trackingNumber,
     name, email, contactNumber, zipCode, additionalInfo, city, country, shippingAddress,
     orderItems } = req.body;
 
-  //validator
-  try {
-    for (const cartItem of orderItems) {
-      validateOrderItem(cartItem);
-    }
-    validateOrderItem(address, totalPrice, status, discount, paymentMethod, trackingNumber,
-      name, email, contactNumber, zipCode, additionalInfo, city, country)
-  } catch (validationError) {
-    return res.status(400).json({ error: validationError.message });
-  }
   const userId = req.user.id;
   const orderDate = req.user.id.createdAt;
   try {

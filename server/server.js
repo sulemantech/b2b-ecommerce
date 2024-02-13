@@ -45,7 +45,7 @@ const server = new ApolloServer({
 app.use('/verify-id-token', authRoutes);
 
 //notification
-app.use('/send-notification',notificationRoute)
+app.use('/notifications',notificationRoute)
 
 //swagger Api's
 app.use('/n5store', swaggerUi.serve, swaggerUi.setup(require('./swagger_output.json')));

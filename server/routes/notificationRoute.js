@@ -26,7 +26,7 @@ router.post('/', (req, res) => {
   });
 
   //notification
-router.post('/notifications', async (req, res) => {
+router.post('/send', async (req, res) => {
   try {
     const { notification_type_id, related_entity_type, related_entity_id, message, sender_id, recipient_id, status } = req.body;
 
@@ -50,7 +50,7 @@ router.post('/notifications', async (req, res) => {
   
 
 //notificationType
-router.post('/notificationTypes', async (req, res) => {
+router.post('/types', async (req, res) => {
   try {
     // Extract data from request body
     const { typeName, description } = req.body;
@@ -71,7 +71,7 @@ router.post('/notificationTypes', async (req, res) => {
 });
 
 //new notificationConfiguration
-router.post('/notificationConfigurations', async (req, res) => {
+router.post('/config', async (req, res) => {
   try {
     // Extract data from request body
     const { user_id, notification_type_id, is_enabled } = req.body;

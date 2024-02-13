@@ -1545,6 +1545,177 @@
           }
         }
       }
+    },
+    "/send": {
+      "post": {
+        "description": "Create a new notification",
+        "tags": ["Notification"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Notification data",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "notification_type_id": {
+                  "type": "integer",
+                  "description": "ID of the notification type"
+                },
+                "related_entity_type": {
+                  "type": "string",
+                  "description": "Type of the related entity"
+                },
+                "related_entity_id": {
+                  "type": "integer",
+                  "description": "ID of the related entity"
+                },
+                "message": {
+                  "type": "string",
+                  "description": "Content of the notification message"
+                },
+                "sender_id": {
+                  "type": "integer",
+                  "description": "ID of the sender"
+                },
+                "recipient_id": {
+                  "type": "integer",
+                  "description": "ID of the recipient"
+                },
+                "status": {
+                  "type": "string",
+                  "description": "Status of the notification"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "New notification created"
+          },
+          "500": {
+            "description": "Internal server error occurred while processing the request"
+          }
+        }
+      }
+    },
+    "/types": {
+      "post": {
+        "description": "Create a new notification type",
+        "tags": ["Notification"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Notification type data",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "typeName": {
+                  "type": "string",
+                  "description": "Name of the notification type"
+                },
+                "description": {
+                  "type": "string",
+                  "description": "Description of the notification type"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "New notification type created"
+          },
+          "500": {
+            "description": "Internal server error occurred while processing the request"
+          }
+        }
+      }
+    },
+    "/config": {
+      "post": {
+        "description": "Create a new notification configuration",
+        "tags": ["Notification"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Notification configuration data",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user_id": {
+                  "type": "integer",
+                  "description": "ID of the user"
+                },
+                "notification_type_id": {
+                  "type": "integer",
+                  "description": "ID of the notification type"
+                },
+                "is_enabled": {
+                  "type": "boolean",
+                  "description": "Flag indicating whether the notification is enabled"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "New notification configuration created"
+          },
+          "500": {
+            "description": "Internal server error occurred while processing the request"
+          }
+        }
+      }
+    },
+    "/": {
+      "post": {
+        "description": "Send a notification",
+        "tags": ["Notification"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "Notification data",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "description": "Token of the device to which the notification will be sent"
+                },
+                "title": {
+                  "type": "string",
+                  "description": "Title of the notification"
+                },
+                "body": {
+                  "type": "string",
+                  "description": "Body of the notification"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notification sent successfully"
+          },
+          "500": {
+            "description": "Internal server error occurred while processing the request"
+          }
+        }
+      }
     }
+    
+    
+        
   }
 }
