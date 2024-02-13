@@ -4,7 +4,7 @@ const registerationModel = require('../models/registerationModel');
 const { Op } = require('sequelize');
 const verifyToken = require('../middlewares/verifyToken')
 const orderItemsModel = require('../models/orderItemsModel');
-const validateOrderItem = require('../middlewares/validatorOrderItem');
+const validateOrder = require('../middlewares/validateOrder');
 const router = express.Router();
 
 // Get all orders 
@@ -28,48 +28,78 @@ router.get('/', async (req, res) => {
 });
 
 //get specific orders of specific users through there id     
-router.get('/user', verifyToken, async (req, res) => {
-  const userId = req.user.id.id;
+// router.get('/user', verifyToken, async (req, res) => {
+//   const userId = req.user.id.id;
 
+//   try {
+//     const userOrders = await orderModel.findAll({
+//       where: { userId },
+//       include: [
+//         {
+//           model: registerationModel,
+//           attributes: ['id', 'firstname', 'lastname', 'contactNumber', 'email'],
+//         },
+//         {
+//           model: orderItemsModel,
+//           attributes: ['orderId', 'price', 'discount', 'totalPrice', 'productId', 'quantity'],
+//         },
+//       ],
+//     });
+
+//     res.json(userOrders);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Internal Server Error in user orders get' });
+//   }
+// });
+router.get('/byrole', verifyToken, async (req, res) => {
   try {
-    const userOrders = await orderModel.findAll({
-      where: { userId },
-      include: [
-        {
-          model: registerationModel,
-          attributes: ['id', 'firstname', 'lastname', 'contactNumber', 'email'],
-        },
-        {
-          model: orderItemsModel,
-          attributes: ['orderId', 'price', 'discount', 'totalPrice', 'productId', 'quantity'],
-        },
-      ],
-    });
+    console.log("req.user.id",req.user.role);
+    const userRole = req.user.role;
 
-    res.json(userOrders);
+    if (userRole === 'admin') {
+      // Admin can view all orders without any filtering
+      const orders = await orderModel.findAll({
+        include: [
+          {
+            model: orderItemsModel,
+            attributes: ["orderId", "price", "discount", "totalPrice", 'productId', 'quantity'],
+          },
+        ],
+        order: [['orderId', 'ASC']],
+      });
+      res.json(orders);
+    } else if (userRole === 'supplier') {
+      const userId = req.user.id;
+      // Supplier can view orders associated with their userId
+      const supplierOrders = await orderModel.findAll({
+        where: { userId },
+        include: [
+          {
+            model: orderItemsModel,
+            attributes: ["orderId", "price", "discount", "totalPrice", 'productId', 'quantity'],
+          },
+        ],
+        order: [['orderId', 'ASC']],
+      });
+      res.json(supplierOrders);
+    } else {
+      res.status(403).json({ message: 'Unauthorized: Access denied' });
+    }
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: 'Internal Server Error in user orders get' });
+    res.status(500).json({ message: 'Internal Server Error in order get' });
   }
 });
 
+
 //POST API FOR ORDER    
-router.post('/', verifyToken, async (req, res) => {
+router.post('/', verifyToken,validateOrder, async (req, res) => {
   const { address, totalPrice, status, discount, paymentMethod, trackingNumber,
     name, email, contactNumber, zipCode, additionalInfo, city, country, shippingAddress,
     orderItems } = req.body;
 
-  //validator
-  try {
-    for (const cartItem of orderItems) {
-      validateOrderItem(cartItem);
-    }
-    validateOrderItem(address, totalPrice, status, discount, paymentMethod, trackingNumber,
-      name, email, contactNumber, zipCode, additionalInfo, city, country)
-  } catch (validationError) {
-    return res.status(400).json({ error: validationError.message });
-  }
-  const userId = req.user.id.id;
+  const userId = req.user.id;
   const orderDate = req.user.id.createdAt;
   try {
     // Create a new order
@@ -99,7 +129,7 @@ router.post('/', verifyToken, async (req, res) => {
 
 //update api
 router.put('/update', verifyToken, async (req, res) => {
-  const userId = req.user.id.id;
+  const userId = req.user.id;
   const { address, totalPrice, status, discount, paymentMethod, trackingNumber,
     name, email, contactNumber, zipCode, additionalInfo, city, country, shippingAddress,
      } = req.body;
@@ -126,7 +156,7 @@ router.put('/update', verifyToken, async (req, res) => {
 //delete api
 
 router.delete('/:orderId', verifyToken, async (req, res) => {
-  const userId = req.user.id.id; // Assuming this is the user ID of the authenticated user
+  const userId = req.user.id; // Assuming this is the user ID of the authenticated user
   const orderIdToDelete = req.params.orderId;
 
   try {

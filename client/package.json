@@ -9,6 +9,7 @@
     "bootstrap": "^5.3.2",
     "clsx": "^1.2.1",
     "cogo-toast": "https://github.com/hasanm95/cogo-toast",
+    "firebase": "^10.8.0",
     "google-map-react": "^2.2.0",
     "i18next": "^22.0.4",
     "i18next-browser-languagedetector": "^7.0.0",

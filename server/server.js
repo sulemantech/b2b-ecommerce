@@ -18,7 +18,11 @@ const searchRoute= require('./routes/searchRoute')
 const typeDefs = require('./schema/graphqlSchema');
 const resolvers = require('./resolvers/resolver');
 const path = require('path');
-
+const customerRoute=require('./routes/customerRoute')
+const businessRoute=require('./routes/businessRoute')
+const swaggerUi = require('swagger-ui-express');
+const authRoutes = require('./routes/authRoutes');
+const notificationRoute=require('./routes/notificationRoute')
 require('dotenv').config();
 
 const app = express();
@@ -37,8 +41,14 @@ const server = new ApolloServer({
 });
 
 
-// await server.start()
-//  server.applyMiddleware({ app, path: '/api/product/search' });
+//authRoute firebase
+app.use('/verify-id-token', authRoutes);
+
+//notification
+app.use('/notifications',notificationRoute)
+
+//swagger Api's
+app.use('/n5store', swaggerUi.serve, swaggerUi.setup(require('./swagger_output.json')));
 
 //products
 app.use('/api/products/', productRoutes);
@@ -74,10 +84,16 @@ app.use('/api/orderitems', orderItemsRoute)
 //companies
 app.use('/api/company',companiesRoute)
 
+//customer
+app.use('/api/customer',customerRoute)
+
+app.use('/api/business',businessRoute)
+
 //searching
 const search='/api/product/'
 
-// Serve static files from the 'images' directory   http://localhost:5001/assets/products/images-1704183525093-867535339.png
+
+// Serve static files from the 'images' directory 
 app.use('/assets',express.static(path.join(__dirname, 'assets')));
 
 //Start the ApolloServer before applying middleware

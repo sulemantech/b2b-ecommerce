@@ -30,6 +30,4 @@ const addressModel = sequelize.define('address', {
   },
 });
 
-// Establishing the foreign key relationship
-
 module.exports = addressModel;

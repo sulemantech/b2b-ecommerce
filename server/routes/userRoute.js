@@ -6,20 +6,29 @@ const registerationModel = require('../models/registerationModel');
 const router = require('./productRoutes');
 const bcrypt = require('bcrypt');
 const verifyToken = require('../middlewares/verifyToken');
+const businessModel = require('../models/businessModel');
+const customerModel = require('../models/customerModel');
+
 
 router.post('/login', async (req, res) => {
-  const { firstname, password } = req.body;
+  const { email, password } = req.body;
 
   try {
     const user = await registerationModel.findOne({
       where: {
-        firstname,
+        email,
       },
     });
 
     if (user) {
       if (bcrypt.compareSync(password, user.password)) {
-        const token = jwt.sign({ id: user, role: user.role }, process.env.JWT_SECRET, {
+        const tokenData = {
+          id: user.id,
+          firstname: user.firstname,
+          email: user.email, 
+          role: user.role,
+        };
+        const token = jwt.sign(tokenData, process.env.JWT_SECRET, {
           expiresIn: 86400,
         });
 
@@ -29,7 +38,7 @@ router.post('/login', async (req, res) => {
         res.status(401).send({ auth: false, message: 'Incorrect password' });
       }
     } else {
-      res.status(401).send({ auth: false, message: 'Incorrect firstname' });
+      res.status(401).send({ auth: false, message: 'Incorrect email' });
     }
   } catch (error) {
     console.error(error);
@@ -39,11 +48,11 @@ router.post('/login', async (req, res) => {
 
 
 router.post('/register', async (req, res) => {
-    const { firstname,lastname,address, businessName,contactNumber, email, password } = req.body;
+    const { firstname,lastname,address, businessName,contactNumber, email, password,customerId,businessId } = req.body;
     const passwordhash=await bcrypt.hash(password,10);
     try {
       const newUser = await registerationModel.create({
-        firstname,lastname,address, businessName,contactNumber, email, password: passwordhash,
+        firstname,lastname,address, businessName,contactNumber, email, password: passwordhash,customerId,businessId
       });
       res.status(201).json(newUser);
     } catch (error) {
@@ -56,7 +65,18 @@ router.post('/register', async (req, res) => {
   // get registration
   router.get('/get/registration', async (req, res) => {
     try {
-      const allusers = await registerationModel.findAll();
+      const allusers = await registerationModel.findAll({
+        include: [
+          {
+            model: businessModel,
+            attributes: ['name', 'address', 'email'],
+          },
+          {
+            model: customerModel,
+            attributes: ['name', 'address', 'email'],
+          },
+        ],
+      });
       res.status(200).json(allusers);
     } catch (error) {
       console.error('Error:', error.message);
@@ -66,7 +86,7 @@ router.post('/register', async (req, res) => {
 
 //get specific user data that is login
 router.get('/user/profile', verifyToken, async (req, res) => {
-  const userId = req.user.id.id; // Assuming the decoded token has an 'id' property
+  const userId = req.user.id; // Assuming the decoded token has an 'id' property
 
   try {
     const user = await registerationModel.findByPk(userId);
@@ -96,7 +116,7 @@ router.get('/user/profile', verifyToken, async (req, res) => {
 
 // Update user profile
 router.put('/user/profile/update', verifyToken, async (req, res) => {
-const userId = req.user.id.id; 
+const userId = req.user.id; 
 
 try {
   const user = await registerationModel.findByPk(userId);

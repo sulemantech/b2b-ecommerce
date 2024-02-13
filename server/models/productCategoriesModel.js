@@ -7,4 +7,5 @@ const productCategoriesModel = sequelize.define('productCategories', {
   
 });
 
+
 module.exports = productCategoriesModel;

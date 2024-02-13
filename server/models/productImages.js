@@ -25,14 +25,6 @@ const productImages = sequelize.define('productImages', {
   },
 });
 
-sequelize.sync()
-  .then(() => {
-    console.log('ProductImage model synced with the database');
-  })
-  .catch((error) => {
-    console.error('Error syncing ProductImage model:', error);
-  });
-
 module.exports = productImages;
 
 

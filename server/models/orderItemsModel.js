@@ -44,7 +44,6 @@ const orderItemsModel = sequelize.define('orderItems', {
     },
 });
 
-// orderItemsModel.belongsTo(orderModel, { foreignKey: 'orderId' });
 orderItemsModel.belongsTo(productModel, { foreignKey: 'productId' });
 
 module.exports = orderItemsModel;
