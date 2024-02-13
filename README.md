@@ -15,10 +15,12 @@ This repository contains the codebase for a comprehensive B2B and B2C E-commerce
   - Advanced product search and filtering capabilities.
   - User authentication and authorization for personalized experiences.
   - Cart management and order processing functionality.
- 
+
+**Client Application Screenshots:**
   - ![Client Application](./screen_shots/Client_Capture6.PNG)
-  - ![Client Application](./screen_shots/Client_Capture10.PNG)
   - ![Client Application](./screen_shots/Client_Capture13.PNG)
+  - ![Client Application](./screen_shots/Client_Capture8.PNG)
+  - ![Client Application](./screen_shots/Client_Capture9.PNG)
     
 
 - **Server Application (API):**
@@ -27,12 +29,29 @@ This repository contains the codebase for a comprehensive B2B and B2C E-commerce
   - Database integration with Postgresql and Sequelize ORM for efficient data handling.
   - RESTful API endpoints for seamless communication between client and server.
   - Scalable and modular codebase for easy maintenance and updates.
+ 
+    **Client Application Screenshots:**
+  - ![APIs](./screen_shots/swagger1.PNG)
+  - ![APIs](./screen_shots/swagger2.PNG)
+  - ![APIs](./screen_shots/swagger3.PNG)
+  - ![APIs](./screen_shots/swagger4.PNG)
+  - ![APIs](./screen_shots/swagger5.PNG)
+    
 
 - **Admin Dashboard:**
   - Powerful admin dashboard built with TypeScript.
   - Data visualization using Tailwind and other related technologies for graphs and charts.
   - User management and access control features.
   - Comprehensive insights into sales, user activities, and other key metrics.
+
+  **Admin Application Screenshots:**
+  - ![Admin Application](./screen_shots/Capture.PNG)
+  - ![Admin Application](./screen_shots/Capture2.PNG)
+  - ![Admin Application](./screen_shots/Capture5.PNG)
+  - ![Admin Application](./screen_shots/Capture3.PNG)
+  - ![Admin Application](./screen_shots/Capture4.PNG)
+  - ![Admin Application](./screen_shots/Capture7.PNG)
+    
 
 ## Prerequisites
 
