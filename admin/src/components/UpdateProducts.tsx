@@ -5,13 +5,15 @@ import { Link } from 'react-router-dom';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { ChangeEvent } from 'react';
+import { useNavigate } from "react-router-dom";
+
 
 interface UpdateProductProps {}
 interface ProductVariant {
   key: string;
   id: number;
   options: string;
-  value: string;
+  values: string;
   availableQuantity: string;
   unit: string;
   weight: number;
@@ -23,6 +25,11 @@ interface ProductVariant {
 
   [key: string]: any;
 }
+interface FormData {
+  selectedOption: string;
+  inputValue: string;
+  dynamicFields: string[];
+}
 
 interface OptionValue {
   id: string;
@@ -31,13 +38,119 @@ interface OptionValue {
 }
 
 const UpdateProduct: React.FC<UpdateProductProps> = () => {
-  const [_, setEditorContent] = useState('');
 
+
+
+  const [submittedData, setSubmittedData] = useState<{ [key: string]: string[]; }>({});
+  const [, setUniqueValuesSet] = useState<Set<string>>(new Set());
+  const [, setDropdownVisible] = useState<boolean>(true);
+  const [tableInputValues, setTableInputValues] = useState< Array<{ [key: string]: string }>>([]);
+  const [formData, setFormData] = useState<FormData>({
+    selectedOption: '',
+    inputValue: '',
+    dynamicFields: [],
+  });
+  const [_, setEditorContent] = useState('');
+  const navigate = useNavigate();
   const { id } = useParams();
   const handleEditorChange = (_: any, editor: any) => {
     const content = editor.getData();
     setEditorContent(content);
   };
+
+  const handleDropdownChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFormData({
+      selectedOption: e.target.value,
+      inputValue: '',
+      dynamicFields: [],
+    });
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      inputValue: e.target.value,
+    }));
+    if (e.target.value.trim() !== '') {
+      if (
+        formData.dynamicFields.length === 0 ||
+        formData.dynamicFields.slice(-1)[0].trim() !== ''
+      ) {
+        setFormData((prevData) => ({
+          ...prevData,
+          dynamicFields: [...prevData.dynamicFields, ''],
+        }));
+      }
+    }
+  };
+
+  const handleDynamicFieldChange = (index: number, value: string) => {
+    const updatedFields = [...formData.dynamicFields];
+    if (value.trim() === '') {
+      if (updatedFields.length > 1) {
+        updatedFields.splice(index, 1);
+      }
+    } else {
+      updatedFields[index] = value;
+      if (value.length === 1 && index === updatedFields.length - 1) {
+        updatedFields.push('');
+      }
+    }
+
+    setFormData({
+      ...formData,
+      dynamicFields: updatedFields,
+    });
+  };
+
+  const handleSubmit = () => {
+    const { selectedOption, inputValue, dynamicFields } = formData;
+    const isDuplicateInForm = (dynamicFields || []).includes(inputValue);
+    const isDuplicateInSubmittedData = (
+      submittedData[selectedOption] || []
+    ).includes(inputValue);
+    const nonEmptyDynamicFields = dynamicFields.filter(
+      (field) => field.trim() !== '',
+    );
+    if (isDuplicateInForm || isDuplicateInSubmittedData) {
+      console.log(`Duplicate value for ${selectedOption}: ${inputValue}`);
+    } else {
+      setSubmittedData((prevData) => ({
+        ...prevData,
+        [selectedOption]: [
+          ...(prevData[selectedOption] || []),
+          inputValue,
+          ...nonEmptyDynamicFields,
+        ],
+      }));
+      setUniqueValuesSet(
+        (prevValues) =>
+          new Set([...prevValues, inputValue, ...nonEmptyDynamicFields]),
+      );
+      setDropdownVisible(false);
+      setTableInputValues([]);
+    }
+  };
+
+  const handleTableInputChange = (
+    outerIndex: number,
+    property: string,
+    value: string,
+  ) => {
+    const updatedInputValues = [...tableInputValues];
+    updatedInputValues[outerIndex] = { ...updatedInputValues[outerIndex] };
+    updatedInputValues[outerIndex][property] = value;
+    setTableInputValues(updatedInputValues);
+    console.log('Table Input Values:', tableInputValues);
+  };
+
+
+
+
+
+
+
+
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -85,6 +198,7 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
     });
   };
 
+ 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -113,48 +227,49 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
         setProductImages(
           (product.productImages && product.productImages[0]?.images) || [],
         );
+     
         if (product.productVariants) {
           const variantsData = product.productVariants.map(
             (variant: {
               key: string;
-              value: string[] | null;
+              value: string | null;
               availableQuantity: string | null;
               unit: string | null;
               weight: number | null;
               id: number | null;
-
               optionValues: {
                 id: string;
-                name: string;
+                name: string[];
                 variantSku: string[];
               }[];
             }) => ({
               key: variant.key || '',
-              options: Array.isArray(variant.value)
-                ? variant.value.join(', ')
-                : '',
               availableQuantity: variant.availableQuantity || '',
               unit: variant.unit || '',
-              value: variant.value || '',
+              values: Array.isArray(variant.value) ? variant.value : (variant.value ? JSON.parse(variant.value) : []),
               id: variant.id || '',
               weight: variant.weight || '',
               optionValues: variant.optionValues.map((optionValue) => ({
                 id: optionValue.id,
-                name: optionValue.name,
+                name: Array.isArray(optionValue.name) ? optionValue.name[0] : optionValue.name,
                 variantSku: optionValue.variantSku,
               })),
+            
             }),
           );
           setVariants(variantsData);
           console.log('variant', variantsData);
         }
+        
+        
       } catch (error) {
         console.error('Error fetching product:', error);
       }
     };
-
+  
     fetchProduct();
   }, [id]);
+  
   const handleUpdate = async () => {
     try {
       const response = await axios.put(
@@ -179,12 +294,47 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
           categoryName,
           variants: variants,
         },
-      );
-      console.log(response.data);
+        );
+        console.log(response.data);
+        navigate('/products');
+      
+      
     } catch (error) {
       console.error('Error updating product:', error);
     }
   };
+
+//****DEleteVariants*****
+
+async function deleteVariant(variantId: number) {
+  try {
+    const response = await fetch(`http://localhost:5001/api/products/variants/${variantId}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (!response.ok) {
+      const errorMessage = await response.json();
+      throw new Error(errorMessage.message || 'Failed to delete variant.');
+    }
+
+    console.log('Variant deleted successfully.');
+    const newVariants = variants.filter(variant => variant.id !== variantId);
+    setVariants(newVariants);
+  } catch (error) {
+    console.error('Error:', error);
+  }
+}
+
+
+
+
+
+
+
+
   // ****DEleteImage***********
   const handleDeleteImage = async () => {
     try {
@@ -480,18 +630,232 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-9">
+          <div className="flex flex-col">
+            <div className="rounded-xl border-stroke  bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-5">
+              <h1 className="font-bold">Variants</h1>
+              <hr />
+              <div className="mt-5 border-bodydark border-opacity-20 border-4 p-5">
+                <h1>Option name</h1>
+                <select
+                  style={{ background: 'lightgray' }}
+                  id="dropdown"
+                  value={formData.selectedOption}
+                  onChange={handleDropdownChange}
+                  className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
+        px-5  bg-black font-medium outline-none transition focus:border-primary active:border-primary 
+        disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+        dark:focus:border-primary"
+                >
+                  <option value="color">select-</option>
+                  <option value="color">Color</option>
+                  <option value="size">Size</option>
+                  {/* Add more options as needed */}
+                </select>
+                <br />
+                <br />
+
+                {formData.selectedOption === 'color' ||
+                formData.selectedOption === 'size' ? (
+                  <div>
+                    <h1 className="font-bold">Option Value</h1>
+                    <input
+                      style={{ background: 'lightgray' }}
+                      type="text"
+                      className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
+            px-3 font-medium outline-none transition focus:border-primary active:border-primary 
+            disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+            dark:focus:border-primary"
+                      id="valueInput"
+                      name="value"
+                      value={formData.inputValue}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                ) : null}
+
+                {formData.dynamicFields.map((field, index) => (
+                  <div key={index}>
+                    <input
+                      style={{ background: 'lightgray' }}
+                      type="text"
+                      placeholder="Add another value"
+                      className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
+            px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+            disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+            dark:focus:border-primary"
+                      value={field}
+                      onChange={(e) =>
+                        handleDynamicFieldChange(index, e.target.value)
+                      }
+                    />
+                  </div>
+                ))}
+                <br />
+                <br />
+
+                <button
+                  type="button"
+                  className="inline-flex items-center justify-center rounded-md
+        bg-black p-1  text-center font-medium text-white hover:bg-opacity-90 "
+                  onClick={handleSubmit}
+                >
+                  Add New
+                </button>
+                <br />
+                <br />
+              </div>
+
+              <div className="Parent ">
+                <div className="table mt-5">
+                  {Object.keys(submittedData).length > 0 && (
+                    <div>
+                      <table>
+                        <thead>
+                          <tr>
+                            <th className="border font-bold border-stroke p-2">
+                              Value
+                            </th>
+                            <th className="border font-bold border-stroke p-2">
+                              Type
+                            </th>
+                            <th className="border font-bold border-stroke p-2">
+                              Weight
+                            </th>
+                            <th className="border font-bold border-stroke p-2">
+                              Unit
+                            </th>
+                            <th className="border font-bold border-stroke p-2">
+                              AvailableQuantity
+                            </th>
+
+                            <th className="border font-bold border-stroke p-2">
+                              VarientPrice
+                            </th>
+                            <th className="border font-bold border-stroke p-2">
+                              VariantSku
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {Object.entries(submittedData).map(
+                            ([_, values], index) =>
+                              values.map((value, innerIndex) => (
+                                <tr key={`${index}-${innerIndex}`}>
+                                  <td className="border font-bold border-stroke p-2">
+                                    {value}
+                                  </td>
+                                  <td className="border font-bold border-stroke p-2">
+                                    <input
+                                      type="text"
+                                      placeholder="type"
+                                      className="w-full min-w-30 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                      onChange={(e) =>
+                                        handleTableInputChange(
+                                          innerIndex,
+                                          'type',
+                                          e.target.value,
+                                        )
+                                      }
+                                    />
+                                  </td>
+                                  <td className="border font-bold border-stroke p-2">
+                                    <input
+                                      type="number"
+                                      placeholder="0.0"
+                                      className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                      onChange={(e) =>
+                                        handleTableInputChange(
+                                          innerIndex,
+                                          'weight',
+                                          e.target.value,
+                                        )
+                                      }
+                                    />
+                                  </td>
+                                  <td className="border font-bold border-stroke p-2">
+                                    <input
+                                      type="text"
+                                      placeholder="Kg"
+                                      className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                      onChange={(e) =>
+                                        handleTableInputChange(
+                                          innerIndex,
+                                          'unit',
+                                          e.target.value,
+                                        )
+                                      }
+                                    />
+                                  </td>
+                                  <td className="border font-bold border-stroke p-2">
+                                    <input
+                                      type="number"
+                                      placeholder="0.0"
+                                      className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                      onChange={(e) =>
+                                        handleTableInputChange(
+                                          innerIndex,
+                                          'availableQuantity',
+                                          e.target.value,
+                                        )
+                                      }
+                                    />
+                                  </td>
+                                  <td className="border font-bold border-stroke p-2">
+                                    <input
+                                      type="number"
+                                      placeholder="0.0"
+                                      className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                      onChange={(e) =>
+                                        handleTableInputChange(
+                                          innerIndex,
+                                          'variantPrice',
+                                          e.target.value,
+                                        )
+                                      }
+                                    />
+                                  </td>
+                                  <td className="border font-bold border-stroke p-2">
+                                    <input
+                                      type="text"
+                                      placeholder="sku"
+                                      className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                                      onChange={(e) =>
+                                        handleTableInputChange(
+                                          innerIndex,
+                                          'variantSku',
+                                          e.target.value,
+                                        )
+                                      }
+                                    />
+                                  </td>
+                                </tr>
+                              )),
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+
+          <div className="flex flex-col ">
             <div className="rounded-xl border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-5">
               <table>
-                <thead>
+                <thead className='p-10'>
                   <tr>
                     <th> Key</th>
-                    <th>values</th>
+                    <th>Values</th>
                     <th>Available Quantity</th>
                     <th>Option Values</th>
+                    <th>Action</th>
                   </tr>
                 </thead>
-                <tbody>
+                {/* <tbody>
                   {variants.map((variant, index) => (
                     <tr key={index}>
                       <td>
@@ -499,6 +863,10 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
                           type="text"
                           value={variant.key}
                           onChange={(e) => handleVariantChange(e, index, 'key')}
+                          className="w-20 rounded-lg border-[1.5px] border-stroke bg-transparent  mr-4
+            px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+            disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+            dark:focus:border-primary"
                         />
                       </td>
                       <td>
@@ -506,11 +874,14 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
                           <div key={index} className="option-value">
                             <input
                               type="text"
-                              value={variant.value}
+                              value={variant.values}
                               onChange={(e) =>
-                                handleVariantChange(e, index, 'value')
+                                handleVariantChange(e, index, 'values')
                               }
-                              className="option-name-input"
+                              className="w-30 rounded-lg border-[1.5px] border-stroke bg-transparent  mr-4
+            px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+            disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+            dark:focus:border-primary"
                             />
                           </div>
                         ))}
@@ -522,13 +893,22 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
                           onChange={(e) =>
                             handleVariantChange(e, index, 'availableQuantity')
                           }
+                            className="w-20 rounded-lg border-[1.5px] border-stroke bg-transparent  mr-4
+            px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+            disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+            dark:focus:border-primary"
                         />
                       </td>
                       <td>
-                        <div className="option-names">
+                        <div className="option-names flex p-10">
                           {variant.optionValues.map((option, optionIndex) => (
                             <div key={optionIndex} className="option-value">
                               <input
+                                className="w-20 rounded-lg border-[1.5px] border-stroke bg-transparent  mr-4
+            px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+            disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+            dark:focus:border-primary"
+                              
                                 type="text"
                                 value={option.name}
                                 onChange={(e) =>
@@ -539,15 +919,89 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
                                     'name',
                                   )
                                 }
-                                className="option-name-input"
+                               
                               />
                             </div>
                           ))}
                         </div>
                       </td>
+                      <td><button className='font-extrabold'
+                         onClick={()=>deleteVariant(variant.id)}
+
+                      >
+                        Delete
+                        </button></td>
                     </tr>
                   ))}
-                </tbody>
+                </tbody> */}
+                <tbody>
+  {variants.map((variant, index) => (
+    <tr key={index}>
+      <td>
+        {/* <input
+          type="text"
+          value={variant.key}
+          onChange={(e) => handleVariantChange(e, index, 'key')}
+          className="input-style"
+        /> */}
+      </td>
+      <td>
+      {Array.isArray(variant.values) && variant.values.map((value, valueIndex) => (
+  <div key={valueIndex} className="option-value">
+    <input
+      type="text"
+      value={value}
+      onChange={(e) =>
+        handleVariantChange(e, index, 'values')}
+      className="input-style"
+    />
+  </div>
+))}
+      </td>
+      <td>
+        <input
+          type="text"
+          value={variant.availableQuantity}
+          onChange={(e) =>
+            handleVariantChange(e, index, 'availableQuantity')
+          }
+          className="input-style"
+        />
+      </td>
+      <td>
+        <div className="option-names">
+          {variant.optionValues.map((option, optionIndex) => (
+            <div key={optionIndex} className="option-value">
+              <input
+                type="text"
+                value={option.name}
+                onChange={(e) =>
+                  handleOptionChange(
+                    e,
+                    index,
+                    optionIndex,
+                    'name'
+                  )
+                }
+                className="input-style"
+              />
+            </div>
+            
+          ))}
+        </div>
+      </td>
+      <td>
+        <button
+          className='font-extrabold'
+          onClick={() => deleteVariant(variant.id)}
+        >
+          Delete
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
+
               </table>
             </div>
           </div>

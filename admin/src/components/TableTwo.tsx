@@ -20,7 +20,7 @@ const TableTwo: React.FC  = () => {
   }
 const fetchAllProducts = () => {
   const API_Urlfetch=`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products/all`;
-  console.log("product API",API_Urlfetch)
+  // console.log("product API",API_Urlfetch)
   fetch(API_Urlfetch)
     .then(response => {
       if (!response.ok) {
