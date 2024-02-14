@@ -1,49 +1,57 @@
 
-import { useEffect,useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState} from 'react';
+import Cookies from 'js-cookie';
+
+interface Order {
+  id: number;
+  orderDate:Date;
+  totalPrice:number;
+  status:string;
+  discount:string;
+  paymentMethod:string;
+  trackingNumber:string;
+
+}
 
 
 
 const TableTwo: React.FC  = () => {
-  // console.log(import.meta.env)
-  const [products,setProducts]=useState<Products[]>([]);
-  interface Products {
-    id: number;
-    productId: number;
-    name: string;
-    price: number;
-    categoryName: string;
-    discount: number;
-    manufacturer:string;
-    productImages: Array<{ date: string; images: string[] }>;
-    // productImages?: { date: string; images: string[] }[] | undefined;
-  }
-const fetchAllProducts = () => {
-  const API_Urlfetch=`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products/all`;
-  console.log("product API",API_Urlfetch)
-  fetch(API_Urlfetch)
-    .then(response => {
-      if (!response.ok) {
-        console.log("Network error");
+  const token = Cookies.get('token');
+  const [orders, setOrders] = useState<Order[]>([])
+
+  
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        const response = await fetch('http://localhost:5001/api/order/byrole', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch orders');
+        }
+
+        const data = await response.json();
+        // Sort orders in descending order based on orderDate
+        const sortedOrders = data.sort((a: Order, b: Order) => {
+          return new Date(b.orderDate).getTime() - new Date(a.orderDate).getTime();
+        });
+        setOrders(sortedOrders);
+      } catch (error) {
+        console.error('Error fetching orders:', error);
       }
-      return response.json();
-    })
-    .then(data => {
-      setProducts(data);
-    })
-    .catch(error => {
-      console.error('Error fetching all products:', error.message);
-    });
-};
+    };
 
-
-useEffect(() => {
-  fetchAllProducts();
-}, []);
-
-
-
-
+    fetchOrders();
+  }, []);
+ 
+  
+  
   return (
     <>
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
@@ -61,9 +69,7 @@ useEffect(() => {
         <div className="col-span-1 flex items-center">
           <p className="font-medium text-black">Status</p>
         </div>
-        <div className="col-span-1 flex items-center">
-          <p className="font-medium text-black">Shipping Address</p>
-        </div>
+       
          <div className="col-span-1 flex items-center">
           <p className="font-medium text-black">Payment Method</p>
         </div>
@@ -72,47 +78,36 @@ useEffect(() => {
         </div>
       </div>
       
-      {products.map((product) => (
-        <div  key={product.id}
-        className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5"  id={`${product.id}`}>
+      {orders.map((index) => (
+        <div  key={index.id}
+        className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5"  id={`${index.id}`}>
     <div className="col-span-2 flex items-center">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
         <div className="h-12.5 w-15 rounded-md">
-        {/* <img src={process.env.RESOURCE_SERVER_HOST + product.productImages[0]?.images[0]} alt="" /> */}
-        <img src={`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}${product?.productImages[0]?.images[0]}`} />
-
-           {/* console.log("pppppppppppppppppp",)   */}
+        {new Date(index.orderDate).toLocaleString()}
+     
         </div>
         <p className="text-sm text-black dark:text-white">
-          {product.name}
-          {/* {product.id} */}
+          {/* {index.orderDate} */}
         </p>
       </div>
     </div>
     <div className="col-span-2 hidden items-center sm:flex">
-      <p className="text-sm text-black dark:text-white">{product.categoryName}</p>
+      <p className="text-sm text-black dark:text-white">{index.totalPrice}</p>
     </div>
     <div className="col-span-1 flex items-center">
-      <p className="text-sm text-black dark:text-white">{product.price}</p>
+      <p className="text-sm text-black dark:text-white">{index.discount}</p>
     </div>
     <div className="col-span-1 flex items-center">
-      <p className="text-sm text-black dark:text-white">{product.discount}</p>
+      <p className="text-sm text-black dark:text-white">{index.status}</p>
     </div>
     <div className="col-span-1 flex items-center">
-      <p className="text-sm text-black dark:text-white">{product.manufacturer}</p>
+      <p className="text-sm text-black dark:text-white">{index.paymentMethod}</p>
     </div>
     <div className="col-span-1 flex items-center">
-      <div>
-        <Link to={`/UpdateProducts/${product.id}`} className="bg-blue hover:bg-blue-700 font-bold py-2 px-4 rounded-full">
-        Edit
-      </Link>
-
-      </div>
+      <p className="text-sm text-black dark:text-white">{index.trackingNumber}</p>
     </div>
     <div className="col-span-1 flex items-center">
-      <Link to={`/forms/form-elements/`} className="bg-blue hover:bg-blue-700 font-bold py-2 px-4 rounded-full">
-        AddNew
-      </Link>
     </div>
   </div>
 ))}

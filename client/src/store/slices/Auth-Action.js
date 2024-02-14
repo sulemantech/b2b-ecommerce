@@ -3,19 +3,12 @@ import { login, logout } from './Auth-slice';
 import { deleteAllFromCart } from '../slices/cart-slice';
 import { deleteAllFromWishlist } from './wishlist-slice';
 import {post} from '../../API';
-// import {post} from '../../../../admin/src/pages/Dashboard/ECommerce';
 
 export const navigateAction = (navigate, path) => {
   navigate(path);
 };
 export const submitLoginAsync = (values, navigate) => async (dispatch) => {
-  // try {
-  //   const result = await post('/login', values);
 
-  //   dispatch(login({ user: result.user, token: result.token }));
-  //   console.log('Login successful:', result.token);
-  //   navigate('/');
-  // } 
   try {
     const result = await post('/login', values);
 
@@ -30,7 +23,7 @@ export const submitLoginAsync = (values, navigate) => async (dispatch) => {
       //admin navgation setting here 
       // navigate('../../../../admin/src/pages/Dashboard/ECommerce');
 
-    } else if (result.role === 'user') {
+    } else if (result.role === 'supplier') {
       console.log("user running");
       navigate('/');
     }
