@@ -16,8 +16,8 @@ interface Category {
 interface supplier {
   id: number;
   name: string;
-  supplier_id:number;
-  supplier_name:string;
+  supplier_id: number;
+  supplier_name: string;
 }
 const FormElements = () => {
   const [productId, setProductId] = useState('');
@@ -149,13 +149,9 @@ const FormElements = () => {
     productId: '',
     status: '',
   });
-  console.log(value);
+  
+  
 
-
- 
- 
- 
- 
   const handleFormSubmit = async () => {
     handleSubmitImage();
     try {
@@ -163,7 +159,6 @@ const FormElements = () => {
         ([option, values], index) => {
           const tableInput = tableInputValues[index];
 
-  
           return {
             key: option,
             values: values,
@@ -172,7 +167,7 @@ const FormElements = () => {
             unit: tableInput?.unit || undefined,
             availableQuantity: tableInput?.availableQuantity || undefined,
             variantPrice: tableInput?.variantPrice || undefined,
-            variantSku: tableInput?.variantSku || "",
+            variantSku: tableInput?.variantSku || '',
             optionValues: values.map((name, id) => {
               return {
                 id: id.toString(),
@@ -181,9 +176,9 @@ const FormElements = () => {
               };
             }),
           };
-        }
+        },
       );
-  
+
       // Prepare the full request data
       const requestData = {
         products: value,
@@ -191,7 +186,7 @@ const FormElements = () => {
       };
       const response = await axios.post(
         'http://localhost:5001/api/products/',
-        requestData
+        requestData,
       );
       console.log('Product and Variants created:', response.data);
       setTableInputValues([]);
@@ -217,12 +212,10 @@ const FormElements = () => {
         inputValue: '',
         dynamicFields: [],
       });
-  
     } catch (error) {
       console.error('Error creating product and variants:', error);
     }
   };
-  
 
   const handleSubmitImage = async () => {
     if (!productId) {
@@ -730,7 +723,6 @@ const FormElements = () => {
               </div>
             </div>
           </div>
-          
         </div>
 
         {/* //////////////////////////////////////second column/////////////////////////////////////////////////////////////////////////////////////////// */}
@@ -842,29 +834,29 @@ const FormElements = () => {
     <option key={supplier.id} value={supplier.supplier_id}>{supplier.supplier_id}</option>
   ))}
 </select> */}
-<select
-  onChange={(e) => {
-    const selectedSupplier = suppliers.find(
-      (supplier) => supplier.supplier_id === parseInt(e.target.value)
-    );
-    if (selectedSupplier) {
-      setvalues({
-        ...value,
-        supplier_id: String(selectedSupplier.supplier_id),
-      
-      });
-    }
-  }}
-  value={value.supplier_id} 
-  className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
->
-  <option value="">Selected Vendor</option>
-  {suppliers.map((supplier) => (
-    <option key={supplier.id} value={supplier.supplier_id}>
-      {supplier.supplier_name}
-    </option>
-  ))}
-</select>
+                <select
+                  onChange={(e) => {
+                    const selectedSupplier = suppliers.find(
+                      (supplier) =>
+                        supplier.supplier_id === parseInt(e.target.value),
+                    );
+                    if (selectedSupplier) {
+                      setvalues({
+                        ...value,
+                        supplier_id: String(selectedSupplier.supplier_id),
+                      });
+                    }
+                  }}
+                  value={value.supplier_id}
+                  className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                >
+                  <option value="">Selected Vendor</option>
+                  {suppliers.map((supplier) => (
+                    <option key={supplier.id} value={supplier.supplier_id}>
+                      {supplier.supplier_name}
+                    </option>
+                  ))}
+                </select>
 
                 {/* <input
                   type="text"

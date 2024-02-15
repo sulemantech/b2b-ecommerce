@@ -8,13 +8,16 @@ import { ChangeEvent } from 'react';
 import { useNavigate } from "react-router-dom";
 
 
+
 interface UpdateProductProps {}
 interface ProductVariant {
   key: string;
   id: number;
   options: string;
   values: string;
+  type:string;
   availableQuantity: string;
+  variantPrice:number;
   unit: string;
   weight: number;
   optionValues: {
@@ -185,6 +188,10 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
     ] as string[]) = [e.target.value];
     setVariants(updatedVariants);
   };
+
+
+
+
   const handleVariantChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     index: number,
@@ -197,6 +204,25 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
       return updatedVariants;
     });
   };
+
+
+
+
+  
+  // const handleVariantChange = (
+  //   e: React.ChangeEvent<HTMLInputElement>,
+  //   index: number,
+  //   fieldName: string,
+  // ) => {
+  //   const newValue: string = e.target.value;
+  //   setVariants((prevVariants) => {
+  //     const updatedVariants: ProductVariant[] = [...prevVariants];
+  //     // Check if fieldName is 'weight' and convert newValue to a number
+  //     updatedVariants[index][fieldName] = fieldName === 'weight' ? Number(newValue) : newValue;
+  //     return updatedVariants;
+  //   });
+  // };
+  
 
  
   useEffect(() => {
@@ -233,7 +259,9 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
             (variant: {
               key: string;
               value: string | null;
+              type:number |null;
               availableQuantity: string | null;
+              variantPrice:number|null;
               unit: string | null;
               weight: number | null;
               id: number | null;
@@ -245,8 +273,10 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
             }) => ({
               key: variant.key || '',
               availableQuantity: variant.availableQuantity || '',
+              variantPrice:variant.variantPrice || '',
               unit: variant.unit || '',
               values: Array.isArray(variant.value) ? variant.value : (variant.value ? JSON.parse(variant.value) : []),
+              type:variant.type || '',
               id: variant.id || '',
               weight: variant.weight || '',
               optionValues: variant.optionValues.map((optionValue) => ({
@@ -839,158 +869,123 @@ async function deleteVariant(variantId: number) {
               </div>
             </div>
           </div>
-
-
-
-
           <div className="flex flex-col ">
             <div className="rounded-xl border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-5">
-              <table>
-                <thead className='p-10'>
-                  <tr>
-                    <th> Key</th>
-                    <th>Values</th>
-                    <th>Available Quantity</th>
-                    <th>Option Values</th>
-                    <th>Action</th>
-                  </tr>
-                </thead>
-                {/* <tbody>
-                  {variants.map((variant, index) => (
-                    <tr key={index}>
-                      <td>
-                        <input
-                          type="text"
-                          value={variant.key}
-                          onChange={(e) => handleVariantChange(e, index, 'key')}
-                          className="w-20 rounded-lg border-[1.5px] border-stroke bg-transparent  mr-4
-            px-5 font-medium outline-none transition focus:border-primary active:border-primary 
-            disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
-            dark:focus:border-primary"
-                        />
-                      </td>
-                      <td>
-                        {variants.map((variant, index) => (
-                          <div key={index} className="option-value">
-                            <input
-                              type="text"
-                              value={variant.values}
-                              onChange={(e) =>
-                                handleVariantChange(e, index, 'values')
-                              }
-                              className="w-30 rounded-lg border-[1.5px] border-stroke bg-transparent  mr-4
-            px-5 font-medium outline-none transition focus:border-primary active:border-primary 
-            disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
-            dark:focus:border-primary"
-                            />
-                          </div>
-                        ))}
-                      </td>
-                      <td>
-                        <input
-                          type="text"
-                          value={variant.availableQuantity}
-                          onChange={(e) =>
-                            handleVariantChange(e, index, 'availableQuantity')
-                          }
-                            className="w-20 rounded-lg border-[1.5px] border-stroke bg-transparent  mr-4
-            px-5 font-medium outline-none transition focus:border-primary active:border-primary 
-            disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
-            dark:focus:border-primary"
-                        />
-                      </td>
-                      <td>
-                        <div className="option-names flex p-10">
-                          {variant.optionValues.map((option, optionIndex) => (
-                            <div key={optionIndex} className="option-value">
-                              <input
-                                className="w-20 rounded-lg border-[1.5px] border-stroke bg-transparent  mr-4
-            px-5 font-medium outline-none transition focus:border-primary active:border-primary 
-            disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
-            dark:focus:border-primary"
-                              
-                                type="text"
-                                value={option.name}
-                                onChange={(e) =>
-                                  handleOptionChange(
-                                    e,
-                                    index,
-                                    optionIndex,
-                                    'name',
-                                  )
-                                }
-                               
-                              />
-                            </div>
-                          ))}
-                        </div>
-                      </td>
-                      <td><button className='font-extrabold'
-                         onClick={()=>deleteVariant(variant.id)}
 
-                      >
-                        Delete
-                        </button></td>
-                    </tr>
-                  ))}
-                </tbody> */}
-                <tbody>
-  {variants.map((variant, index) => (
-    <tr key={index}>
-      <td>
-        {/* <input
+
+            <table className='gap-10'>
+      <thead>
+    <tr>
+      <th className="border font-bold border-stroke p-2">Key</th>
+      <th className="border font-bold border-stroke p-2">Values</th>
+      <th className="border font-bold border-stroke p-2">Type</th>
+      <th className="border font-bold border-stroke p-2">Weight</th>
+      <th className="border font-bold border-stroke p-2">Unit</th>
+      <th className="border font-bold border-stroke p-2">AvailableQuantity</th>
+      <th className="border font-bold border-stroke p-2">VariantPrice</th>
+      <th className="border font-bold border-stroke p-2">VariantSku</th>
+      <th className="border font-bold border-stroke p-2">Action</th>
+    </tr>
+  </thead>
+  <tbody className=''>
+  {variants.map((variant, index) =>
+  Array.isArray(variant.values) && variant.values.map((value, valueIndex) => (
+    <tr key={`${index}-${valueIndex}`}>
+      <td className="border font-bold border-stroke p-2">
+        <div className='my-4'>
+      <input
           type="text"
           value={variant.key}
-          onChange={(e) => handleVariantChange(e, index, 'key')}
-          className="input-style"
-        /> */}
+          // onChange={(e) => handleVariantChange(e, index, 'values')}
+          className="w-30 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 
+          font-medium outline-none transition focus:border-primary active:border-primary
+           disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+            dark:focus:border-primary"
+          
+        />
+        </div>
       </td>
-      <td>
-      {Array.isArray(variant.values) && variant.values.map((value, valueIndex) => (
-  <div key={valueIndex} className="option-value">
-    <input
-      type="text"
-      value={value}
-      onChange={(e) =>
-        handleVariantChange(e, index, 'values')}
-      className="input-style"
-    />
-  </div>
-))}
+      <td className="border font-bold border-stroke p-2">
+        <div className='my-4'>
+        <input
+  type="text"
+  value={value}
+  onChange={(e) => handleVariantChange(e, index, 'values')}
+  className="w-30 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 
+  font-medium outline-none transition focus:border-primary active:border-primary
+  disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
+  dark:bg-form-input dark:focus:border-primary"
+/>
+        </div>
+      </td >
+      <td className="border font-bold border-stroke p-2">
+        <input
+          type="text"
+          value={variant.type}
+          onChange={(e) => handleVariantChange(e, index, 'type')}
+          className="w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 
+          font-medium outline-none transition focus:border-primary active:border-primary
+           disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+            dark:focus:border-primary"
+          
+        />
       </td>
-      <td>
+      <td className="border font-bold border-stroke p-2">
+        <input
+          type="text"
+          value={variant.weight}
+          onChange={(e) => handleVariantChange(e, index, 'weight')}
+          className="w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 
+          font-medium outline-none transition focus:border-primary active:border-primary
+           disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+            dark:focus:border-primary"
+        />
+      </td>
+      <td className="border font-bold border-stroke p-2">
+        <input
+          type="text"
+          value={variant.unit}
+          onChange={(e) => handleVariantChange(e, index, 'unit')}
+          className="w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 
+          font-medium outline-none transition focus:border-primary active:border-primary
+           disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+            dark:focus:border-primary"
+        />
+      </td>
+      <td className="border font-bold border-stroke p-2">
         <input
           type="text"
           value={variant.availableQuantity}
-          onChange={(e) =>
-            handleVariantChange(e, index, 'availableQuantity')
-          }
-          className="input-style"
+          onChange={(e) => handleVariantChange(e, index, 'availableQuantity')}
+          className="w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 
+          font-medium outline-none transition focus:border-primary active:border-primary
+           disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+            dark:focus:border-primary"
         />
       </td>
-      <td>
-        <div className="option-names">
-          {variant.optionValues.map((option, optionIndex) => (
-            <div key={optionIndex} className="option-value">
-              <input
-                type="text"
-                value={option.name}
-                onChange={(e) =>
-                  handleOptionChange(
-                    e,
-                    index,
-                    optionIndex,
-                    'name'
-                  )
-                }
-                className="input-style"
-              />
-            </div>
-            
-          ))}
-        </div>
+      <td className="border font-bold border-stroke p-2">
+        <input
+          type="text"
+          value={variant.variantPrice}
+          onChange={(e) => handleVariantChange(e, index, 'variantPrice')}
+          className="w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 
+          font-medium outline-none transition focus:border-primary active:border-primary
+           disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+            dark:focus:border-primary"
+        />
       </td>
-      <td>
+      <td className="border font-bold border-stroke p-2">
+        <input
+          type="text"
+          value={variant.optionValues[0].variantSku}
+          onChange={(e) => handleVariantChange(e, index, 'variantSku')}
+          className="w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 
+          font-medium outline-none transition focus:border-primary active:border-primary
+           disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+            dark:focus:border-primary"
+        />
+      </td>
+      <td className="border font-bold border-stroke p-2">
         <button
           className='font-extrabold'
           onClick={() => deleteVariant(variant.id)}
@@ -999,10 +994,13 @@ async function deleteVariant(variantId: number) {
         </button>
       </td>
     </tr>
-  ))}
-</tbody>
+  ))
+)}
 
-              </table>
+  </tbody>
+</table>
+
+
             </div>
           </div>
         </div>
