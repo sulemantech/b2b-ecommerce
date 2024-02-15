@@ -27,13 +27,15 @@ router.post('/login', async (req, res) => {
           firstname: user.firstname,
           email: user.email, 
           role: user.role,
+          customerId: user.customerId,
+          vendorid: user.businessId,
         };
         const token = jwt.sign(tokenData, process.env.JWT_SECRET, {
           expiresIn: 86400,
         });
 
         res.cookie('token', token, { httpOnly: true });
-        res.status(200).send({ auth: true, token,role: user.role });
+        res.status(200).send({ auth: true, token,role: user.role});
       } else {
         res.status(401).send({ auth: false, message: 'Incorrect password' });
       }
@@ -51,6 +53,7 @@ router.post('/register', async (req, res) => {
     const { firstname,lastname,address, businessName,contactNumber, email, password,customerId,businessId } = req.body;
     const passwordhash=await bcrypt.hash(password,10);
     try {
+      //create customer and get its customerId
       const newUser = await registerationModel.create({
         firstname,lastname,address, businessName,contactNumber, email, password: passwordhash,customerId,businessId
       });

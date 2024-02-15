@@ -19,4 +19,7 @@ const notificationTypeModel = sequelize.define('notificationType', {
   timestamps: false
 });
 
+
+//title
+
 module.exports = notificationTypeModel;

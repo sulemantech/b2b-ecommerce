@@ -9,7 +9,9 @@ const productImages= require('../models/productImages');
 const categoryModel=require('../models/categoryModel');
 const productVariantModel=require('../models/productVariantModel')
 
+
 const { validateProduct, validateVariants,validateBulkProducts } = require('../middlewares/validateVariantsMiddleware');
+const verifyToken = require('../middlewares/verifyToken');
 
 //post API    ///////////////////////////////////////////////////////////////////
 router.post('/', async (req, res) => {
@@ -88,20 +90,21 @@ const paginateResults = (page = 1, pageSize = 20) => ({
   limit: pageSize,
 });
 
-// GET API with pagination /////////////////////////////////////////////
-router.get('/all', async (req, res) => {
+//get api with pagination
+// Common function to get products based on user role and other criteria
+const getProductsByUserRole = async (req, res, whereClause) => {
   const page = req.query.page || 1;
   const pageSize = req.query.pageSize || 20;
   const status = req.query.status; 
+
   try {
     const { offset, limit } = paginateResults(page, pageSize);
 
-    const whereClause = {};
-    
     // If status is provided, add it to the where clause
     if (status) {
       whereClause.status = status.toLowerCase();
     }
+
     const allProducts = await productModel.findAll({
       where: whereClause,
       include: [
@@ -114,18 +117,34 @@ router.get('/all', async (req, res) => {
         {
           model: productVariantModel,
           attributes: ['type', 'weight', 'unit', 'key', 'value', 'availableQuantity', 'optionValues'],
-          required: false, // Use false if you want left join
+          required: false,
         },
-        // {
-        //   model: optionValueModel,
-        //   attributes: ['id', 'name', 'variantSku'],
-        //   required: false, // Use false if you want left join
-        // },
       ],
       order: [['id', 'ASC']],
       ...paginateResults(page, pageSize),
     });
 
+    return allProducts;
+  } catch (error) {
+    throw new Error('Internal Server Error');
+  }
+};
+
+// Route handler for '/all' with token verification
+router.get('/all', verifyToken, async (req, res) => {
+  const userRole = req.user.role;
+  const whereClause = {};
+
+  if (userRole === 'admin' || userRole === 'user') {
+    // Admin and user can view all products without any filtering
+  } else if (userRole === 'supplier') {
+    // Supplier can view products associated with their userId
+    console.log("req.user.vendorId",req.user.vendorid);
+    whereClause.userId = req.user.vendorid;
+  }
+
+  try {
+    const allProducts = await getProductsByUserRole(req, res, whereClause);
     res.status(200).json(allProducts);
   } catch (error) {
     console.error('Error:', error.message);
@@ -133,6 +152,18 @@ router.get('/all', async (req, res) => {
   }
 });
 
+// Route handler for '/clients/all' without token verification
+router.get('/clients/all', async (req, res) => {
+  const whereClause = {}; 
+
+  try {
+    const allProducts = await getProductsByUserRole(req, res, whereClause);
+    res.status(200).json(allProducts);
+  } catch (error) {
+    console.error('Error:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 
 router.get('/:category_id', async (req, res) => {
@@ -218,6 +249,7 @@ router.put('/:productId',  async (req, res) => {
             optionValues,
             productId,
           });
+          return existingVariant.toJSON();
         } else {
           // Create new variant if it doesn't exist
           const newVariant = await productVariantModel.create({
