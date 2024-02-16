@@ -1,10 +1,12 @@
 
 import { useEffect,useState } from 'react';
 import { Link } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 
 
 const TableTwo: React.FC  = () => {
+  const Token=Cookies.get('token');
   // console.log(import.meta.env)
   const [products,setProducts]=useState<Products[]>([]);
   interface Products {
@@ -18,10 +20,17 @@ const TableTwo: React.FC  = () => {
     productImages: Array<{ date: string; images: string[] }>;
     // productImages?: { date: string; images: string[] }[] | undefined;
   }
+
+  
 const fetchAllProducts = () => {
   const API_Urlfetch=`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products/all`;
-  // console.log("product API",API_Urlfetch)
-  fetch(API_Urlfetch)
+  
+
+  fetch(API_Urlfetch ,{
+  headers: {
+    Authorization: `Bearer ${Token}`,
+  },
+})
     .then(response => {
       if (!response.ok) {
         console.log("Network error");
