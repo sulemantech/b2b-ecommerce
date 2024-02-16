@@ -1,10 +1,11 @@
 const express = require('express');
 const orderModel = require('../models/orderModel');
 const registerationModel = require('../models/registerationModel');
-const { Op } = require('sequelize');
+const { Op,sequelize } = require('sequelize');
 const verifyToken = require('../middlewares/verifyToken')
 const orderItemsModel = require('../models/orderItemsModel');
 const validateOrder = require('../middlewares/validateOrder');
+const productModel = require('../models/productModel');
 const router = express.Router();
 
 // Get all orders 
@@ -28,33 +29,34 @@ router.get('/', async (req, res) => {
 });
 
 //get specific orders of specific users through there id     
-// router.get('/user', verifyToken, async (req, res) => {
-//   const userId = req.user.id.id;
+router.get('/user', verifyToken, async (req, res) => {
+  const userId = req.user.id;
 
-//   try {
-//     const userOrders = await orderModel.findAll({
-//       where: { userId },
-//       include: [
-//         {
-//           model: registerationModel,
-//           attributes: ['id', 'firstname', 'lastname', 'contactNumber', 'email'],
-//         },
-//         {
-//           model: orderItemsModel,
-//           attributes: ['orderId', 'price', 'discount', 'totalPrice', 'productId', 'quantity'],
-//         },
-//       ],
-//     });
+  try {
+    const userOrders = await orderModel.findAll({
+      where: { userId },
+      include: [
+        {
+          model: registerationModel,
+          attributes: ['id', 'firstname', 'lastname', 'contactNumber', 'email'],
+        },
+        {
+          model: orderItemsModel,
+          attributes: ['orderId', 'price', 'discount', 'totalPrice', 'productId', 'quantity'],
+        },
+      ],
+    });
 
-//     res.json(userOrders);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Internal Server Error in user orders get' });
-//   }
-// });
+    res.json(userOrders);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error in user orders get' });
+  }
+});
+
+
 router.get('/byrole', verifyToken, async (req, res) => {
   try {
-    console.log("req.user.id",req.user.role);
     const userRole = req.user.role;
 
     if (userRole === 'admin') {
@@ -70,14 +72,17 @@ router.get('/byrole', verifyToken, async (req, res) => {
       });
       res.json(orders);
     } else if (userRole === 'supplier') {
-      const userId = req.user.id;
+      const userId = req.user.vendorid;
+      console.log("userId..",userId);
+      console.log("userId..",req.user.vendorid);
       // Supplier can view orders associated with their userId
       const supplierOrders = await orderModel.findAll({
-        where: { userId },
+        // where: { userId },
+        where: { '$orderItems.vendorId$': userId },
         include: [
           {
             model: orderItemsModel,
-            attributes: ["orderId", "price", "discount", "totalPrice", 'productId', 'quantity'],
+            attributes: ["orderId", "price", "discount", "totalPrice", 'productId', 'quantity','vendorId'],
           },
         ],
         order: [['orderId', 'ASC']],
@@ -108,11 +113,26 @@ router.post('/', verifyToken,validateOrder, async (req, res) => {
       trackingNumber, name, email, contactNumber, zipCode, additionalInfo, city, country, shippingAddress
     });
 
+    //Get vendorId by produtId from product table here
+    //var vendorId = productsModle.findOne() here
+
     // Create order items associated with the order
     for (const cartItem of orderItems) {
+
+      // Fetch the product from the Product model
+      const product = await productModel.findByPk(cartItem.productId);
+console.log("product",product);
+      if (!product) {
+        return res.status(404).json({ message: `Product with ID ${cartItem.productId} not found` });
+      }
+
+      // Assuming the Product model has a vendorId attribute
+      const vendorId = product.supplier_id;
+
       await orderItemsModel.create({
         orderId: order.orderId,
         productId: cartItem.productId,
+        vendorId: vendorId,
         quantity: cartItem.quantity,
         price: cartItem.price,
         discount: cartItem.discount,

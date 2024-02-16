@@ -42,6 +42,10 @@ const orderItemsModel = sequelize.define('orderItems', {
       type: DataTypes.FLOAT, // or DataTypes.DECIMAL
       // allowNull: false,
     },
+    vendorId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
 });
 
 orderItemsModel.belongsTo(productModel, { foreignKey: 'productId' });

@@ -4,6 +4,8 @@ const admin = require('firebase-admin');
 const notificationModel = require('../models/notificationModel');
 const notificationTypeModel = require('../models/notificationTypeModel');
 const notificationConfigrationModel = require('../models/notificationConfigrationModel');
+const verifyToken = require('../middlewares/verifyToken');
+
 
 router.post('/', (req, res) => {
     const { token, title, body } = req.body;
@@ -92,6 +94,32 @@ router.post('/config', async (req, res) => {
   }
 });
 
+
+router.get('/specific', verifyToken, async (req, res) => {
+  const userId = req.user.id; 
+
+  try {
+    // Fetch notifications for the specific user with their associated type and configuration
+    const notifications = await notificationModel.findAll({
+      where: { recipient_id: userId }, 
+      include: [
+        { 
+          model: notificationTypeModel,
+           attributes: ['id','typeName', 'description']
+           }, 
+        // { 
+        //   model: notificationConfigrationModel,
+        //    attributes: ['is_enabled']
+        //    } 
+      ]
+    });
+
+    res.status(200).json(notifications);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
   module.exports=router;
 
