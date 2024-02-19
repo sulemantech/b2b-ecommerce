@@ -15,7 +15,7 @@ const ProductImageDescription = ({ spaceTopClass, spaceBottomClass, galleryType,
   const { compareItems } = useSelector((state) => state.compare);
   const wishlistItem = wishlistItems.find(item => item.id === product.id);
   const compareItem = compareItems.find(item => item.id === product.id);
-  debugger
+  
 
   
 

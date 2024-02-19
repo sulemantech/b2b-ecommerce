@@ -7,29 +7,16 @@ import { useEffect } from "react";
 
 const ShopCategories = ({categories ,getSortParams,selectedCategories }) => {
   const [checked, setChecked] = useState(true);
-  const [categoryList, setCategoryList] = useState([]);
 
-
-  useEffect(() => {
-    fetch('http://localhost:5001/api/categories/all')
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setCategoryList(data);
-        
-      })
-      .catch((error) => {
-        console.error('Fetch Error:', error);
-      });
-  }, []);
+  // useEffect(()=>{
+  //   const allCategoriesButton = document.getElementById('allCategoriesButton');
+  //   if (allCategoriesButton) {
+  //     allCategoriesButton.click();
+  //   }
+    
+  // },[]);
   
-  console.log("categoryList",categoryList.map((ee)=>{
-    console.log("idd",ee.id);
-  }));
+
   
   return (
     <div className="sidebar-widget">
@@ -39,23 +26,12 @@ const ShopCategories = ({categories ,getSortParams,selectedCategories }) => {
           <ul>
           
             <li>
-              {/* <div className="sidebar-widget-list-left">
-                <button
-                 defaultChecked={checked}
-                  onClick={e => {
-                    getSortParams("category", "1,2,3" ); //////get/all/
-                    setActiveSort(e);
-                  }}
-          
-                >
-                      <span className={`checkmark ${selectedCategories.length === 0 ? 'selected' : ''}`} /> All Categories
-                </button>
-              </div> */}
               <div className="sidebar-widget-list-left">
                   <button
                     defaultChecked={checked}
+                    id="allCategoriesButton"
                     onClick={(e) => {
-                      const categoryIds = categoryList.map((category) => category.id).join(',');
+                      const categoryIds = categories.Categories.map((category) => category.id).join(',');
                       getSortParams("category", categoryIds);
                       setActiveSort(e);
                     }}

@@ -39,8 +39,8 @@ const [formvalue,setvalue]= useState({
 
     const orderData = {
       address: users.address,
-      totalPrice: cartTotalPrice.toFixed(2),
-      status: "processing",
+      totalPrice: 3,
+      // status: "pending",
       discount: 5,
       paymentMethod: "Cash on delivery",
       trackingNumber: Math.floor(Math.random() * 1000000),

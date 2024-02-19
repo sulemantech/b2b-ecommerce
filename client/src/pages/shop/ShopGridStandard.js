@@ -27,11 +27,11 @@ const ShopGridStandard = () => {
     const [sortedProducts, setSortedProducts] = useState([]);
     const { products } = useSelector((state) => state.product);
     const pageLimit = 15;
-    let { pathname } = useLocation();
-    
- 
-    
+    let { pathname } = useLocation();    
   const [selectedCategories, setSelectedCategories] = useState([]);
+  
+
+
   const handleSortParams = (type, value) => {
     if (type === "category") {
       const updatedCategories = [...selectedCategories];
@@ -53,10 +53,14 @@ const ShopGridStandard = () => {
         setSortType(sortType);
         setSortValue(sortValue);
     }
+
     const getFilterSortParams = (sortType, sortValue) => {
         setFilterSortType(sortType);
         setFilterSortValue(sortValue);
     }
+    
+
+
 
   
     useEffect(() => {
@@ -70,9 +74,28 @@ const ShopGridStandard = () => {
             }
           };
           fetchData();
-          dispatch(fetchProducts());
         }
       }, [offset, sortValue, selectedCategories]);
+      
+
+    useEffect(() => {
+      if (selectedCategories.length > 0) {
+        const filteredProducts = products.filter((product) =>
+          selectedCategories.includes(product.categoryId)
+        );
+        setCurrentData(filteredProducts);
+      } else {
+        setCurrentData(products);
+      }
+    }, [products, selectedCategories]);
+    
+  
+    useEffect(() => {
+      if (selectedCategories.length === 0) {
+        dispatch(fetchProducts());
+      }
+    }, [offset, sortValue, selectedCategories]);
+  
 
 
 

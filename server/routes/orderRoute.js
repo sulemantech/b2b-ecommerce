@@ -100,7 +100,7 @@ router.get('/byrole', verifyToken, async (req, res) => {
 
 //POST API FOR ORDER    
 router.post('/', verifyToken,validateOrder, async (req, res) => {
-  const { address, totalPrice, status, discount, paymentMethod, trackingNumber,
+  const { address, totalPrice, discount, paymentMethod, trackingNumber,
     name, email, contactNumber, zipCode, additionalInfo, city, country, shippingAddress,
     orderItems } = req.body;
 
@@ -109,7 +109,7 @@ router.post('/', verifyToken,validateOrder, async (req, res) => {
   try {
     // Create a new order
     const order = await orderModel.create({
-      userId, address, orderDate, totalPrice, status, discount, paymentMethod,
+      userId, address, orderDate, totalPrice, discount, paymentMethod,
       trackingNumber, name, email, contactNumber, zipCode, additionalInfo, city, country, shippingAddress
     });
 
