@@ -136,6 +136,7 @@ const [formvalue,setvalue]= useState({
                           <label>shippingAddress</label>
                           <input
                             className="billing-address"
+                            required
                             placeholder="House number and street name"
                             type="text"
                             onChange={(e)=>setvalue({...formvalue,shippingAddress: e.target.value})}
@@ -145,6 +146,7 @@ const [formvalue,setvalue]= useState({
                           <input
                             placeholder="Apartment, suite, unit etc."
                             type="text"
+                            required
                           />
                         </div>
                       </div>

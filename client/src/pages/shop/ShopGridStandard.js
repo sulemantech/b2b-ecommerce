@@ -61,42 +61,42 @@ const ShopGridStandard = () => {
     
 
 
-
-  
-    useEffect(() => {
-        if (selectedCategories.length > 0) {
-          const fetchData = async () => {
-            try {
-              const data = await fetchProductsByCategories(`${selectedCategories.join(',')}`, offset, sortValue);
-              setCurrentData(data);
-            } catch (error) {
-              console.error('Error fetching data:', error);
-            }
-          };
-          fetchData();
-        }
-      }, [offset, sortValue, selectedCategories]);
-      
-
     useEffect(() => {
       if (selectedCategories.length > 0) {
-        const filteredProducts = products.filter((product) =>
-          selectedCategories.includes(product.categoryId)
-        );
-        setCurrentData(filteredProducts);
-      } else {
-        setCurrentData(products);
+          const fetchData = async () => {
+              try {
+                  const data = await fetchProductsByCategories(`${selectedCategories}`, offset, sortValue);
+                  dispatch(setProducts(data));
+                  setCurrentData(data);
+              } catch (error) {
+                  console.error('Error fetching data:', error);
+              }
+          };
+          fetchData();
       }
-    }, [products, selectedCategories]);
-    
+  }, [offset, sortValue, selectedCategories, dispatch]);
+
+
+
+  useEffect(() => {
+      if (selectedCategories.length > 0) {
+          const filteredProducts = products.filter((product) =>
+              selectedCategories.includes(product.categoryId)
+          );
+      } else {
+          setCurrentData(products);
+      }
+  }, [products, selectedCategories]);
+  
   
     useEffect(() => {
-      if (selectedCategories.length === 0) {
         dispatch(fetchProducts());
-      }
-    }, [offset, sortValue, selectedCategories]);
-  
+    }, []);
 
+
+
+
+  
 
 
 
