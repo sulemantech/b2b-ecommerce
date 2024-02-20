@@ -3,67 +3,58 @@ const { DataTypes } = require('sequelize');
 const customerModel = require('./customerModel');
 const businessModel = require('./businessModel');
 
-const registerationModel = sequelize.define('user', {
-      id: {
-          type: DataTypes.INTEGER,
-          primaryKey: true,
-          autoIncrement: true,
-        },
-      firstname: {
-        type: DataTypes.STRING,
-        // allowNull: false,
-        unique: true,
-      },
-      lastname: {
-        type: DataTypes.STRING,
-        // allowNull: false,
-        // unique: true,
-      },
-      email: {
-        type: DataTypes.STRING,
-        // allowNull: false,
-        unique: true,
-      },
-      password: {
-        type: DataTypes.STRING,
-        // allowNull: false,
-      },
-      address: {
-        type: DataTypes.STRING,
-      },
-      contactNumber: {
+const registrationModel = sequelize.define('user', {
+    id: {
         type: DataTypes.INTEGER,
-      },
-      businessName: {
+        primaryKey: true,
+        autoIncrement: true,
+    },
+    firstname: {
         type: DataTypes.STRING,
-      },
-      role: {
-        type: DataTypes.STRING, 
-        defaultValue: 'user', 
-      },
-      customerId: {
+    },
+    lastname: {
+        type: DataTypes.STRING,
+    },
+    email: {
+        type: DataTypes.STRING,
+        unique: true,
+    },
+    password: {
+        type: DataTypes.STRING,
+    },
+    address: {
+        type: DataTypes.STRING,
+    },
+    contactNumber: {
+        type: DataTypes.INTEGER,
+    },
+    businessName: {
+        type: DataTypes.STRING,
+    },
+    role: {
+        type: DataTypes.STRING,
+        defaultValue: 'user',
+    },
+    customerId: {
         type: DataTypes.INTEGER,
         references: {
-          model: 'customer', 
-          key: 'id',
+            model: 'customers',
+            key: 'id',
         },
-        allowNull: true, 
-        unique: true, 
-      },
-      businessId: { // Update the foreign key here
+    },
+    businessId: {
         type: DataTypes.INTEGER,
         references: {
-          model: 'business', 
-          key: 'id',
+            model: 'businesses',
+            key: 'id',
         },
-        allowNull: true,
-        unique: true,
-      },
+    }
+}, {
+    timestamps: false,
 });
 
 // Add the association to define a one-to-one relationship
-registerationModel.belongsTo(customerModel, { foreignKey: 'customerId' });
-// Update the association to use the new foreign key
-registerationModel.belongsTo(businessModel, { foreignKey: 'businessId' });
+registrationModel.belongsTo(customerModel, { foreignKey: 'customerId', as: 'customer' });
+registrationModel.belongsTo(businessModel, { foreignKey: 'businessId', as: 'business' });
 
-module.exports =  registerationModel;
+module.exports = registrationModel;

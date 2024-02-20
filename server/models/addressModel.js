@@ -1,9 +1,8 @@
-// models/addressModel.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database/db');
 const stateModel = require('./stateModel');
-const addressModel = sequelize.define('address', {
-  
+
+const Address = sequelize.define('address', {
   address: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -30,4 +29,12 @@ const addressModel = sequelize.define('address', {
   },
 });
 
-module.exports = addressModel;
+// Sync models with the database
+// sequelize.sync({ force: true })
+//   .then(() => {
+//     console.log('Database synchronized successfully');
+//   })
+//   .catch(error => {
+//     console.error('Error synchronizing database:', error);
+//   });
+module.exports = Address;

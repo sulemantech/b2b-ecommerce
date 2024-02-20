@@ -14,8 +14,8 @@ const orderItemsModel = sequelize.define('orderItems', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: orderModel,
-      key: 'orderId',
+      model: 'orders',
+      key: 'orderId', // Assuming the primary key of orderModel is 'id'
     },
   },
   productId: {
@@ -26,28 +26,30 @@ const orderItemsModel = sequelize.define('orderItems', {
       key: 'id',
     },
   },
-    quantity: {
-      type: DataTypes.INTEGER,
-      // allowNull: false,
-    },
-    price: {
-      type: DataTypes.FLOAT,
-      // allowNull: false,
-    },
-    discount: {
-      type: DataTypes.FLOAT,
-      // allowNull: false,
-    },
-    totalPrice: {
-      type: DataTypes.FLOAT, // or DataTypes.DECIMAL
-      // allowNull: false,
-    },
-    vendorId: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
+  quantity: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  price: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+  },
+  discount: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+    defaultValue: 0, // Adding a default value if applicable
+  },
+  totalPrice: {
+    type: DataTypes.FLOAT,
+    allowNull: false,
+  },
+  vendorId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
 });
 
+// Define association
 orderItemsModel.belongsTo(productModel, { foreignKey: 'productId' });
 
 module.exports = orderItemsModel;

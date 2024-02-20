@@ -8,6 +8,93 @@ const supplierModel=require('./supplierModel');
 const productVariantModel = require('./productVariantModel');
 
 
+// const productModel = sequelize.define('products', {
+//   id: {
+//     type: DataTypes.INTEGER,
+//     primaryKey: true,
+//     autoIncrement: true,
+//   },
+//   name: {
+//     type: DataTypes.STRING,
+//     // allowNull: false,
+//   },
+//   description: {
+//     type: DataTypes.TEXT,
+//     // allowNull: false,
+//   },
+//   price: {
+//     type: DataTypes.FLOAT,
+//     // allowNull: false,
+//   },
+//   quantity: {
+//     type: DataTypes.INTEGER,
+//     // allowNull: true,
+//   },
+//   manufacturer: {
+//     type: DataTypes.STRING,
+//     // allowNull: false,
+//   },
+//   dateAdded: {
+//     type: DataTypes.DATE,
+//     // allowNull: false,
+//     defaultValue: DataTypes.NOW,
+//   },
+//   discount: {
+//     type: DataTypes.INTEGER,
+//     // allowNull: false,
+//   },
+//   new: {
+//     type: DataTypes.BOOLEAN,
+//     // allowNull: false,
+//   },
+//   rating: {
+//     type: DataTypes.INTEGER,
+//     // allowNull: false,
+//   },
+//   saleCount: {
+//     type: DataTypes.INTEGER,
+//     // allowNull: false,
+//   },
+ 
+//   tag: {
+//     type: DataTypes.ARRAY(DataTypes.STRING),
+//     // allowNull: false,
+//   },
+//   stock: {
+//     type: DataTypes.INTEGER,
+//     // allowNull: false,
+//   },
+//   quantityInStock: {
+//     type: DataTypes.INTEGER,
+//     // allowNull: false,
+//   },
+//   sku: {
+//     type: DataTypes.STRING,
+//     allowNull: false,
+//     // unique: true,
+//   },
+//   category_id: {
+//     type: DataTypes.INTEGER,
+//     allowNull: false,
+//     // unique: true,
+//   },
+//   supplier_id: {
+//     type: DataTypes.INTEGER,
+//     allowNull: false,
+//   },
+//   categoryName: {
+//     type: DataTypes.STRING,
+//     // allowNull: false,
+//   },
+//   status: {
+//     type: DataTypes.STRING,
+//     allowNull: true, 
+//     // defaultValue: 'active', 
+//   }
+// });
+
+
+// Define association
 const productModel = sequelize.define('products', {
   id: {
     type: DataTypes.INTEGER,
@@ -16,85 +103,84 @@ const productModel = sequelize.define('products', {
   },
   name: {
     type: DataTypes.STRING,
-    // allowNull: false,
+    allowNull: false,
   },
   description: {
     type: DataTypes.TEXT,
-    // allowNull: false,
+    allowNull: false,
   },
   price: {
     type: DataTypes.FLOAT,
-    // allowNull: false,
+    allowNull: false,
   },
   quantity: {
     type: DataTypes.INTEGER,
-    // allowNull: true,
+    allowNull: true,
   },
   manufacturer: {
     type: DataTypes.STRING,
-    // allowNull: false,
+    allowNull: false,
   },
   dateAdded: {
     type: DataTypes.DATE,
-    // allowNull: false,
+    allowNull: false,
     defaultValue: DataTypes.NOW,
   },
   discount: {
     type: DataTypes.INTEGER,
-    // allowNull: false,
+    allowNull: false,
+    defaultValue: 0, // Set a default value if applicable
   },
-  new: {
+  isNew: {
     type: DataTypes.BOOLEAN,
-    // allowNull: false,
+    allowNull: false,
+    defaultValue: true, // Set a default value if applicable
   },
   rating: {
     type: DataTypes.INTEGER,
-    // allowNull: false,
+    allowNull: true, // Adjust as per your requirement
   },
   saleCount: {
     type: DataTypes.INTEGER,
-    // allowNull: false,
+    allowNull: true, // Adjust as per your requirement
   },
- 
   tag: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
-    // allowNull: false,
+    type: DataTypes.STRING, // Use STRING for compatibility
+    allowNull: true, // Adjust as per your requirement
+    get() {
+      const tags = this.getDataValue('tag');
+      return tags ? tags.split(',') : [];
+    },
+    set(value) {
+      this.setDataValue('tag', value.join(','));
+    },
   },
   stock: {
     type: DataTypes.INTEGER,
-    // allowNull: false,
+    allowNull: false,
+    defaultValue: 0, // Set a default value if applicable
   },
   quantityInStock: {
     type: DataTypes.INTEGER,
-    // allowNull: false,
+    allowNull: false,
+    defaultValue: 0, // Set a default value if applicable
   },
   sku: {
     type: DataTypes.STRING,
     allowNull: false,
-    // unique: true,
-  },
-  category_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    // unique: true,
-  },
-  supplier_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
+    unique: true, // Ensure uniqueness
   },
   categoryName: {
     type: DataTypes.STRING,
-    // allowNull: false,
+    allowNull: false,
   },
   status: {
-    type: DataTypes.STRING,
-    allowNull: true, 
-    // defaultValue: 'active', 
+    type: DataTypes.ENUM('active', 'inactive'), // Use ENUM for limited options
+    allowNull: false,
+    defaultValue: 'active', // Set a default value if applicable
   }
 });
 
-
-// Define association
 productModel.hasMany(productImages, { foreignKey: 'productId' });
 productModel.belongsTo(supplierModel, { foreignKey: 'supplier_id' });
 productModel.belongsToMany(categoryModel, { through: productCategoriesModel });

@@ -1,9 +1,8 @@
-// models/notificationConfiguration.js
-
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database/db');
 const notificationTypeModel = require('./notificationTypeModel');
-const notificationConfigurationModel = sequelize.define('notificationConfiguration', {
+
+const NotificationConfiguration = sequelize.define('notificationConfiguration', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -13,7 +12,7 @@ const notificationConfigurationModel = sequelize.define('notificationConfigurati
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'users',
+      model: 'users', // Assuming 'users' is the name of your user model table
       key: 'id'
     }
   },
@@ -21,7 +20,7 @@ const notificationConfigurationModel = sequelize.define('notificationConfigurati
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'notificationType',
+      model: notificationTypeModel, // Reference the notificationTypeModel directly
       key: 'id'
     }
   },
@@ -34,5 +33,6 @@ const notificationConfigurationModel = sequelize.define('notificationConfigurati
   timestamps: false
 });
 
-notificationConfigurationModel.belongsTo(notificationTypeModel, { foreignKey: 'notification_type_id' });
-module.exports = notificationConfigurationModel;
+NotificationConfiguration.belongsTo(notificationTypeModel, { foreignKey: 'notification_type_id' });
+
+module.exports = NotificationConfiguration;

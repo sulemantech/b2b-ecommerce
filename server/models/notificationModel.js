@@ -1,10 +1,8 @@
-
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database/db');
 const notificationTypeModel = require('./notificationTypeModel');
 
-
-const notificationModel = sequelize.define('notification', {
+const Notification = sequelize.define('notification', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -14,7 +12,7 @@ const notificationModel = sequelize.define('notification', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'notificationType',
+      model: notificationTypeModel, // Reference the notificationTypeModel directly
       key: 'id'
     }
   },
@@ -53,6 +51,6 @@ const notificationModel = sequelize.define('notification', {
   timestamps: false
 });
 
+Notification.belongsTo(notificationTypeModel, { foreignKey: 'notification_type_id' });
 
-notificationModel.belongsTo(notificationTypeModel, { foreignKey: 'notification_type_id' });
-module.exports = notificationModel;
+module.exports = Notification;

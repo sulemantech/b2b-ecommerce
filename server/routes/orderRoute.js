@@ -73,11 +73,9 @@ router.get('/byrole', verifyToken, async (req, res) => {
       res.json(orders);
     } else if (userRole === 'supplier') {
       const userId = req.user.vendorid;
-      console.log("userId..",userId);
-      console.log("userId..",req.user.vendorid);
       // Supplier can view orders associated with their userId
       const supplierOrders = await orderModel.findAll({
-        // where: { userId },
+       
         where: { '$orderItems.vendorId$': userId },
         include: [
           {
@@ -113,19 +111,14 @@ router.post('/', verifyToken,validateOrder, async (req, res) => {
       trackingNumber, name, email, contactNumber, zipCode, additionalInfo, city, country, shippingAddress
     });
 
-    //Get vendorId by produtId from product table here
-    //var vendorId = productsModle.findOne() here
-
     // Create order items associated with the order
     for (const cartItem of orderItems) {
 
       // Fetch the product from the Product model
       const product = await productModel.findByPk(cartItem.productId);
-console.log("product",product);
       if (!product) {
         return res.status(404).json({ message: `Product with ID ${cartItem.productId} not found` });
       }
-
       // Assuming the Product model has a vendorId attribute
       const vendorId = product.supplier_id;
 

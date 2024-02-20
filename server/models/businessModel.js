@@ -30,6 +30,6 @@ const businessModel = sequelize.define('business', {
   });
   
 
-  
+ 
   module.exports = businessModel;
   

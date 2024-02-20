@@ -1,7 +1,13 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database/db');
+const productModel = require('./productModel'); // Assuming this is the correct path to your productModel
 
 const productVariantModel = sequelize.define('productVariants', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true,
+  },
   type: {
     type: DataTypes.STRING,
     allowNull: true,
@@ -19,8 +25,15 @@ const productVariantModel = sequelize.define('productVariants', {
     allowNull: true,
   },
   value: {
-    type: DataTypes.JSONB,
+    type: DataTypes.TEXT,
     allowNull: true,
+    get() {
+      const value = this.getDataValue('value');
+      return value ? JSON.parse(value) : null;
+    },
+    set(value) {
+      this.setDataValue('value', JSON.stringify(value));
+    },
   },
   availableQuantity: {
     type: DataTypes.INTEGER,
@@ -33,13 +46,24 @@ const productVariantModel = sequelize.define('productVariants', {
   productId: {
     type: DataTypes.INTEGER,
     allowNull: true,
+    references: {
+      model: 'products', // Assuming productModel is correctly defined
+      key: 'id',
+    },
   },
   optionValues: {
-    type: DataTypes.JSONB, 
+    type: DataTypes.TEXT,
     allowNull: true,
+    get() {
+      const optionValues = this.getDataValue('optionValues');
+      return optionValues ? JSON.parse(optionValues) : null;
+    },
+    set(value) {
+      this.setDataValue('optionValues', JSON.stringify(value));
+    },
   },
 }, {
-  timestamps: false, 
+  timestamps: false,
 });
 
 module.exports = productVariantModel;

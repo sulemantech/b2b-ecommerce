@@ -92,21 +92,24 @@ const paginateResults = (page = 1, pageSize = 20) => ({
 
 //get api with pagination
 // Common function to get products based on user role and other criteria
-const getProductsByUserRole = async (req, res, whereClause) => {
-  const page = req.query.page || 1;
-  const pageSize = req.query.pageSize || 20;
+const getProductsByUserRole = async (req, res, whereClause, page, pageSize) => {
+  // const page = req.query.page || 1;
+  // const pageSize = req.query.pageSize || 20;
   const status = req.query.status; 
 
   try {
     const { offset, limit } = paginateResults(page, pageSize);
-
+    console.log("funccccccccpage,pageSize",page,pageSize);
+    console.log("funccccccccoffset, limit",offset, limit);
     // If status is provided, add it to the where clause
     if (status) {
       whereClause.status = status.toLowerCase();
     }
 
     const allProducts = await productModel.findAll({
-      where: whereClause,
+      where: {
+        supplier_id: `${whereClause.supplier_id}` 
+      },
       include: [
         {
           model: productImages,
@@ -118,10 +121,10 @@ const getProductsByUserRole = async (req, res, whereClause) => {
           model: productVariantModel,
           attributes: ['type', 'weight', 'unit', 'key', 'value', 'availableQuantity', 'optionValues'],
           required: false,
-        },
+        }
       ],
       order: [['id', 'ASC']],
-      ...paginateResults(page, pageSize),
+      offset, limit
     });
 
     return allProducts;
@@ -134,17 +137,20 @@ const getProductsByUserRole = async (req, res, whereClause) => {
 router.get('/all', verifyToken, async (req, res) => {
   const userRole = req.user.role;
   const whereClause = {};
+  const page = parseInt(req.query.page) || 1;
+  const pageSize = parseInt(req.query.pageSize) || 20;
+  console.log(page,pageSize);
 
   if (userRole === 'admin' || userRole === 'user') {
     // Admin and user can view all products without any filtering
   } else if (userRole === 'supplier') {
     // Supplier can view products associated with their userId
     console.log("req.user.vendorId",req.user.vendorid);
-    whereClause.userId = req.user.vendorid;
+    whereClause.supplier_id = req.user.vendorid;
   }
 
   try {
-    const allProducts = await getProductsByUserRole(req, res, whereClause);
+    const allProducts = await getProductsByUserRole(req, res, whereClause,page, pageSize);
     res.status(200).json(allProducts);
   } catch (error) {
     console.error('Error:', error.message);
@@ -154,16 +160,30 @@ router.get('/all', verifyToken, async (req, res) => {
 
 // Route handler for '/clients/all' without token verification
 router.get('/clients/all', async (req, res) => {
-  const whereClause = {}; 
-
   try {
-    const allProducts = await getProductsByUserRole(req, res, whereClause);
+    const allProducts = await productModel.findAll({
+      include: [
+        {
+          model: productImages,
+          where: { productId: { [Op.col]: 'products.id' } },
+          attributes: ['date', 'images'],
+          required: false,
+        },
+        {
+          model: productVariantModel,
+          attributes: ['type', 'weight', 'unit', 'key', 'value', 'availableQuantity', 'optionValues'],
+          required: false,
+        }
+      ],
+      order: [['id', 'ASC']],
+    });
     res.status(200).json(allProducts);
   } catch (error) {
     console.error('Error:', error.message);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 
 router.get('/:category_id', async (req, res) => {

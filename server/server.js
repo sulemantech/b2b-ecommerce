@@ -23,6 +23,7 @@ const businessRoute=require('./routes/businessRoute')
 const swaggerUi = require('swagger-ui-express');
 const authRoutes = require('./routes/authRoutes');
 const notificationRoute=require('./routes/notificationRoute')
+const sequelize = require('./database/db');
 require('dotenv').config();
 
 const app = express();
@@ -39,7 +40,6 @@ const server = new ApolloServer({
   typeDefs,
   resolvers,
 });
-
 
 //authRoute firebase
 app.use('/verify-id-token', authRoutes);

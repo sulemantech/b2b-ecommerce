@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../database/db');
-const registerationModel = require('./registerationModel');
+const registerationModel = require('./registerationModel'); // Corrected model name
+
 const orderItemsModel = require('./orderItemsModel');
 
 const orderModel = sequelize.define('orders', {
@@ -12,7 +13,7 @@ const orderModel = sequelize.define('orders', {
   userId: {
     type: DataTypes.INTEGER,
     references: {
-      model: registerationModel, // Replace with your actual RegistrationModel
+      model: registerationModel,
       key: 'id',
     },
   },
@@ -46,12 +47,12 @@ const orderModel = sequelize.define('orders', {
     allowNull: false,
   },
   contactNumber: {
-    type: DataTypes.INTEGER, // Assuming it's a large integer
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
   zipCode: {
     type: DataTypes.INTEGER,
-    allowNull:true,
+    allowNull: true,
   },
   additionalInfo: {
     type: DataTypes.STRING,
@@ -64,12 +65,9 @@ const orderModel = sequelize.define('orders', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  
-    
-  
 });
 
-orderModel.belongsTo(registerationModel, { foreignKey: 'userId' }); 
+orderModel.belongsTo(registerationModel, { foreignKey: 'userId' });
 orderModel.hasMany(orderItemsModel, { foreignKey: 'orderId' });
 
 module.exports = orderModel;
