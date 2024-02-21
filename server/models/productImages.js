@@ -31,12 +31,12 @@ const productImages = sequelize.define('productImages', {
   },
   date: {
     type: DataTypes.DATE,
-    allowNull: true, // Modify as per your requirement
+    defaultValue: DataTypes.NOW, // Modify as per your requirement
   },
   images: {
-    type: DataTypes.JSON, // Use JSON data type for compatibility
+    type: DataTypes.TEXT, // Change data type to TEXT
     allowNull: false,
-    defaultValue: [], // Default value as an empty array
+    defaultValue: '', // Default value as an empty string
     get() {
       const images = this.getDataValue('images');
       return images ? JSON.parse(images) : [];
@@ -45,6 +45,7 @@ const productImages = sequelize.define('productImages', {
       this.setDataValue('images', JSON.stringify(value));
     },
   },
+
   productId: {
     type: DataTypes.INTEGER,
     allowNull: false,
