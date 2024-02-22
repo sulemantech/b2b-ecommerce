@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "mysql2": "^3.9.1",
     "pg": "^8.11.3",
     "sequelize": "^6.35.2"
   }
