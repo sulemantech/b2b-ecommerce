@@ -121,7 +121,7 @@ router.post('/', verifyToken,validateOrder, async (req, res) => {
 
       // Fetch the product from the Product model
       const product = await productModel.findByPk(cartItem.productId);
-console.log("product",product);
+// console.log("product",product);
       if (!product) {
         return res.status(404).json({ message: `Product with ID ${cartItem.productId} not found` });
       }

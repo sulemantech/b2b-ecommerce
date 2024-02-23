@@ -7,6 +7,7 @@ import {post} from '../../API';
 export const navigateAction = (navigate, path) => {
   navigate(path);
 };
+
 export const submitLoginAsync = (values, navigate) => async (dispatch) => {
 
   try {
@@ -15,17 +16,16 @@ export const submitLoginAsync = (values, navigate) => async (dispatch) => {
     dispatch(login({ user: result.user, token: result.token, role: result.role }));
     
     console.log('Login successful:', result.token);
+    navigate('/shop-grid-standard');
+
     
     // Redirect based on role
     if (result.role === 'admin') {
       console.log('Login roleeee:', result.role);
       console.log("admin running");
-      //admin navgation setting here 
-      // navigate('../../../../admin/src/pages/Dashboard/ECommerce');
 
     } else if (result.role === 'supplier') {
       console.log("user running");
-      navigate('/');
     }
 
   }

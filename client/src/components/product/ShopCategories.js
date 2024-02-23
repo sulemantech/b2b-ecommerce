@@ -8,13 +8,8 @@ import { useEffect } from "react";
 const ShopCategories = ({categories ,getSortParams,selectedCategories }) => {
   const [checked, setChecked] = useState(true);
 
-  // useEffect(()=>{
-  //   const allCategoriesButton = document.getElementById('allCategoriesButton');
-  //   if (allCategoriesButton) {
-  //     allCategoriesButton.click();
-  //   }
-    
-  // },[]);
+
+ 
   
 
   
@@ -28,15 +23,16 @@ const ShopCategories = ({categories ,getSortParams,selectedCategories }) => {
             <li>
               <div className="sidebar-widget-list-left">
                   <button
-                    defaultChecked={checked}
+                    
                     id="allCategoriesButton"
+                    className="active"
                     onClick={(e) => {
-                      const categoryIds = categories.Categories.map((category) => category.id).join(',');
+                      const categoryIds = categories.Categories.map((category) => category.id);
                       getSortParams("category", categoryIds);
-                      setActiveSort(e);
+                      // setActiveSort(e);
                     }}
                   >
-                    <span className={`checkmark ${selectedCategories.length === 0 ? 'selected' : ''}`} /> All Categories
+                    <span className={`checkmark `} /> All Categories
                   </button>
                 </div>
 
@@ -46,9 +42,8 @@ const ShopCategories = ({categories ,getSortParams,selectedCategories }) => {
                 <li key={key+1}>
                   <div className="sidebar-widget-list-left" id={key+1}>
                       
-                   
                       <button
-                   
+                      id="IndCategorie"
                       onClick={e => {
                         getSortParams("category", category.id);
                         

@@ -16,7 +16,7 @@ export const fetchProducts = (page, pageSize) => async (dispatch) => {
         return res?.data;
       });     
       dispatch(setProducts(productsData));
-      console.log("productAll",productsData);
+      // console.log("productAll",productsData);
     } catch (error) {
       console.error('Error fetching products:', error);
       
