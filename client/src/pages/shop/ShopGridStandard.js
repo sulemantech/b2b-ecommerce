@@ -39,7 +39,7 @@ const ShopGridStandard = () => {
   const handleSortParams = (type, value) => {
     if (type === "category") {
         if (Array.isArray(value)) {
-            setSelectedCategories([value]);     
+            setSelectedCategories([value]);   
         } 
         else if (selectedCategories.length>=0 && !Array.isArray(value)) {
             const [first, ...rest] = selectedCategories;
@@ -120,6 +120,7 @@ const ShopGridStandard = () => {
           const fetchData = async () => {
               try {
                   const data = await fetchProductsByCategories(`${selectedCategories}`, offset, sortValue);
+                  dispatch(setProducts(data))
                   setCurrentData(data);
               } 
               
@@ -141,9 +142,9 @@ const ShopGridStandard = () => {
       }
   }, [products, selectedCategories]);
   
-    // useEffect(() => {
-    //     dispatch(fetchProducts());
-    // }, []);
+    useEffect(() => {
+        dispatch(fetchProducts());
+    }, []);
 
     // useEffect(() => {
     //     dispatch(fetchProductsByCategories());
