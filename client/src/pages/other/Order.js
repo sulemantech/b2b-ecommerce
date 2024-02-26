@@ -13,12 +13,14 @@ const Order = () => {
   const [searchInput, setSearchInput] = useState('');
   const [filteredOrders, setFilteredOrders] = useState([]);
 
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const ordersData = await fetchUserOrders(storedToken);
         setOrders(ordersData);
-        console.log("order",ordersData)
+        
+        console.log("oredre",ordersData);
       } catch (error) {
         console.error('Error fetching orders:', error);
       }

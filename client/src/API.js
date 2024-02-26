@@ -65,13 +65,13 @@ const API_Registration = axios.create({
 
 
 const userOrder = `${APIHost}/api/order/byrole`;
-export const fetchUserOrders = async (token) => {
+export const fetchUserOrders = async (storedToken) => {
   try {
     const response = await fetch(userOrder, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${storedToken}`,
       },
     });
 
@@ -90,14 +90,15 @@ export const fetchUserOrders = async (token) => {
 
 
 
+
 const orderplace= `${APIHost}/api/order`;
-export const placeOrder = async (token, orderData) => {
+export const placeOrder = async (storedToken, orderData) => {
   try {
     const response = await fetch(`${orderplace}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${storedToken}`,
       },
       body: JSON.stringify(orderData),
     });

@@ -71,7 +71,7 @@ router.get('/byrole', verifyToken, async (req, res) => {
         order: [['orderId', 'ASC']],
       });
       res.json(orders);
-    } else if (userRole === 'supplier') {
+    } else if (userRole === 'user') {
       const userId = req.user.vendorid;
       console.log("userId..",userId);
       console.log("userId..",req.user.vendorid);

@@ -102,6 +102,34 @@ const ShopGridStandard = () => {
     }
 };
 
+
+
+////newcode
+// const handleSortParams = (type, value) => {
+//     if (type === "category") {
+//       let updatedCategories = [...selectedCategories];
+//       if (Array.isArray(value)) {
+//         setSelectedCategories([value]);
+//       } else {
+//         const categoryIndex = updatedCategories.indexOf(value);
+//         if (categoryIndex !== -1) {
+//           updatedCategories.splice(categoryIndex, 1);
+//         } else {
+//           updatedCategories.push(value);
+//         }
+//         const isAllCategories = updatedCategories.length === categoryIds.length && 
+//                                 updatedCategories.every(value => categoryIds.includes(value));
+//         const filterButtons = document.querySelectorAll(".sidebar-widget-list-left button, .sidebar-widget-tag button, .product-filter button");
+//         filterButtons.forEach((item) => {
+//           if (item.id === "allCategoriesButton") {
+//             item.classList.toggle("active", isAllCategories);
+//           }
+//         });
+//       }
+//       setSelectedCategories(updatedCategories);
+//     }
+//   };
+  
     const getLayout = (layout) => {
         setLayout(layout)
     }
@@ -120,6 +148,7 @@ const ShopGridStandard = () => {
           const fetchData = async () => {
               try {
                   const data = await fetchProductsByCategories(`${selectedCategories}`, offset, sortValue);
+                  dispatch(setProducts(data));
                   setCurrentData(data);
               } 
               
@@ -141,9 +170,9 @@ const ShopGridStandard = () => {
       }
   }, [products, selectedCategories]);
   
-    // useEffect(() => {
-    //     dispatch(fetchProducts());
-    // }, []);
+    useEffect(() => {
+        dispatch(fetchProducts());
+    }, []);
 
     // useEffect(() => {
     //     dispatch(fetchProductsByCategories());
