@@ -13,7 +13,7 @@ const validateOrder = (req, res, next) => {
   }
 
   // Validate status
-  if (!['Pending', 'Processing', 'Shipped', 'Delivered'].includes(status)) {
+  if (!['Pending', 'Processing', 'Shipped', 'Delivered', 'pending','active','Active','processing', 'shipped','inactive','Inactive'].includes(status)) {
     return res.status(400).json({ error: 'Invalid status' });
   }
 
