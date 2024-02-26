@@ -29,6 +29,7 @@ chrome-user-data
 .vscode
 *.swp
 *.swo
+.env
 
 packages/react-devtools-core/dist
 packages/react-devtools-extensions/chrome/build
@@ -43,4 +44,3 @@ packages/react-devtools-inline/dist
 packages/react-devtools-shell/dist
 packages/react-devtools-timeline/dist
 
-.env
