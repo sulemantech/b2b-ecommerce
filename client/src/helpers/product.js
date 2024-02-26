@@ -203,15 +203,119 @@ export const getIndividualSizes = product => {
   return individualSizes;
 };
 
-export const setActiveSort = e => {
-  const filterButtons = document.querySelectorAll(
-    ".sidebar-widget-list-left button, .sidebar-widget-tag button, .product-filter button"
-  );
-  filterButtons.forEach(item => {
-    // item.classList.remove("active");
-  });
+
+
+
+// //yesterday///
+export const setActiveSort = (e, selectedCategories ,updatedCategories) => {
+  const isAllCategoriesButton = e.currentTarget.id === "allCategoriesButton";
+  // if (isAllCategoriesButton) {
+  //   const filterButtons = document.querySelectorAll(
+  //     ".sidebar-widget-list-left button, .sidebar-widget-tag button, .product-filter button"
+  //   );
+  //   filterButtons.forEach((item) => {
+  //     if (item.id == "allCategoriesButton") {
+  //       // item.classList.remove("active");
+        
+  //     }
+  //   });
+  // } else {
+  //   const allCategoriesButton = document.getElementById("allCategoriesButton");
+  //   allCategoriesButton.classList.remove("active");
+  // }
   e.currentTarget.classList.toggle("active");
 };
+
+
+
+// export const setActiveSort = (e) => {
+//   const isAllCategoriesButton = e.currentTarget.id === "allCategoriesButton";
+//   const AllCategoriesButton = e.currentTarget.id === "IndCategorie";
+//   console.log("IndividualCategories",AllCategoriesButton);
+
+//   const filterButtons = document.querySelectorAll(
+//     ".sidebar-widget-list-left button, .sidebar-widget-tag button, .product-filter button"
+//   );
+//   console.log("frilterBUttons",filterButtons)
+
+//   if (isAllCategoriesButton) {
+//     // Toggle active class for "All Categories" button
+//     e.currentTarget.classList.toggle("active");
+
+//     // If "All Categories" checkbox is checked, remove active class from individual category checkboxes
+//     if (e.currentTarget.classList.contains("active")) {
+//       filterButtons.forEach(item => {
+//         if (item.id !== "allCategoriesButton") {
+//           item.classList.remove("active");
+//         }
+//       });
+//     }
+//   } else 
+//   if (AllCategoriesButton) {
+//     // Toggle active class for individual category checkbox
+//     e.currentTarget.classList.toggle("active");
+
+//     // Check if all individual category checkboxes are active
+//     const allCategoriesButton = document.getElementById("allCategoriesButton");
+//     const filterButtonsArray = Array.from(filterButtons).filter(item => {
+//         return item.id.startsWith("categoryButton-") && item.classList.contains("active");
+//     });
+
+//     // If filterButtonsArray is not empty, it means all individual category buttons are active
+//     if (filterButtonsArray.length =3) {
+//         allCategoriesButton.classList.add("active");
+//     } else {
+//         allCategoriesButton.classList.remove("active");
+//     }
+// }
+
+
+
+// };
+
+
+
+
+
+
+
+
+
+
+//////today
+// export const setActiveSort = (e, selectedCategories) => {
+//   const isAllCategoriesButton = e.currentTarget.id === "allCategoriesButton";
+//   const IsIndCategoriesButton = e.currentTarget.id === "IndCategorie";
+//   const filterButtons = document.querySelectorAll(
+//         ".sidebar-widget-list-left button, .sidebar-widget-tag button, .product-filter button"
+//       );
+//       console.log("frilterBUttons",filterButtons)
+
+//   if (isAllCategoriesButton) {
+//     const allCategoriesButton = document.getElementById("allCategoriesButton");
+//     const isActive = allCategoriesButton.classList.toggle("active");
+//     if (isActive) {
+//       allCategoriesButton.classList.remove("active");
+//     } else {
+//       allCategoriesButton.classList.add("active");
+//     }
+//     if (IsIndCategoriesButton) {
+//       const allButtons = document.getElementById("IndCategorie");
+//       const allButtonsActive = Array.from(allButtons).every(button => button.classList.contains('active'));
+//       if (allButtonsActive) {
+//         allCategoriesButton.classList.add("active");
+//       }
+//     }
+
+//   } else {
+//     const allCategoriesButton = document.getElementById("allCategoriesButton");
+//     allCategoriesButton.classList.remove("active");
+//   }
+//   e.currentTarget.classList.toggle("active");
+// };
+
+
+
 
 export const setActiveLayout = e => {
   const gridSwitchBtn = document.querySelectorAll(".shop-tab button");

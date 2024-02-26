@@ -2,6 +2,8 @@ import { Fragment, useState, useEffect } from 'react';
 import Paginator from 'react-hooks-paginator';
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom"
+import { setActiveSort } from "../../helpers/product";
+
 import { getSortedProducts } from '../../helpers/product';
 import SEO from "../../components/seo";
 import LayoutOne from '../../layouts/LayoutOne';
@@ -26,25 +28,79 @@ const ShopGridStandard = () => {
     const [currentData, setCurrentData] = useState([]);
     const [sortedProducts, setSortedProducts] = useState([]);
     const { products } = useSelector((state) => state.product);
+    const categories = useSelector(state => state.category.Categories);
     const pageLimit = 15;
-    let { pathname } = useLocation();
-    
- 
-    
+    let { pathname } = useLocation();    
   const [selectedCategories, setSelectedCategories] = useState([]);
+
+  const categoryIds = categories.map((category) => category.id);
+
+
   const handleSortParams = (type, value) => {
     if (type === "category") {
-      const updatedCategories = [...selectedCategories];
-      const categoryIndex = updatedCategories.indexOf(value);
-      if (categoryIndex !== -1) {
-        updatedCategories.splice(categoryIndex, 1);
-      } else {
-        updatedCategories.push(value);
-      }
-      setSelectedCategories(updatedCategories);
-    }
-  };
+        if (Array.isArray(value)) {
+            setSelectedCategories([value]);     
+        } 
+        else if (selectedCategories.length>=0 && !Array.isArray(value)) {
+            const [first, ...rest] = selectedCategories;
+            if (Array.isArray(first)) {
+                const filterButtons = document.querySelectorAll(
+                    ".sidebar-widget-list-left button, .sidebar-widget-tag button, .product-filter button"
+                  );
+                  filterButtons.forEach((item) => {
+                    if (item.id == "allCategoriesButton") {
+                      item.classList.remove("active");
+                  }
+                  }
+             ) 
+                const updatedCategories = [...rest];
+                const categoryIndex = updatedCategories.indexOf(value);
+                if (categoryIndex !== -1) {
+                    updatedCategories.splice(categoryIndex, 1);
+                } else {
+                    updatedCategories.push(value);
+                }
+                setSelectedCategories(updatedCategories);
+            } else{
+                const updatedCategories = [...selectedCategories];
+                const categoryIndex = updatedCategories.indexOf(value);
+                if (categoryIndex !== -1) {
+                    updatedCategories.splice(categoryIndex, 1);
+                } else {
+                    updatedCategories.push(value);
+                  
+                }
+                const isMatch =  updatedCategories.every(value => categoryIds.includes(value) && updatedCategories.length===categoryIds.length);
+                if (isMatch) {
+                    const filterButtons = document.querySelectorAll(
+                        ".sidebar-widget-list-left button, .sidebar-widget-tag button, .product-filter button"
+                      );
+                      filterButtons.forEach((item) => {
+                        if (item.id == "allCategoriesButton") {
+                          item.classList.add("active");
+                          
+                      }
+                      }
+                     
+                 ) 
+                }else{
+                    const filterButtons = document.querySelectorAll(
+                        ".sidebar-widget-list-left button, .sidebar-widget-tag button, .product-filter button"
+                      );
+                      filterButtons.forEach((item) => {
+                        if (item.id == "allCategoriesButton") {
+                          item.classList.remove("active");  
+                      }
+                      }
+                 ) 
 
+                }
+                setSelectedCategories(updatedCategories);
+                
+            }
+        }
+    }
+};
 
     const getLayout = (layout) => {
         setLayout(layout)
@@ -53,27 +109,49 @@ const ShopGridStandard = () => {
         setSortType(sortType);
         setSortValue(sortValue);
     }
+
     const getFilterSortParams = (sortType, sortValue) => {
         setFilterSortType(sortType);
         setFilterSortValue(sortValue);
     }
-
-  
+    
     useEffect(() => {
-        if (selectedCategories.length > 0) {
+      if (selectedCategories.length > 0) {
           const fetchData = async () => {
-            try {
-              const data = await fetchProductsByCategories(`${selectedCategories.join(',')}`, offset, sortValue);
-              setCurrentData(data);
-            } catch (error) {
-              console.error('Error fetching data:', error);
-            }
+              try {
+                  const data = await fetchProductsByCategories(`${selectedCategories}`, offset, sortValue);
+                  setCurrentData(data);
+              } 
+              
+              catch (error) {
+                  console.error('Error fetching data:', error);
+              }
           };
           fetchData();
-          dispatch(fetchProducts());
-        }
-      }, [offset, sortValue, selectedCategories]);
+      }
+  }, [offset, sortValue, selectedCategories,dispatch]);
 
+  useEffect(() => {
+      if (selectedCategories.length > 0) {
+          const filteredProducts = products.filter((product) =>
+              selectedCategories.includes(product.categoryId)
+          );
+      } else {
+          setCurrentData(products);
+      }
+  }, [products, selectedCategories]);
+  
+    // useEffect(() => {
+    //     dispatch(fetchProducts());
+    // }, []);
+
+    // useEffect(() => {
+    //     dispatch(fetchProductsByCategories());
+    // },[]);
+
+
+
+  
 
 
 

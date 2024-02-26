@@ -12,6 +12,7 @@ export const fetchCategory = () => async (dispatch) => {
       });
     
       dispatch(setCategory(Allcategory));
+      console.log("allcategorie",Allcategory);
     } catch (error) {
       console.error('Error fetching products:', error);
       

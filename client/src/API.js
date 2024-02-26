@@ -44,7 +44,7 @@ export const post = async (endpoint, data) => {
 
 
 
-const Registration= `${APIHost}/api/signin/register`;
+const Registration= `${APIHost}/api/signin/`;
 const API_Registration = axios.create({
   baseURL: Registration,
   headers: {
