@@ -1,3 +1,5 @@
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 import { Suspense, lazy } from "react";
 import ScrollToTop from "./helpers/scroll-top";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -10,7 +12,6 @@ const Product = lazy(() => import("./pages/shop-product/Product"));
 const ProductTabRight = lazy(() =>
   import("./pages/shop-product/ProductTabRight")
 );
-
 
 // blog pages
 const BlogStandard = lazy(() => import("./pages/blog/BlogStandard"));
@@ -31,120 +32,124 @@ const Cart = lazy(() => import("./pages/other/Cart"));
 const Wishlist = lazy(() => import("./pages/other/Wishlist"));
 const Compare = lazy(() => import("./pages/other/Compare"));
 const Checkout = lazy(() => import("./pages/other/Checkout"));
-// const Logout = lazy(() => import("./pages/other/Logout"));
-
 const NotFound = lazy(() => import("./pages/other/NotFound"));
+// import { logoutAsync } from "../src/store/slices/Auth-Action";
 
 const App = () => {
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const authToken = useSelector((state) => state.auth.token);
+  // const handleLogout = () => {
+  //   dispatch(logoutAsync(authToken));
+  // };
+
   return (
-      <Router>
-        <ScrollToTop>
-          <Suspense
-            fallback={
-              <div className="flone-preloader-wrapper">
-                <div className="flone-preloader">
-                  <span></span>
-                  <span></span>
-                </div>
+    <Router>
+      <ScrollToTop>
+        <Suspense
+          fallback={
+            <div className="flone-preloader-wrapper">
+              <div className="flone-preloader">
+                <span></span>
+                <span></span>
               </div>
-            }
-          >
-            <Routes>
-              <Route
-                // path={process.env.PUBLIC_URL + "/"}
-                // element={<HomeFashion/>}
-                path={process.env.PUBLIC_URL + "/"}
-                element={<ShopGridStandard/>}
-              />
+            </div>
+          }
+        >
+          <Routes>
+            <Route
+              // path={process.env.PUBLIC_URL + "/"}
+              // element={<HomeFashion/>}
+              path={process.env.PUBLIC_URL + "/"}
+              element={<ShopGridStandard />}
+            />
 
-              {/* product pages */}
-              <Route
-                path={process.env.PUBLIC_URL + "/product/:id"}
-                element={<Product/>}
-              />
-               <Route
-                path={process.env.PUBLIC_URL + "/product-tab-right/:id"}
-                element={<ProductTabRight/>}
-              />
-             
-              {/* Shop pages */}
-              <Route
-                path={process.env.PUBLIC_URL + "/shop-grid-standard"}
-                element={<ShopGridStandard/>}
-              />
-             
-             
+            {/* product pages */}
+            <Route
+              path={process.env.PUBLIC_URL + "/product/:id"}
+              element={<Product />}
+            />
+            <Route
+              path={process.env.PUBLIC_URL + "/product-tab-right/:id"}
+              element={<ProductTabRight />}
+            />
 
-              {/* Blog pages */}
-              <Route
-                path={process.env.PUBLIC_URL + "/blog-standard"}
-                element={<BlogStandard/>}
-              />
-              <Route
-                path={process.env.PUBLIC_URL + "/blog-no-sidebar"}
-                element={<BlogNoSidebar/>}
-              />
-              <Route
-                path={process.env.PUBLIC_URL + "/blog-right-sidebar"}
-                element={<BlogRightSidebar/>}
-              />
-              <Route
-                path={process.env.PUBLIC_URL + "/blog-details-standard"}
-                element={<BlogDetailsStandard/>}
-              /> 
+            {/* Shop pages */}
+            <Route
+              path={process.env.PUBLIC_URL + "/shop-grid-standard"}
+              element={<ShopGridStandard />}
+            />
 
-              {/* Other pages */}
-              <Route
-                path={process.env.PUBLIC_URL + "/about"}
-                element={<About/>}
-              />
-              <Route
-                path={process.env.PUBLIC_URL + "/contact"}
-                element={<Contact/>}
-              />
-              <Route
-                path={process.env.PUBLIC_URL + "/firebase"}
-                element={<Firebase/>}
-              />
-              <Route
-                path={process.env.PUBLIC_URL + "/my-account"}
-                element={<MyAccount/>}
-              />
-              <Route
-                path={process.env.PUBLIC_URL + "/login-register"}
-                element={<LoginRegister/>}
-              />
+            {/* Blog pages */}
+            <Route
+              path={process.env.PUBLIC_URL + "/blog-standard"}
+              element={<BlogStandard />}
+            />
+            <Route
+              path={process.env.PUBLIC_URL + "/blog-no-sidebar"}
+              element={<BlogNoSidebar />}
+            />
+            <Route
+              path={process.env.PUBLIC_URL + "/blog-right-sidebar"}
+              element={<BlogRightSidebar />}
+            />
+            <Route
+              path={process.env.PUBLIC_URL + "/blog-details-standard"}
+              element={<BlogDetailsStandard />}
+            />
 
-              <Route
-                path={process.env.PUBLIC_URL + "/cart"}
-                element={<Cart/>}
-              />
-              <Route
-                path={process.env.PUBLIC_URL + "/wishlist"}
-                element={<Wishlist/>}
-              />
-              <Route
-                path={process.env.PUBLIC_URL + "/compare"}
-                element={<Compare/>}
-              />
-              <Route
-                path={process.env.PUBLIC_URL + "/checkout"}
-                element={<Checkout/>}
-              /> 
-                <Route
-                path={process.env.PUBLIC_URL + "/my-Order"}
-                element={<Order/>}
-              /> 
-              <Route
-                path={process.env.PUBLIC_URL + "/logout"}
-                element={<LoginRegister/>}
-              /> 
+            {/* Other pages */}
+            <Route
+              path={process.env.PUBLIC_URL + "/about"}
+              element={<About />}
+            />
+            <Route
+              path={process.env.PUBLIC_URL + "/contact"}
+              element={<Contact />}
+            />
+            <Route
+              path={process.env.PUBLIC_URL + "/firebase"}
+              element={<Firebase />}
+            />
+            <Route
+              path={process.env.PUBLIC_URL + "/my-account"}
+              element={<MyAccount />}
+            />
+            <Route
+              path={process.env.PUBLIC_URL + "/login-register"}
+              element={<LoginRegister />}
+            />
 
-              <Route path="*" element={<NotFound/>} />
-            </Routes>
-          </Suspense>
-        </ScrollToTop>
-      </Router>
+            <Route path={process.env.PUBLIC_URL + "/cart"} element={<Cart />} />
+            <Route
+              path={process.env.PUBLIC_URL + "/wishlist"}
+              element={<Wishlist />}
+            />
+            <Route
+              path={process.env.PUBLIC_URL + "/compare"}
+              element={<Compare />}
+            />
+            <Route
+              path={process.env.PUBLIC_URL + "/checkout"}
+              element={
+                isLoggedIn ?<Checkout /> : <Navigate to="/shop-grid-standard"/>}
+            />
+
+            <Route
+              path={process.env.PUBLIC_URL + "/my-Order"}
+              element={
+                isLoggedIn ? <Order /> : <Navigate to="/shop-grid-standard" />
+              }
+            />
+            <Route
+              path={process.env.PUBLIC_URL + "/logout"}
+              element={<LoginRegister />}
+            />
+
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
+      </ScrollToTop>
+    </Router>
   );
 };
 

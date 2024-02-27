@@ -18,12 +18,12 @@ const resolvers = {
           whereClause[Op.or] = [
             {
               name: {
-                [Op.iLike]: `%${query}%`,
+                [Op.like]: `%${query}%`,
               },
             },
             {
               sku: {
-                [Op.iLike]: `%${query}%`,
+                [Op.like]: `%${query}%`,
               },
             },
             {
@@ -53,45 +53,9 @@ const resolvers = {
           return productSearchResults;
         }
 
-        // If no results for products, check for category name
-        const categoryResult = await categoryModel.findOne({
-          where: { name: query },
-          include: [
-            {
-              model: productModel,
-              attributes: ['id', 'name', 'description', 'price', 'quantity'],
-              include: {
-                model: productImages,
-                attributes: ['images'],
-              },
-              
-            },
-          ],
-        });
-
-        // If category found, return its products
-        if (categoryResult) {
-          return categoryResult.products;
-        }
-
-        // const ordersSearchResults = await orderModel.findAll(
-        //   {
-        //   include: [
-        //     {
-        //       model: registerationModel,
-        //       attributes: ['id', 'firstname', 'lastname', 'contactNumber', 'email'],
-        //     },
-        //     {
-        //       model: orderItemsModel,
-        //       attributes: ['orderId', 'productId', 'quantity', 'price', 'discount', 'totalPrice'],
-        //     },
-        //   ],
-        // }
-        // );
-        console.log(ordersSearchResults);
 
         // Combine and return both product and order search results
-        return [...productSearchResults, ...ordersSearchResults];
+        return [...productSearchResults];
       } catch (error) {
         console.error('Error during search:', error.message);
         throw new Error('Internal Server Error');

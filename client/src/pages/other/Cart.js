@@ -7,6 +7,8 @@ import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import { addToCart, decreaseQuantity, deleteFromCart, deleteAllFromCart } from "../../store/slices/cart-slice";
 import { cartItemStock } from "../../helpers/product";
+import { logoutAsync } from "../../store/slices/Auth-Action";
+
 
 const Cart = () => {
   let cartTotalPrice = 0;
@@ -18,7 +20,14 @@ const Cart = () => {
   const currency = useSelector((state) => state.currency);
   const { cartItems } = useSelector((state) => state.cart);
   const { products } = useSelector((state) => state.product);
-  // console.log("kkkkkkkkkkkkkkkkkkkkkkkkk"cartItems[0].stock);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const authToken = useSelector((state) => state.auth.token);
+
+
+  const handleLogout = () => {
+    dispatch(logoutAsync(authToken));
+  };
+
 
   
   
@@ -259,9 +268,15 @@ const Cart = () => {
                           {currency.currencySymbol + cartTotalPrice.toFixed(2)}
                         </span>
                       </h4>
+                      {isLoggedIn ? (
                       <Link to={process.env.PUBLIC_URL + "/checkout"}>
                         Proceed to Checkout
                       </Link>
+                      ):(
+                        <Link to={process.env.PUBLIC_URL + "/login-register"}>
+                        Proceed to Checkout
+                      </Link>
+                      )}
                     </div>
                   </div>
                 </div>

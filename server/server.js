@@ -58,7 +58,7 @@ app.use('/api/products/', productRoutes);
 app.use('/api/suppliers', supplierRoute);
 
 //signin route
-app.use('/api/signin', userRoute)
+app.use('/api/user', userRoute)
 
 //productImagePost
 app.use('/productImages', productImages)
