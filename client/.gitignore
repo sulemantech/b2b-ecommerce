@@ -6,6 +6,7 @@ scripts/flow/*/.flowconfig
 *~
 yarn.lock
 *.pyc
+.env
 .grunt
 _SpecRunner.html
 _benchmarks_
