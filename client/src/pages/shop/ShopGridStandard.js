@@ -39,7 +39,11 @@ const ShopGridStandard = () => {
   const handleSortParams = (type, value) => {
     if (type === "category") {
         if (Array.isArray(value)) {
-            setSelectedCategories([value]);     
+            setSelectedCategories([value]);  
+
+            const allCategoriesButton = document.getElementById("allCategoriesButton");
+            allCategoriesButton.classList.toggle("active");
+
         } 
         else if (selectedCategories.length>=0 && !Array.isArray(value)) {
             const [first, ...rest] = selectedCategories;

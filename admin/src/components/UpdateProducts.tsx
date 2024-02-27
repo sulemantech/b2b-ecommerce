@@ -205,23 +205,6 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
     });
   };
 
-
-
-
-  
-  // const handleVariantChange = (
-  //   e: React.ChangeEvent<HTMLInputElement>,
-  //   index: number,
-  //   fieldName: string,
-  // ) => {
-  //   const newValue: string = e.target.value;
-  //   setVariants((prevVariants) => {
-  //     const updatedVariants: ProductVariant[] = [...prevVariants];
-  //     // Check if fieldName is 'weight' and convert newValue to a number
-  //     updatedVariants[index][fieldName] = fieldName === 'weight' ? Number(newValue) : newValue;
-  //     return updatedVariants;
-  //   });
-  // };
   
 
  
@@ -359,12 +342,6 @@ async function deleteVariant(variantId: number) {
 }
 
 
-
-
-
-
-
-
   // ****DEleteImage***********
   const handleDeleteImage = async () => {
     try {
@@ -401,6 +378,7 @@ async function deleteVariant(variantId: number) {
              disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark 
              dark:bg-form-input dark:focus:border-primary"
                 value={name}
+              
                 onChange={(e) => setName(e.target.value)}
               />
             </div>

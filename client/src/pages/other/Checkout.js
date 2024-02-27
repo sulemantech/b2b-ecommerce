@@ -12,7 +12,6 @@ import { getUserInformation } from "../../API";
 
 const Checkout = () => {
   let cartTotalPrice = 0;
-
   let { pathname } = useLocation();
   const currency = useSelector((state) => state.currency);
   const { cartItems } = useSelector((state) => state.cart);
@@ -20,14 +19,19 @@ const Checkout = () => {
   const [users, setUsers] = useState([]);
   
 
-
 const [formvalue,setvalue]= useState({
   zipCode:"",
   shippingAddress:"",
   additionalInfo:"",
   city:"",
   country:"",
+})
 
+const [update,setupadte]=useState({
+  firstname:"",
+  lastname:"",
+  email:"",
+  contactNumber:""
 })
 
 const handlePlaceOrder = async () => {
@@ -54,13 +58,13 @@ const handlePlaceOrder = async () => {
       paymentMethod: "Cash on delivery",
       trackingNumber: Math.floor(Math.random() * 1000000).toString(),
       orderItems: cartItemsData,
-      name: formvalue.firstname,
-      lastName: users.lastname,
+      name: update.firstname,
+      lastname: update.lastname,
       country: formvalue.country,
       city: formvalue.city,
       zipCode: parseInt(formvalue.zipCode),
       contactNumber: users.contactNumber,
-      email: users.email,
+      email: update.email,
       additionalInfo: formvalue.additionalInfo,
       shippingAddress: formvalue.shippingAddress,
     };
@@ -73,23 +77,19 @@ const handlePlaceOrder = async () => {
     }
   };
 
-
-
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const userData = await getUserInformation(storedToken);
         setUsers(userData);
+        setupadte(userData);
+        
       } catch (error) {
       }
     };
 
     fetchUser(); 
   }, [storedToken]);
-
-
-
-   
 
   return (
     <Fragment>
@@ -108,7 +108,7 @@ const handlePlaceOrder = async () => {
         <div className="checkout-area pt-95 pb-100">
           <div className="container">
             {cartItems && cartItems.length >= 1 ? (
-                    <form onSubmit={handlePlaceOrder}>
+                    <form>
               <div className="row">
                 <div className="col-lg-7">
                   <div className="billing-info-wrap">
@@ -116,37 +116,27 @@ const handlePlaceOrder = async () => {
                     <div className="row">
                       <div className="col-lg-6 col-md-6">
                         <div className="billing-info mb-20">
+                          <div className="billing-info mb-20">
                           <label>First Name</label>
-                          <input type="text" name="" value={users.firstname} />
+                          <input type="text" name="" value={update.firstname}
+                          onChange={(e)=>setupadte({...update, firstname:e.target.value})}
+                          required
+                          
+                           />
+                        </div>
                         </div>
                       </div>
                       <div className="col-lg-6 col-md-6">
                         <div className="billing-info mb-20">
                           <label>Last Name</label>
-                          <input type="text" name="" value={users.lastname}
-                           onChange={(e)=>setvalue({...formvalue,country:e.target.value})}
-                           formvalue={formvalue.firstname}
+                      
+                           <input type="text" name="" value={update.lastname}
+                           onChange={(e)=>setupadte({...update, lastname:e.target.value})}
+                           required
+                           
+                          
                            />
                         </div>
-                      </div>
-                      {/* <div className="col-lg-12">
-                        <div className="billing-info mb-20">
-                          <label>Company Name</label>
-                          <input type="text" name="" value={users.companyName} />
-                        </div>
-                      </div> */}
-                      <div className="col-lg-12">
-                        {/* <div className="billing-select mb-20">
-                          <label>Country</label>
-                          <select>
-                            <option>Select a country</option>
-                            <option>Azerbaijan</option>
-                            <option>Bahamas</option>
-                            <option>Bahrain</option>
-                            <option>Bangladesh</option>
-                            <option>Barbados</option>
-                          </select>
-                        </div> */}
                       </div>
                       <div className="col-lg-12">
                         <div className="billing-info mb-20">
@@ -160,11 +150,7 @@ const handlePlaceOrder = async () => {
                             formvalue={formvalue.shippingAddress}
                             // name="" value={users.address}
                           />
-                          <input
-                            placeholder="Apartment, suite, unit etc."
-                            type="text"
-                            required
-                          />
+                         
                         </div>
                       </div>
                       <div className="col-lg-12">
@@ -210,15 +196,21 @@ const handlePlaceOrder = async () => {
                       <div className="col-lg-6 col-md-6">
                         <div className="billing-info mb-20">
                           <label>Phone</label>
-                          <input type="text" name="" value={users.contactNumber} 
-                          required/>
+                          <input type="text" name="" value={update.contactNumber}
+                          onChange={(e)=>setupadte({...update, contactNumber:e.target.value})}
+                          required
+                          
+                           />
                         </div>
                       </div>
                       <div className="col-lg-6 col-md-6">
                         <div className="billing-info mb-20">
                           <label>Email Address</label>
-                          <input type="text" name="" value={users.email}
-                          required/>
+                          <input type="text" name="" value={update.email}
+                          onChange={(e)=>setupadte({...update, email:e.target.value})}
+                          
+                          required
+                           />
                         </div>
                       </div>
                     </div>
