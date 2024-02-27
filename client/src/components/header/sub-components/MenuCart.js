@@ -3,11 +3,22 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getDiscountPrice } from "../../../helpers/product";
 import { deleteFromCart } from "../../../store/slices/cart-slice"
+import { Alert } from "react-bootstrap";
+import { logoutAsync } from "../../../store/slices/Auth-Action";
+
 
 const MenuCart = () => {
   const dispatch = useDispatch();
   const currency = useSelector((state) => state.currency);
   const { cartItems } = useSelector((state) => state.cart);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const authToken = useSelector((state) => state.auth.token);
+
+  const handleLogout = () => {
+    dispatch(logoutAsync(authToken));
+  };
+
+
   let cartTotalPrice = 0;
   return (
     <div className="shopping-cart-content">
@@ -87,12 +98,25 @@ const MenuCart = () => {
             <Link className="default-btn" to={process.env.PUBLIC_URL + "/cart"}>
               view cart
             </Link>
+            {isLoggedIn ? (
+
             <Link
               className="default-btn"
               to={process.env.PUBLIC_URL + "/checkout"}
             >
               checkout
             </Link>
+            ):(
+              <Link
+              className="default-btn"
+              to={process.env.PUBLIC_URL + "/login-register"}
+            >
+              checkout
+            </Link>
+           
+              
+              
+            )}
           </div>
         </Fragment>
       ) : (

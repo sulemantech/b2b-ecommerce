@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { placeOrder } from "../../API";
 import { getUserInformation } from "../../API";
 
+
 const Checkout = () => {
   let cartTotalPrice = 0;
 
@@ -17,7 +18,8 @@ const Checkout = () => {
   const { cartItems } = useSelector((state) => state.cart);
   const storedToken = useSelector((state) => state.auth.token);
   const [users, setUsers] = useState([]);
-console.log(cartItems);
+  
+
 
 const [formvalue,setvalue]= useState({
   zipCode:"",
@@ -28,28 +30,35 @@ const [formvalue,setvalue]= useState({
 
 })
 
-  const handlePlaceOrder = async () => {
-    const cartItemsData = cartItems.map((cartItem) => ({
+const handlePlaceOrder = async () => {
+  let totalPrice = 0;
+  const cartItemsData = cartItems.map((cartItem) => {
+    const itemTotalPrice = (cartItem.price - cartItem.discount) * cartItem.quantity;
+    totalPrice += itemTotalPrice;
+    return {
       productId: cartItem.id,
       quantity: cartItem.quantity,
       price: cartItem.price,
       discount: cartItem.discount,
-      totalPrice: (cartItem.price - cartItem.discount) * cartItem.quantity,
-    }));
+      vendorId: cartItem.supplier_id,
+      totalPrice: itemTotalPrice,
+    };
+  });
+
 
     const orderData = {
       address: users.address,
-      totalPrice: 3,
-      // status: "pending",
+      totalPrice:totalPrice,
+      status: "Pending",
       discount: 5,
       paymentMethod: "Cash on delivery",
-      trackingNumber: Math.floor(Math.random() * 1000000),
+      trackingNumber: Math.floor(Math.random() * 1000000).toString(),
       orderItems: cartItemsData,
-      name: users.firstname,
+      name: formvalue.firstname,
       lastName: users.lastname,
       country: formvalue.country,
       city: formvalue.city,
-      zipCode: formvalue.zipCode,
+      zipCode: parseInt(formvalue.zipCode),
       contactNumber: users.contactNumber,
       email: users.email,
       additionalInfo: formvalue.additionalInfo,
@@ -78,6 +87,10 @@ const [formvalue,setvalue]= useState({
     fetchUser(); 
   }, [storedToken]);
 
+
+
+   
+
   return (
     <Fragment>
       <SEO
@@ -95,6 +108,7 @@ const [formvalue,setvalue]= useState({
         <div className="checkout-area pt-95 pb-100">
           <div className="container">
             {cartItems && cartItems.length >= 1 ? (
+                    <form onSubmit={handlePlaceOrder}>
               <div className="row">
                 <div className="col-lg-7">
                   <div className="billing-info-wrap">
@@ -109,7 +123,10 @@ const [formvalue,setvalue]= useState({
                       <div className="col-lg-6 col-md-6">
                         <div className="billing-info mb-20">
                           <label>Last Name</label>
-                          <input type="text" name="" value={users.lastname} />
+                          <input type="text" name="" value={users.lastname}
+                           onChange={(e)=>setvalue({...formvalue,country:e.target.value})}
+                           formvalue={formvalue.firstname}
+                           />
                         </div>
                       </div>
                       {/* <div className="col-lg-12">
@@ -133,7 +150,7 @@ const [formvalue,setvalue]= useState({
                       </div>
                       <div className="col-lg-12">
                         <div className="billing-info mb-20">
-                          <label>shippingAddress</label>
+                          <label>Shipping Address</label>
                           <input
                             className="billing-address"
                             required
@@ -152,7 +169,7 @@ const [formvalue,setvalue]= useState({
                       </div>
                       <div className="col-lg-12">
                         <div className="billing-info mb-20">
-                          <label>city</label>
+                          <label>City</label>
                           <input type="text" 
                           placeholder="city"
                           onChange={(e)=>setvalue({...formvalue,city:e.target.value})}
@@ -163,49 +180,66 @@ const [formvalue,setvalue]= useState({
                       <div className="col-lg-6 col-md-6">
                         <div className="billing-info mb-20">
                           <label>State / County</label>
-                          <input type="text" 
+                          <input type="text"
                           onChange={(e)=>setvalue({...formvalue,country:e.target.value})}
                           formvalue={formvalue.country}
+                          required
                           />
                         </div>
                       </div>
                       <div className="col-lg-6 col-md-6">
+                     
+
                         <div className="billing-info mb-20">
-                          <label>zipCode</label>
+                          <label>ZipCode</label>
                           <input type="text"    onChange={(e) =>
                                 setvalue({ ...formvalue, zipCode: e.target.value })
                           }
                                 formvalue={formvalue.zipCode}
+                                required
+                                
+                                
+                              
                   />
+                     
                         </div>
+                        
+                       
+
                       </div>
                       <div className="col-lg-6 col-md-6">
                         <div className="billing-info mb-20">
                           <label>Phone</label>
-                          <input type="text" name="" value={users.contactNumber} />
+                          <input type="text" name="" value={users.contactNumber} 
+                          required/>
                         </div>
                       </div>
                       <div className="col-lg-6 col-md-6">
                         <div className="billing-info mb-20">
                           <label>Email Address</label>
-                          <input type="text" name="" value={users.email}/>
+                          <input type="text" name="" value={users.email}
+                          required/>
                         </div>
                       </div>
                     </div>
+                  
 
                     <div className="additional-info-wrap">
-                      <h4>additionalInfo</h4>
+                      <h4>AdditionalInfo</h4>
                       <div className="additional-info">
-                        <label>Order notes</label>
+                        <label>Order Notes</label>
                         <textarea
                           placeholder="Notes about your order, e.g. special notes for delivery. "
                           name="message"
                           onChange={(e)=>setvalue({...formvalue,additionalInfo:e.target.value})}
                           formvalue={formvalue.additionalInfo}
                           defaultValue={""}
+                          required
                         />
                       </div>
                     </div>
+                    
+                    
                   </div>
                 </div>
 
@@ -233,7 +267,7 @@ const [formvalue,setvalue]= useState({
                               const finalDiscountedPrice = (
                                 discountedPrice * currency.currencyRate
                                 ).toFixed(2);
-                                console.log("finalDiscountedPrice",finalDiscountedPrice* cartItem.quantity);
+                                // console.log("finalDiscountedPrice",finalDiscountedPrice* cartItem.quantity);
                                 
                                 
 
@@ -256,8 +290,8 @@ const [formvalue,setvalue]= useState({
                                   <span className="order-price">
                                     {discountedPrice !== null
                                       ? currency.currencySymbol +
-                                        (
-                                          finalDiscountedPrice *
+                                      (
+                                        finalDiscountedPrice *
                                           cartItem.quantity
                                         ).toFixed(2)
                                       : currency.currencySymbol +
@@ -290,10 +324,12 @@ const [formvalue,setvalue]= useState({
                     </div>
                     <div className="place-order mt-25">
                     <button className="btn-hover" onClick={handlePlaceOrder}>Place Order</button>
+  
                     </div>
                   </div>
                 </div>
               </div>
+              </form>
             ) : (
               <div className="row">
                 <div className="col-lg-12">
@@ -303,7 +339,8 @@ const [formvalue,setvalue]= useState({
                     </div>
                     <div className="item-empty-area__text">
                       No items found in cart to checkout <br />{" "}
-                      <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
+                      <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}
+                      >
                         Shop Now
                       </Link>
                     </div>
