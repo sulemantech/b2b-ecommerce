@@ -141,9 +141,9 @@ const ShopGridStandard = () => {
       }
   }, [products, selectedCategories]);
   
-    // useEffect(() => {
-    //     dispatch(fetchProducts());
-    // }, []);
+    useEffect(() => {
+        dispatch(fetchProducts());
+    }, []);
 
     // useEffect(() => {
     //     dispatch(fetchProductsByCategories());
