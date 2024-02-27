@@ -51,7 +51,7 @@ const ShopGridStandard = () => {
                   );
                   filterButtons.forEach((item) => {
                     if (item.id == "allCategoriesButton") {
-                      item.classList.remove("active");
+                      item.classList.remove("active"); 
                   }
                   }
              ) 
