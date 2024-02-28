@@ -8,7 +8,7 @@ import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import { useEffect, useState } from "react";
 import { placeOrder } from "../../API";
 import { getUserInformation } from "../../API";
-
+import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
   let cartTotalPrice = 0;
@@ -17,42 +17,42 @@ const Checkout = () => {
   const { cartItems } = useSelector((state) => state.cart);
   const storedToken = useSelector((state) => state.auth.token);
   const [users, setUsers] = useState([]);
-  
+  const navigate = useNavigate();
 
-const [formvalue,setvalue]= useState({
-  zipCode:"",
-  shippingAddress:"",
-  additionalInfo:"",
-  city:"",
-  country:"",
-})
-
-const [update,setupadte]=useState({
-  firstname:"",
-  lastname:"",
-  email:"",
-  contactNumber:""
-})
-
-const handlePlaceOrder = async () => {
-  let totalPrice = 0;
-  const cartItemsData = cartItems.map((cartItem) => {
-    const itemTotalPrice = (cartItem.price - cartItem.discount) * cartItem.quantity;
-    totalPrice += itemTotalPrice;
-    return {
-      productId: cartItem.id,
-      quantity: cartItem.quantity,
-      price: cartItem.price,
-      discount: cartItem.discount,
-      vendorId: cartItem.supplier_id,
-      totalPrice: itemTotalPrice,
-    };
+  const [formvalue, setvalue] = useState({
+    zipCode: "",
+    shippingAddress: "",
+    additionalInfo: "",
+    city: "",
+    country: "",
   });
 
+  const [update, setupadte] = useState({
+    firstname: "",
+    lastname: "",
+    email: "",
+    contactNumber: "",
+  });
+
+  const handlePlaceOrder = async () => {
+    let totalPrice = 0;
+    const cartItemsData = cartItems.map((cartItem) => {
+      const itemTotalPrice =
+        (cartItem.price - cartItem.discount) * cartItem.quantity;
+      totalPrice += itemTotalPrice;
+      return {
+        productId: cartItem.id,
+        quantity: cartItem.quantity,
+        price: cartItem.price,
+        discount: cartItem.discount,
+        vendorId: cartItem.supplier_id,
+        totalPrice: itemTotalPrice,
+      };
+    });
 
     const orderData = {
       address: users.address,
-      totalPrice:totalPrice,
+      totalPrice: totalPrice,
       status: "Pending",
       discount: 5,
       paymentMethod: "Cash on delivery",
@@ -72,6 +72,7 @@ const handlePlaceOrder = async () => {
     try {
       const response = await placeOrder(storedToken, orderData);
       console.log("Order placed successfully:", response);
+      navigate("/order/success");
     } catch (error) {
       console.error("Error placing order:", error.message);
     }
@@ -83,12 +84,10 @@ const handlePlaceOrder = async () => {
         const userData = await getUserInformation(storedToken);
         setUsers(userData);
         setupadte(userData);
-        
-      } catch (error) {
-      }
+      } catch (error) {}
     };
 
-    fetchUser(); 
+    fetchUser();
   }, [storedToken]);
 
   return (
@@ -99,16 +98,16 @@ const handlePlaceOrder = async () => {
       />
       <LayoutOne headerTop="visible">
         {/* breadcrumb */}
-        <Breadcrumb 
+        <Breadcrumb
           pages={[
-            {label: "Home", path: process.env.PUBLIC_URL + "/" },
-            {label: "Checkout", path: process.env.PUBLIC_URL + pathname }
-          ]} 
+            { label: "Home", path: process.env.PUBLIC_URL + "/" },
+            { label: "Checkout", path: process.env.PUBLIC_URL + pathname },
+          ]}
         />
         <div className="checkout-area pt-95 pb-100">
           <div className="container">
             {cartItems && cartItems.length >= 1 ? (
-                    <form>
+              // <form>
               <div className="row">
                 <div className="col-lg-7">
                   <div className="billing-info-wrap">
@@ -117,25 +116,35 @@ const handlePlaceOrder = async () => {
                       <div className="col-lg-6 col-md-6">
                         <div className="billing-info mb-20">
                           <div className="billing-info mb-20">
-                          <label>First Name</label>
-                          <input type="text" name="" value={update.firstname}
-                          onChange={(e)=>setupadte({...update, firstname:e.target.value})}
-                          required
-                          
-                           />
-                        </div>
+                            <label>First Name</label>
+                            <input
+                              type="text"
+                              name=""
+                              value={update.firstname}
+                              onChange={(e) =>
+                                setupadte({
+                                  ...update,
+                                  firstname: e.target.value,
+                                })
+                              }
+                              required
+                            />
+                          </div>
                         </div>
                       </div>
                       <div className="col-lg-6 col-md-6">
                         <div className="billing-info mb-20">
                           <label>Last Name</label>
-                      
-                           <input type="text" name="" value={update.lastname}
-                           onChange={(e)=>setupadte({...update, lastname:e.target.value})}
-                           required
-                           
-                          
-                           />
+
+                          <input
+                            type="text"
+                            name=""
+                            value={update.lastname}
+                            onChange={(e) =>
+                              setupadte({ ...update, lastname: e.target.value })
+                            }
+                            required
+                          />
                         </div>
                       </div>
                       <div className="col-lg-12">
@@ -146,75 +155,80 @@ const handlePlaceOrder = async () => {
                             required
                             placeholder="House number and street name"
                             type="text"
-                            onChange={(e)=>setvalue({...formvalue,shippingAddress: e.target.value})}
+                            onChange={(e) =>
+                              setvalue({
+                                ...formvalue,
+                                shippingAddress: e.target.value,
+                              })
+                            }
                             formvalue={formvalue.shippingAddress}
                             // name="" value={users.address}
                           />
-                         
                         </div>
                       </div>
                       <div className="col-lg-12">
                         <div className="billing-info mb-20">
                           <label>City</label>
-                          <input type="text" 
-                          placeholder="city"
-                          onChange={(e)=>setvalue({...formvalue,city:e.target.value})}
-                          formvalue={formvalue.city}
+                          <input
+                            type="text"
+                            required
+                            placeholder="city"
+                            onChange={(e) =>
+                              setvalue({ ...formvalue, city: e.target.value })
+                            }
+                            formvalue={formvalue.city}
                           />
                         </div>
                       </div>
+                    
                       <div className="col-lg-6 col-md-6">
-                        <div className="billing-info mb-20">
-                          <label>State / County</label>
-                          <input type="text"
-                          onChange={(e)=>setvalue({...formvalue,country:e.target.value})}
-                          formvalue={formvalue.country}
-                          required
-                          />
-                        </div>
-                      </div>
-                      <div className="col-lg-6 col-md-6">
-                     
-
                         <div className="billing-info mb-20">
                           <label>ZipCode</label>
-                          <input type="text"    onChange={(e) =>
-                                setvalue({ ...formvalue, zipCode: e.target.value })
-                          }
-                                formvalue={formvalue.zipCode}
-                                required
-                                
-                                
-                              
-                  />
-                     
+                          <input
+                            type="text"
+                            required
+                            onChange={(e) =>
+                              setvalue({
+                                ...formvalue,
+                                zipCode: e.target.value,                                
+                              })
+                            }
+                            formvalue={formvalue.zipCode}
+                          />
                         </div>
-                        
-                       
-
                       </div>
                       <div className="col-lg-6 col-md-6">
                         <div className="billing-info mb-20">
                           <label>Phone</label>
-                          <input type="text" name="" value={update.contactNumber}
-                          onChange={(e)=>setupadte({...update, contactNumber:e.target.value})}
-                          required
-                          
-                           />
+                          <input
+                            type="text"
+                            name=""
+                            value={update.contactNumber}
+                            onChange={(e) =>
+                              setupadte({
+                                ...update,
+                                contactNumber: e.target.value,
+                              })
+                            }
+                            required
+                          />
                         </div>
                       </div>
-                      <div className="col-lg-6 col-md-6">
+                      <div className="col-lg-12 col-md-12">
                         <div className="billing-info mb-20">
                           <label>Email Address</label>
-                          <input type="text" name="" value={update.email}
-                          onChange={(e)=>setupadte({...update, email:e.target.value})}
-                          
-                          required
-                           />
+                          <input
+                            type="text"
+                            name=""
+                            value={update.email}
+                            onChange={(e) =>
+                              setupadte({ ...update, email: e.target.value })
+                            }
+                            required
+                          />
                         </div>
                       </div>
                     </div>
-                  
 
                     <div className="additional-info-wrap">
                       <h4>AdditionalInfo</h4>
@@ -223,15 +237,18 @@ const handlePlaceOrder = async () => {
                         <textarea
                           placeholder="Notes about your order, e.g. special notes for delivery. "
                           name="message"
-                          onChange={(e)=>setvalue({...formvalue,additionalInfo:e.target.value})}
+                          onChange={(e) =>
+                            setvalue({
+                              ...formvalue,
+                              additionalInfo: e.target.value,
+                            })
+                          }
                           formvalue={formvalue.additionalInfo}
                           defaultValue={""}
                           required
                         />
                       </div>
                     </div>
-                    
-                    
                   </div>
                 </div>
 
@@ -258,10 +275,8 @@ const handlePlaceOrder = async () => {
                               ).toFixed(2);
                               const finalDiscountedPrice = (
                                 discountedPrice * currency.currencyRate
-                                ).toFixed(2);
-                                // console.log("finalDiscountedPrice",finalDiscountedPrice* cartItem.quantity);
-                                
-                                
+                              ).toFixed(2);
+                              // console.log("finalDiscountedPrice",finalDiscountedPrice* cartItem.quantity);
 
                               discountedPrice != null
                                 ? (cartTotalPrice +=
@@ -273,17 +288,12 @@ const handlePlaceOrder = async () => {
                                   <span className="order-middle-left">
                                     {cartItem.name} X {cartItem.quantity}
                                   </span>{" "}
-                                  
-                                  <span>
-                                    {"hellllooo" + cartItem.id}
-
-                                  </span>
-                                  
+                                 
                                   <span className="order-price">
                                     {discountedPrice !== null
                                       ? currency.currencySymbol +
-                                      (
-                                        finalDiscountedPrice *
+                                        (
+                                          finalDiscountedPrice *
                                           cartItem.quantity
                                         ).toFixed(2)
                                       : currency.currencySymbol +
@@ -315,13 +325,14 @@ const handlePlaceOrder = async () => {
                       <div className="payment-method"></div>
                     </div>
                     <div className="place-order mt-25">
-                    <button className="btn-hover" onClick={handlePlaceOrder}>Place Order</button>
-  
+                      <button className="btn-hover" onClick={handlePlaceOrder}>
+                        Place Order
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
-              </form>
+              /* </form> */
             ) : (
               <div className="row">
                 <div className="col-lg-12">
@@ -331,8 +342,7 @@ const handlePlaceOrder = async () => {
                     </div>
                     <div className="item-empty-area__text">
                       No items found in cart to checkout <br />{" "}
-                      <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}
-                      >
+                      <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
                         Shop Now
                       </Link>
                     </div>
