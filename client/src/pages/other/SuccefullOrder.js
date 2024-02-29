@@ -1,10 +1,13 @@
 import Card from "react-bootstrap/Card";
+import LayoutOne from "../../layouts/LayoutOne";
+
 
 function OrderSuccess() {
   return (
     
+      <LayoutOne headerTop="visible">
     <div className="d-flex justify-content-center align-items-center" style={{height: "100vh"}}>
-    <Card className="col-md-6 mx-auto mt-20  ">
+    <Card className="col-md-6 mx-auto">
       <Card.Body className="" >
         <Card.Title className="text-center">
           {" "}
@@ -36,6 +39,8 @@ function OrderSuccess() {
       </Card.Body>
     </Card>
     </div>
+    </LayoutOne>
+    
   );
 }
 

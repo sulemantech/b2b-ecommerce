@@ -69,7 +69,7 @@ const Compare = () => {
                                       className="img-fluid"
                                       src={
                                         process.env.PUBLIC_URL +
-                                        compareItem.image[0]
+                                        compareItem.images
                                       }
                                       alt=""
                                     />
