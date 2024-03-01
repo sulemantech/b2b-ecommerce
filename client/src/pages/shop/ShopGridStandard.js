@@ -28,11 +28,11 @@ const ShopGridStandard = () => {
   const [sortedProducts, setSortedProducts] = useState([]);
   const { products } = useSelector((state) => state.product);
   const categories = useSelector((state) => state.category.Categories);
-  const pageLimit = 15;
+  const pageLimit = 10;
   let { pathname } = useLocation();
   const [selectedCategories, setSelectedCategories] = useState([]);
-
   const categoryIds = categories.map((category) => category.id);
+  debugger
 
 
   const handleSortParams = (type, value) => {
@@ -198,6 +198,15 @@ const ShopGridStandard = () => {
   //     dispatch(fetchProductsByCategories());
   // },[]);
 
+  useEffect(() => {
+    let sortedProducts = getSortedProducts(products, sortType, sortValue);
+    const filterSortedProducts = getSortedProducts(sortedProducts, filterSortType, filterSortValue);
+    sortedProducts = filterSortedProducts;
+    setSortedProducts(sortedProducts);
+    setCurrentData(sortedProducts.slice(offset, offset + pageLimit));
+}, [offset, products, sortType, sortValue, filterSortType, filterSortValue ]);
+
+
   return (
     <Fragment>
       <SEO
@@ -239,6 +248,7 @@ const ShopGridStandard = () => {
 
                 {/* shop product pagination */}
                 <div className="pro-pagination-style text-center mt-30">
+                
                   <Paginator
                     totalRecords={sortedProducts.length}
                     pageLimit={pageLimit}
@@ -250,6 +260,7 @@ const ShopGridStandard = () => {
                     pagePrevText="«"
                     pageNextText="»"
                   />
+                  
                 </div>
               </div>
             </div>

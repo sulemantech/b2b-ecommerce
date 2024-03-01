@@ -20,9 +20,7 @@ const ProductDescriptionInfo = ({
 }) => {
   
   const dispatch = useDispatch();
-  const [selectedProductColor, setSelectedProductColor] = useState(
-    product.variation ? product.variation[0].color : ""
-  );
+  const [selectedProductColor, setSelectedProductColor] = useState( product.variation ? product.variation[0].color : "");
   const [selectedProductSize, setSelectedProductSize] = useState(
     product.variation ? product.variation[0].size[0].name : ""
   );
@@ -37,6 +35,7 @@ const ProductDescriptionInfo = ({
     selectedProductColor,
     selectedProductSize
   );
+  debugger
 
   return (
     <div className="product-details-content ml-70">
@@ -64,8 +63,10 @@ const ProductDescriptionInfo = ({
       )}
       <div className="pro-details-list">
         <p>{product.description}</p>
+        
       </div>
-     
+
+    
 
       {product.variation ? (
         <div className="pro-details-size-color">

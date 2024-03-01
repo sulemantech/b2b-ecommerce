@@ -12,7 +12,7 @@ import { getUserInformation } from "../../API";
 import { useNavigate } from "react-router-dom";
 import { deleteAllFromCart } from "../../store/slices/cart-slice";
 import { useDispatch } from "react-redux";
-import FooterOne from "../../wrappers/footer/FooterOne";
+import FooterCopyright from "../../components/footer/FooterCopyright";
 
 const Checkout = () => {
   let cartTotalPrice = 0;
@@ -289,7 +289,7 @@ const Checkout = () => {
             )}
           </div>
         <br/>
-          <FooterOne />
+        <FooterCopyright/>
         </div>
         {/* </LayoutOne> */}
         <div className="your-order-area col-lg-6 border-start ">

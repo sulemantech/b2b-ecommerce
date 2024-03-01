@@ -5,6 +5,7 @@ import FooterCopyright from "../../components/footer/FooterCopyright";
 import FooterNewsletter from "../../components/footer/FooterNewsletter";
 
 
+
 const FooterOne = ({
   backgroundColorClass,
   spaceTopClass,
@@ -25,10 +26,7 @@ const FooterOne = ({
             }`}
           >
             {/* footer copyright */}
-            <FooterCopyright
-              footerLogo="/assets/img/logo/logo.png"
-              spaceBottomClass="mb-30"
-            />
+            <FooterCopyright/>
           </div>
           <div
             className={`${
