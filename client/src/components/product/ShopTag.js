@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { setActiveSort } from "../../helpers/product";
 
 const ShopTag = ({ tags, getSortParams,tagFilterSortParams }) => {
-
+debugger
  
   
   return (
@@ -13,6 +13,8 @@ const ShopTag = ({ tags, getSortParams,tagFilterSortParams }) => {
         {tags ? (
           <ul>
             {tags.map((tag, key) => {
+              //  tag = tag.replace(/^{|\}$/g, '');
+              tag = tag.replace(/(^["{]+)|(["}]+$)/g, '');
               return (
                 <li key={key}>
                   <button

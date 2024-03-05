@@ -28,11 +28,11 @@ const ShopGridStandard = () => {
   const [sortedProducts, setSortedProducts] = useState([]);
   const { products } = useSelector((state) => state.product);
   const categories = useSelector((state) => state.category.Categories);
-  const pageLimit = 10;
+  const pageLimit = 12;
   let { pathname } = useLocation();
   const [selectedCategories, setSelectedCategories] = useState([]);
   const categoryIds = categories.map((category) => category.id);
-  debugger
+  
 
 
   const handleSortParams = (type, value) => {
@@ -153,10 +153,8 @@ const ShopGridStandard = () => {
   };
 
   const tagFilterSortParams=(tag,value)=>{
-    setCurrentData((data)=>
-        [...data].splice((value)))
-    
-
+    setSortType(sortType);
+    setSortValue(sortValue);
     console.log(tag,value);
 
   }
