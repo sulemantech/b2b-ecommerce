@@ -32,9 +32,9 @@ function OrderSuccess() {
         <Card.Text className="text-center">
         Thank you for your order! We've received your request and will process it shortly
         </Card.Text>
-        <Card.Link href="/shop-grid-standard" className="text-white bg-black p-1 rounded rounded-border border border-primary">
+        {/* <Card.Link href="/shop-grid-standard" className="text-white bg-black p-1 rounded rounded-border border border-primary">
             Back to Home
-            </Card.Link>
+            </Card.Link> */}
       
       </Card.Body>
     </Card>

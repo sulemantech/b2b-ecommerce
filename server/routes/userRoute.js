@@ -31,7 +31,7 @@ router.post('/login', async (req, res) => {
           vendorid: user.businessId,
         };
         const token = jwt.sign(tokenData, process.env.JWT_SECRET, {
-          expiresIn: '1m',
+          expiresIn: '24h',
         });
 
         res.cookie('token', token, { httpOnly: true });

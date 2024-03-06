@@ -100,7 +100,7 @@ const Cart = () => {
                                     <img
                                       className="img-fluid"
                                       src={
-                                        process.env.PUBLIC_URL +
+                                        process.env.REACT_APP_PUBLIC_URL+
                                         cartItem?.productImages[0].images
                                       }
                                       alt=""

@@ -10,6 +10,7 @@ import Swiper, { SwiperSlide } from "../../components/swiper";
 
 
 const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
+  
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [index, setIndex] = useState(-1);
   const slides = product?.productImages.flatMap((productImage, i) =>
@@ -95,7 +96,7 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
         </button>
         <div className="single-image">
           <img
-            src={process.env.PUBLIC_URL + imageSet.images}
+            src={ process.env.REACT_APP_PUBLIC_URL  + imageSet.images}
             className="img-fluid"
             alt=""
           />
@@ -131,7 +132,7 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
                   <SwiperSlide key={key}>
                     <div className="single-image">
                       <img
-                        src={process.env.PUBLIC_URL + single.images}
+                        src={ process.env.REACT_APP_PUBLIC_URL   + single.images}
                         className="img-fluid"
                         alt=""
                       />

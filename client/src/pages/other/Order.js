@@ -60,6 +60,7 @@ const Order = () => {
             { label: 'My Account', path: process.env.PUBLIC_URL + pathname },
           ]}
         />
+            {orders.length>1 ? (
         <div className="orders-container">
           <h2 style={{ textAlign: 'center' }}>User Orders</h2>
 
@@ -73,7 +74,6 @@ const Order = () => {
             />
             {/* <button onClick={handleSearch}>Search</button> */}
           </div>
-
           <table className="orders-table">
             <thead>
               <tr>
@@ -100,7 +100,14 @@ const Order = () => {
               ))}
             </tbody>
           </table>
+          </div>
+        ):(
+          <div className='mt-30 mb-30'>
+        <h1 className='text-center font-italic-bold '>
+          No Order Found
+        </h1>
         </div>
+          )}
       </LayoutOne>
     </>
   );

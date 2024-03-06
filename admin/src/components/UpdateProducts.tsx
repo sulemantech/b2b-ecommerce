@@ -419,7 +419,7 @@ async function deleteVariant(variantId: number) {
                           {productImages.map((imageUrl, index) => (
                             <img
                               key={index}
-                              src={imageUrl}
+                              src={import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST + imageUrl}
                               alt={`Product Image ${index + 1}`}
                             />
                           ))}
