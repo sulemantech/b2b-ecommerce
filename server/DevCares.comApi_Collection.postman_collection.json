@@ -187,11 +187,10 @@
 							]
 						},
 						"url": {
-							"raw": "https://devcares.com/productImages/get",
+							"raw": "{{B2B_HOST}}/productImages/get",
 							"protocol": "https",
 							"host": [
-								"devcares",
-								"com"
+								"{{B2B_HOST}}"
 							],
 							"path": [
 								"productImages",
