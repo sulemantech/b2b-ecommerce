@@ -183,7 +183,8 @@ const productModel = sequelize.define('products', {
 
 productModel.hasMany(productImages, { foreignKey: 'productId' });
 productModel.belongsTo(supplierModel, { foreignKey: 'supplier_id' });
-productModel.belongsToMany(categoryModel, { through: productCategoriesModel });
+productModel.belongsTo(categoryModel, { foreignKey: 'catagory_id' });
+// productModel.belongsToMany(categoryModel, { through: productCategoriesModel });
 categoryModel.belongsToMany(productModel, { through: productCategoriesModel }); 
 productModel.hasMany(productVariantModel, { foreignKey: 'productId' });
 

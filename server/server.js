@@ -36,6 +36,14 @@ app.get('/', (req,res)=>{
     res.send("getting ")
 })
 
+// sequelize.sync({ alter: true })
+//   .then(() => {
+//     console.log('Database synchronized successfully');
+//   })
+//   .catch(error => {
+//     console.error('Error synchronizing database:', error);
+//   });
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,

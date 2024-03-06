@@ -1,0 +1,1648 @@
+{
+	"info": {
+		"_postman_id": "535bd95d-8754-47be-8138-35bf31b61060",
+		"name": "DevCares.comApi_Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29264762"
+	},
+	"item": [
+		{
+			"name": "products",
+			"item": [
+				{
+					"name": "getSpecificProductByCategory",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{B2B_HOST}}/api/products/1",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "postProduct",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6eyJpZCI6OCwiZmlyc3RuYW1lIjoibHV0aGZpIiwibGFzdG5hbWUiOiJraGFuIiwiZW1haWwiOiJsdXRoZmlAZW1haS5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRyQlBHdlVVQ3JSMFFNUkxUMnY0NlFPLkhpUnFBb2xyV3BGYXFaQm84R0xldEY3Yi9XNk1rZSIsImFkZHJlc3MiOiIxMjMgTWFpbiBTdCIsImNvbnRhY3ROdW1iZXIiOjEyMzQ1Njc4OTAsImJ1c2luZXNzTmFtZSI6IkRvZSBFbnRlcnByaXNlcyIsImNyZWF0ZWRBdCI6IjIwMjMtMTItMDhUMTA6MTk6MDIuNjQxWiIsInVwZGF0ZWRBdCI6IjIwMjMtMTItMDhUMTA6MTk6MDIuNjQxWiJ9LCJpYXQiOjE3MDQxMDEzODYsImV4cCI6MTcwNDE4Nzc4Nn0.DGg1WQPEeaJzIKAGlsHpT1bNMHK1n5SkWsjViF9tSEs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"products\": {\r\n    \"name\": \"mango\",\r\n    \"description\": \"description for mango\",\r\n    \"price\": 100,\r\n    \"quantity\": 100,\r\n    \"manufacturer\": \"Sample Manufacturer\",\r\n    \"discount\": 10,\r\n    \"new\": true,\r\n    \"rating\": 4,\r\n    \"saleCount\": 0,\r\n    \"tag\": [\r\n      \"tag1\",\r\n      \"tag2\"\r\n    ],\r\n    \"stock\": 1000,\r\n    \"quantityInStock\": 100,\r\n    \"sku\": \"p172-124q\",\r\n    \"category_id\": 1,\r\n    \"supplier_id\": 3,\r\n    \"categoryName\": \"Sample Category\",\r\n    \"status\": \"active\"\r\n  },\r\n  \"variants\": [\r\n    {\r\n      \"key\": \"size\",\r\n      \"values\": [\r\n        \"small\",\r\n        \"medium\",\r\n        \"E-large\"\r\n      ],\r\n      \"type\": \"individual\",\r\n      \"weight\": 1.5,\r\n      \"unit\": \"kg\",\r\n      \"availableQuantity\": 100,\r\n      \"variantPrice\": 24.99,\r\n      \"variantSku\": \"abc133\",\r\n      \"optionValues\": [\r\n        {\r\n          \"id\": \"1\",\r\n          \"name\": \"small\",\r\n          \"variantSku\": [\r\n            \"ABC1239-small\"\r\n          ]\r\n        },\r\n        {\r\n          \"id\": \"2\",\r\n          \"name\": \"medium\",\r\n          \"variantSku\": [\r\n            \"ABC1239-medium\"\r\n          ]\r\n        },\r\n        {\r\n          \"id\": \"3\",\r\n          \"name\": \"E-large\",\r\n          \"variantSku\": [\r\n            \"ABC1239-large\"\r\n          ]\r\n        }\r\n      ]\r\n    },\r\n    {\r\n      \"key\": \"color\",\r\n      \"values\": [\r\n        \"red\",\r\n        \"black\"\r\n      ],\r\n      \"type\": \"individual\",\r\n      \"weight\": 1.5,\r\n      \"unit\": \"kg\",\r\n      \"availableQuantity\": 100,\r\n      \"variantPrice\": 24.99,\r\n      \"optionValues\": 12\r\n    }\r\n  ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/api/products",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UpdateProduct",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"products\": {\r\n    \"name\": \"mango2\",\r\n    \"description\": \"This is a sample product\",\r\n    \"price\": 29.99,\r\n    \"quantity\": 100,\r\n    \"manufacturer\": \"Sample Manufacturer\",\r\n    \"discount\": 10,\r\n    \"new\": true,\r\n    \"rating\": 4,\r\n    \"saleCount\": 0,\r\n    \"tag\": [\r\n      \"tag1\",\r\n      \"tag2\"\r\n    ],\r\n    \"stock\": 1000,\r\n    \"quantityInStock\": 100,\r\n    \"sku\": \"pkpmangaaa\",\r\n    \"category_id\": 1,\r\n    \"supplier_id\": 1,\r\n    \"categoryName\": \"Sample Category\",\r\n    \"status\": \"active\"\r\n  },\r\n  \"variants\": [\r\n    {\r\n        \"id\":56,\r\n      \"key\": \"size\",\r\n      \"values\": [\r\n        \"size\",\r\n        \"medium\"\r\n        \r\n      ],\r\n      \"type\": \"individual\",\r\n      \"weight\": 1.5,\r\n      \"unit\": \"kg\",\r\n      \"availableQuantity\": 50,\r\n      \"variantPrice\": 24.99,\r\n      \"variantSku\":\"abc123\",\r\n      \"optionValues\": [\r\n        {\r\n          \"id\": \"1\",\r\n          \"name\": \"small\",\r\n          \"variantSku\": [\r\n            \"ABC1239-small\"\r\n          ]\r\n        },\r\n        {\r\n          \"id\": \"2\",\r\n          \"name\": \"medium\",\r\n          \"variantSku\": [\r\n            \"ABC1239-medium\"\r\n          ]\r\n        },\r\n        {\r\n          \"id\": \"3\",\r\n          \"name\": \"E-large\",\r\n          \"variantSku\": [\r\n            \"ABC1239-large\"\r\n          ]\r\n        }\r\n      ]\r\n    },\r\n    {\r\n        \"id\":57,\r\n      \"key\": \"color\",\r\n      \"values\": [\r\n        \"red\",\r\n        \"black\"\r\n      ],\r\n      \"type\": \"individual\",\r\n      \"weight\": 1.5,\r\n      \"unit\": \"kg\",\r\n      \"availableQuantity\": 50,\r\n      \"variantPrice\": 24.99,\r\n      \"optionValues\": [\r\n        {\r\n          \"id\": \"1\",\r\n          \"name\": \"red\",\r\n          \"variantSku\": [\r\n            \"ABC1239-red\"\r\n          ]\r\n        },\r\n        {\r\n          \"id\": \"2\",\r\n          \"name\": \"black\",\r\n          \"variantSku\": [\r\n            \"ABC1239-black\"\r\n          ]\r\n        }\r\n      ]\r\n    }\r\n  ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/api/products/43",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"43"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all products cfor clients",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "sortBy",
+									"value": "low_to_high",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/api/products/clients/all",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"clients",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"query\": \"query { search(query: \\\"100\\\") { id name  price description sku productImages{ date images } } }\"\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/api/product/",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"product",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "productImages",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "images",
+									"type": "file",
+									"src": "C:\\Users\\Luthfullah\\Downloads\\h1j2t0he.png"
+								},
+								{
+									"key": "productId",
+									"value": "5",
+									"type": "text"
+								},
+								{
+									"key": "",
+									"value": "",
+									"type": "text",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "https://devcares.com/productImages/get",
+							"protocol": "https",
+							"host": [
+								"devcares",
+								"com"
+							],
+							"path": [
+								"productImages",
+								"get"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "productVariantsDelete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{B2B_HOST}}/api/products/14",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"14"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getSpecificProduct",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{B2B_HOST}}/api/products/specific/1",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"specific",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "bulkProducts",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n  {\r\n    \"name\": \"Product 1\",\r\n    \"description\": \"Description for Product 1\",\r\n    \"price\": 10,\r\n    \"quantity\": 100,\r\n    \"manufacturer\": \"Manufacturer 1\",\r\n    \"discount\": 10,\r\n    \"new\": true,\r\n    \"rating\": 4,\r\n    \"saleCount\": 0,\r\n    \"tag\": [\"tag1\", \"tag2\"],\r\n    \"stock\": 1000,\r\n    \"quantityInStock\": 100,\r\n    \"sku\": \"SKUn21120\" , // Use timestamp for simplicity\r\n    \"category_id\": 1,\r\n    \"supplier_id\": 1,\r\n    \"categoryName\": \"Category 1\",\r\n    \"status\": \"active\",\r\n    \"variants\": [\r\n      {\r\n        \"key\": \"size\",\r\n        \"values\": [\"small\", \"medium\", \"large\"],\r\n        \"optionValues\": [\r\n          { \"id\": \"1\", \"name\": \"small\", \"variantSku\": \"SKU12\" },\r\n          { \"id\": \"2\", \"name\": \"medium\", \"variantSku\": \"SKU120\"  },\r\n          { \"id\": \"3\", \"name\": \"large\", \"variantSku\": \"SKU20\" }\r\n        ]\r\n      },\r\n      {\r\n        \"key\": \"color\",\r\n        \"values\": [\"red\", \"black\"],\r\n        \"optionValues\": [\r\n          { \"id\": \"1\", \"name\": \"red\", \"variantSku\": \"SKUSKU120120\" },\r\n          { \"id\": \"2\", \"name\": \"black\", \"variantSku\": \"SKSKU120U_\"  }\r\n        ]\r\n      }\r\n    ]\r\n  },\r\n  {\r\n    \"name\": \"Product 2\",\r\n    \"description\": \"Description for Product 2\",\r\n    \"price\": 29.99,\r\n    \"quantity\": 50,\r\n    \"manufacturer\": \"Manufacturer 2\",\r\n    \"discount\": 15,\r\n    \"new\": false,\r\n    \"rating\": 3,\r\n    \"saleCount\": 10,\r\n    \"tag\": [\"tag3\", \"tag4\"],\r\n    \"stock\": 800,\r\n    \"quantityInStock\": 50,\r\n    \"sku\": \"KSKn2120\",\r\n    \"category_id\": 2,\r\n    \"supplier_id\": 2,\r\n    \"categoryName\": \"Category 2\",\r\n    \"status\": \"inactive\",\r\n    \"variants\": [\r\n      {\r\n        \"key\": \"size\",\r\n        \"values\": [\"small\", \"medium\"],\r\n        \"optionValues\": [\r\n          { \"id\": \"1\", \"name\": \"small\", \"variantSku\": \"SKSKU120SKU120U\" },\r\n          { \"id\": \"2\", \"name\": \"medium\", \"variantSku\": \"SKU120SKU\"  }\r\n        ]\r\n      }\r\n    ]\r\n  }\r\n]\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/api/products/bulk",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"bulk"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "variantsDelete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{B2B_HOST}}/api/products/variants/1",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"variants",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "priceSort",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{B2B_HOST}}/api/products/clients/all?page=1&pageSize=200&status=active&sortBy=high_to_low",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"clients",
+								"all"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "200"
+								},
+								{
+									"key": "status",
+									"value": "active"
+								},
+								{
+									"key": "sortBy",
+									"value": "high_to_low"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAllProducts for vendor",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsImZpcnN0bmFtZSI6ImhhbXphIiwiZW1haWwiOiJoYW16YUBnbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImN1c3RvbWVySWQiOm51bGwsInZlbmRvcmlkIjpudWxsLCJpYXQiOjE3MDk3MjkwMTEsImV4cCI6MTcwOTgxNTQxMX0.NXyWjY-m5foUkSavKm_2CHQi-vqQKyIbUUdb-glY8Zg",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{B2B_HOST}}/api/products/all?page=1&pageSize=200&status=active",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"all"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "pageSize",
+									"value": "200"
+								},
+								{
+									"key": "status",
+									"value": "active"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "newproductform",
+			"item": [
+				{
+					"name": "New request",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "productImages",
+			"item": [
+				{
+					"name": "getImages",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{B2B_HOST}}/productImages/get",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"productImages",
+								"get"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "postImages",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "images",
+									"type": "file",
+									"src": "C:\\Users\\Luthfullah\\Downloads\\h1j2t0he.png"
+								},
+								{
+									"key": "productId",
+									"value": "4",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/productImages",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"productImages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateImage",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "productId",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "images",
+									"type": "file",
+									"src": "C:\\Users\\Luthfullah\\Downloads\\preview.png"
+								}
+							],
+							"options": {
+								"formdata": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/productImages/123",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"productImages",
+								"123"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteImage",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{B2B_HOST}}/productImages/23",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"productImages",
+								"23"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "categories",
+			"item": [
+				{
+					"name": "postCategory",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "\r\n{\r\n  \"name\": \"kitchen\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/api/categories",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetCategory",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{B2B_HOST}}/api/categories/1",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"categories",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getCategoryList",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{B2B_HOST}}/api/categories/all",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"categories",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateCategory",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n        \r\n        \"name\": \"electronics\"\r\n        \r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/api/categories/1",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"categories",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteCategory",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/api/categories/2",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"categories",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "supplier",
+			"item": [
+				{
+					"name": "supplierPost",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"supplier_name\": \"luthfi\",\r\n  \"contact_info\": \"123-456-7890\",\r\n  \"contact_person\": \"John Doe\",\r\n  \"website\": \"http://luthfi.com\",\r\n  \"description\": \"A description of the supplier\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/api/suppliers/",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"suppliers",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getSuppliersDetails",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{B2B_HOST}}/api/suppliers/all",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"suppliers",
+								"all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "specificSupplier",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{B2B_HOST}}/api/suppliers/1",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"suppliers",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Registeration",
+			"item": [
+				{
+					"name": "post user",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstname\": \"luthfi12\",\r\n  \"lastname\": \"Luna\",\r\n  \"email\": \"luthf9909@gmail.com\",\r\n  \"password\": \"luthfi12\",\r\n  \"address\": \"123 Main St\",\r\n  \"contactNumber\": 1234567890,\r\n  \"businessName\": \"luthfi1 Enterprises\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/api/user/register/customer",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"register",
+								"customer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "loginUser",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"hamza@gmail.com\",\r\n    \"password\":\"hamza\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/api/user/login",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "loginUsers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{B2B_HOST}}/api/user/",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"user",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "allUsers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{B2B_HOST}}/api/user/get/registration",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"get",
+								"registration"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "userProfile",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsImZpcnN0bmFtZSI6ImhhbXphIiwiZW1haWwiOiJoYW16YUBnbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImN1c3RvbWVySWQiOm51bGwsInZlbmRvcmlkIjpudWxsLCJpYXQiOjE3MDk3MjkzNjQsImV4cCI6MTcwOTgxNTc2NH0.VYwdaWG6MtfssZ3inrwmBABbK0KRG0jJMpi-QA4w0fk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/api/user/user/profile",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"user",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "profileUpdate",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsImZpcnN0bmFtZSI6ImhhbXphIiwiZW1haWwiOiJoYW16YUBnbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImN1c3RvbWVySWQiOm51bGwsInZlbmRvcmlkIjpudWxsLCJpYXQiOjE3MDk3Mjk1NTYsImV4cCI6MTcwOTgxNTk1Nn0.1i16ZeSoIpZ1us6DrH22RbfSQx56LrwKmiNYqZbUbFA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": 8,\r\n    \"firstname\": \"luthfi\",\r\n    \"lastname\": \"luthfi\",\r\n    \"email\": \"luthfi@email.com\",\r\n    \"address\": \"123 Main Street\",\r\n    \"contactNumber\": 123456789,\r\n    \"businessName\": \"Doe Enterprises\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/api/user/user/profile/update",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"user",
+								"profile",
+								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "cities",
+			"item": [
+				{
+					"name": "citiesPost",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cityName\":\"peshawar\",\r\n    \"stateId\":1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/api/cities/post",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"cities",
+								"post"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "citiesGet",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{B2B_HOST}}/api/cities/get",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"cities",
+								"get"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "states",
+			"item": [
+				{
+					"name": "statePost",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"stateName\": \"California\",\r\n  \"stateCode\": \"12334\",\r\n  \"stateId\": 3\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/api/state/post",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"state",
+								"post"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "stateGet",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{B2B_HOST}}/api/state/get",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"state",
+								"get"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "addresses",
+			"item": [
+				{
+					"name": "addAddress",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"address\": \"f-200, mexico\",\r\n  \"city\": \"Cityville\",\r\n  \"stateId\": 1, \r\n  \"zipCode\": 12345,\r\n  \"country\": \"mexico\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/api/address/create",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"address",
+								"create"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New request",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"name": "cookie",
+								"sortOrder": 1,
+								"infoTitle": "This header was automatically added",
+								"info": "The Cookie header is added to send the cookies that are associated with this endpoint.\n\nUse the cookie manager to remove the header or to change the value.",
+								"allowedToToggle": false,
+								"disableEdit": true,
+								"previewSettingsLink": "Go to cookies",
+								"key": "Cookie",
+								"value": "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZmlyc3RuYW1lIjoibHV0aGZpIiwiZW1haWwiOiJsdXRoZmlAZW1haS5jb20iLCJyb2xlIjoidXNlciIsImlhdCI6MTcwNTU2MDEzNywiZXhwIjoxNzA1NjQ2NTM3fQ.aji5GXN1Gzc0V122V5Q_I6QMnuTsFKf0-9LKIApjL_8",
+								"system": true,
+								"type": "text"
+							},
+							{
+								"name": "cache-control",
+								"sortOrder": 2,
+								"infoTitle": "We recommend using this header",
+								"info": "Postman added \"Cache-Control: no-cache\" as a precautionary measure to prevent the server from returning stale response when one makes repeated requests.\n\nYou can remove this header in the app settings or enter a new one with a different value.",
+								"allowedToToggle": false,
+								"disableEdit": true,
+								"previewSettingsLink": "Go to settings",
+								"key": "Cache-Control",
+								"value": "no-cache",
+								"system": true,
+								"type": "text"
+							},
+							{
+								"name": "postman-token",
+								"sortOrder": 3,
+								"infoTitle": "We recommend using this header",
+								"info": "The Postman-Token header appends a random UUID to every outgoing request. Postman adds this header for API developers to better debug requests sent and to ensure separate requests appear distinct to the receiving server.\n\nYou can remove this header in the app settings.",
+								"allowedToToggle": false,
+								"disableEdit": true,
+								"previewSettingsLink": "Go to settings",
+								"key": "Postman-Token",
+								"value": "<calculated when request is sent>",
+								"system": true,
+								"type": "text"
+							},
+							{
+								"name": "host",
+								"sortOrder": 6,
+								"infoTitle": "We recommend using this header",
+								"info": "The Host header is added to identify the domain name for which a request is being sent to the server. This header is implicitly sent by every HTTP client.\n\nYou can remove the header or enter a new one with a different value. It is most likely that without this header, your request will return an HTTP 400 error.",
+								"allowedToToggle": true,
+								"disableEdit": true,
+								"key": "Host",
+								"value": "<calculated when request is sent>",
+								"system": true,
+								"type": "text"
+							},
+							{
+								"name": "user-agent",
+								"sortOrder": 7,
+								"infoTitle": "We recommend using this header",
+								"info": "The User-Agent header is added to help the server identify Postman as the HTTP requesting application or client.\n\nIt is recommended that this header be sent, but you can remove the header or enter a new one with a different value.",
+								"allowedToToggle": true,
+								"disableEdit": true,
+								"key": "User-Agent",
+								"value": "PostmanRuntime/7.32.1",
+								"system": true,
+								"type": "text"
+							},
+							{
+								"name": "accept",
+								"sortOrder": 8,
+								"infoTitle": "We recommend using this header",
+								"info": "The \"Accept: */*\" header is added to tell the server that Postman can understand and process all forms of response content types.\n\nIt is recommended that this header be sent, but you can remove the header or enter a new one with a different value.",
+								"allowedToToggle": true,
+								"disableEdit": true,
+								"key": "Accept",
+								"value": "*/*",
+								"system": true,
+								"type": "text"
+							},
+							{
+								"name": "accept-encoding",
+								"sortOrder": 9,
+								"infoTitle": "We recommend using this header",
+								"info": "The Accept-Encoding header is added to indicate to the server that Postman HTTP client supports a defined list of content-encoding or compression algorithms as response.\n\nYou can remove the header or enter a new one with a different value. Doing that may not accurately render the response within the app.",
+								"allowedToToggle": true,
+								"disableEdit": true,
+								"key": "Accept-Encoding",
+								"value": "gzip, deflate, br",
+								"system": true,
+								"type": "text"
+							},
+							{
+								"name": "connection",
+								"sortOrder": 10,
+								"infoTitle": "We recommend using this header",
+								"info": "Postman added the Connection header to indicate the server to keep the underlying network connection open once the current response is received. This allows Postman to reuse the same connection for faster response times in subsequent requests to the same server.\n\nYou can remove this header or enter a new one with a different value, such as `Connection: Close` to control this behaviour.",
+								"allowedToToggle": true,
+								"disableEdit": true,
+								"key": "Connection",
+								"value": "keep-alive",
+								"system": true,
+								"type": "text"
+							},
+							{
+								"key": "x-api-key",
+								"value": "luthfi-secret-key",
+								"type": "text",
+								"id": 0
+							}
+						],
+						"url": {
+							"raw": "{{B2B_HOST}}/api/address/getAll",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"address",
+								"getAll"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "order",
+			"item": [
+				{
+					"name": "postOrder",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsImZpcnN0bmFtZSI6ImhhbXphIiwiZW1haWwiOiJoYW16YUBnbWFpbC5jb20iLCJyb2xlIjoidXNlciIsImN1c3RvbWVySWQiOjQsInZlbmRvcmlkIjpudWxsLCJpYXQiOjE3MDg5Mjc5NTIsImV4cCI6MTcwOTAxNDM1Mn0.cKcRrdcJpq-mWlEGrmwrKHRQo7ApTTsuNEOBBs4_7bc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"address\": \"123 peshawar\",\r\n  \"totalPrice\": 200,\r\n  \"status\": \"Pending\",\r\n  \"discount\": 10,\r\n  \"paymentMethod\": \"Credit card \",\r\n  \"trackingNumber\": \"123456\",\r\n  \"name\": \"luthfi\",\r\n  \"email\": \"luthfi@example.com\",\r\n  \"contactNumber\": 1234567898,\r\n  \"zipCode\": 12345,\r\n  \"additionalInfo\": \"Special instructions for delivery\",\r\n  \"city\": \"islamabad\",\r\n  \"country\": \"Sample Country\",\r\n  \"orderItems\": [\r\n    {\r\n      \"productId\": 9,\r\n      \"quantity\": 3,\r\n      \"price\": 2500,\r\n      \"discount\": 10,\r\n      \"totalPrice\": 48,\r\n      \"vendorId\":9\r\n    },\r\n    {\r\n      \"productId\": 9,\r\n      \"quantity\": 2,\r\n      \"price\": 25.00,\r\n      \"discount\": 2,\r\n      \"totalPrice\": 48,\r\n      \"vendorId\":9\r\n    }\r\n  ]\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/api/order/",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"order",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getOrder",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{B2B_HOST}}/api/order/",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"order",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "specificOrders",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZmlyc3RuYW1lIjoibHV0aGZpIiwiZW1haWwiOiJsdXRoZmlAZ21haWwuY29tIiwicm9sZSI6InN1cHBsaWVyIiwiY3VzdG9tZXJJZCI6bnVsbCwidmVuZG9yaWQiOjksImlhdCI6MTcwNzk5NDMzNCwiZXhwIjoxNzA4MDgwNzM0fQ.0SY6J5914Dzsv2kUIQjKKOAOGV_l2k90mVbmQyn3_NI",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/api/order/byrole",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"order",
+								"byrole"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GQL_orders",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"query\": \"query { getAllOrders { orderId userId address orderDate totalPrice status discount paymentMethod trackingNumber zipCode additionalInfo  } }\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/api/product/",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"product",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateOrder",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6eyJpZCI6OCwiZmlyc3RuYW1lIjoibHV0aGZpIiwibGFzdG5hbWUiOiJraGFuIiwiZW1haWwiOiJsdXRoZmlAZW1haS5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRyQlBHdlVVQ3JSMFFNUkxUMnY0NlFPLkhpUnFBb2xyV3BGYXFaQm84R0xldEY3Yi9XNk1rZSIsImFkZHJlc3MiOiIxMjMgTWFpbiBTdCIsImNvbnRhY3ROdW1iZXIiOjEyMzQ1Njc4OTAsImJ1c2luZXNzTmFtZSI6IkRvZSBFbnRlcnByaXNlcyIsImNyZWF0ZWRBdCI6IjIwMjMtMTItMDhUMTA6MTk6MDIuNjQxWiIsInVwZGF0ZWRBdCI6IjIwMjMtMTItMDhUMTA6MTk6MDIuNjQxWiJ9LCJpYXQiOjE3MDQxMDEzODYsImV4cCI6MTcwNDE4Nzc4Nn0.DGg1WQPEeaJzIKAGlsHpT1bNMHK1n5SkWsjViF9tSEs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"address\":\"234 peshawar\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/api/order/update",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"order",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteOrderWithItems",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6eyJpZCI6OCwiZmlyc3RuYW1lIjoibHV0aGZpIiwibGFzdG5hbWUiOiJraGFuIiwiZW1haWwiOiJsdXRoZmlAZW1haS5jb20iLCJwYXNzd29yZCI6IiQyYiQxMCRyQlBHdlVVQ3JSMFFNUkxUMnY0NlFPLkhpUnFBb2xyV3BGYXFaQm84R0xldEY3Yi9XNk1rZSIsImFkZHJlc3MiOiIxMjMgTWFpbiBTdCIsImNvbnRhY3ROdW1iZXIiOjEyMzQ1Njc4OTAsImJ1c2luZXNzTmFtZSI6IkRvZSBFbnRlcnByaXNlcyIsImNyZWF0ZWRBdCI6IjIwMjMtMTItMDhUMTA6MTk6MDIuNjQxWiIsInVwZGF0ZWRBdCI6IjIwMjMtMTItMDhUMTA6MTk6MDIuNjQxWiJ9LCJpYXQiOjE3MDQxMDEzODYsImV4cCI6MTcwNDE4Nzc4Nn0.DGg1WQPEeaJzIKAGlsHpT1bNMHK1n5SkWsjViF9tSEs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/api/order/69",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"order",
+								"69"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "userOrder",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiZmlyc3RuYW1lIjoibHV0aGZpIiwiZW1haWwiOiJsdXRoZmlAZ21haWwuY29tIiwicm9sZSI6InN1cHBsaWVyIiwiY3VzdG9tZXJJZCI6bnVsbCwidmVuZG9yaWQiOjksImlhdCI6MTcwNzk4NDczOSwiZXhwIjoxNzA4MDcxMTM5fQ.cC4VOUIASG_QS01h_N0eYLDhLgW3tzTu5aXQ58yO6yY",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{B2B_HOST}}/api/order/user",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"order",
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "orderItems",
+			"item": [
+				{
+					"name": "postOrderItems",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \r\n  \"orderId\": 1,\r\n  \"productId\": 2,\r\n  \"quantity\": 3,\r\n  \"price\": 25.00,\r\n  \"discount\": 2,\r\n  \"totalPrice\": 48.00\r\n}\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/api/orderitems/",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"orderitems",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "company",
+			"item": [
+				{
+					"name": "companyDetailsPost",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"companyName\": \"facebook\",\r\n  \"industry\": \"Test Industry\",\r\n  \"addressId\": 1,\r\n  \"description\": \"Test Description\",\r\n  \"contactInformation\": \"Test Contact Info\",\r\n  \"website\": \"http://www.testcompany.com\",\r\n  \"industryType\": \"Test Industry Type\",\r\n  \"shippingInformation\": \"Test Shipping Info\",\r\n  \"paymentMethods\": \"Test Payment Methods\",\r\n  \"returnPolicy\": \"CARD\",\r\n  \"status\": \"Active\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/api/company/",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"company",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "companyGet",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "customer",
+			"item": [
+				{
+					"name": "postCustomer",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"luthfullah1\",\r\n  \"address\": \"123 islamabad ,pakistan\",\r\n  \"email\": \"luthfullah1.doe@example.com\",\r\n  \"contactNumber\": 12345678\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/api/customer/addCustomer",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"customer",
+								"addCustomer"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "businesses",
+			"item": [
+				{
+					"name": "businessPost",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/api/business",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"api",
+								"business"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "notification",
+			"item": [
+				{
+					"name": "notificationPostToken",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"token\": \"\",\r\n  \"title\": \"Test Notification\",\r\n  \"body\": \"This is a test notification message.\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/notifications",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"notifications"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "notificationPost",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"notification_type_id\": 1,\r\n  \"related_entity_type\": \"user\",\r\n  \"related_entity_id\": 123,\r\n  \"message\": \"This is a test notification\",\r\n  \"sender_id\": 456,\r\n  \"recipient_id\": 789,\r\n  \"status\": \"pending\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/notifications/send",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"notifications",
+								"send"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "notificationTypes",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"typeName\": \"order successful \",\r\n  \"description\": \"This is a new notification type for successful order\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/notifications/types",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"notifications",
+								"types"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "notificationConfigurations",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"user_id\": 1,\r\n  \"notification_type_id\": 1,\r\n  \"is_enabled\": true\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{B2B_HOST}}/send-notification/notificationConfigurations",
+							"host": [
+								"{{B2B_HOST}}"
+							],
+							"path": [
+								"send-notification",
+								"notificationConfigurations"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New request",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
