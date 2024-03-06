@@ -32,20 +32,18 @@ const Order = () => {
 
 
 
-
   useEffect(() => {
     const lowercasedInput = searchInput.toLowerCase();
     const filtered = orders.filter((order) => {
       const orderId = order.orderId && typeof order.orderId === 'string' ? order.orderId.toLowerCase() : '';
-      const trackingNumber = order.trackingNumber && typeof order.trackingNumber === 'string' ? order.trackingNumber.toLowerCase() : '';
-      // return orderId.includes(lowercasedInput) || order.shippingAddress.toLowerCase().includes(lowercasedInput);
+      const trackingNumber = typeof order.trackingNumber === 'number' ? order.trackingNumber.toString() : '';
+      const shippingAddress = order.shippingAddress && typeof order.shippingAddress === 'string' ? order.shippingAddress.toLowerCase() : '';
       return (
         orderId.includes(lowercasedInput) ||
-        order.shippingAddress.toLowerCase().includes(lowercasedInput) ||
-        trackingNumber.includes(lowercasedInput)
+        trackingNumber.includes(lowercasedInput) ||
+        shippingAddress.includes(lowercasedInput)
       );
     });
-
 
     const updatedFilteredOrders = searchInput.trim() === '' ? orders : filtered;
     setFilteredOrders(updatedFilteredOrders);

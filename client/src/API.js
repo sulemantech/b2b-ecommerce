@@ -24,7 +24,7 @@ export const fetchProductsByCategories = async (selectedCategories, offset, sort
 
 
 
-const Login = `${APIHost}/api/signin`;
+const Login = `${APIHost}/api/user`;
 const api = axios.create({
   baseURL: Login,
   headers: {
@@ -44,7 +44,7 @@ export const post = async (endpoint, data) => {
 
 
 
-const Registration= `${APIHost}/api/signin/`;
+const Registration= `${APIHost}/api/user/register/`;
 const API_Registration = axios.create({
   baseURL: Registration,
   headers: {
@@ -118,7 +118,7 @@ export const placeOrder = async (storedToken, orderData) => {
 
 
 
-const getUser = `${APIHost}/api/signin/user/profile`;
+const getUser = `${APIHost}/api/user/user/profile`;
 
 export const getUserInformation = async (token) => {
   try {

@@ -8,7 +8,6 @@ import { addToCart } from "../../store/slices/cart-slice";
 import { addToWishlist } from "../../store/slices/wishlist-slice";
 import { addToCompare } from "../../store/slices/compare-slice";
 
-
 const ProductDescriptionInfo = ({
   product,
   discountedPrice,
@@ -19,10 +18,9 @@ const ProductDescriptionInfo = ({
   wishlistItem,
   compareItem,
 }) => {
+  
   const dispatch = useDispatch();
-  const [selectedProductColor, setSelectedProductColor] = useState(
-    product.variation ? product.variation[0].color : ""
-  );
+  const [selectedProductColor, setSelectedProductColor] = useState( product.variation ? product.variation[0].color : "");
   const [selectedProductSize, setSelectedProductSize] = useState(
     product.variation ? product.variation[0].size[0].name : ""
   );
@@ -37,6 +35,7 @@ const ProductDescriptionInfo = ({
     selectedProductColor,
     selectedProductSize
   );
+  debugger
 
   return (
     <div className="product-details-content ml-70">
@@ -64,7 +63,10 @@ const ProductDescriptionInfo = ({
       )}
       <div className="pro-details-list">
         <p>{product.description}</p>
+        
       </div>
+
+    
 
       {product.variation ? (
         <div className="pro-details-size-color">
@@ -77,6 +79,7 @@ const ProductDescriptionInfo = ({
                     className={`pro-details-color-content--single ${single.color}`}
                     key={key}
                   >
+                    
                     <input
                       type="radio"
                       value={single.color}
@@ -99,6 +102,7 @@ const ProductDescriptionInfo = ({
           </div>
           <div className="pro-details-size">
             <span>Size</span>
+            
             <div className="pro-details-size-content">
               {product.variation &&
                 product.variation.map(single => {

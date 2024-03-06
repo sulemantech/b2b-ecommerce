@@ -12,6 +12,7 @@ const admin = require('firebase-admin');
 
 const router = express.Router();
 
+//firebase
 router.post('/', async (req, res) => {
   try {
     const { idtoken } = req.body;

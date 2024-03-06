@@ -4,6 +4,7 @@ import { Suspense, lazy } from "react";
 import ScrollToTop from "./helpers/scroll-top";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Order from "./pages/other/Order";
+import OrderSuccess from "./pages/other/SuccefullOrder";
 import ShopPage from "./components/product/ShopPage";
 const ShopGridStandard = lazy(() => import("./pages/shop/ShopGridStandard"));
 
@@ -78,6 +79,7 @@ const App = () => {
               path={process.env.PUBLIC_URL + "/shop-grid-standard"}
               element={<ShopGridStandard />}
             />
+            
 
             {/* Blog pages */}
             <Route
@@ -139,6 +141,10 @@ const App = () => {
               element={
                 isLoggedIn ? <Order /> : <Navigate to="/shop-grid-standard" />
               }
+            />
+               <Route
+              path={process.env.PUBLIC_URL + "/order/success"}
+              element={< OrderSuccess/>}
             />
             <Route
               path={process.env.PUBLIC_URL + "/logout"}

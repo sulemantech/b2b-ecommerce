@@ -20,7 +20,7 @@ const LoginRegister = () => {
     email: "",
     password: "",
     address: "",
-    contactNumber: "",
+    contactNumber:0,
     businessName: "",
   });
   const navigate = useNavigate();
@@ -29,17 +29,23 @@ const LoginRegister = () => {
   const SubmitRegistration = async (e) => {
     e.preventDefault();
     try {
-      const result = await postRegistration('/register', values);
-      console.log('Registration successful:', result);
-      setvalues({
-        firstname: "",
-        lastname: "",
-        email: "",
-        password: "",
-        address: "",
-        contactNumber: "",
-        businessName: "",
-      });
+      // const contactNumberInt = parseInt(values.contactNumber, 10);
+      // if (isNaN(contactNumberInt)) {
+      //   throw new Error('Contact number must be an INTEGER.');
+      // }
+      // const updatedValues = { ...values, contactNumber: contactNumberInt };
+
+      const result = await postRegistration('/customer', values);
+      console.log("user registerd",result);
+      // setvalues({
+      //   firstname: "",
+      //   lastname: "",
+      //   email: "",
+      //   password: "",
+      //   address: "",
+      //   contactNumber,
+      //   businessName: "",
+      // });
       window.location.reload();
     } catch (error) {
       console.error('Error during registration:', error);
@@ -203,7 +209,7 @@ const LoginRegister = () => {
                                 onChange={(e) =>
                                   setvalues({
                                     ...values,
-                                    contactNumber: e.target.value,
+                                    contactNumber: parseInt(e.target.value),
                                   })
                                 }
                                 name={values.contactNumber}

@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { setActiveSort } from "../../helpers/product";
 
 const ShopColor = ({ colors, getSortParams }) => {
+  
   return (
     <div className="sidebar-widget mt-50">
       <h4 className="pro-sidebar-title">Color </h4>
