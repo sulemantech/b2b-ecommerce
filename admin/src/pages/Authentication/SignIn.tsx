@@ -40,7 +40,7 @@ const SignIn: React.FC = () => {
 
     try {
       const credentials: LoginCredentials = { email, password };
-      const response: AxiosResponse<LoginResponse> = await axios.post('http://localhost:5001/api/signin/login', credentials);
+      const response: AxiosResponse<LoginResponse> = await axios.post('http://localhost:5001/api/user/login', credentials);
 
       if (response.status === 200) {
         const { auth, token, role } = response.data;

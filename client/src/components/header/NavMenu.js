@@ -45,15 +45,15 @@ const NavMenu = ({ menuWhiteClass, sidebarMenu }) => {
                   {t("home and kitchen")}
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link to={process.env.PUBLIC_URL + "/blog-details-standard"}>
                   {t("fasion")}
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </li>
           <li>
-            <Link to={process.env.PUBLIC_URL + "/"}>
+            {/* <Link to={process.env.PUBLIC_URL + "/"}>
               {t("pages")}
               {sidebarMenu ? (
                 <span>
@@ -62,7 +62,7 @@ const NavMenu = ({ menuWhiteClass, sidebarMenu }) => {
               ) : (
                 <i className="fa fa-angle-down" />
               )}
-            </Link>
+            </Link> */}
             <ul className="submenu">
               <li>
                 <Link to={process.env.PUBLIC_URL + "/cart"}>

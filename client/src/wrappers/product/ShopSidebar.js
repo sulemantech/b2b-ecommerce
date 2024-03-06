@@ -14,8 +14,9 @@ import ShopTag from "../../components/product/ShopTag";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import { fetchCategory } from "../../store/slices/CategoryAction";
+import { propTypes } from "react-hooks-paginator";
 
-const ShopSidebar = ({ products, getSortParams, sideSpaceClass  , selectedCategories}) => {
+const ShopSidebar = ({ products, getSortParams, sideSpaceClass  , selectedCategories ,tagFilterSortParams}) => {
 
 
   const uniqueColors = getIndividualColors(products);
@@ -24,6 +25,7 @@ const ShopSidebar = ({ products, getSortParams, sideSpaceClass  , selectedCatego
   const dispatch=useDispatch();
   const uniqueCategories=useSelector((state)=>state.category);
   // const uniqueCategories = getIndividualCategories(uniqueCategory?.categories);
+  
 
   useEffect(()=>{
 dispatch(fetchCategory(dispatch))
@@ -48,15 +50,18 @@ dispatch(fetchCategory(dispatch))
       <ShopSize sizes={uniqueSizes} getSortParams={getSortParams} />
 
       {/* filter by tag */}
-      <ShopTag tags={uniqueTags} getSortParams={getSortParams} />
+      <ShopTag tags={uniqueTags} getSortParams={getSortParams}  tagFilterSortParams={tagFilterSortParams}/>
+    
     </div>
   );
 };
 
+
 ShopSidebar.propTypes = {
   getSortParams: PropTypes.func,
   products: PropTypes.array,
-  sideSpaceClass: PropTypes.string
+  sideSpaceClass: PropTypes.string,
+  tagFilterSortParams:PropTypes.func
 };
 
 export default ShopSidebar;

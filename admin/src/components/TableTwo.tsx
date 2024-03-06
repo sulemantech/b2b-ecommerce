@@ -23,7 +23,8 @@ const TableTwo: React.FC  = () => {
 
   
 const fetchAllProducts = () => {
-  const API_Urlfetch=`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products/all`;
+  const API_Urlfetch = `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products/clients/all`;
+
   
 
   fetch(API_Urlfetch ,{
@@ -44,6 +45,7 @@ const fetchAllProducts = () => {
       console.error('Error fetching all products:', error.message);
     });
 };
+
 
 
 useEffect(() => {

@@ -1,15 +1,12 @@
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { Link } from "react-router-dom";
+import {STORE_NAME} from '../../../src/config'
 
 const FooterCopyright = ({ footerLogo, spaceBottomClass, colorClass }) => {
   return (
     <div className={clsx("copyright", spaceBottomClass, colorClass)}>
-      <div className="footer-logo">
-        <Link to={process.env.PUBLIC_URL + "/"}>
-          <img alt="" src={process.env.PUBLIC_URL + footerLogo} />
-        </Link>
-      </div>
+      <h1 style={{color: "#555252", opacity:"0.9"}}>{STORE_NAME}</h1>
       <p>
         &copy; {new Date().getFullYear()}{" "}
         <a
@@ -21,6 +18,12 @@ const FooterCopyright = ({ footerLogo, spaceBottomClass, colorClass }) => {
         </a>
         .<br /> All Rights Reserved
       </p>
+      <div className="footer-logo">
+        <Link to={process.env.PUBLIC_URL + "/"}>
+          <img alt="" src={process.env.PUBLIC_URL + footerLogo} />
+        </Link>
+      </div>
+    
     </div>
   );
 };

@@ -139,6 +139,7 @@ const FormElements = () => {
     description: '',
     price: '',
     weight: '',
+    manufacturer:'',
     rating: 5,
     tag: [] as string[],
     quantityInStock: '',
@@ -202,6 +203,7 @@ const FormElements = () => {
         price: '',
         weight: '',
         rating: 5,
+        manufacturer:"china",
         tag: [],
         quantityInStock: '',
         sku: '',
@@ -333,6 +335,8 @@ const FormElements = () => {
                 }
                 onReady={handleEditorReady}
                 onChange={handleEditorChange}
+                
+
               />
             </div>
           </div>
