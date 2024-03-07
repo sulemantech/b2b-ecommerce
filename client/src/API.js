@@ -1,7 +1,7 @@
 
 import axios from 'axios';
-const APIHost = "http://localhost:5001"
-// const APIHost = "https://devcares.com"
+// const APIHost = "http://localhost:5001"
+const APIHost = "https://devcares.com"
 
 
 

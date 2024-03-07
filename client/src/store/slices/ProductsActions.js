@@ -7,7 +7,7 @@ import axios from "axios";
 export const fetchProducts = (page, pageSize) => async (dispatch) => {
     try {
     
-      const productsData = await axios.get(`REACT_APP_PUBLIC_URL/api/products/clients/all` ,{
+      const productsData = await axios.get(`${process.env.REACT_APP_PUBLIC_URL}/api/products/clients/all` ,{
         params: {
           page,
           pageSize,
