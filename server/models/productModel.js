@@ -178,7 +178,11 @@ const productModel = sequelize.define('products', {
     type: DataTypes.ENUM('active', 'inactive'), // Use ENUM for limited options
     allowNull: false,
     defaultValue: 'active', // Set a default value if applicable
-  }
+  },
+  category_id: {
+    type: DataTypes.INTEGER,
+    allowNull: true   
+  },
 });
 
 productModel.hasMany(productImages, { foreignKey: 'productId' });

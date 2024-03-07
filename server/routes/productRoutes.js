@@ -172,7 +172,7 @@ router.get('/clients/all', async (req, res) => {
         },
         {
           model: productVariantModel,
-          attributes: ['type', 'weight', 'unit', 'key', 'value', 'availableQuantity', 'optionValues'],
+          attributes: [ 'weight', 'unit', 'key', 'value', 'availableQuantity', 'optionValues'],
           required: false,
         }
       ],
