@@ -24,7 +24,7 @@ router.post('/create',validateApiKey, async (req, res) => {
   
 
 // Get all addresses
-router.get('/getAll',validateApiKey, async (req, res) => {
+router.get('/getAll', async (req, res) => {
   try {
     const allAddresses = await addressModel.findAll();
     res.status(200).json(allAddresses);

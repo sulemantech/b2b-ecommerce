@@ -105,10 +105,12 @@ router.post('/register/customer',validateRegistration, async (req, res) => {
         include: [
           {
             model: businessModel,
+            as: 'business',
             attributes: ['name', 'address', 'email'],
           },
           {
             model: customerModel,
+            as: 'customer',
             attributes: ['name', 'address', 'email'],
           },
         ],

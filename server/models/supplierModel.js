@@ -23,15 +23,7 @@ const supplierModel = sequelize.define('supplier', {
       },
       description: {
         type: DataTypes.TEXT,
-      },
-      created_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-      },
-      updated_at: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-      },
+      }
 });
 
 module.exports = supplierModel;
