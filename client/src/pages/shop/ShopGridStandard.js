@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect,useMemo } from "react";
 import Paginator from "react-hooks-paginator";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
@@ -31,9 +31,10 @@ const ShopGridStandard = () => {
   const pageLimit = 15;
   let { pathname } = useLocation();
   const [selectedCategories, setSelectedCategories] = useState([]);
+
   const categoryIds = categories.map((category) => category.id);
   
-
+ 
 
   const handleSortParams = (type, value) => {
     if (type === "category") {
@@ -175,7 +176,34 @@ const ShopGridStandard = () => {
     sortedProducts = filterSortedProducts;
     setSortedProducts(sortedProducts);
     setCurrentData(sortedProducts.slice(offset, offset + pageLimit));
+    window.scrollTo({top: 0})
 }, [offset, products, sortType, sortValue, filterSortType, filterSortValue ]);
+
+
+const handleScroll = () => {
+  let userScrollHeight = window.innerHeight + window.scrollY;
+  let windowBottomHeight = document.documentElement.offsetHeight;
+
+  if (userScrollHeight >= windowBottomHeight) {
+    setCurrentData(sortedProducts.slice(offset, offset + pageLimit));
+    // setOffset(offset + pageLimit); // Update the offset for pagination
+    setCurrentPage(currentPage + 1);
+  }
+};
+
+useEffect(() => {
+  window.addEventListener("scroll", handleScroll);
+
+  return () => {
+    window.removeEventListener("scroll", handleScroll);
+  };
+}, []);
+
+
+
+
+
+
 
 
   return (
