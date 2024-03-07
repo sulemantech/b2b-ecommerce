@@ -6,7 +6,7 @@
 //   try {
 //     dispatch(setLoading(true));
 
-//     const response = await fetch(`http://localhost:5001/api/product/`);
+//     const response = await fetch(`https://devcares.com/api/product/`);
 //     const data = await response.json();
 //     dispatch(setSearchResults(data));
 //     console.log("searchhhhhhhhhhhhhhhhhhhhhhhhh",data);
@@ -24,7 +24,7 @@ export const searchProducts = (searchTerm,e) => async (dispatch) => {
   try {
     dispatch(setLoading(true));
 
-    const response = await fetch(`http://localhost:5001/api/product/`, {
+    const response = await fetch(`https://devcares.com/api/product/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

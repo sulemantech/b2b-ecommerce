@@ -139,7 +139,7 @@ const ShopGridStandard = () => {
       const fetchData = async () => {
         try {
           const data = await fetchProductsByCategories(
-            ${selectedCategories},
+            selectedCategories,
             offset,
             sortValue
           );
