@@ -73,7 +73,7 @@ useEffect(() => {
           <p className="font-medium text-black">Discount</p>
         </div>
         <div className="col-span-1 flex items-center">
-          <p className="font-medium text-black">manufacturer</p>
+          <p className="font-medium text-black">Manufacturer</p>
         </div>
          <div className="col-span-1 flex items-center">
           <p className="font-medium text-black">Action</p>
@@ -121,7 +121,7 @@ useEffect(() => {
       </div>
     </div>
     <div className="col-span-1 flex items-center">
-      <Link to={`/forms/form-elements/`} className="bg-blue hover:bg-blue-700 font-bold py-2 px-4 rounded-full">
+      <Link to={`/product`} className="bg-blue hover:bg-blue-700 font-bold py-2 px-4 rounded-full">
         AddNew
       </Link>
     </div>

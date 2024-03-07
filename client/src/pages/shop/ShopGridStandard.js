@@ -28,7 +28,7 @@ const ShopGridStandard = () => {
   const [sortedProducts, setSortedProducts] = useState([]);
   const { products } = useSelector((state) => state.product);
   const categories = useSelector((state) => state.category.Categories);
-  const pageLimit = 12;
+  const pageLimit = 15;
   let { pathname } = useLocation();
   const [selectedCategories, setSelectedCategories] = useState([]);
   const categoryIds = categories.map((category) => category.id);
@@ -139,7 +139,7 @@ const ShopGridStandard = () => {
       const fetchData = async () => {
         try {
           const data = await fetchProductsByCategories(
-            selectedCategories,
+            `${selectedCategories}`,
             offset,
             sortValue
           );
@@ -195,7 +195,7 @@ const ShopGridStandard = () => {
         />
 
         <div className="shop-area pt-95 pb-100">
-          <div className="container">
+          <div className="container-fluid">
             <div className="row">
               <div className="col-lg-3 order-2 order-lg-1">
                 {/* shop sidebar */}

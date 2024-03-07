@@ -47,7 +47,7 @@ const productVariantModel = sequelize.define('productVariants', {
     type: DataTypes.INTEGER,
     allowNull: true,
     references: {
-      model: 'products', // Assuming productModel is correctly defined
+      model: productModel, // Assuming productModel is correctly defined
       key: 'id',
     },
   },

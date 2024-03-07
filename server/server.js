@@ -36,13 +36,15 @@ app.get('/', (req,res)=>{
     res.send("getting ")
 })
 
-// sequelize.sync({ alter: true })
+
+// sequelize.sync({ force: false }) // This will drop the existing tables and recreate them
 //   .then(() => {
-//     console.log('Database synchronized successfully');
+//     console.log('Database synchronized');
 //   })
-//   .catch(error => {
-//     console.error('Error synchronizing database:', error);
+//   .catch(err => {
+//     console.error('An error occurred while synchronizing the database:', err);
 //   });
+
 
 const server = new ApolloServer({
   typeDefs,

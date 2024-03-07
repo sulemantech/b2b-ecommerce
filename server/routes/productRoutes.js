@@ -12,6 +12,7 @@ const productVariantModel=require('../models/productVariantModel')
 
 const { validateProduct, validateVariants,validateBulkProducts } = require('../middlewares/validateVariantsMiddleware');
 const verifyToken = require('../middlewares/verifyToken');
+const { log } = require('console');
 
 //post API    ///////////////////////////////////////////////////////////////////
 router.post('/', async (req, res) => {
@@ -171,7 +172,7 @@ router.get('/clients/all', async (req, res) => {
         },
         {
           model: productVariantModel,
-          attributes: ['type', 'weight', 'unit', 'key', 'value', 'availableQuantity', 'optionValues'],
+          attributes: [ 'weight', 'unit', 'key', 'value', 'availableQuantity', 'optionValues'],
           required: false,
         }
       ],
@@ -180,6 +181,40 @@ router.get('/clients/all', async (req, res) => {
     res.status(200).json(allProducts);
   } catch (error) {
     console.error('Error:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+// Route handler for '/clients/all' with token verification
+router.get('/clients/all/pricesort', async (req, res) => {
+  try {
+    const { sortBy } = req.query;
+    let sortOrder = [['id', 'ASC']]; // Default sort order
+
+    // Check sortBy parameter to determine the sorting order
+    if (sortBy === 'low_to_high') {
+      sortOrder = [['price', 'ASC']];
+    } else if (sortBy === 'high_to_low') {
+      sortOrder = [['price', 'DESC']];
+    }
+
+    // Fetch all products with associated product images
+    const allProducts = await productModel.findAll({
+      include: [
+        {
+          model: productImages,
+          where: { productId: Sequelize.col('products.id') }, // Use Sequelize.col for referencing column names
+          attributes: ['date', 'images']
+        }
+      ],
+      order: sortOrder // Apply the determined sort order
+    });
+
+    // Send the JSON response
+    res.status(200).json(allProducts);
+  } catch (error) {
+    console.error('Error:', error.stack);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });

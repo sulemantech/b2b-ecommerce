@@ -31,7 +31,7 @@ router.post('/login', async (req, res) => {
           vendorid: user.businessId,
         };
         const token = jwt.sign(tokenData, process.env.JWT_SECRET, {
-          expiresIn: '1m',
+          expiresIn: '24h',
         });
 
         res.cookie('token', token, { httpOnly: true });
@@ -105,10 +105,12 @@ router.post('/register/customer',validateRegistration, async (req, res) => {
         include: [
           {
             model: businessModel,
+            as: 'business',
             attributes: ['name', 'address', 'email'],
           },
           {
             model: customerModel,
+            as: 'customer',
             attributes: ['name', 'address', 'email'],
           },
         ],

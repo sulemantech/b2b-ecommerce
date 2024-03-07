@@ -2,7 +2,9 @@ import PropTypes from "prop-types";
 
 import { setActiveSort } from "../../helpers/product";
 
-const ShopTag = ({ tags, getSortParams,tagFilterSortParams }) => { 
+const ShopTag = ({ tags, getSortParams,tagFilterSortParams }) => {
+
+ 
   
   return (
     <div className="sidebar-widget mt-50">

@@ -32,7 +32,7 @@ const ProductGridSingle = ({
           <Link to={process.env.PUBLIC_URL + "/product-tab-right/" + product.id}>
             <img
               className="default-img"
-              src={process.env.PUBLIC_URL + product?.productImages[0]?.images[0]}
+              src={process.env.REACT_APP_PUBLIC_URL + product?.productImages[0]?.images[0]}
               alt=""
             />
             {/* {product.image.length > 1 ? (

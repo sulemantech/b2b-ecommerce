@@ -12,7 +12,7 @@ const FooterNewsletter = ({
   return (
     <div className={clsx("footer-widget", spaceBottomClass, sideMenu ? "ml-ntv5" : spaceLeftClass, widgetColorClass)}>
       <div className="footer-title">
-        <h3>SUBSCRIBE</h3>
+        <h3  style={{ color: "#555252", opacity: "0.9" }}>SUBSCRIBE</h3>
       </div>
       <div className={clsx("subscribe-style", colorClass)}>
         <p>Get E-mail updates about our latest shop and special offers.</p>

@@ -33,29 +33,37 @@ const ProductGridListSingle = ({
     <Fragment>
       <div className={clsx("product-wrap", spaceBottomClass)}>
         <div className="product-img">
-          <Link
-            to={process.env.PUBLIC_URL + "/product-tab-right/" + product.id}
-          >
-            <img
-              className="default-img"
-              src={
-                process.env.REACT_APP_PUBLIC_URL +
-                (product?.productImages?.[0]?.images?.[0] || "")
-              }
-            />
+        <Link to={process.env.PUBLIC_URL + "/product-tab-right/" + product.id}>
+    {product?.productImages?.[0]?.images?.[0] ? (
+      <img
+        className="default-img"
+        src={
+          process.env.REACT_APP_PUBLIC_URL +
+          product?.productImages?.[0]?.images?.[0]
+        }
+        alt="Product"
+      />
+    ) : (
+      <img
+        className="default-img"
+        src="https://www.cureuppharma.in/wp-content/uploads/2018/06/dummy.jpg"
+        alt="Dummy Image"
+      />
+    )}
 
-            {product.productImages.length > 1 ? (
-              <img
-                className="hover-img"
-                src={
-                  process.env.REACT_APP_PUBLIC_URL +
-                  product?.productImages[0]?.images[0]
-                }
-              />
-            ) : (
-              ""
-            )}
-          </Link>
+    {product.productImages.length > 1 ? (
+      <img
+        className="hover-img"
+        src={
+          process.env.REACT_APP_PUBLIC_URL +
+          product?.productImages[0]?.images[0]
+        }
+        alt="Product Hover"
+      />
+    ) : (
+      ""
+    )}
+  </Link>
 
           {product.discount || product.new ? (
             <div className="product-img-badges">
