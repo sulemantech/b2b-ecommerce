@@ -6,6 +6,7 @@ scripts/flow/*/.flowconfig
 *~
 yarn.lock
 *.pyc
+.env
 .grunt
 _SpecRunner.html
 _benchmarks_
@@ -29,6 +30,7 @@ chrome-user-data
 .vscode
 *.swp
 *.swo
+.env
 
 .env
 
@@ -44,3 +46,4 @@ packages/react-devtools-extensions/.tempUserDataDir
 packages/react-devtools-inline/dist
 packages/react-devtools-shell/dist
 packages/react-devtools-timeline/dist
+

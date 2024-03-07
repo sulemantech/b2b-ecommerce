@@ -196,6 +196,7 @@ router.get('/:category_id', async (req, res) => {
         model: productImages,
         where: { productId: { [Op.col]: 'products.id' } }, 
         attributes: ['date', 'images'],
+        required: false,
       },
     });
 
