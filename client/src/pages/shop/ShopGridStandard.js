@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useState, useEffect,useMemo } from "react";
 import Paginator from "react-hooks-paginator";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
@@ -17,7 +17,6 @@ import { setProducts } from "../../store/slices/product-slice";
 
 const ShopGridStandard = () => {
   const dispatch = useDispatch();
-  const [categoryIds, setCategoryIds] = useState([]);
   const [layout, setLayout] = useState("grid three-column");
   const [sortType, setSortType] = useState("");
   const [sortValue, setSortValue] = useState("");
@@ -32,16 +31,10 @@ const ShopGridStandard = () => {
   const pageLimit = 15;
   let { pathname } = useLocation();
   const [selectedCategories, setSelectedCategories] = useState([]);
-  // const categoryIds = categories.map((category) => category.id);
 
-  useEffect(() => {
-    if (Array.isArray(categories)) { // Check if categories is an array
-      const ids = categories.map(category => category.id);
-      setCategoryIds(ids);
-    }
-  }, [categories]);  
+  const categoryIds = categories.map((category) => category.id);
   
-
+ 
 
   const handleSortParams = (type, value) => {
     if (type === "category") {
@@ -183,7 +176,34 @@ const ShopGridStandard = () => {
     sortedProducts = filterSortedProducts;
     setSortedProducts(sortedProducts);
     setCurrentData(sortedProducts.slice(offset, offset + pageLimit));
+    window.scrollTo({top: 0})
 }, [offset, products, sortType, sortValue, filterSortType, filterSortValue ]);
+
+
+// const handleScroll = () => {
+//   let userScrollHeight = window.innerHeight + window.scrollY;
+//   let windowBottomHeight = document.documentElement.offsetHeight;
+
+//   if (userScrollHeight >= windowBottomHeight) {
+//     setCurrentData(sortedProducts.slice(offset, offset + pageLimit));
+//     // setOffset(offset + pageLimit); // Update the offset for pagination
+//     setCurrentPage(currentPage + 1);
+//   }
+// };
+
+// useEffect(() => {
+//   window.addEventListener("scroll", handleScroll);
+
+//   return () => {
+//     window.removeEventListener("scroll", handleScroll);
+//   };
+// }, []);
+
+
+
+
+
+
 
 
   return (
@@ -203,7 +223,7 @@ const ShopGridStandard = () => {
         />
 
         <div className="shop-area pt-95 pb-100">
-          <div className="container-fluid">
+          <div className="container-fluid bg-gray">
             <div className="row">
               <div className="col-lg-3 order-2 order-lg-1">
                 {/* shop sidebar */}
