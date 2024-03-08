@@ -180,24 +180,24 @@ const ShopGridStandard = () => {
 }, [offset, products, sortType, sortValue, filterSortType, filterSortValue ]);
 
 
-const handleScroll = () => {
-  let userScrollHeight = window.innerHeight + window.scrollY;
-  let windowBottomHeight = document.documentElement.offsetHeight;
+// const handleScroll = () => {
+//   let userScrollHeight = window.innerHeight + window.scrollY;
+//   let windowBottomHeight = document.documentElement.offsetHeight;
 
-  if (userScrollHeight >= windowBottomHeight) {
-    setCurrentData(sortedProducts.slice(offset, offset + pageLimit));
-    // setOffset(offset + pageLimit); // Update the offset for pagination
-    setCurrentPage(currentPage + 1);
-  }
-};
+//   if (userScrollHeight >= windowBottomHeight) {
+//     setCurrentData(sortedProducts.slice(offset, offset + pageLimit));
+//     // setOffset(offset + pageLimit); // Update the offset for pagination
+//     setCurrentPage(currentPage + 1);
+//   }
+// };
 
-useEffect(() => {
-  window.addEventListener("scroll", handleScroll);
+// useEffect(() => {
+//   window.addEventListener("scroll", handleScroll);
 
-  return () => {
-    window.removeEventListener("scroll", handleScroll);
-  };
-}, []);
+//   return () => {
+//     window.removeEventListener("scroll", handleScroll);
+//   };
+// }, []);
 
 
 
@@ -223,7 +223,7 @@ useEffect(() => {
         />
 
         <div className="shop-area pt-95 pb-100">
-          <div className="container-fluid">
+          <div className="container-fluid bg-gray">
             <div className="row">
               <div className="col-lg-3 order-2 order-lg-1">
                 {/* shop sidebar */}
