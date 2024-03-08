@@ -149,6 +149,7 @@ const LoginRegister = () => {
                               onSubmit={SubmitRegistration}
                             >
                               <input
+                              required
                                 type="text"
                                 placeholder="firstname"
                                 onChange={(e) =>
@@ -160,6 +161,7 @@ const LoginRegister = () => {
                                 name={values.firstname}
                               />
                               <input
+                              required
                                 type="text"
                                 placeholder="lastname"
                                 onChange={(e) =>
@@ -171,6 +173,7 @@ const LoginRegister = () => {
                                 name={values.lastname}
                               />
                               <input
+                              required
                                 type="email"
                                 placeholder="email"
                                 onChange={(e) =>
@@ -182,6 +185,7 @@ const LoginRegister = () => {
                                 name={values.email}
                               />
                               <input
+                              required
                                 type="password"
                                 placeholder="password"
                                 onChange={(e) =>
@@ -193,6 +197,7 @@ const LoginRegister = () => {
                                 name={values.password}
                               />
                               <input
+                              required
                                 type="text"
                                 placeholder="address"
                                 onChange={(e) =>
@@ -204,6 +209,7 @@ const LoginRegister = () => {
                                 name={values.address}
                               />
                               <input
+                              required
                                 type="number"
                                 placeholder="contact"
                                 onChange={(e) =>
@@ -215,6 +221,7 @@ const LoginRegister = () => {
                                 name={values.contactNumber}
                               />
                               <input
+                              required
                                 type="text"
                                 placeholder="Bussinessname"
                                 onChange={(e) =>
@@ -226,6 +233,7 @@ const LoginRegister = () => {
                                 name={values.businessName}
                               />
                               <input
+                              required
                                 type="button"
                                 className="btn btn-success"
                                 onClick={SubmitRegistration}

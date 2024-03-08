@@ -1,6 +1,6 @@
 {
-  "short_name": "Flone React",
-  "name": "React Minimalist eCommerce Template",
+  "short_name": "MetaMart",
+  "name": "Ecommerce platform for your brand",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",

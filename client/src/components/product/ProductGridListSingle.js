@@ -10,6 +10,7 @@ import { addToCart } from "../../store/slices/cart-slice";
 import { addToWishlist } from "../../store/slices/wishlist-slice";
 import { addToCompare } from "../../store/slices/compare-slice";
 import { useSelector } from "react-redux";
+import { APIHost } from "../../API";
 
 const ProductGridListSingle = ({
   product,
@@ -37,10 +38,7 @@ const ProductGridListSingle = ({
     {product?.productImages?.[0]?.images?.[0] ? (
       <img
         className="default-img"
-        src={
-          process.env.REACT_APP_PUBLIC_URL +
-          product?.productImages?.[0]?.images?.[0]
-        }
+        src={`${APIHost}${product?.productImages?.[0]?.images?.[0]}`}
         alt="Product"
       />
     ) : (
@@ -55,9 +53,9 @@ const ProductGridListSingle = ({
       <img
         className="hover-img"
         src={
-          process.env.REACT_APP_PUBLIC_URL +
+          `${APIHost}${
           product?.productImages[0]?.images[0]
-        }
+        }`}
         alt="Product Hover"
       />
     ) : (

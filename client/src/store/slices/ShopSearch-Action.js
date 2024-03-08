@@ -1,12 +1,13 @@
 
 
+import { APIHost } from '../../API';
 import { setSearchResults, setError, setLoading } from '../slices/ShopSearch-Slice';
 
 export const searchProducts = (searchTerm,e) => async (dispatch) => {
   try {
     dispatch(setLoading(true));
 
-    const response = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/api/product/`, {
+    const response = await fetch(`${APIHost}/api/product/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
