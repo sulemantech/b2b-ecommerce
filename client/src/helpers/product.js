@@ -70,48 +70,41 @@ export const cartItemStock = (item, color, size) => {
 
 //get products based on category
 export const getSortedProducts = (products, sortType, sortValue) => {
-  if (products && sortType && sortValue) {
-    if (sortType === "category") {
-      
-    }
-    if (sortType === "tag") {
-      
-    }
-    if (sortType === "color") {
-      return products.filter(
-        product =>
-          product.variation &&
-          product.variation.filter(single => single.color === sortValue)[0]
-      );
-    }
-    if (sortType === "size") {
-      return products.filter(
-        product =>
-          product.variation &&
-          product.variation.filter(
-            single => single.size.filter(single => single.name === sortValue)[0]
-          )[0]
-      );
-    }
-    if (sortType === "filterSort") {
-      let sortProducts = [...products];
-      if (sortValue === "default") {
-        return sortProducts;
-      }
-      if (sortValue === "priceHighToLow") {
-        return sortProducts.sort((a, b) => {
-          return b.price - a.price;
-        });
-      }
-      if (sortValue === "priceLowToHigh") {
-        return sortProducts.sort((a, b) => {
-          return a.price - b.price;
-        });
-      }
+  if (Array.isArray(products) && sortType && sortValue) {
+    switch (sortType) {
+      case "category":
+      case "tag":
+        return products; // Return the original products array
+      case "color":
+        return products.filter(
+          product =>
+            product.variation &&
+            product.variation.some(single => single.color === sortValue)
+        );
+      case "size":
+        return products.filter(
+          product =>
+            product.variation &&
+            product.variation.some(single =>
+              single.size.some(size => size.name === sortValue)
+            )
+        );
+      case "filterSort":
+        let sortProducts = [...products];
+        if (sortValue === "priceHighToLow") {
+          return sortProducts.sort((a, b) => b.price - a.price);
+        }
+        if (sortValue === "priceLowToHigh") {
+          return sortProducts.sort((a, b) => a.price - b.price);
+        }
+        return sortProducts; // Return the original products array for "default" case
+      default:
+        return products; // Return the original products array if no sortType matches
     }
   }
   return products;
 };
+
 
 // get individual element
 const getIndividualItemArray = array => {
@@ -140,23 +133,24 @@ export const getIndividualCategories = products => {
 // get individual tags
 export const getIndividualTags = products => {
   let productTags = [];
-  products &&
-    products.map(product => {
-      return (
-        product.tag &&
-        product.tag.map(single => {
-          return productTags.push(single);
-        })
-      );
+  if (Array.isArray(products)) {
+    products.forEach(product => {
+      if (Array.isArray(product.tag)) {
+        product.tag.forEach(single => {
+          productTags.push(single);
+        });
+      }
     });
+  }
   const individualProductTags = getIndividualItemArray(productTags);
   return individualProductTags;
 };
 
+
 // get individual colors
 export const getIndividualColors = products => {
   let productColors = [];
-  products &&
+  if (Array.isArray(products)) {
     products.map(product => {
       return (
         product.variation &&
@@ -165,43 +159,50 @@ export const getIndividualColors = products => {
         })
       );
     });
+  }
   const individualProductColors = getIndividualItemArray(productColors);
   return individualProductColors;
 };
 
+
 // get individual sizes
 export const getProductsIndividualSizes = products => {
   let productSizes = [];
-  products &&
+  if (Array.isArray(products)) {
     products.map(product => {
       return (
         product.variation &&
         product.variation.map(single => {
-          return single.size.map(single => {
-            return productSizes.push(single.name);
-          });
+          if (Array.isArray(single.size)) {
+            return single.size.map(size => {
+              return productSizes.push(size.name);
+            });
+          }
         })
       );
     });
+  }
   const individualProductSizes = getIndividualItemArray(productSizes);
   return individualProductSizes;
 };
 
+
 // get product individual sizes
 export const getIndividualSizes = product => {
   let productSizes = [];
-  product.variation &&
-    product.variation.map(singleVariation => {
-      return (
-        singleVariation.size &&
-        singleVariation.size.map(singleSize => {
-          return productSizes.push(singleSize.name);
-        })
-      );
+  if (Array.isArray(product.variation)) {
+    product.variation.forEach(singleVariation => {
+      if (Array.isArray(singleVariation.size)) {
+        singleVariation.size.forEach(singleSize => {
+          productSizes.push(singleSize.name);
+        });
+      }
     });
+  }
   const individualSizes = getIndividualItemArray(productSizes);
   return individualSizes;
 };
+
 
 
 

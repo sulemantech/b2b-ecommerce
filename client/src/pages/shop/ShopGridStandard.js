@@ -17,6 +17,7 @@ import { setProducts } from "../../store/slices/product-slice";
 
 const ShopGridStandard = () => {
   const dispatch = useDispatch();
+  const [categoryIds, setCategoryIds] = useState([]);
   const [layout, setLayout] = useState("grid three-column");
   const [sortType, setSortType] = useState("");
   const [sortValue, setSortValue] = useState("");
@@ -31,7 +32,14 @@ const ShopGridStandard = () => {
   const pageLimit = 15;
   let { pathname } = useLocation();
   const [selectedCategories, setSelectedCategories] = useState([]);
-  const categoryIds = categories.map((category) => category.id);
+  // const categoryIds = categories.map((category) => category.id);
+
+  useEffect(() => {
+    if (Array.isArray(categories)) { // Check if categories is an array
+      const ids = categories.map(category => category.id);
+      setCategoryIds(ids);
+    }
+  }, [categories]);  
   
 
 
