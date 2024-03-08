@@ -1,12 +1,30 @@
+// import { setSearchResults, setError, setLoading } from '../slices/ShopSearch-Slice';
 
+// import { setSearchResults, setError, setLoading } from '../slices/ShopSearch-Slice'; 
 
+// export const searchProducts = (searchTerm) => async (dispatch) => {
+//   try {
+//     dispatch(setLoading(true));
+
+//     const response = await fetch(`https://devcares.com/api/product/`);
+//     const data = await response.json();
+//     dispatch(setSearchResults(data));
+//     console.log("searchhhhhhhhhhhhhhhhhhhhhhhhh",data);
+//   } catch (error) {
+//     console.error('Error during search:', error);
+//     dispatch(setError('An error occurred during the search. Please try again.'));
+//   } finally {
+//     dispatch(setLoading(false));
+//   }
+// };
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 import { setSearchResults, setError, setLoading } from '../slices/ShopSearch-Slice';
 
 export const searchProducts = (searchTerm,e) => async (dispatch) => {
   try {
     dispatch(setLoading(true));
 
-    const response = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/api/product/`, {
+    const response = await fetch(`https://devcares.com/api/product/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
