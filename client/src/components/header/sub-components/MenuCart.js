@@ -5,6 +5,7 @@ import { getDiscountPrice } from "../../../helpers/product";
 import { deleteFromCart } from "../../../store/slices/cart-slice"
 import { Alert } from "react-bootstrap";
 import { logoutAsync } from "../../../store/slices/Auth-Action";
+import { APIHost } from "../../../API";
 
 
 const MenuCart = () => {
@@ -47,7 +48,7 @@ const MenuCart = () => {
                     <Link to={process.env.PUBLIC_URL + "/product/" + item.id}>
                       <img
                         alt=""
-                        src={process.env.PUBLIC_URL + item ?.productImages[0]?.images[0]}
+                        src={`${APIHost}${item ?.productImages[0]?.images[0]}`}
                         className="img-fluid"
                       />
                     </Link>

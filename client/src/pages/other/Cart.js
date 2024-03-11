@@ -8,6 +8,7 @@ import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import { addToCart, decreaseQuantity, deleteFromCart, deleteAllFromCart } from "../../store/slices/cart-slice";
 import { cartItemStock } from "../../helpers/product";
 import { logoutAsync } from "../../store/slices/Auth-Action";
+import { APIHost } from "../../API";
 
 
 const Cart = () => {
@@ -100,10 +101,9 @@ const Cart = () => {
                                     <img
                                       className="img-fluid"
                                       src={
-                                        process.env.REACT_APP_PUBLIC_URL+
-                                        cartItem?.productImages[0].images
-                                      }
-                                      alt=""
+                                        `${APIHost}${cartItem?.productImages[0].images
+                                         } `}
+                                     
                                     />
                                   </Link>
                                 </td>

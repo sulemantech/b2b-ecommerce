@@ -18,7 +18,7 @@ const FooterCheckout = ({ footerLogo, spaceBottomClass, colorClass }) => {
                 rel="noopener noreferrer"
                 target="_blank"
               >
-                Flone
+                MetaMart
               </a>
               .<br /> All Rights Reserved
             </p>

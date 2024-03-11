@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 import FooterCopyright from "../../components/footer/FooterCopyright";
 import { Container } from "react-bootstrap";
 import FooterCheckout from "../../components/footer/FooterCheckout";
+import { APIHost } from "../../API";
 
 const Checkout = () => {
   let cartTotalPrice = 0;
@@ -316,9 +317,7 @@ const Checkout = () => {
                       {cartItems.map((cartItem, key) => {
                         <img
                           src={
-                            process.env.REACT_APP_PUBLIC_URL +
-                            cartItem?.productImages[0].images
-                          }
+                            `${APIHost}${cartItem?.productImages[0].images}`}
                           alt=""
                         />;
                         const discountedPrice = getDiscountPrice(

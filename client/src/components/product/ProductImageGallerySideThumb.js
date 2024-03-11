@@ -7,6 +7,7 @@ import Thumbnails from "yet-another-react-lightbox/plugins/thumbnails";
 import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import Fullscreen from "yet-another-react-lightbox/plugins/fullscreen";
 import Swiper, { SwiperSlide } from "../../components/swiper";
+import { APIHost } from "../../API";
 
 const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
@@ -98,7 +99,7 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
                     </button>
                     <div className="single-image">
                       <img
-                        src={process.env.REACT_APP_PUBLIC_URL + imageSet.images}
+                        src={`${APIHost}${imageSet.images}`}
                         className="img-fluid"
                         alt=""
                       />
@@ -141,7 +142,7 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
                   <SwiperSlide key={key}>
                     <div className="single-image">
                       <img
-                        src={process.env.REACT_APP_PUBLIC_URL + single.images}
+                        src={`${APIHost}${single.images}`}
                         className="img-fluid"
                         alt=""
                       />

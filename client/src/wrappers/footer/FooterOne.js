@@ -17,7 +17,7 @@ const FooterOne = ({
   sideMenu
 }) => {
   return (
-    <footer className={clsx("footer-area", backgroundColorClass, spaceTopClass, spaceBottomClass, extraFooterClass, spaceLeftClass, spaceRightClass )}>
+    <footer className={clsx("footer-area", backgroundColorClass, spaceTopClass, spaceBottomClass, extraFooterClass, spaceLeftClass, spaceRightClass )} style={{p:"20px"}}>
       <div className={`${containerClass ? containerClass : "container"}`}>
         <div className="row">
           <div
@@ -43,7 +43,7 @@ const FooterOne = ({
                     <Link to={process.env.PUBLIC_URL + "/about"}>About us</Link>
                   </li>
                   <li>
-                    <Link to={process.env.PUBLIC_URL + "#/"}>
+                    <Link to={process.env.PUBLIC_URL + "/contact"}>
                       Store location
                     </Link>
                   </li>

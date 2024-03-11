@@ -46,12 +46,13 @@ const Contact = () => {
                     <div className="contact-info-dec">
                       <p>
                         <a href="mailto:yourname@email.com">
-                          yourname@email.com
+                          metafront.net@email.com
                         </a>
                       </p>
                       <p>
-                        <a href="https://yourwebsitename.com">
-                          yourwebsitename.com
+                        <a href="https://metafront.net/">
+                          Metafront.Net
+                          
                         </a>
                       </p>
                     </div>
@@ -61,8 +62,8 @@ const Contact = () => {
                       <i className="fa fa-map-marker" />
                     </div>
                     <div className="contact-info-dec">
-                      <p>Address goes here, </p>
-                      <p>street, Crossroad 123.</p>
+                      <p>Lower Ground,Plot 349 ST 1,1-9/3 </p>
+                      <p>Islamabad Capital Territory 4400 Pakistan</p>
                     </div>
                   </div>
                   <div className="contact-social text-center">

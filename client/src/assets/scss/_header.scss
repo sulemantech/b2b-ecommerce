@@ -36,6 +36,7 @@
     display: none;
     @media #{$md-layout} {
       display: block;
+      
     }
     @media #{$xs-layout} {
       display: block;

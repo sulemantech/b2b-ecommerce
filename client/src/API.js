@@ -1,7 +1,7 @@
-
+import { setCategory } from './store/slices/category-Slice';
 import axios from 'axios';
 // const APIHost = "http://localhost:5001"
-const APIHost = "https://devcares.com"
+export const APIHost = "https://devcares.com"
 
 
 
@@ -146,6 +146,16 @@ export const getUserInformation = async (token) => {
 };
 
 
+
+export const fetchCategories = async () => {
+  try {
+    const response = await axios.get(`${APIHost}/api/categories/all`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    throw error;
+  }
+};
 
 
 

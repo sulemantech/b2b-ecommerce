@@ -210,7 +210,7 @@ const ShopGridStandard = () => {
     <Fragment>
       <SEO
         titleTemplate="Shop Page"
-        description="Shop page of flone react minimalist eCommerce template."
+        description="Shop page of MetaMart from metafront.net."
       />
 
       <LayoutOne headerTop="visible">
@@ -222,10 +222,10 @@ const ShopGridStandard = () => {
           ]}
         />
 
-        <div className="shop-area pt-95 pb-100">
-          <div className="container-fluid bg-gray">
+        <div className="shop-area pt-95 pb-100 ">
+          <div className="container-fluid ">
             <div className="row">
-              <div className="col-lg-3 order-2 order-lg-1">
+              <div className="col-lg-3 order-2 order-lg-1 p-0">
                 {/* shop sidebar */}
                 <ShopSidebar
                   products={products}
@@ -241,6 +241,7 @@ const ShopGridStandard = () => {
                   getFilterSortParams={getFilterSortParams}
                   productCount={products.length}
                   sortedProductCount={currentData.length}
+                
                 />
                 {/* shop page content default */}
                 <ShopProducts layout={layout} products={currentData} />
