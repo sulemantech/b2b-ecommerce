@@ -136,18 +136,19 @@ const FormElements = () => {
 
   const [value, setvalues] = useState({
     name: '',
-    description: '',
+    description: 'best',
     price: '',
-    weight: '',
-    manufacturer:'',
+    weight: 20,
+    manufacturer:'china',
+    new:'true',
     rating: 5,
     tag: [] as string[],
     quantityInStock: '',
     sku: '',
+    quantity:'',
     category_id: '',
     supplier_id: '',
     categoryName: '',
-    productId: '',
     status: '',
   });
   console.log(value);
@@ -191,7 +192,7 @@ const FormElements = () => {
         variants: variantsData,
       };
       const response = await axios.post(
-        'http://localhost:5001/api/products/',
+        `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products`,
         requestData
       );
       console.log('Product and Variants created:', response.data);
@@ -199,18 +200,19 @@ const FormElements = () => {
       setSubmittedData({});
       setvalues({
         name: '',
-        description: '',
+        description: 'best',
         price: '',
-        weight: '',
+        weight: 20,
+        new:'true',
         rating: 5,
         manufacturer:"china",
         tag: [],
         quantityInStock: '',
         sku: '',
+        quantity:'',
         category_id: '',
         supplier_id: '',
         categoryName: '',
-        productId: '',
         status: '',
       });
 
@@ -243,7 +245,7 @@ const FormElements = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:5001/productImages', {
+      const response = await fetch(`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/productImages`, {
         method: 'POST',
         body: formData,
       });
@@ -272,7 +274,7 @@ const FormElements = () => {
   //categoriesAPI//
 
   useEffect(() => {
-    fetch('http://localhost:5001/api/categories/all')
+    fetch(`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/categories/all`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -289,7 +291,7 @@ const FormElements = () => {
   //Vendor/
 
   useEffect(() => {
-    fetch('http://localhost:5001/api/suppliers/all')
+    fetch(`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/suppliers/all`)
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -505,9 +507,9 @@ const FormElements = () => {
                   disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
                    dark:focus:border-primary"
                       onChange={(e) =>
-                        setvalues({ ...value, name: e.target.value })
+                        setvalues({ ...value, quantity: e.target.value })
                       }
-                      value={value.name}
+                      value={value.quantity}
                     />
                   </div>
                 </div>
@@ -751,6 +753,7 @@ const FormElements = () => {
             disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
             dark:focus:border-primary"
               >
+                <option value=""> select</option>
                 <option value="pending">Pending</option>
                 <option value="active">Active</option>
                 <option value="inactive">Inactive</option>

@@ -24,7 +24,7 @@ const TableTwo: React.FC  = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await fetch('http://localhost:5001/api/order/byrole', {
+        const response = await fetch(`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/order/byrole`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

@@ -50,7 +50,7 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
   componentDidMount() {
     const fetchPendingProducts = () => {
       fetch(
-        'http://localhost:5001/api/products/all?page=1&pageSize=500&status=pending',
+        `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products/all?page=1&pageSize=500&status=pending`,
       )
         .then((response) => {
           if (!response.ok) {

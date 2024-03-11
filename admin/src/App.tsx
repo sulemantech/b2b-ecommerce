@@ -35,7 +35,7 @@ function App() {
         <Route path="/auth/signin" element={<SignIn />} />
         <Route path="/auth/signup" element={<SignUp/>} />
         <Route element={<DefaultLayout />}>
-          <Route index element={isLogin?<ECommerce />: <Navigate to="/auth/signin"/> } />
+          <Route path='/' element={isLogin?<ECommerce />: <Navigate to="/auth/signin"/> } />
           
           {routes.map((route, index) => {
           const { path, component: Component } = route;
