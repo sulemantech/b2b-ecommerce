@@ -8,6 +8,7 @@ import SignUp from './pages/Authentication/SignUp';
 import Loader from './common/Loader';
 import routes from './routes';
 import Cookies from 'js-cookie';
+import { Navigate } from 'react-router-dom';
 
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'));
 
@@ -17,6 +18,8 @@ function App() {
   useEffect(() => {
     setTimeout(() => setLoading(false), 1000);
   }, []);
+  const isLogin = Cookies.get('token');
+  
   
 
   return loading ? (
@@ -30,24 +33,28 @@ function App() {
       />
       <Routes>
         <Route path="/auth/signin" element={<SignIn />} />
-        <Route path="/auth/signup" element={<SignUp />} />
+        <Route path="/auth/signup" element={<SignUp/>} />
         <Route element={<DefaultLayout />}>
-          <Route index element={<ECommerce />} />
+          <Route index element={isLogin?<ECommerce />: <Navigate to="/auth/signin"/> } />
           
-          {routes.map((routes, index) => {
-            const { path, component: Component } = routes;
-            return (
-              <Route
-                key={index}
-                path={path}
-                element={
+          {routes.map((route, index) => {
+          const { path, component: Component } = route;
+          return (
+            <Route
+              key={index}
+              path={path}
+              element={
+                isLogin ? (
                   <Suspense fallback={<Loader />}>
                     <Component />
                   </Suspense>
-                }
-              />
-            );
-          })}
+                ) : (
+                  <Navigate to="/auth/signin" />
+                )
+              }
+            />
+          );
+        })}
         </Route>
       </Routes>
     </>

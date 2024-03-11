@@ -40,7 +40,7 @@ const SignIn: React.FC = () => {
 
     try {
       const credentials: LoginCredentials = { email, password };
-      const response: AxiosResponse<LoginResponse> = await axios.post('http://localhost:5001/api/user/login', credentials);
+      const response: AxiosResponse<LoginResponse> = await axios.post(`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/user/login`, credentials);
 
       if (response.status === 200) {
         const { auth, token, role } = response.data;
@@ -84,7 +84,7 @@ const SignIn: React.FC = () => {
           
                 <img className="hidden dark:block" src={Logo} alt="Logo" />
                 {/* <img className="dark:hidden mb-5.5 inline-block" src={LogoDark} alt="Logo" /> */}
-                <h1 className='text-2xl font-bold text-black dark:text-white sm:text-title-xl2'>N5 STORE ADMIN</h1>
+                <h1 className='text-2xl font-bold text-black dark:text-white sm:text-title-xl2'>MetaMart</h1>
             
 
               <p className="2xl:px-20">
@@ -220,7 +220,7 @@ const SignIn: React.FC = () => {
             <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
     
               <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
-                Sign In to N5 STORE
+              MetaMart
               </h2>
 
               <form>
