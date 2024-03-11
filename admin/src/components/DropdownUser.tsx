@@ -41,7 +41,7 @@ const DropdownUser = () => {
     return () => document.removeEventListener('keydown', keyHandler);
   });
 
-  const isLogin = Cookies.get('token');
+  // const isLogin = Cookies.get('token');
 
   const handleLogout = (): void => {
     Cookies.remove('token');
@@ -244,7 +244,6 @@ const DropdownUser = () => {
           </svg>
           Log Out
         </NavLink> */}
-        {isLogin ? (
           <NavLink
             to="/auth/signin"
             onClick={handleLogout}
@@ -273,35 +272,7 @@ const DropdownUser = () => {
             </svg>
             Logout
           </NavLink>
-        ) : (
-          <NavLink
-            to="/"
-            className={({ isActive }) =>
-              'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-black ' +
-              (isActive && '!text-white')
-            }
-          >
-            <span className="opacity-0 group-hover:opacity-100">&#8594;</span>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="icon icon-tabler icon-tabler-login-2"
-              width="22"
-              height="22"
-              viewBox="0 0 22 22"
-              stroke-width="0.5"
-              stroke="#000000"
-              fill="none"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            >
-              <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-              <path d="M9 8v-2a2 2 0 0 1 2 -2h7a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-7a2 2 0 0 1 -2 -2v-2" />
-              <path d="M3 12h13l-3 -3" />
-              <path d="M13 15l3 -3" />
-            </svg>
-            Sign In
-          </NavLink>
-        )}
+     
       </div>
       {/* <!-- Dropdown End --> */}
     </div>
