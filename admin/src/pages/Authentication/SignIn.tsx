@@ -225,12 +225,12 @@ const SignIn: React.FC = () => {
 
               <form>
                 <div className="mb-4">
-                  
                   <div className="relative">
                     <input
                       id="emailInput"
                       name="email"
                       value={email}
+                      required
                       onChange={handleInputChange}
                       placeholder="Enter your email"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
@@ -272,7 +272,9 @@ const SignIn: React.FC = () => {
                  
                   <div className="relative">
                     <input
+                    type='password'
                      id="passwordInput"
+                     required
                      name="password"
                      value={password}
                      onChange={handleInputChange}
