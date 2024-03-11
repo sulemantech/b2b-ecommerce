@@ -58,6 +58,8 @@ useEffect(() => {
   return (
     <>
     <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+      {Token ? (
+      <>
 
       <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5">
         <div className="col-span-2 flex items-center">
@@ -127,6 +129,12 @@ useEffect(() => {
     </div>
   </div>
 ))}
+</>
+      ):(
+        <h1 className='text-center my-54 font-semibold'>
+          No products Found
+        </h1>
+      )}
 </div>
 {/* {console.log("process.env.RESOURCE_SERVER_HOST ", )} */}
 
