@@ -1,7 +1,6 @@
 import Logo from '../../images/logo/logo.svg';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import axios, { AxiosResponse } from 'axios';
-import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 
 
@@ -17,12 +16,11 @@ interface LoginCredentials {
   password: string;
 }
 
-
 const SignIn: React.FC = () => {
 
-  const navigate = useNavigate();
   const [email, setemail] = useState('');
   const [password, setPassword] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = event.target;
@@ -31,48 +29,44 @@ const SignIn: React.FC = () => {
     } else if (name === 'password') {
       setPassword(value);
       // console.log("firstttt",value);
-      
     }
   };
+ 
 
+
+ 
   const handleFormSubmit = async (event: FormEvent): Promise<void> => {
     event.preventDefault();
 
     try {
-      const credentials: LoginCredentials = { email, password };
-      const response: AxiosResponse<LoginResponse> = await axios.post(`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/user/login`, credentials);
+        const credentials: LoginCredentials = { email, password };
+        const response: AxiosResponse<LoginResponse> = await axios.post(
+            `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/user/login`,
+            credentials,
+        );
 
-      if (response.status === 200) {
-        const { auth, token, role } = response.data;
-        console.log({ auth, token, role });
+        if (response.status === 200) {
+            const { auth, token, role } = response.data;
+            console.log({ auth, token, role });
 
-        if (token && role) {
-          Cookies.set('token', token, { expires: 1 });
-          Cookies.set('role', role, { expires: 1 });
-
-  
-      navigate('/');
-
-
+            if (token && role) {
+                Cookies.set('token', token, { expires: 1 });
+                Cookies.set('role', role, { expires: 1 });
+               
+            }
         }
-    
-      } else {
-        console.error('Login failed:', response.data.message);
-        // Handle login failure
-      }
-    } catch (error) {
-      console.error('Internal Server Error in login:', error);
-  
+    } catch (error: any) {
+        console.error(
+            'Internal Server Error in login:',
+            error.response.data.message,
+        );
+        setErrorMessage(error.response.data.message);
+        // alert(error.response.data.message);
     }
-  };
-  
-
-  
+};
 
 
 
-
-  
 
 
   return (
@@ -81,15 +75,13 @@ const SignIn: React.FC = () => {
         <div className="flex flex-wrap items-center">
           <div className="hidden w-full xl:block xl:w-1/2">
             <div className="py-17.5 px-26 text-center">
-          
-                <img className="hidden dark:block" src={Logo} alt="Logo" />
-                {/* <img className="dark:hidden mb-5.5 inline-block" src={LogoDark} alt="Logo" /> */}
-                <h1 className='text-2xl font-bold text-black dark:text-white sm:text-title-xl2'>MetaMart</h1>
-            
+              <img className="hidden dark:block" src={Logo} alt="Logo" />
+              {/* <img className="dark:hidden mb-5.5 inline-block" src={LogoDark} alt="Logo" /> */}
+              <h1 className="text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
+                MetaMart
+              </h1>
 
-              <p className="2xl:px-20">
-              
-              </p>
+              <p className="2xl:px-20"></p>
 
               <span className="mt-15 inline-block">
                 <svg
@@ -218,9 +210,8 @@ const SignIn: React.FC = () => {
 
           <div className="w-full border-stroke dark:border-strokedark xl:w-1/2 xl:border-l-2">
             <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
-    
               <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
-              MetaMart
+                MetaMart
               </h2>
 
               <form>
@@ -262,22 +253,26 @@ const SignIn: React.FC = () => {
                         </g>
                       </svg>
                     </span>
+                    <div className="absolute">
+                      <h1 className="text-danger font-semibold">
+                        {' '}
+                        {errorMessage == 'Incorrect email' && errorMessage}
+                      </h1>
+                    </div>
                   </div>
                 </div>
                 <br />
                 <br />
 
-
                 <div className="mb-6">
-                 
                   <div className="relative">
                     <input
-                    type='password'
-                     id="passwordInput"
-                     required
-                     name="password"
-                     value={password}
-                     onChange={handleInputChange}
+                      type="password"
+                      id="passwordInput"
+                      required
+                      name="password"
+                      value={password}
+                      onChange={handleInputChange}
                       placeholder="Enter your Password"
                       className="w-full rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                     />
@@ -304,6 +299,11 @@ const SignIn: React.FC = () => {
                       </svg>
                     </span>
                   </div>
+                  <div className="absolute">
+                    <h1 className="text-danger font-semibold">
+                      {errorMessage == 'Incorrect password' && errorMessage}
+                    </h1>
+                  </div>
                 </div>
 
                 <div className="mb-5">
@@ -311,12 +311,10 @@ const SignIn: React.FC = () => {
                     type="submit"
                     value="Sign In"
                     onClick={handleFormSubmit}
-                    
-
                     className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
                   />
                 </div>
-                
+
                 <button className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50">
                   <span>
                     <svg

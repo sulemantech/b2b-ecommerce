@@ -9,7 +9,6 @@ import Loader from './common/Loader';
 import routes from './routes';
 import Cookies from 'js-cookie';
 import { Navigate } from 'react-router-dom';
-
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'));
 
 function App() {
@@ -35,12 +34,13 @@ function App() {
         <Route path="/auth/signin" element={<SignIn />} />
         <Route path="/auth/signup" element={<SignUp/>} />
         <Route element={<DefaultLayout />}>
-          <Route path='/' element={isLogin?<ECommerce />: <Navigate to="/auth/signin"/> } />
+          <Route index element={<ECommerce/> } />
           
           {routes.map((route, index) => {
-          const { path, component: Component } = route;
-          return (
-            <Route
+            const { path, component: Component } = route;
+            console.log(isLogin)
+            return (
+              <Route
               key={index}
               path={path}
               element={
@@ -50,8 +50,8 @@ function App() {
                   </Suspense>
                 ) : (
                   <Navigate to="/auth/signin" />
-                )
-              }
+                  )
+                }
             />
           );
         })}
