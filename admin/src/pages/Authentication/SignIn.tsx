@@ -2,6 +2,9 @@ import Logo from '../../images/logo/logo.svg';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import axios, { AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
+import { useLoginContext } from '../../routes/Logincontext';
+import { useNavigate } from 'react-router-dom';
+
 
 
 interface LoginResponse {
@@ -17,6 +20,8 @@ interface LoginCredentials {
 }
 
 const SignIn: React.FC = () => {
+  const { setIsLogin } = useLoginContext();
+  const navigate=useNavigate();
 
   const [email, setemail] = useState('');
   const [password, setPassword] = useState('');
@@ -39,22 +44,23 @@ const SignIn: React.FC = () => {
     event.preventDefault();
 
     try {
-        const credentials: LoginCredentials = { email, password };
-        const response: AxiosResponse<LoginResponse> = await axios.post(
-            `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/user/login`,
-            credentials,
-        );
+      const credentials: LoginCredentials = { email, password };
+      const response: AxiosResponse<LoginResponse> = await axios.post(`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/user/login`, credentials);
 
-        if (response.status === 200) {
-            const { auth, token, role } = response.data;
-            console.log({ auth, token, role });
+      if (response.status === 200) {
+        const { auth, token, role } = response.data;
+        console.log({ auth, token, role });
 
-            if (token && role) {
-                Cookies.set('token', token, { expires: 1 });
-                Cookies.set('role', role, { expires: 1 });
-               
-            }
+        if (token && role) {
+          Cookies.set('token', token, { expires: 1 });
+          Cookies.set('role', role, { expires: 1 });
+
+          setIsLogin(true);
+
+      navigate('/');
         }
+      }
+
     } catch (error: any) {
         console.error(
             'Internal Server Error in login:',

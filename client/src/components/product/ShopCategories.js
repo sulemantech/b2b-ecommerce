@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import { setActiveSort } from "../../helpers/product";
 import { useState } from "react";
 import { useEffect } from "react";
+import { propTypes } from "react-hooks-paginator";
 
 
 
@@ -27,7 +28,7 @@ const ShopCategories = ({categories ,getSortParams,selectedCategories }) => {
                     id="allCategoriesButton"
                     className="active"
                     onClick={(e) => {
-                      const categoryIds = categories.Categories.map((category) => category.id);
+                      const categoryIds = Array.isArray(categories.Categories.map((category) => category.id));
                       getSortParams("category", categoryIds);
                       // setActiveSort(e);
                     }}
@@ -67,8 +68,7 @@ const ShopCategories = ({categories ,getSortParams,selectedCategories }) => {
 };
 
 ShopCategories.propTypes = {
-  categories: PropTypes.array,
-  getSortParams: PropTypes.func
+  getSortParams: PropTypes.func,
 };
 
 export default ShopCategories;
