@@ -9,10 +9,14 @@ import SignUp from './pages/Authentication/SignUp';
 import Loader from './common/Loader';
 import routes from './routes';
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'));
+import Cookies from 'js-cookie';
+
+
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
   const { isLogin } = useLoginContext(); 
+  const islogin1=Cookies.get('token');
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 1000);
@@ -24,7 +28,7 @@ function App() {
     <>
       <Toaster position="top-right" reverseOrder={false} containerClassName="overflow-auto" />
       <Routes>
-        <Route path="/auth/signin" element={<SignIn />} />
+        <Route path="/auth/signin" element={islogin1  ? <Navigate to="/" /> : <SignIn/>} />
         <Route path="/auth/signup" element={<SignUp />} />
         <Route element={<DefaultLayout />}>
           <Route path="/" element={isLogin ? <ECommerce /> : <Navigate to="/auth/signin" />} />

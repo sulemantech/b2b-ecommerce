@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { FaRegUserCircle } from 'react-icons/fa';
 import Cookies from 'js-cookie';
+import { useLoginContext } from '../routes/Logincontext';
+
+
 
 // import jwt_decode from 'jwt-decode';
 
@@ -27,6 +30,8 @@ interface TokenData {
 }
 
 const DropdownUser = () => {
+  const { setIsLogin } = useLoginContext(); 
+
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const trigger = useRef<any>(null);
   const dropdown = useRef<any>(null);
@@ -44,9 +49,11 @@ const DropdownUser = () => {
   // const isLogin = Cookies.get('token');
 
   const handleLogout = (): void => {
+    setIsLogin(false)
     Cookies.remove('token');
     Cookies.remove('role');
     console.log('logout session');
+    
   };
 
   // Inside the useEffect block
