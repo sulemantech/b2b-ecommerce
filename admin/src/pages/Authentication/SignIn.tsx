@@ -3,6 +3,8 @@ import React, { ChangeEvent, FormEvent, useState } from 'react';
 import axios, { AxiosResponse } from 'axios';
 import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
+import { useLoginContext } from '../../routes/Logincontext';
+
 
 
 interface LoginResponse {
@@ -19,6 +21,7 @@ interface LoginCredentials {
 
 
 const SignIn: React.FC = () => {
+  const { setIsLogin } = useLoginContext();
 
   const navigate = useNavigate();
   const [email, setemail] = useState('');
@@ -50,7 +53,8 @@ const SignIn: React.FC = () => {
           Cookies.set('token', token, { expires: 1 });
           Cookies.set('role', role, { expires: 1 });
 
-  
+          setIsLogin(true);
+
       navigate('/');
 
 

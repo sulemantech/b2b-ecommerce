@@ -4,11 +4,14 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import App from './App';
 import './index.css';
 import './satoshi.css';
+import { LoginProvider } from './routes/Logincontext';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Router>
-      <App />
+      <LoginProvider>
+        <App />
+      </LoginProvider>
     </Router>
   </React.StrictMode>
 );
