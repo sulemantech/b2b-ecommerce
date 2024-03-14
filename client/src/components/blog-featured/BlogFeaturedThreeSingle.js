@@ -9,13 +9,12 @@ const BlogFeaturedThreeSingle = ({ singlePost }) => {
           <img src={process.env.PUBLIC_URL + singlePost.image} alt="" />
         </Link>
         <div className="blog-category-names blog-category-names--style2">
-          {singlePost.category.map((singleCategory, key) => {
-            return (
+          {Array.isArray(singlePost.category) &&
+            singlePost.category.map((singleCategory, key) => (
               <span className="red" key={key}>
                 {singleCategory}
               </span>
-            );
-          })}
+            ))}
         </div>
       </div>
       <div className="blog-content-wrap">
@@ -36,6 +35,7 @@ const BlogFeaturedThreeSingle = ({ singlePost }) => {
     </div>
   );
 };
+
 
 BlogFeaturedThreeSingle.propTypes = {
   singlePost: PropTypes.shape({})

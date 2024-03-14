@@ -212,7 +212,7 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
     const fetchProduct = async () => {
       try {
         const response = await axios.get(
-          `http://localhost:5001/api/products/specific/${id}`,
+          `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products/specific/${id}`,
         );
         const product = response.data;
         setName(product.name || '');

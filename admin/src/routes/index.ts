@@ -15,11 +15,19 @@ const Users =lazy(()=>import('../pages/Dashboard/Users'));
 const Orders =lazy(()=>import('../pages/Dashboard/Oders'));
 const UpdateProducts =lazy(()=>import('../components/UpdateProducts'));
 const ProductNavigate=lazy(()=>import('../components/PoductNavigator'));
+const ECommerce =lazy(()=>import ('../pages/Dashboard/ECommerce'));
 
 
 
 
 const coreRoutes = [
+  {
+    path: '/dashboard',
+    title: 'ecomerce',
+    component:ECommerce,
+
+  },
+  
   {
     path: '/products',
     title: 'products',

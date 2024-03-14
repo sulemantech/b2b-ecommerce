@@ -158,5 +158,19 @@ export const fetchCategories = async () => {
 };
 
 
-
+export const fetchProducts = (page, pageSize) => async (dispatch) => {
+  try {
+    const productsData = await axios.get(`${APIHost}/api/products/clients/all`, {
+      params: {
+        page,
+        pageSize,
+      },
+    }).then((res) => {
+      return res?.data;
+    });
+    console.log("productAll", productsData);
+  } catch (error) {
+    console.error('Error fetching products:', error);
+  }
+};
 

@@ -29,7 +29,7 @@ const productImages = sequelize.define('productImages', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: productModel,
+      model: 'products',
       key: 'id',
     },
   },

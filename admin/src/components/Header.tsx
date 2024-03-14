@@ -63,7 +63,7 @@ const Header = (props: {
       
       <div>
       <h1 style={{ color: 'white', font: 'bold', fontSize: '30px' }}>
-            N5 STORE
+      MetaMart
           </h1>
       </div>
         

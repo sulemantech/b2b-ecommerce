@@ -9,21 +9,17 @@ const BlogFeaturedSingle = ({ singlePost }) => {
           <img src={process.env.PUBLIC_URL + singlePost.image} alt="" />
         </Link>
         <div className="blog-category-names">
-          {singlePost.category.map((singleCategory, key) => {
-            return (
+          {Array.isArray(singlePost.category) &&
+            singlePost.category.map((singleCategory, key) => (
               <span className="purple" key={key}>
                 {singleCategory}
               </span>
-            );
-          })}
+            ))}
         </div>
       </div>
       <div className="blog-content-wrap">
         <div className="blog-content text-center">
           <h3>
-            {/* <Link to={process.env.PUBLIC_URL + singlePost.url}>
-              {products[3].name}
-            </Link> */}
             <Link to={process.env.PUBLIC_URL + singlePost.url}>
               {singlePost.title}
             </Link>
@@ -39,6 +35,7 @@ const BlogFeaturedSingle = ({ singlePost }) => {
     </div>
   );
 };
+
 
 BlogFeaturedSingle.propTypes = {
   singlePost: PropTypes.shape({})
