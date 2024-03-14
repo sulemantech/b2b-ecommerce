@@ -2,13 +2,75 @@
   "swagger": "2.0",
   "info": {
     "version": "1.0.0",
-    "title": "N5 Store",
-    "description": "Best e-commerce website."
+    "title": "MetaMart API",
+    "description": "MetaMart API Information",
+    "servers": [
+      "http://localhost:5001"
+    ]
   },
   "host": "localhost:5001",
   "basePath": "/",
+  "tags": [
+    {
+      "name": "addressController",
+      "description": "All endpoints for addressController"
+    },
+    {
+      "name": "businessController",
+      "description": "All endpoints for businessController"
+    },
+    {
+      "name": "categoryController",
+      "description": "All endpoints for categoryController"
+    },
+    {
+      "name": "citiesController",
+      "description": "All endpoints for citiesController"
+    },
+    {
+      "name": "companiesController",
+      "description": "All endpoints for companiesController"
+    },
+    {
+      "name": "customerController",
+      "description": "All endpoints for customerController"
+    },
+    {
+      "name": "notificationController",
+      "description": "All endpoints for notificationController"
+    },
+    {
+      "name": "orderController",
+      "description": "All endpoints for orderController"
+    },
+    {
+      "name": "orderItemsController",
+      "description": "All endpoints for orderItemsController"
+    },
+    {
+      "name": "productController",
+      "description": "All endpoints for productController"
+    },
+    {
+      "name": "productImagesController",
+      "description": "All endpoints for productImagesController"
+    },
+    {
+      "name": "stateController",
+      "description": "All endpoints for stateController"
+    },
+    {
+      "name": "supplierController",
+      "description": "All endpoints for supplierController"
+    },
+    {
+      "name": "userController",
+      "description": "All endpoints for userController"
+    }
+  ],
   "schemes": [
-    "http","https"
+    "http",
+    "https"
   ],
   "securityDefinitions": {
     "Bearer": {
@@ -17,22 +79,36 @@
       "in": "header"
     }
   },
-  "security": [
-    {
-      "Bearer": []
-    }
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
   ],
   "paths": {
+    "/api/address/all": {
+      "get": {
+        "tags": [
+          "addressController"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/api/address/create": {
       "post": {
+        "tags": [
+          "addressController"
+        ],
         "description": "",
-        "tags": ["Address"],
         "parameters": [
-          {
-            "name": "x-api-key",
-            "in": "header",
-            "type": "string"
-          },
           {
             "name": "body",
             "in": "body",
@@ -62,43 +138,32 @@
           "201": {
             "description": "Created"
           },
-          "401": {
-            "description": "Unauthorized"
-          },
           "500": {
             "description": "Internal Server Error"
           }
         }
       }
     },
-    "/api/address/getAll": {
+    "/api/business/": {
       "get": {
-        "description": "",
-        "tags": ["Address"],
-        "parameters": [
-          {
-            "name": "x-api-key",
-            "in": "header",
-            "type": "string"
-          }
+        "tags": [
+          "businessController"
         ],
+        "description": "",
         "responses": {
           "200": {
             "description": "OK"
           },
-          "401": {
-            "description": "Unauthorized"
-          },
           "500": {
             "description": "Internal Server Error"
           }
         }
-      }
-    },
-    "/api/business": {
+      },
       "post": {
+        "tags": [
+          "businessController"
+        ],
         "description": "",
-        "tags": ["Business"],
         "parameters": [
           {
             "name": "body",
@@ -106,16 +171,16 @@
             "schema": {
               "type": "object",
               "properties": {
-                "supplier_name": {
+                "name": {
                   "example": "any"
                 },
-                "contact_info": {
+                "address": {
                   "example": "any"
                 },
-                "contact_person": {
+                "email": {
                   "example": "any"
                 },
-                "website": {
+                "contactNumber": {
                   "example": "any"
                 },
                 "description": {
@@ -126,71 +191,21 @@
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK"
-          },
           "201": {
             "description": "Created"
           },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
           "500": {
             "description": "Internal Server Error"
-          },
-          "default": {
-            "description": ""
-          }
-        }
-      },
-      "get": {
-        "tags": ["Business"],
-        "description": "Retrieve all businesses",
-        "security": [
-          {
-            "Bearer": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Business"
-              }
-            },
-            "examples": {
-              "application/json": [
-                {
-                  "businessName": "Business1",
-                  "businessType": "Type1"
-                },
-                {
-                  "businessName": "Business2",
-                  "businessType": "Type2"
-                }
-              ]
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "schema": {
-              "$ref": "#/definitions/Error"
-            }
           }
         }
       }
-    
-  
     },
     "/api/categories/all": {
       "get": {
+        "tags": [
+          "categoryController"
+        ],
         "description": "",
-        "tags": ["Category"],
         "responses": {
           "200": {
             "description": "OK"
@@ -201,45 +216,12 @@
         }
       }
     },
-    "/api/categories/": {
-      "post": {
-        "description": "Create a new category",
-        "tags": ["Category"],
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "any"
-                }
-              },
-              "required": ["name"]
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },    
     "/api/categories/{categoryId}": {
       "get": {
+        "tags": [
+          "categoryController"
+        ],
         "description": "",
-        "tags": ["Category"],
         "parameters": [
           {
             "name": "categoryId",
@@ -261,8 +243,10 @@
         }
       },
       "put": {
+        "tags": [
+          "categoryController"
+        ],
         "description": "",
-        "tags": ["Category"],
         "parameters": [
           {
             "name": "categoryId",
@@ -296,8 +280,10 @@
         }
       },
       "delete": {
+        "tags": [
+          "categoryController"
+        ],
         "description": "",
-        "tags": ["Category"],
         "parameters": [
           {
             "name": "categoryId",
@@ -319,12 +305,42 @@
         }
       }
     },
-
-
+    "/api/categories/": {
+      "post": {
+        "tags": [
+          "categoryController"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
     "/api/cities/get": {
       "get": {
+        "tags": [
+          "citiesController"
+        ],
         "description": "",
-        "tags":["Cities"],
         "responses": {
           "200": {
             "description": "OK"
@@ -337,8 +353,976 @@
     },
     "/api/cities/post": {
       "post": {
+        "tags": [
+          "citiesController"
+        ],
         "description": "",
-        "tags":["Cities"],
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "cityName": {
+                  "example": "any"
+                },
+                "stateId": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/company/": {
+      "get": {
+        "tags": [
+          "companiesController"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/company/add": {
+      "post": {
+        "tags": [
+          "companiesController"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "companyName": {
+                  "example": "any"
+                },
+                "industry": {
+                  "example": "any"
+                },
+                "addressId": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                },
+                "contactInformation": {
+                  "example": "any"
+                },
+                "website": {
+                  "example": "any"
+                },
+                "industryType": {
+                  "example": "any"
+                },
+                "shippingInformation": {
+                  "example": "any"
+                },
+                "paymentMethods": {
+                  "example": "any"
+                },
+                "returnPolicy": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/customer/": {
+      "get": {
+        "tags": [
+          "customerController"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "customerController"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "example": "any"
+                },
+                "address": {
+                  "example": "any"
+                },
+                "email": {
+                  "example": "any"
+                },
+                "contactNumber": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/specific": {
+      "get": {
+        "tags": [
+          "notificationController"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/send": {
+      "post": {
+        "tags": [
+          "notificationController"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "example": "any"
+                },
+                "title": {
+                  "example": "any"
+                },
+                "body": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/create": {
+      "post": {
+        "tags": [
+          "notificationController"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "notification_type_id": {
+                  "example": "any"
+                },
+                "related_entity_type": {
+                  "example": "any"
+                },
+                "related_entity_id": {
+                  "example": "any"
+                },
+                "message": {
+                  "example": "any"
+                },
+                "sender_id": {
+                  "example": "any"
+                },
+                "recipient_id": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/types": {
+      "post": {
+        "tags": [
+          "notificationController"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "typeName": {
+                  "example": "any"
+                },
+                "description": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/config": {
+      "post": {
+        "tags": [
+          "notificationController"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "user_id": {
+                  "example": "any"
+                },
+                "notification_type_id": {
+                  "example": "any"
+                },
+                "is_enabled": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/order/": {
+      "get": {
+        "tags": [
+          "orderController"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/order/user": {
+      "get": {
+        "tags": [
+          "orderController"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/order/role": {
+      "get": {
+        "tags": [
+          "orderController"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/order/create": {
+      "post": {
+        "tags": [
+          "orderController"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "address": {
+                  "example": "any"
+                },
+                "totalPrice": {
+                  "example": "any"
+                },
+                "discount": {
+                  "example": "any"
+                },
+                "paymentMethod": {
+                  "example": "any"
+                },
+                "trackingNumber": {
+                  "example": "any"
+                },
+                "name": {
+                  "example": "any"
+                },
+                "email": {
+                  "example": "any"
+                },
+                "contactNumber": {
+                  "example": "any"
+                },
+                "zipCode": {
+                  "example": "any"
+                },
+                "additionalInfo": {
+                  "example": "any"
+                },
+                "city": {
+                  "example": "any"
+                },
+                "country": {
+                  "example": "any"
+                },
+                "shippingAddress": {
+                  "example": "any"
+                },
+                "orderItems": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/order/update": {
+      "put": {
+        "tags": [
+          "orderController"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "address": {
+                  "example": "any"
+                },
+                "totalPrice": {
+                  "example": "any"
+                },
+                "status": {
+                  "example": "any"
+                },
+                "discount": {
+                  "example": "any"
+                },
+                "paymentMethod": {
+                  "example": "any"
+                },
+                "trackingNumber": {
+                  "example": "any"
+                },
+                "name": {
+                  "example": "any"
+                },
+                "email": {
+                  "example": "any"
+                },
+                "contactNumber": {
+                  "example": "any"
+                },
+                "zipCode": {
+                  "example": "any"
+                },
+                "additionalInfo": {
+                  "example": "any"
+                },
+                "city": {
+                  "example": "any"
+                },
+                "country": {
+                  "example": "any"
+                },
+                "shippingAddress": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/order/delete/{orderId}": {
+      "delete": {
+        "tags": [
+          "orderController"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/orderitems/all": {
+      "get": {
+        "tags": [
+          "orderItemsController"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/products/all": {
+      "get": {
+        "tags": [
+          "productController"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "type": "string"
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/products/clients/all": {
+      "get": {
+        "tags": [
+          "productController"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/products/clients/all/sort": {
+      "get": {
+        "tags": [
+          "productController"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "sortBy",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/products/category/{category_id}": {
+      "get": {
+        "tags": [
+          "productController"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "category_id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/products/{id}": {
+      "get": {
+        "tags": [
+          "productController"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/products/create": {
+      "post": {
+        "tags": [
+          "productController"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "products": {
+                  "example": "any"
+                },
+                "variants": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/products/createBulk": {
+      "post": {
+        "tags": [
+          "productController"
+        ],
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/products/{productId}": {
+      "put": {
+        "tags": [
+          "productController"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "products": {
+                  "example": "any"
+                },
+                "variants": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "productController"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/products/variants/{variantId}": {
+      "delete": {
+        "tags": [
+          "productController"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "variantId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/productImages/get": {
+      "get": {
+        "tags": [
+          "productImagesController"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/productImages/": {
+      "post": {
+        "tags": [
+          "productImagesController"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "productId": {
+                  "example": "any"
+                },
+                "id": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/productImages/update/{id}": {
+      "put": {
+        "tags": [
+          "productImagesController"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "productId": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/productImages/{productId}": {
+      "delete": {
+        "tags": [
+          "productImagesController"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/state/all": {
+      "get": {
+        "tags": [
+          "stateController"
+        ],
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/state/add": {
+      "post": {
+        "tags": [
+          "stateController"
+        ],
+        "description": "",
         "parameters": [
           {
             "name": "body",
@@ -369,1024 +1353,15 @@
         }
       }
     },
-
-    "/api/company/get": {
-      "get": {
-        "description": "Get all companies",
-        "tags": ["Companies"],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/company/": {
-      "post": {
-        "description": "Add a new company",
-        "tags": ["Companies"],
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "companyName": {
-                  "example": "Any Company"
-                },
-                "industry": {
-                  "example": "Technology"
-                },
-                "addressId": {
-                  "example": "address_id_here"
-                },
-                "description": {
-                  "example": "Company Description"
-                },
-                "contactInformation": {
-                  "example": "Contact Information"
-                },
-                "website": {
-                  "example": "https://www.example.com"
-                },
-                "industryType": {
-                  "example": "Type of Industry"
-                },
-                "shippingInformation": {
-                  "example": "Shipping Information"
-                },
-                "paymentMethods": {
-                  "example": "Payment Methods"
-                },
-                "returnPolicy": {
-                  "example": "Return Policy"
-                },
-                "status": {
-                  "example": "Active"
-                }
-              },
-              "required": [
-                "companyName",
-                "industry",
-                "addressId",
-                "status"
-              ]
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error in company post"
-          }
-        }
-      }
-    },
-
-
-    "/api/customer/addCustomer": {
-      "post": {
-        "description": "Create a new customer",
-        "tags": ["Customers"],
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "example": "John Doe"
-                },
-                "address": {
-                  "example": "123 Main St"
-                },
-                "email": {
-                  "example": "john.doe@example.com"
-                },
-                "contactNumber": {
-                  "example": "+1234567890"
-                }
-              },
-              "required": ["name", "address", "email", "contactNumber"]
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "500": {
-            "description": "Internal Server Error in creating customer"
-          }
-        }
-      }
-    },
-    "/api/customer/all": {
-      "get": {
-        "description": "Retrieve all customers",
-        "tags": ["Customers"],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error in fetching customers"
-          }
-        }
-      }
-    },
-    "/api/orderItems": {
-      "get": {
-        "description": "Get all order items",
-        "tags": ["Order Items"],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "post": {
-        "description": "Add a new order item",
-        "tags": ["Order Items"],
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "orderId": {
-                  "example": "123"
-                },
-                "productId": {
-                  "example": "456"
-                },
-                "quantity": {
-                  "example": 2
-                },
-                "price": {
-                  "example": 25.99
-                },
-                "discount": {
-                  "example": 5.00
-                },
-                "totalPrice": {
-                  "example": 45.98
-                }
-              },
-              "required": ["orderId", "productId", "quantity", "price", "discount", "totalPrice"]
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/order/": {
-      "get": {
-        "description": "Retrieve all orders",
-        "tags": ["Orders"],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/order/byrole": {
-      "get": {
-        "description": "",
-        "tags": ["Orders"],
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/order/update": {
-      "put": {
-        "description": "",
-        "tags": ["Orders"],
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "address": {
-                  "example": "any"
-                },
-                "totalPrice": {
-                  "example": "any"
-                },
-                "status": {
-                  "example": "any"
-                },
-                "discount": {
-                  "example": "any"
-                },
-                "paymentMethod": {
-                  "example": "any"
-                },
-                "trackingNumber": {
-                  "example": "any"
-                },
-                "name": {
-                  "example": "any"
-                },
-                "email": {
-                  "example": "any"
-                },
-                "contactNumber": {
-                  "example": "any"
-                },
-                "zipCode": {
-                  "example": "any"
-                },
-                "additionalInfo": {
-                  "example": "any"
-                },
-                "city": {
-                  "example": "any"
-                },
-                "country": {
-                  "example": "any"
-                },
-                "shippingAddress": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "api/order/user": {
-      "get": {
-        "tags": ["Orders"],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-                
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized: Invalid or missing token"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/order": {
-      "post": {
-        "description": "Place a new order",
-        
-        "tags": ["Orders"],
-        "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "address": {
-                  "type": "string",
-                  "example": "123 Main St"
-                },
-                "totalPrice": {
-                  "type": "number",
-                  "example": 100.50
-                },
-                "status": {
-                  "type": "string",
-                  "example": "Processing"
-                },
-                "discount": {
-                  "type": "number",
-                  "example": 10.00
-                },
-                "paymentMethod": {
-                  "type": "string",
-                  "example": "Credit Card"
-                },
-                "trackingNumber": {
-                  "type": "string",
-                  "example": "TRK123456"
-                },
-                "name": {
-                  "type": "string",
-                  "example": "John Doe"
-                },
-                "email": {
-                  "type": "string",
-                  "example": "john.doe@example.com"
-                },
-                "contactNumber": {
-                  "type": "string",
-                  "example": "+1234567890"
-                },
-                "zipCode": {
-                  "type": "string",
-                  "example": "12345"
-                },
-                "additionalInfo": {
-                  "type": "string",
-                  "example": "Additional information"
-                },
-                "city": {
-                  "type": "string",
-                  "example": "City"
-                },
-                "country": {
-                  "type": "string",
-                  "example": "Country"
-                },
-                "shippingAddress": {
-                  "type": "string",
-                  "example": "456 Shipping St"
-                },
-                "orderItems": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "productId": {
-                        "type": "string",
-                        "example": "789"
-                      },
-                      "quantity": {
-                        "type": "integer",
-                        "example": 2
-                      },
-                      "price": {
-                        "type": "number",
-                        "example": 25.99
-                      },
-                      "discount": {
-                        "type": "number",
-                        "example": 5.00
-                      },
-                      "totalPrice": {
-                        "type": "number",
-                        "example": 45.98
-                      }
-                    },
-                    "required": ["productId", "quantity", "price", "discount", "totalPrice"]
-                  }
-                }
-              },
-              "required": ["address", "totalPrice", "status", "discount", "paymentMethod", "trackingNumber", "name", "email", "contactNumber", "zipCode", "additionalInfo", "city", "country", "shippingAddress", "orderItems"]
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/order/{orderId}": {
-      "delete": {
-        "description": "",
-        "tags": ["Orders"],
-        "parameters": [
-          {
-            "name": "orderId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "401": {
-            "description": "Unauthorized"
-          },
-          "403": {
-            "description": "Forbidden"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-
-    "/productImages": {
-      "post": {
-        "description": "Upload product images",
-        "tags": ["Product Images"],
-        "consumes": ["multipart/form-data"],
-        "parameters": [
-          {
-            "name": "productId",
-            "in": "formData",
-            "type": "string",
-            "description": "ID of the product",
-            "required": true
-          },
-          {
-            "name": "id",
-            "in": "formData",
-            "type": "string",
-            "description": "ID of the image",
-            "required": true
-          }          
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-
-    "/productImages/get": {
-      "get": {
-        "description": "Retrieve all product images",
-        "tags": ["Product Images"],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/productImages/{productId}": {
-      "delete": {
-        "description": "",
-        "tags": ["Product Images"],
-        "parameters": [
-          {
-            "name": "productId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "put": {
-        "description": "",
-        "tags": ["Product Images"],
-        "parameters": [
-          {
-            "name": "productId",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "products": {
-                  "example": "any"
-                },
-                "variants": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-
-    
-    "/api/products": {
-      "post": {
-        "description": "Create product and variants",
-        "tags": ["Products"],
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "products": {
-                  "$ref": "#/definitions/ProductInput"
-                },
-                "variants": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/ProductVariantInput"
-                  }
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string"
-                },
-                "Product": {
-                  "$ref": "#/definitions/Product"
-                },
-                "Variants": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/ProductVariant"
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/products/variants/{variantId}": {
-      "delete": {
-        "tags": ["Products"],
-        "summary": "Delete a variant by ID",
-        "description": "Deletes a variant by its ID.",
-        "parameters": [
-          {
-            "name": "variantId",
-            "in": "path",
-            "description": "ID of the variant to delete",
-            "required": true,
-            "schema": {
-              "type": "integer"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Variant deleted successfully"
-          },
-          "404": {
-            "description": "Variant not found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },    
-   
-    "/api/products/bulk": {
-      "post": {
-        "description": "",
-        "tags": ["Products"],
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "products": {
-                  "example": "any"
-                },
-                "variants": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created"
-          },
-          "400": {
-            "description": "Bad Request"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/products/{category_id}": {
-      "get": {
-        "description": "",
-        "tags": ["Products"],
-        "parameters": [
-          {
-            "name": "category_id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/products/specific/{id}": {
-      "get": {
-        "description": "",
-        "tags": ["Products"],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/products/all": {
-      "get": {
-        "tags": ["Products"],
-        "summary": "Get all products",
-        "description": "Get all products based on user role and other criteria",
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "description": "Page number",
-            "required": false,
-            "type": "integer"
-          },
-          {
-            "name": "pageSize",
-            "in": "query",
-            "description": "Number of items per page",
-            "required": false,
-            "type": "integer"
-          },
-          {
-            "name": "status",
-            "in": "query",
-            "description": "Product status",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-               
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/products/clients/all": {
-      "get": {
-        "tags": ["Products"],
-        "summary": "Get all products for clients",
-        "description": "Get all products for clients without token verification",
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "description": "Page number",
-            "required": false,
-            "type": "integer"
-          },
-          {
-            "name": "pageSize",
-            "in": "query",
-            "description": "Number of items per page",
-            "required": false,
-            "type": "integer"
-          },
-          {
-            "name": "status",
-            "in": "query",
-            "description": "Product status",
-            "required": false,
-            "type": "string"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful response",
-            "schema": {
-              "type": "array",
-              "items": {
-                "type": "object"
-              
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-  },
-    "/api/products/{productId}": {
-      "put": {
-        "description": "Update product and its variants by ID",
-        "tags": ["Products"],
-        "parameters": [
-          {
-            "name": "productId",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "ID of the product to be updated"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/UpdatedProductWithVariants"
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      },
-      "delete": {
-        "description": "Delete product and its variants by ID",
-        "tags": ["Products"],
-        "parameters": [
-          {
-            "name": "productId",
-            "in": "path",
-            "required": true,
-            "type": "string",
-            "description": "ID of the product to be deleted"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string",
-                  "description": "Deletion success message"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Not Found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-
-    "/api/state/get": {
-      "get": {
-        "description": "Get all states with associated cities",
-        "tags": ["States"],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/StateWithCities"
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/state/post": {
-      "post": {
-        "description": "Add a new state",
-        "tags": ["States"],
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/NewState"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/State"
-            }
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "definitions": {
-      "StateWithCities": {
-        "type": "object",
-        "properties": {
-          "stateName": {
-            "type": "string",
-            "description": "Name of the state"
-          },
-          "stateCode": {
-            "type": "string",
-            "description": "Code of the state"
-          },
-          "stateId": {
-            "type": "string",
-            "description": "ID of the state"
-          },
-          "cities": {
-            "type": "array",
-            "items": {
-              "$ref": "#/definitions/City"
-            },
-            "description": "List of associated cities"
-          }
-        }
-      },
-      
-      "NewState": {
-        "type": "object",
-        "properties": {
-          "stateName": {
-            "type": "string",
-            "description": "Name of the state"
-          },
-          "stateCode": {
-            "type": "string",
-            "description": "Code of the state"
-          },
-          "stateId": {
-            "type": "string",
-            "description": "ID of the state"
-          }
-        }
-      },
-      "State": {
-        "$ref": "#/definitions/NewState"
-      }
-    },
     "/api/suppliers/all": {
       "get": {
-        "description": "Get all suppliers",
-        "tags": ["Suppliers"],
+        "tags": [
+          "supplierController"
+        ],
+        "description": "",
         "responses": {
           "200": {
-            "description": "OK",
-            "schema": {
-              "type": "array",
-              "items": {
-                "$ref": "#/definitions/Supplier"
-              }
-            }
+            "description": "OK"
           },
           "500": {
             "description": "Internal Server Error"
@@ -1396,8 +1371,10 @@
     },
     "/api/suppliers/{id}": {
       "get": {
-        "description": "Get a specific supplier by ID",
-        "tags": ["Suppliers"],
+        "tags": [
+          "supplierController"
+        ],
+        "description": "",
         "parameters": [
           {
             "name": "id",
@@ -1408,73 +1385,10 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/Supplier"
-            }
-          },
-          "404": {
-            "description": "Supplier not found"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/suppliers": {
-      "post": {
-        "description": "Create a new supplier",
-        "tags": ["Suppliers"],
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "$ref": "#/definitions/NewSupplier"
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "Created",
-            "schema": {
-              "$ref": "#/definitions/Supplier"
-            }
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        }
-      }
-    },
-    "/api/signin/login": {
-      "post": {
-        "description": "",
-        "tags":["Users"],
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "email": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "200": {
             "description": "OK"
           },
-          "401": {
-            "description": "Unauthorized"
+          "404": {
+            "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
@@ -1482,10 +1396,12 @@
         }
       }
     },
-    "/api/signin/register": {
+    "/api/suppliers/": {
       "post": {
+        "tags": [
+          "supplierController"
+        ],
         "description": "",
-        "tags":["Users"],
         "parameters": [
           {
             "name": "body",
@@ -1493,31 +1409,19 @@
             "schema": {
               "type": "object",
               "properties": {
-                "firstname": {
+                "supplier_name": {
                   "example": "any"
                 },
-                "lastname": {
+                "contact_info": {
                   "example": "any"
                 },
-                "address": {
+                "contact_person": {
                   "example": "any"
                 },
-                "businessName": {
+                "website": {
                   "example": "any"
                 },
-                "contactNumber": {
-                  "example": "any"
-                },
-                "email": {
-                  "example": "any"
-                },
-                "password": {
-                  "example": "any"
-                },
-                "customerId": {
-                  "example": "any"
-                },
-                "businessId": {
+                "description": {
                   "example": "any"
                 }
               }
@@ -1534,10 +1438,12 @@
         }
       }
     },
-    "/api/signin/get/registration": {
+    "/api/user/registrations": {
       "get": {
+        "tags": [
+          "userController"
+        ],
         "description": "",
-        "tags":["Users"],
         "responses": {
           "200": {
             "description": "OK"
@@ -1548,10 +1454,12 @@
         }
       }
     },
-    "/api/signin/user/profile": {
+    "/api/user/profile": {
       "get": {
+        "tags": [
+          "userController"
+        ],
         "description": "",
-        "tags":["Users"],
         "parameters": [
           {
             "name": "authorization",
@@ -1566,25 +1474,17 @@
           "401": {
             "description": "Unauthorized"
           },
-          "404": {
-            "description": "Not Found"
-          },
           "500": {
             "description": "Internal Server Error"
           }
         }
-      }
-    },
-    "/api/signin/user/profile/update": {
+      },
       "put": {
+        "tags": [
+          "userController"
+        ],
         "description": "",
-        "tags":["Users"],
         "parameters": [
-          {
-            "name": "authorization",
-            "in": "header",
-            "type": "string"
-          },
           {
             "name": "body",
             "in": "body",
@@ -1617,9 +1517,6 @@
           "200": {
             "description": "OK"
           },
-          "401": {
-            "description": "Unauthorized"
-          },
           "404": {
             "description": "Not Found"
           },
@@ -1629,159 +1526,24 @@
         }
       }
     },
-    "/notifications/send": {
+    "/api/user/login": {
       "post": {
-        "description": "Create a new notification",
-        "tags": ["Notification"],
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "description": "Notification data",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "notification_type_id": {
-                  "type": "integer",
-                  "description": "ID of the notification type"
-                },
-                "related_entity_type": {
-                  "type": "string",
-                  "description": "Type of the related entity"
-                },
-                "related_entity_id": {
-                  "type": "integer",
-                  "description": "ID of the related entity"
-                },
-                "message": {
-                  "type": "string",
-                  "description": "Content of the notification message"
-                },
-                "sender_id": {
-                  "type": "integer",
-                  "description": "ID of the sender"
-                },
-                "recipient_id": {
-                  "type": "integer",
-                  "description": "ID of the recipient"
-                },
-                "status": {
-                  "type": "string",
-                  "description": "Status of the notification"
-                }
-              }
-            }
-          }
+        "tags": [
+          "userController"
         ],
-        "responses": {
-          "201": {
-            "description": "New notification created"
-          },
-          "500": {
-            "description": "Internal server error occurred while processing the request"
-          }
-        }
-      }
-    },
-    "/notifications/types": {
-      "post": {
-        "description": "Create a new notification type",
-        "tags": ["Notification"],
+        "description": "",
         "parameters": [
           {
             "name": "body",
             "in": "body",
-            "description": "Notification type data",
-            "required": true,
             "schema": {
               "type": "object",
               "properties": {
-                "typeName": {
-                  "type": "string",
-                  "description": "Name of the notification type"
+                "email": {
+                  "example": "any"
                 },
-                "description": {
-                  "type": "string",
-                  "description": "Description of the notification type"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "New notification type created"
-          },
-          "500": {
-            "description": "Internal server error occurred while processing the request"
-          }
-        }
-      }
-    },
-    "/notifications/config": {
-      "post": {
-        "description": "Create a new notification configuration",
-        "tags": ["Notification"],
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "description": "Notification configuration data",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "user_id": {
-                  "type": "integer",
-                  "description": "ID of the user"
-                },
-                "notification_type_id": {
-                  "type": "integer",
-                  "description": "ID of the notification type"
-                },
-                "is_enabled": {
-                  "type": "boolean",
-                  "description": "Flag indicating whether the notification is enabled"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {
-          "201": {
-            "description": "New notification configuration created"
-          },
-          "500": {
-            "description": "Internal server error occurred while processing the request"
-          }
-        }
-      }
-    },
-    "/": {
-      "post": {
-        "description": "Send a notification",
-        "tags": ["Notification"],
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "description": "Notification data",
-            "required": true,
-            "schema": {
-              "type": "object",
-              "properties": {
-                "token": {
-                  "type": "string",
-                  "description": "Token of the device to which the notification will be sent"
-                },
-                "title": {
-                  "type": "string",
-                  "description": "Title of the notification"
-                },
-                "body": {
-                  "type": "string",
-                  "description": "Body of the notification"
+                "password": {
+                  "example": "any"
                 }
               }
             }
@@ -1789,13 +1551,120 @@
         ],
         "responses": {
           "200": {
-            "description": "Notification sent successfully"
+            "description": "OK"
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "500": {
-            "description": "Internal server error occurred while processing the request"
+            "description": "Internal Server Error"
           }
         }
       }
-    }    
-  }
+    },
+    "/api/user/register/customer": {
+      "post": {
+        "tags": [
+          "userController"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "firstname": {
+                  "example": "any"
+                },
+                "lastname": {
+                  "example": "any"
+                },
+                "address": {
+                  "example": "any"
+                },
+                "businessName": {
+                  "example": "any"
+                },
+                "contactNumber": {
+                  "example": "any"
+                },
+                "email": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/api/user/register/vendor": {
+      "post": {
+        "tags": [
+          "userController"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "firstname": {
+                  "example": "any"
+                },
+                "lastname": {
+                  "example": "any"
+                },
+                "address": {
+                  "example": "any"
+                },
+                "businessName": {
+                  "example": "any"
+                },
+                "contactNumber": {
+                  "example": "any"
+                },
+                "email": {
+                  "example": "any"
+                },
+                "password": {
+                  "example": "any"
+                },
+                "vendorId": {
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": []
+    }
+  ]
 }

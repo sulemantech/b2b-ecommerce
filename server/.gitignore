@@ -1,8 +1,10 @@
 /node_modules
 .env
-/db.js
+/config.js
+config.js
 yarn.lock
 .DS_STORE
+swagger_output.json
 node_modules
 node_modules/
 scripts/flow/*/.flowconfig
@@ -15,6 +17,7 @@ _benchmarks_
 build/
 remote-repo/
 swagger_output.json
+swagger_output
 /swagger_output.json
 serviceAccount.json
 /serviceAccount.json
@@ -32,7 +35,6 @@ chrome-user-data
 .vscode
 *.swp
 *.swo
-
 packages/react-devtools-core/dist
 packages/react-devtools-extensions/chrome/build
 packages/react-devtools-extensions/chrome/*.crx
