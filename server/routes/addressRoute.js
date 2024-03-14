@@ -1,41 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const addressModel = require('../models/addressModel');
 const validateApiKey = require('../middlewares/validateApiKey');
-// router.post('/create', ...) - Updated version
-router.post('/create',validateApiKey, async (req, res) => {
-    try {
-      const { address, city, stateId, zipCode, country } = req.body;
-  
-      const newAddress = await addressModel.create({
-        address,
-        city,
-        stateId,
-        zipCode,
-        country,
-      });
+const addressController = require('../controllers/addressController');
 
-      res.status(201).json(newAddress);
-    } catch (error) {
-      console.error('Error creating address:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  });
-  
-
-// Get all addresses
-router.get('/getAll', async (req, res) => {
-  try {
-    const allAddresses = await addressModel.findAll();
-    res.status(200).json(allAddresses);
-  } catch (error) {
-    console.error('Error getting addresses:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
-
-
-
+router.post('/api/address/create', validateApiKey, addressController.createAddress);
+router.get('/api/address/getAll', validateApiKey, addressController.getAllAddresses);
 
 module.exports = router;

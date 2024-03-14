@@ -1,40 +1,8 @@
 const express = require('express');
-const orderItemsModel = require('../models/orderItemsModel');
 const router = express.Router();
+const orderItemsController = require('../controllers/orderItemsController');
 
-// Get all order items
-router.get('/', async (req, res) => {
-  try {
-    const orderItems = await orderItemsModel.findAll();
-    res.json(orderItems);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-});
+router.get('/api/orderitems/', orderItemsController.getAllOrderItems);
 
-// Add a new order item
-// router.post('/', async (req, res) => {
-//   try {
-//     // Extract order item details from the request body
-//     const { orderId, productId, quantity, price, discount, totalPrice,vendorId } = req.body;
+module.exports = router
 
-//     // Create the order item using Sequelize model
-//     const orderItem = await orderItemsModel.create({      
-//       orderId,
-//       productId,
-//       quantity,
-//       price,
-//       discount,
-//       totalPrice,vendorId
-//     });
-
-//     // Respond with the created order item
-//     res.status(201).json({ message: 'Order item created successfully', orderItem });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ message: 'Internal Server Error' });
-//   }
-// });
-
-module.exports = router;

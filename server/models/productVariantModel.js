@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../database/db');
+const sequelize = require('../config/config.js');
 const productModel = require('./productModel'); // Assuming this is the correct path to your productModel
 
 const productVariantModel = sequelize.define('productVariants', {
@@ -47,7 +47,7 @@ const productVariantModel = sequelize.define('productVariants', {
     type: DataTypes.INTEGER,
     allowNull: true,
     references: {
-      model: productModel, // Assuming productModel is correctly defined
+      model: 'products', // Assuming productModel is correctly defined
       key: 'id',
     },
   },
