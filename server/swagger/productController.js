@@ -400,7 +400,7 @@ module.exports = {
       method: getAllProductsForClientsSortPrice,
     },
     {
-      path: '/api/products/category/:category_id',
+      path: '/api/products/:category_id',
       method: getProductsByCategoryId,
     },
     {
