@@ -82,12 +82,7 @@ const registerVendor = async (req, res) => {
 
 const getRegistrations = async (req, res) => {
   try {
-    const allusers = await registerationModel.findAll({
-      include: [
-        { model: businessModel, as: 'business', attributes: ['name', 'address', 'email'] },
-        { model: customerModel, as: 'customer', attributes: ['name', 'address', 'email'] },
-      ],
-    });
+    const allusers = await registerationModel.findAll();
     res.status(200).json(allusers);
   } catch (error) {
     console.error(error.message);
@@ -183,7 +178,7 @@ module.exports = {
   ],
   get: [
     {
-      path: '/api/user/registrations',
+      path: '/api/user/getAll',
       method: getRegistrations,
     },
     {
