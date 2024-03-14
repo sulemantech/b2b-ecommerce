@@ -2,7 +2,7 @@ const express=require('express');
 const { ApolloServer } = require('apollo-server-express');
 const cors =require('cors');
 const productRoutes = require('./routes/productRoutes');
-const productImages =require('./routes/productImages');
+const productImagesRoute =require('./routes/productImagesRoute.js');
 const categoryRoute= require('./routes/categoryRoute')
 const supplierRoute= require('./routes/supplierRoute')
 const cookieParser = require('cookie-parser');
@@ -14,16 +14,16 @@ const addressRoute =require('./routes/addressRoute');
 const orderRoute=require('./routes/orderRoute')
 const orderItemsRoute=require('./routes/orderItemsRoute')
 const companiesRoute=require('./routes/companiesRoute')
-const searchRoute= require('./routes/searchRoute')
+// const searchRoute= require('./routes/searchRoute')
 const typeDefs = require('./schema/graphqlSchema');
 const resolvers = require('./resolvers/resolver');
 const path = require('path');
 const customerRoute=require('./routes/customerRoute')
 const businessRoute=require('./routes/businessRoute')
 const swaggerUi = require('swagger-ui-express');
-const authRoutes = require('./routes/authRoutes');
-const notificationRoute=require('./routes/notificationRoute')
-const sequelize = require('./database/db');
+// const authRoutes = require('./routes/authRoutes');
+const notificationRoute=require('./routes/notificationRoute.js')
+const sequelize = require('./config/config.js');
 require('dotenv').config();
 
 const app = express();
@@ -37,7 +37,7 @@ app.get('/', (req,res)=>{
 })
 
 
-// sequelize.sync({ force: false }) // This will drop the existing tables and recreate them
+// sequelize.sync({ force: true }) // This will drop the existing tables and recreate them
 //   .then(() => {
 //     console.log('Database synchronized');
 //   })
@@ -52,7 +52,7 @@ const server = new ApolloServer({
 });
 
 //authRoute firebase
-app.use('/verify-id-token', authRoutes);
+// app.use('/verify-id-token', authRoutes);
 
 //notification
 app.use('/notifications',notificationRoute)
@@ -61,43 +61,43 @@ app.use('/notifications',notificationRoute)
 app.use('/n5store', swaggerUi.serve, swaggerUi.setup(require('./swagger_output.json')));
 
 //products
-app.use('/api/products/', productRoutes);
+app.use('/', productRoutes);
 
 
 //supplier
-app.use('/api/suppliers', supplierRoute);
+app.use('/', supplierRoute);
 
 //signin route
-app.use('/api/user', userRoute)
+app.use('/', userRoute)
 
 //productImagePost
-app.use('/productImages', productImages)
+app.use('/', productImagesRoute)
 // app.use('/categories', category_route)
 
-app.use('/api/categories', categoryRoute)
+app.use('/', categoryRoute)
 
 //cities
-app.use('/api/cities',citiesRoute)
+app.use('/',citiesRoute)
 
 //state
-app.use('/api/state',stateRoute)
+app.use('/',stateRoute)
 
 //addresses
-app.use('/api/address',addressRoute)
+app.use('/',addressRoute)
 
 //order
-app.use('/api/order',orderRoute)
+app.use('/',orderRoute)
 
 //orderItems
-app.use('/api/orderitems', orderItemsRoute)
+app.use('/', orderItemsRoute)
 
 //companies
-app.use('/api/company',companiesRoute)
+app.use('/',companiesRoute)
 
 //customer
-app.use('/api/customer',customerRoute)
+app.use('/',customerRoute)
 
-app.use('/api/business',businessRoute)
+app.use('/',businessRoute)
 
 //searching
 const search='/api/product/'

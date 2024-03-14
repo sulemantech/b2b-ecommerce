@@ -1,5 +1,5 @@
 const { DataTypes } = require('sequelize');
-const sequelize = require('../database/db');
+const sequelize = require('../config/config.js');
 const registerationModel = require('./registerationModel'); // Corrected model name
 
 const orderItemsModel = require('./orderItemsModel');

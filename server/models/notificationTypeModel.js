@@ -1,6 +1,6 @@
 
 const { DataTypes } = require('sequelize');
-const sequelize = require('../database/db');
+const sequelize = require('../config/config.js');
 
 const notificationTypeModel = sequelize.define('notificationType', {
   id: {
@@ -21,5 +21,11 @@ const notificationTypeModel = sequelize.define('notificationType', {
 
 
 //title
-
+// sequelize.sync({ force: true }) // This will drop the existing tables and recreate them
+//   .then(() => {
+//     console.log('Database synchronized');
+//   })
+//   .catch(err => {
+//     console.error('An error occurred while synchronizing the database:', err);
+//   });
 module.exports = notificationTypeModel;

@@ -1,28 +1,9 @@
-const express= require('express');
-const citiesModel = require('../models/citiesModel');
-const router= express.Router();
+const express = require('express');
+const router = express.Router();
+const citiesController = require('../controllers/citiesController');
 
-router.get('/get', async(req,res)=>{
-    try {
-        const cities=await citiesModel.findAll();
-        res.json(cities)
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Internal Server Error' });
-    }
-})
+router.get('/api/cities/get', citiesController.getCities);
+router.post('/api/cities/post', citiesController.postCity);
 
-router.post('/post', async(req,res)=>{
-    const { cityName, stateId } = req.body;
+module.exports = router
 
-  try {
-    const newCity = await citiesModel.create({ cityName, stateId });
-    res.json(newCity);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
-})
-
-
-module.exports=router;
