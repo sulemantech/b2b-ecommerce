@@ -1,4 +1,5 @@
 /node_modules
+swagger_output.json
 .env
 /config.js
 config.js

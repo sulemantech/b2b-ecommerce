@@ -98,7 +98,7 @@ module.exports = {
   // Define routes for getting all product images
   get: [
     {
-      path: '/api/productImages/get',
+      path: '/productImages/get',
       method: getAllProduct,
     },
   ],
@@ -106,7 +106,7 @@ module.exports = {
   // Define routes for uploading product images
   post: [
     {
-      path: '/api/productImages/',
+      path: '/productImages/',
       middleware:upload,
       method: uploadProduct,
     },
@@ -115,7 +115,7 @@ module.exports = {
   // // Define routes for deleting product images
   delete: [
     {
-      path: '/api/productImages/:productId',
+      path: '/productImages/:productId',
       method: deleteProduct,
     },
   ],
@@ -123,7 +123,7 @@ module.exports = {
   // // Define routes for updating product images
   put: [
     {
-      path: '/api/productImages/update/:id',
+      path: '/productImages/update/:id',
       method: updateProduct,
       middleware:upload,
     },
