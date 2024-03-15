@@ -298,11 +298,15 @@ const ProductDescriptionInfo = ({
         </ul>
       </div>
       <br></br>
+      {cartItems>0?(
       <di className="checkout">
       <Link to={process.env.PUBLIC_URL + "/checkout"}>
                         Proceed to Checkout
                       </Link>
       </di>
+      ):(
+        ""
+      )}
      
     </div>
   );

@@ -119,7 +119,7 @@ export const placeOrder = async (storedToken, orderData) => {
 
 
 
-const getUser = `${APIHost}/api/user/user/profile`;
+const getUser = `${APIHost}/api/user/profile`;
 
 export const getUserInformation = async (token) => {
   try {
