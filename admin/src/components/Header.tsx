@@ -61,11 +61,11 @@ const Header = (props: {
           </Link>
         </div>
       
-      <div>
+      {/* <div>
       <h1 style={{ color: 'white', font: 'bold', fontSize: '30px' }}>
       MetaMart
           </h1>
-      </div>
+      </div> */}
         
 
         <div className="hidden sm:block">
