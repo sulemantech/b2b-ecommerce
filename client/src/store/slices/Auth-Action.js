@@ -9,7 +9,8 @@ export const navigateAction = (navigate, path) => {
   navigate(path);
 };
 
-export const submitLoginAsync = (values, navigate) => async (dispatch) => {
+export const submitLoginAsync = (values, navigate,setError) => async (dispatch) => {
+  
 
   try {
     const result = await post('/login', values);
@@ -19,10 +20,6 @@ export const submitLoginAsync = (values, navigate) => async (dispatch) => {
     console.log('Login successful:', result.token);
     navigate('/shop-grid-standard');
 
-
-    
-
-  
     const now =Date.now();
     const expirationTime24Hours= now +(24*60*60*1000);
     // Set a timeout to automatically log out the user after 24 hours
@@ -45,10 +42,12 @@ export const submitLoginAsync = (values, navigate) => async (dispatch) => {
     } else if (result.role === 'supplier') {
       console.log("user running");
     }
+  
 
   }
-  catch (error) {
-    alert(error.message);
+  catch(error) {
+    console.error('Internal Server Error in login:', error.response?.data?.message);
+    setError(error.response?.data?.message || 'An error occurred');
   }
 };
 

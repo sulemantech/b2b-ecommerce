@@ -14,6 +14,7 @@ import { postRegistration} from "../../API";
 const LoginRegister = () => {
   const dispatch = useDispatch();
   const [token, setToken] = useState(localStorage.getItem('token') || '');
+  const [error, setError] = useState(null);
   const [values, setvalues] = useState({
     firstname: "",
     lastname: "",
@@ -53,7 +54,7 @@ const LoginRegister = () => {
   };
 
   const SubmitLogin = () => {
-    dispatch(submitLoginAsync(values,navigate));
+    dispatch(submitLoginAsync(values,navigate,setError));
 
   };
 
@@ -100,7 +101,11 @@ const LoginRegister = () => {
                         <div className="login-form-container">
                           <div className="login-register-form">
                             <form className="form" onSubmit={SubmitLogin}>
+                              <p className="text-danger"> {error== 'Incorrect email' && error}</p>
+                              <div>
                               <input
+                              className="form-control w-100 rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none"
+
                                 type="text"
                                 placeholder="email"
                                 onChange={(e) =>
@@ -110,8 +115,12 @@ const LoginRegister = () => {
                                   })
                                 }
                                 name={values.email}
+                                
                               />
+                              </div>
                               <input
+                              className="form-control w-100 rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none"
+
                                 type="password"
                                 placeholder="Password"
                                 onChange={(e) =>
@@ -122,6 +131,7 @@ const LoginRegister = () => {
                                 }
                                 name={values.password}
                               />
+                               <p className="text-danger"> {error== 'Incorrect email or password' && error}</p>
                               <div className="button-box">
                                 <div className="login-toggle-btn">
                                   <input type="checkbox" />
@@ -130,12 +140,16 @@ const LoginRegister = () => {
                                     Forgot Password?
                                   </Link>
                                 </div>
-                                <input
+                                <div>
+                                <button
                                   type="button"
-                                  className="btn btn-success"
+                                  className="btn btn-primary"
                                   onClick={SubmitLogin}
-                                  value="Login"
-                                />
+                                  
+                                >
+                                  login
+                                </button>
+                                </div>
                               </div>
                             </form>
                           </div>

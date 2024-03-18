@@ -22,7 +22,7 @@ const NavMenu = ({ menuWhiteClass, sidebarMenu }) => {
             </Link>
             
           </li>
-          <li>
+          <li className="d-none">
           <Link to={process.env.PUBLIC_URL + "/blog-standard"}>
               {t("category")}
               {sidebarMenu ? (

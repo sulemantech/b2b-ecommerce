@@ -11,11 +11,9 @@ import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import ShopSidebar from "../../wrappers/product/ShopSidebar";
 import ShopTopbar from "../../wrappers/product/ShopTopbar";
 import ShopProducts from "../../wrappers/product/ShopProducts";
-// import { fetchProducts } from "../../store/slices/ProductsActions";
+import { fetchProducts } from "../../store/slices/ProductsActions";
 import { fetchProductsByCategories } from "../../API";
 import { setProducts } from "../../store/slices/product-slice";
-import { fetchProducts } from "../../API";
-import { fetchProductsAction } from "../../store/slices/ProductsActions";
 
 const ShopGridStandard = () => {
   const dispatch = useDispatch();
@@ -35,6 +33,7 @@ const ShopGridStandard = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
 
   const categoryIds = categories.map((category) => category.id);
+
   
  
 
@@ -167,7 +166,7 @@ const ShopGridStandard = () => {
   }, [products, selectedCategories]);
 
   useEffect(() => {
-    dispatch(fetchProductsAction());
+    dispatch(fetchProducts());
   }, []);
 
  
