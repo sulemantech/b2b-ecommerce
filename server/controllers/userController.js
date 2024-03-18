@@ -11,8 +11,9 @@ const login = async (req, res) => {
 
   try {
     const user = await registerationModel.findOne({ where: { email } });
-
-    if (user && bcrypt.compareSync(password, user.password)) {
+    if (!user) {
+      res.status(401).send({ auth: false, message: 'Incorrect email' });
+    } else if(bcrypt.compareSync(password, user.password)) {
       const tokenData = {
         id: user.id,
         firstname: user.firstname,
@@ -26,7 +27,7 @@ const login = async (req, res) => {
       res.cookie('token', token, { httpOnly: true });
       res.status(200).send({ auth: true, token, role: user.role });
     } else {
-      res.status(401).send({ auth: false, message: 'Incorrect email or password' });
+      res.status(401).send({ auth: false, message: 'Incorrect  password' });
     }
   } catch (error) {
     console.error(error);
