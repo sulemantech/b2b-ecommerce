@@ -56,9 +56,9 @@ const registrationModel = sequelize.define('user', {
 
 //============= NOTE: THESE ASSOCIATIONS ARE SEND TO THE ASSOCIATIONS.JS =======================
 
-
-// Add the association to define a one-to-one relationship
-// registrationModel.belongsTo(customerModel, { foreignKey: 'customerId', as: 'customer' });
-// registrationModel.belongsTo(businessModel, { foreignKey: 'businessId', as: 'business' });
+                                                                                          //    ^
+// Add the association to define a one-to-one relationship                                      |
+// registrationModel.belongsTo(customerModel, { foreignKey: 'customerId', as: 'customer' });    |
+// registrationModel.belongsTo(businessModel, { foreignKey: 'businessId', as: 'business' });    |
 
 module.exports = registrationModel;
