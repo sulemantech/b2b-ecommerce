@@ -15,6 +15,7 @@ import ShopProducts from "../../wrappers/product/ShopProducts";
 import { fetchProductsByCategories } from "../../API";
 import { setProducts } from "../../store/slices/product-slice";
 import { fetchProducts } from "../../API";
+import { fetchProductsAction } from "../../store/slices/ProductsActions";
 
 const ShopGridStandard = () => {
   const dispatch = useDispatch();
@@ -166,7 +167,7 @@ const ShopGridStandard = () => {
   }, [products, selectedCategories]);
 
   useEffect(() => {
-    dispatch(fetchProducts());
+    dispatch(fetchProductsAction());
   }, []);
 
  
