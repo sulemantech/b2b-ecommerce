@@ -7,7 +7,7 @@ import { propTypes } from "react-hooks-paginator";
 
 
 const ShopCategories = ({categories ,getSortParams,selectedCategories }) => {
-  // const [checked, setChecked] = useState(true);
+  const [checked, setChecked] = useState(true);
 
 
  
