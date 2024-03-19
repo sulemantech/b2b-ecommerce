@@ -1,5 +1,6 @@
 const categoryModel = require('../models/categoryModel');
 const productModel = require('../models/productModel');
+const subCategoryModel = require('../models/subCategoryModel');
 
 const getAllCategories = async (req, res) => {
   try {
@@ -12,6 +13,24 @@ const getAllCategories = async (req, res) => {
       ],
     });
     res.status(200).json(categoryList);
+  } catch (error) {
+    console.error('Error:', error.message);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+const getCategoryWithSubcategories = async (req, res) => {
+  try {
+    // Fetch all categories along with their associated subcategories
+    const categoriesWithSubcategories = await categoryModel.findAll({
+      include: [{
+        model: subCategoryModel,
+        as: 'subCategories', // Assuming you've defined the association alias in categoryModel
+        attributes: ['id', 'name'] // Include only necessary attributes of subcategories
+      }]
+    });
+
+    res.status(200).json(categoriesWithSubcategories);
   } catch (error) {
     console.error('Error:', error.message);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -100,6 +119,8 @@ module.exports = {
   createCategory,
   updateCategoryById,
   deleteCategoryById,
+
+  getCategoryWithSubcategories,
  
     get: [
       {
@@ -109,6 +130,10 @@ module.exports = {
       {
         path: '/api/categories/:categoryId',
         method: getCategoryById,
+      },
+      {
+        path: '/api/categories/subCategories/all',
+        method: getCategoryWithSubcategories,
       },
     ],
     post: [

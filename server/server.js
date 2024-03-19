@@ -24,6 +24,8 @@ const swaggerUi = require('swagger-ui-express');
 // const authRoutes = require('./routes/authRoutes');
 const notificationRoute=require('./routes/notificationRoute.js')
 const sequelize = require('./config/config.js');
+const subCategoryRoute=require('./routes/subCategoryRoute.js')
+
 require('dotenv').config();
 
 const app = express();
@@ -54,6 +56,8 @@ const server = new ApolloServer({
 //authRoute firebase
 // app.use('/verify-id-token', authRoutes);
 
+// SubCategory
+app.use('/',subCategoryRoute)
 //notification
 app.use('/notifications',notificationRoute)
 
