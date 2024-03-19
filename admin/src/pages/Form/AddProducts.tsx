@@ -298,7 +298,7 @@ const FormElements = () => {
         }
         return response.json();
       })
-      .then((data) => {
+      .then((data) => { 
         setSuppliers(data);
       })
       .catch((error) => {

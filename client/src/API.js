@@ -6,7 +6,7 @@ export const APIHost = "https://devcares.com"
 
 
 
-const selectCategory= `${APIHost}/api/products/`;
+const selectCategory= `${APIHost}/api/products`;
 export const fetchProductsByCategories = async (selectedCategories, offset, sortValue) => {
   try {
     const response = await axios.get(`${selectCategory}/${selectedCategories}`, {

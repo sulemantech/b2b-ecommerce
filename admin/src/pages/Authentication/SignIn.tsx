@@ -4,7 +4,7 @@ import axios, { AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
 import { useLoginContext } from '../../routes/Logincontext';
 import { useNavigate } from 'react-router-dom';
-
+import Loader from '../../common/Loader';
 
 
 interface LoginResponse {
@@ -20,8 +20,9 @@ interface LoginCredentials {
 }
 
 const SignIn: React.FC = () => {
+  const [loading, setLoading] = useState<boolean>(false);
   const { setIsLogin } = useLoginContext();
-  const navigate=useNavigate();
+  const navigate = useNavigate();
 
   const [email, setemail] = useState('');
   const [password, setPassword] = useState('');
@@ -36,12 +37,17 @@ const SignIn: React.FC = () => {
       // console.log("firstttt",value);
     }
   };
- 
 
 
- 
+
+
   const handleFormSubmit = async (event: FormEvent): Promise<void> => {
     event.preventDefault();
+    setLoading(true);
+
+
+    // Wait for 2 seconds before making the API call
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
     try {
       const credentials: LoginCredentials = { email, password };
@@ -57,19 +63,19 @@ const SignIn: React.FC = () => {
 
           setIsLogin(true);
 
-      navigate('/');
+          navigate('/');
         }
       }
 
     } catch (error: any) {
-        console.error(
-            'Internal Server Error in login:',
-            error.response.data.message,
-        );
-        setErrorMessage(error.response.data.message);
-        // alert(error.response.data.message);
+      console.error(
+        'Internal Server Error in login:',
+        error.response.data.message,
+      );
+      setErrorMessage(error.response.data.message);
+      // alert(error.response.data.message);
     }
-};
+  };
 
 
 
@@ -317,9 +323,16 @@ const SignIn: React.FC = () => {
                     type="submit"
                     value="Sign In"
                     onClick={handleFormSubmit}
-                    className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90"
+                    className="w-full cursor-pointer rounded-lg border border-primary bg-primary p-4 text-white transition hover:bg-opacity-90 relative"
+                    disabled={loading} // Disable button while loading
                   />
+                  {loading && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 rounded-lg">
+                      <Loader />
+                    </div>
+                  )}
                 </div>
+
 
                 <button className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50">
                   <span>
