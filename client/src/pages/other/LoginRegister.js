@@ -9,22 +9,22 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { submitLoginAsync } from "../../store/slices/Auth-Action";
-import { postRegistration} from "../../API";
+import { postRegistration } from "../../API";
 
 const LoginRegister = () => {
   const dispatch = useDispatch();
-  const [token, setToken] = useState(localStorage.getItem('token') || '');
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [error, setError] = useState(null);
   const [values, setvalues] = useState({
     firstname: "",
     lastname: "",
     email: "",
     password: "",
     address: "",
-    contactNumber:0,
+    contactNumber: 0,
     businessName: "",
   });
   const navigate = useNavigate();
-  
 
   const SubmitRegistration = async (e) => {
     e.preventDefault();
@@ -35,28 +35,17 @@ const LoginRegister = () => {
       // }
       // const updatedValues = { ...values, contactNumber: contactNumberInt };
 
-      const result = await postRegistration('/customer', values);
-      console.log("user registerd",result);
-      // setvalues({
-      //   firstname: "",
-      //   lastname: "",
-      //   email: "",
-      //   password: "",
-      //   address: "",
-      //   contactNumber,
-      //   businessName: "",
-      // });
+      const result = await postRegistration("/customer", values);
+      console.log("user registerd", result);
       window.location.reload();
     } catch (error) {
-      console.error('Error during registration:', error);
+      console.error("Error during registration:", error);
     }
   };
 
   const SubmitLogin = () => {
-    dispatch(submitLoginAsync(values,navigate));
-
+    dispatch(submitLoginAsync(values, navigate, setError));
   };
-
 
   let { pathname } = useLocation();
 
@@ -100,18 +89,26 @@ const LoginRegister = () => {
                         <div className="login-form-container">
                           <div className="login-register-form">
                             <form className="form" onSubmit={SubmitLogin}>
+                              <p className="text-danger">
+                                {" "}
+                                {error === "Incorrect email" && error}
+                              </p>
+                              <div>
+                                <input
+                                  className="form-control w-100 rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none"
+                                  type="text"
+                                  placeholder="email"
+                                  onChange={(e) =>
+                                    setvalues({
+                                      ...values,
+                                      email: e.target.value,
+                                    })
+                                  }
+                                  name={values.email}
+                                />
+                              </div>
                               <input
-                                type="text"
-                                placeholder="email"
-                                onChange={(e) =>
-                                  setvalues({
-                                    ...values,
-                                    email: e.target.value,
-                                  })
-                                }
-                                name={values.email}
-                              />
-                              <input
+                                className="form-control w-100 rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none"
                                 type="password"
                                 placeholder="Password"
                                 onChange={(e) =>
@@ -122,6 +119,11 @@ const LoginRegister = () => {
                                 }
                                 name={values.password}
                               />
+                              <p className="text-danger">
+                                {" "}
+                                {error === "Incorrect password" && error}
+                              </p>
+
                               <div className="button-box">
                                 <div className="login-toggle-btn">
                                   <input type="checkbox" />
@@ -130,12 +132,15 @@ const LoginRegister = () => {
                                     Forgot Password?
                                   </Link>
                                 </div>
-                                <input
-                                  type="button"
-                                  className="btn btn-success"
-                                  onClick={SubmitLogin}
-                                  value="Login"
-                                />
+                                <div>
+                                  <button
+                                    type="button"
+                                    className="btn btn-primary"
+                                    onClick={SubmitLogin}
+                                  >
+                                    login
+                                  </button>
+                                </div>
                               </div>
                             </form>
                           </div>
@@ -149,7 +154,8 @@ const LoginRegister = () => {
                               onSubmit={SubmitRegistration}
                             >
                               <input
-                              required
+                                required
+                                className="form-control w-100 rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none"
                                 type="text"
                                 placeholder="firstname"
                                 onChange={(e) =>
@@ -161,8 +167,9 @@ const LoginRegister = () => {
                                 name={values.firstname}
                               />
                               <input
-                              required
+                                required
                                 type="text"
+                                className="form-control w-100 rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none"
                                 placeholder="lastname"
                                 onChange={(e) =>
                                   setvalues({
@@ -173,8 +180,9 @@ const LoginRegister = () => {
                                 name={values.lastname}
                               />
                               <input
-                              required
+                                required
                                 type="email"
+                                className="form-control w-100 rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none"
                                 placeholder="email"
                                 onChange={(e) =>
                                   setvalues({
@@ -185,7 +193,8 @@ const LoginRegister = () => {
                                 name={values.email}
                               />
                               <input
-                              required
+                                required
+                                className="form-control w-100 rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none"
                                 type="password"
                                 placeholder="password"
                                 onChange={(e) =>
@@ -197,8 +206,9 @@ const LoginRegister = () => {
                                 name={values.password}
                               />
                               <input
-                              required
+                                required
                                 type="text"
+                                className="form-control w-100 rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none"
                                 placeholder="address"
                                 onChange={(e) =>
                                   setvalues({
@@ -209,8 +219,9 @@ const LoginRegister = () => {
                                 name={values.address}
                               />
                               <input
-                              required
+                                required
                                 type="number"
+                                className="form-control w-100 rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none"
                                 placeholder="contact"
                                 onChange={(e) =>
                                   setvalues({
@@ -221,7 +232,8 @@ const LoginRegister = () => {
                                 name={values.contactNumber}
                               />
                               <input
-                              required
+                                required
+                                className="form-control w-100 rounded-lg border border-stroke bg-transparent py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none"
                                 type="text"
                                 placeholder="Bussinessname"
                                 onChange={(e) =>
@@ -232,13 +244,15 @@ const LoginRegister = () => {
                                 }
                                 name={values.businessName}
                               />
-                              <input
-                              required
+                              <button
+                                required
                                 type="button"
                                 className="btn btn-success"
                                 onClick={SubmitRegistration}
-                                value="Register"
-                              />
+                                
+                              >
+                                Register
+                                </button>
                               
                             </form>
                           </div>

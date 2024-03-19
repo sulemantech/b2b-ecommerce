@@ -54,7 +54,8 @@ const TableTwo: React.FC  = () => {
   
   return (
     <>
-    <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+    <div className="rounded-lg border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+    <p className='text-center font-semibold text-2xl py-5 uppercase'>orders</p>
 
       <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5">
         <div className="col-span-2 flex items-center">

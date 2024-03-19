@@ -74,6 +74,7 @@ const Order = () => {
             />
             {/* <button onClick={handleSearch}>Search</button> */}
           </div>
+          
           <table className="orders-table">
             <thead>
               <tr>

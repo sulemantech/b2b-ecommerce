@@ -6,7 +6,7 @@ export const APIHost = "https://devcares.com"
 
 
 
-const selectCategory= `${APIHost}/api/products/`;
+const selectCategory= `${APIHost}/api/products`;
 export const fetchProductsByCategories = async (selectedCategories, offset, sortValue) => {
   try {
     const response = await axios.get(`${selectCategory}/${selectedCategories}`, {
@@ -119,7 +119,7 @@ export const placeOrder = async (storedToken, orderData) => {
 
 
 
-const getUser = `${APIHost}/api/user/user/profile`;
+const getUser = `${APIHost}/api/user/profile`;
 
 export const getUserInformation = async (token) => {
   try {

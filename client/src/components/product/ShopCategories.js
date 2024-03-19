@@ -7,7 +7,7 @@ import { propTypes } from "react-hooks-paginator";
 
 
 const ShopCategories = ({categories ,getSortParams,selectedCategories }) => {
-  const [checked, setChecked] = useState(true);
+  // const [checked, setChecked] = useState(true);
 
 
  
@@ -28,7 +28,7 @@ const ShopCategories = ({categories ,getSortParams,selectedCategories }) => {
                     id="allCategoriesButton"
                     className="active"
                     onClick={(e) => {
-                      const categoryIds = Array.isArray(categories.Categories.map((category) => category.id));
+                      const categoryIds = categories.Categories.map((category) => category.id);
                       getSortParams("category", categoryIds);
                       // setActiveSort(e);
                     }}

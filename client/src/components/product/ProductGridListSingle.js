@@ -32,6 +32,7 @@ const ProductGridListSingle = ({
   const dispatch = useDispatch();
   return (
     <Fragment>
+  
       <div className={clsx("product-wrap", spaceBottomClass)}>
         <div className="product-img">
         <Link to={process.env.PUBLIC_URL + "/product-tab-right/" + product.id}>
@@ -170,13 +171,11 @@ const ProductGridListSingle = ({
           <div className="col-xl-4 col-md-5 col-sm-6">
             <div className="product-list-image-wrap">
               <div className="product-img">
-                <Link to={process.env.PUBLIC_URL + "/product/" + product.id}>
+              <Link to={process.env.PUBLIC_URL + "/product-tab-right/" + product.id}>
                   <img
                     className="default-img img-fluid "
-                    src={
-                      process.env.PUBLIC_URL +
-                      product?.productImages[0]?.images[0]
-                    }
+                    src={`${APIHost}${product?.productImages?.[0]?.images?.[0]}`}
+                  
                     alt=""
                   />
                   {product.productImages.length > 1 ? (

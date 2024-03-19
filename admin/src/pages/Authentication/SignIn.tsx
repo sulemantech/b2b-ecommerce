@@ -1,11 +1,10 @@
 import Logo from '../../images/logo/logo.svg';
-import React, { ChangeEvent, FormEvent, useState } from 'react';
+import React, { ChangeEvent, FormEvent, useState, useEffect } from 'react';
 import axios, { AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
 import { useLoginContext } from '../../routes/Logincontext';
 import { useNavigate } from 'react-router-dom';
 import Loader from '../../common/Loader';
-
 
 interface LoginResponse {
   auth: boolean;
@@ -37,21 +36,26 @@ const SignIn: React.FC = () => {
       // console.log("firstttt",value);
     }
   };
-
-
-
+  useEffect(() => {
+    if (errorMessage === 'Incorrect password' || errorMessage === 'Incorrect email') {
+      setLoading(false);
+    }
+  }, [errorMessage]);
+  
 
   const handleFormSubmit = async (event: FormEvent): Promise<void> => {
     event.preventDefault();
     setLoading(true);
 
-
     // Wait for 2 seconds before making the API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     try {
       const credentials: LoginCredentials = { email, password };
-      const response: AxiosResponse<LoginResponse> = await axios.post(`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/user/login`, credentials);
+      const response: AxiosResponse<LoginResponse> = await axios.post(
+        `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/user/login`,
+        credentials,
+      );
 
       if (response.status === 200) {
         const { auth, token, role } = response.data;
@@ -66,7 +70,6 @@ const SignIn: React.FC = () => {
           navigate('/');
         }
       }
-
     } catch (error: any) {
       console.error(
         'Internal Server Error in login:',
@@ -76,10 +79,6 @@ const SignIn: React.FC = () => {
       // alert(error.response.data.message);
     }
   };
-
-
-
-
 
   return (
     <>
@@ -267,8 +266,10 @@ const SignIn: React.FC = () => {
                     </span>
                     <div className="absolute">
                       <h1 className="text-danger font-semibold">
-                        {' '}
-                        {errorMessage == 'Incorrect email' && errorMessage}
+                      
+                        {errorMessage === 'Incorrect email' && (
+                          <span>{errorMessage}</span>
+                        )}
                       </h1>
                     </div>
                   </div>
@@ -313,7 +314,9 @@ const SignIn: React.FC = () => {
                   </div>
                   <div className="absolute">
                     <h1 className="text-danger font-semibold">
-                      {errorMessage == 'Incorrect password' && errorMessage}
+                      {errorMessage === 'Incorrect password' && (
+                        <span>{errorMessage}</span>
+                      )}{' '}
                     </h1>
                   </div>
                 </div>
@@ -327,12 +330,11 @@ const SignIn: React.FC = () => {
                     disabled={loading} // Disable button while loading
                   />
                   {loading && (
-                    <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 rounded-lg">
+                    <div className="absolute inset-0 flex items-center justify-center bg-transarint bg-opacity-75 rounded-lg">
                       <Loader />
                     </div>
                   )}
                 </div>
-
 
                 <button className="flex w-full items-center justify-center gap-3.5 rounded-lg border border-stroke bg-gray p-4 hover:bg-opacity-50 dark:border-strokedark dark:bg-meta-4 dark:hover:bg-opacity-50">
                   <span>

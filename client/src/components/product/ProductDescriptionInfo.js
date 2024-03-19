@@ -18,9 +18,10 @@ const ProductDescriptionInfo = ({
   wishlistItem,
   compareItem,
 }) => {
-  
   const dispatch = useDispatch();
-  const [selectedProductColor, setSelectedProductColor] = useState( product.variation ? product.variation[0].color : "");
+  const [selectedProductColor, setSelectedProductColor] = useState(
+    product.variation ? product.variation[0].color : ""
+  );
   const [selectedProductSize, setSelectedProductSize] = useState(
     product.variation ? product.variation[0].size[0].name : ""
   );
@@ -35,7 +36,6 @@ const ProductDescriptionInfo = ({
     selectedProductColor,
     selectedProductSize
   );
-  debugger
 
   return (
     <div className="product-details-content ml-70">
@@ -63,10 +63,7 @@ const ProductDescriptionInfo = ({
       )}
       <div className="pro-details-list">
         <p>{product.description}</p>
-        
       </div>
-
-    
 
       {product.variation ? (
         <div className="pro-details-size-color">
@@ -79,7 +76,6 @@ const ProductDescriptionInfo = ({
                     className={`pro-details-color-content--single ${single.color}`}
                     key={key}
                   >
-                    
                     <input
                       type="radio"
                       value={single.color}
@@ -102,10 +98,10 @@ const ProductDescriptionInfo = ({
           </div>
           <div className="pro-details-size">
             <span>Size</span>
-            
+
             <div className="pro-details-size-content">
               {product.variation &&
-                product.variation.map(single => {
+                product.variation.map((single) => {
                   return single.color === selectedProductColor
                     ? single.size.map((singleSize, key) => {
                         return (
@@ -185,12 +181,22 @@ const ProductDescriptionInfo = ({
             {productStock && productStock > 0 ? (
               <button
                 onClick={() =>
-                  dispatch(addToCart({
-                    ...product,
-                    quantity: quantityCount,
-                    selectedProductColor: selectedProductColor ? selectedProductColor : product.selectedProductColor ? product.selectedProductColor : null,
-                    selectedProductSize: selectedProductSize ? selectedProductSize : product.selectedProductSize ? product.selectedProductSize : null
-                  }))
+                  dispatch(
+                    addToCart({
+                      ...product,
+                      quantity: quantityCount,
+                      selectedProductColor: selectedProductColor
+                        ? selectedProductColor
+                        : product.selectedProductColor
+                        ? product.selectedProductColor
+                        : null,
+                      selectedProductSize: selectedProductSize
+                        ? selectedProductSize
+                        : product.selectedProductSize
+                        ? product.selectedProductSize
+                        : null,
+                    })
+                  )
                 }
                 disabled={productCartQty >= productStock}
               >
@@ -254,10 +260,11 @@ const ProductDescriptionInfo = ({
           <span>Tags :</span>
           <ul>
             {product.tag.map((single, key) => {
+              const tag = single.replace(/(^["{]+)|(["}]+$)/g, ""); // Remove leading and trailing quotes and braces
               return (
                 <li key={key}>
                   <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
-                    {single}
+                    {tag}
                   </Link>
                 </li>
               );
@@ -298,12 +305,15 @@ const ProductDescriptionInfo = ({
         </ul>
       </div>
       <br></br>
-      <di className="checkout">
-      <Link to={process.env.PUBLIC_URL + "/checkout"}>
-                        Proceed to Checkout
-                      </Link>
-      </di>
-     
+      {cartItems.length > 0 ? (
+        <di className="checkout">
+          <Link to={process.env.PUBLIC_URL + "/checkout"}>
+            Proceed to Checkout
+          </Link>
+        </di>
+      ) : (
+        ""
+      )}
     </div>
   );
 };
@@ -316,7 +326,7 @@ ProductDescriptionInfo.propTypes = {
   finalDiscountedPrice: PropTypes.number,
   finalProductPrice: PropTypes.number,
   product: PropTypes.shape({}),
-  wishlistItem: PropTypes.shape({})
+  wishlistItem: PropTypes.shape({}),
 };
 
 export default ProductDescriptionInfo;

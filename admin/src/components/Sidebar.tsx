@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import SidebarLinkGroup from './SidebarLinkGroup';
 import { IoMdPricetag } from "react-icons/io";
+import Cookies from 'js-cookie';
 // import { useNavigate } from "react-router-dom";
 
 import './styl.css';
@@ -12,6 +13,9 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
+
+  const isadmin=Cookies.get('role');
+
   const location = useLocation();
   const { pathname } = location;
   // const navigate = useNavigate();
@@ -244,11 +248,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               </NavLink>
                             </li>
 
+                       {isadmin=="admin" ?(
                             <li>
+
                               <NavLink
                                 to="/users"
                                 className={({ isActive }) =>
-                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium hover:text-black text-bodydark2 duration-300 ease-in-out hover:bg-bodydark1 ' +
+                                  `group relative flex items-center gap-2.5 rounded-md px-4 font-medium hover:text-black text-bodydark2 duration-300 ease-in-out hover:bg-bodydark1 ` +
                                   (isActive && '!text-black-2')
                                 }
                               >
@@ -257,6 +263,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 Users
                               </NavLink>
                             </li>
+                       ):(
+                        ""
+                            )}
                             <li >
                               <NavLink
                                 to="/orders"

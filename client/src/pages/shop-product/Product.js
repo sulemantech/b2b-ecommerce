@@ -7,8 +7,8 @@ import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import RelatedProductSlider from "../../wrappers/product/RelatedProductSlider";
 import ProductDescriptionTab from "../../wrappers/product/ProductDescriptionTab";
 import ProductImageDescription from "../../wrappers/product/ProductImageDescription";
-// import { fetchProducts } from "../../store/slices/ProductsActions";
-import { fetchProducts } from "../../API";
+import { fetchProducts } from "../../store/slices/ProductsActions";
+// import { fetchProducts } from "../../API";
 
 
 const Product = () => {

@@ -346,6 +346,7 @@ const Checkout = () => {
                                     process.env.REACT_APP_PUBLIC_URL +
                                     cartItem?.productImages[0].images
                                   }
+                                  style={{width:"10%"}}
                                 ></img>
                                 <span className="order-middle-left mx-2">
                                   {cartItem.name} X {cartItem.quantity}
