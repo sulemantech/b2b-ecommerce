@@ -282,11 +282,12 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
   
     fetchProduct();
   }, [id]);
+
   
   const handleUpdate = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:5001/api/products/${id}`,
+        `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products/${id}`,
         {
           name,
           description,
@@ -294,9 +295,9 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
           quantity,
           manufacturer,
           discount,
-          new: newFlag,
+          new: true,
           rating,
-          saleCount,
+          saleCount:20,
           tag: tag.split(',').map((t) => t.trim()),
           stock,
           quantityInStock,
@@ -309,7 +310,7 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
         },
         );
         console.log(response.data);
-        navigate('/products');
+        // navigate('/products');
       
       
     } catch (error) {
@@ -321,7 +322,7 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
 
 async function deleteVariant(variantId: number) {
   try {
-    const response = await fetch(`http://localhost:5001/api/products/variants/${variantId}`, {
+    const response = await fetch(`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products/variants/${variantId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
@@ -346,7 +347,7 @@ async function deleteVariant(variantId: number) {
   const handleDeleteImage = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5001/productImages/${id}`,
+        `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/productImages/${id}`,
         {
           method: 'DELETE',
         },
@@ -378,7 +379,6 @@ async function deleteVariant(variantId: number) {
              disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark 
              dark:bg-form-input dark:focus:border-primary"
                 value={name}
-              
                 onChange={(e) => setName(e.target.value)}
               />
             </div>

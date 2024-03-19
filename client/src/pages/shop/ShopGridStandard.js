@@ -41,6 +41,9 @@ const ShopGridStandard = () => {
     if (type === "category") {
       if (Array.isArray(value)) {
         setSelectedCategories([value]);
+        // console.log("selected",selectedCategories(value))
+        console.log("selected",(value))
+        
 
         const allCategoriesButton = document.getElementById(
           "allCategoriesButton"
@@ -102,7 +105,7 @@ const ShopGridStandard = () => {
       }
     }
 
-    console.log(type,value);
+    console.log(value);
   };
 
 
