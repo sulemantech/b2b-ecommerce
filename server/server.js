@@ -24,7 +24,7 @@ const swaggerUi = require('swagger-ui-express');
 // const authRoutes = require('./routes/authRoutes');
 const notificationRoute=require('./routes/notificationRoute.js')
 const sequelize = require('./config/config.js');
-const subCategoryRoute=require('./routes/subCategoryRoute.js')
+
 
 require('dotenv').config();
 
@@ -39,7 +39,7 @@ app.get('/', (req,res)=>{
 })
 
 
-// sequelize.sync({ force: true }) // This will drop the existing tables and recreate them
+// sequelize.sync({ force: false }) // This will drop the existing tables and recreate them
 //   .then(() => {
 //     console.log('Database synchronized');
 //   })
@@ -56,8 +56,7 @@ const server = new ApolloServer({
 //authRoute firebase
 // app.use('/verify-id-token', authRoutes);
 
-// SubCategory
-app.use('/',subCategoryRoute)
+
 //notification
 app.use('/notifications',notificationRoute)
 
