@@ -3,7 +3,8 @@ import Paginator from "react-hooks-paginator";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import { setActiveSort } from "../../helpers/product";
-
+import { APIHost } from "../../API";
+import axios from "axios";
 import { getSortedProducts } from "../../helpers/product";
 import SEO from "../../components/seo";
 import LayoutOne from "../../layouts/LayoutOne";
@@ -204,6 +205,27 @@ const ShopGridStandard = () => {
 // }, []);
 
 
+ 
+// const [subcategories, setSubcategories] = useState([]);
+  
+
+
+// useEffect(() => {
+//   const fetchCategories = async (id) => {
+//     try {
+//       const response = await axios.get(`${APIHost}/api/categories/subCategories/all/${id}`);
+//       console.log("response", response.data); // Log the full response to see its structure
+//       setSubcategories(response.data);
+//     } catch (error) {
+//       console.error('Error fetching categories:', error);
+//     }
+//   };
+
+//   // Assuming `id` is a variable containing the ID you want to fetch
+//   fetchCategories(id);
+// }, [id]); // Include `id` in the dependency array so the effect runs when `id` changes
+
+
 
 
 
@@ -227,7 +249,7 @@ const ShopGridStandard = () => {
         />
 
         <div className="shop-area pt-95 pb-100 ">
-          <div className="container-fluid ">
+          <div className="container-fluid " >
             <div className="row">
               <div className="col-lg-3 order-2 order-lg-1 p-0">
                 {/* shop sidebar */}
@@ -236,9 +258,10 @@ const ShopGridStandard = () => {
                   getSortParams={handleSortParams}
                   selectedCategories={selectedCategories}
                   tagFilterSortParams={tagFilterSortParams}
+                  // subcategories={subcategories}
                 />
               </div>
-              <div className="col-lg-9 order-1 order-lg-2">
+              <div className="col-lg-9 order-1 order-lg-2" style={{zIndex:2}}>
                 {/* shop topbar default */}
                 <ShopTopbar
                   getLayout={getLayout}

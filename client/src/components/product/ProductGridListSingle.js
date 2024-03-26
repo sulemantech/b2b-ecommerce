@@ -34,7 +34,7 @@ const ProductGridListSingle = ({
     <Fragment>
   
       <div className={clsx("product-wrap", spaceBottomClass)}>
-        <div className="product-img">
+        <div className="product-img ">
         <Link to={process.env.PUBLIC_URL + "/product-tab-right/" + product.id}>
     {product?.productImages?.[0]?.images?.[0] ? (
       <img

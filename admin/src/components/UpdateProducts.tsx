@@ -289,28 +289,30 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
       const response = await axios.put(
         `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products/${id}`,
         {
-          name,
-          description,
-          price,
-          quantity,
-          manufacturer,
-          discount,
-          new: true,
-          rating,
-          saleCount:20,
-          tag: tag.split(',').map((t) => t.trim()),
-          stock,
-          quantityInStock,
-          sku,
-          category_id,
-          supplier_id,
-          status,
-          categoryName,
+          products: {
+            name,
+            description,
+            price,
+            quantity,
+            manufacturer,
+            discount,
+            new: true,
+            rating,
+            saleCount: 20,
+            tag: tag.split(',').map((t) => t.trim()),
+            stock,
+            quantityInStock,
+            sku,
+            category_id,
+            supplier_id,
+            status,
+            categoryName,
+          },
           variants: variants,
         },
         );
         console.log(response.data);
-        // navigate('/products');
+        navigate('/products');
       
       
     } catch (error) {
