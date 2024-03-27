@@ -149,8 +149,8 @@ export const getUserInformation = async (token) => {
 
 export const fetchCategories = async () => {
   try {
-    const response = await axios.get(`${APIHost}/api/categories/all`);
-    return response.data;
+    const response = await axios.get(`${APIHost}/api/categories/all`);    
+    return response.data.filter(category => category.parentId === null);
   } catch (error) {
     console.error('Error fetching categories:', error);
     throw error;

@@ -109,6 +109,38 @@ const ShopGridStandard = () => {
     console.log(value);
   };
 
+  
+  // const handleSortParams = (type, value) => {
+  //   if (type !== "category") {
+  //     return;
+  //   }
+  
+  //   if (Array.isArray(value)) {
+  //     setSelectedCategories([value]);
+  //     const allCategoriesButton = document.getElementById("allCategoriesButton");
+  //     allCategoriesButton?.classList.add("active");
+  //   } else {
+  //     const updatedCategories = selectedCategories.includes(value)
+  //       ? selectedCategories.filter((cat) => cat !== value)
+  //       : [...selectedCategories, value];
+  
+  //     setSelectedCategories(updatedCategories);
+  
+  //     const isAllCategoriesSelected = updatedCategories.length === categoryIds.length &&
+  //                                      updatedCategories.every((cat) => categoryIds.includes(cat));
+  
+  //     const allCategoriesButton = document.getElementById("allCategoriesButton");
+  //     if (isAllCategoriesSelected) {
+  //       allCategoriesButton?.classList.add("active");
+  //     } else {
+  //       allCategoriesButton?.classList.remove("active");
+  //     }
+  //   }
+  
+  //   console.log(value);
+  // };
+  
+
 
   const getLayout = (layout) => {
     setLayout(layout);

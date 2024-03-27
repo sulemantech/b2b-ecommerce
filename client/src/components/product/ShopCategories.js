@@ -15,7 +15,7 @@ const ShopCategories = ({ categories, getSortParams, selectedCategories }) => {
       const response = await axios.get(
         `${APIHost}/api/categories/subCategories/all/${id}`
       );
-      console.log("response", response.data); // Log the full response to see its structure
+      // console.log("response", response.data); // Log the full response to see its structure
       setSubcategories(response.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -38,11 +38,43 @@ const ShopCategories = ({ categories, getSortParams, selectedCategories }) => {
                     <li key={subIndex}>
                       <button
                         onClick={(e) => {
-                          // Handle button click if needed
+                        getSortParams("category", subcategory.id)
+                          setActiveSort(e);
                         }}
-                        className="border-0 bg-gray mb-10 hover:text-meta-1"
+                        className="border-0 mb-1 bg-gray p-10"
+                        
                       >
-                        {subcategory.name}
+                        <p
+                          className="d-flex "
+                          onMouseOver={(e) => {
+                            e.currentTarget.classList.add(
+                              "bg-white",
+                              "text-danger"
+                            );
+                            e.currentTarget.querySelector("img").style.display =
+                              "inline";
+                          }}
+                          onMouseOut={(e) => {
+                            e.currentTarget.classList.remove(
+                              "bg-white",
+                              "text-danger"
+                            );
+                            e.currentTarget.querySelector("img").style.display =
+                              "none";
+                          }}
+                        >
+                          {subcategory.name}
+                          <span className="bg-transparent">
+                            <img
+                              src="icons8-right-arrow-50.png"
+                              style={{
+                                display: "none",
+                                width: "40%",
+                                background: "white",
+                              }}
+                            />
+                          </span>
+                        </p>
                       </button>
                     </li>
                   ))}
@@ -50,14 +82,6 @@ const ShopCategories = ({ categories, getSortParams, selectedCategories }) => {
               </li>
             ))}
           </ul>
-        </div>
-      ) : subcategories.length === 0 && show ? (
-        <div
-          className="position-absolute top-50 rounded h-50 bg-gray border"
-          style={{ marginLeft: "24%", zIndex: 5 }}
-          onMouseLeave={() => setShow(false)}
-        >
-         <p className="mt-100"> No subcategories found</p>
         </div>
       ) : null}
 
@@ -93,6 +117,7 @@ const ShopCategories = ({ categories, getSortParams, selectedCategories }) => {
                     }}
                   >
                     <button
+                      className=""
                       id="IndCategorie"
                       onClick={(e) => {
                         getSortParams("category", category.id);
@@ -105,8 +130,38 @@ const ShopCategories = ({ categories, getSortParams, selectedCategories }) => {
                             ? "selected"
                             : ""
                         }`}
-                      />{" "}
-                      {category.name}
+                      />
+                      <p
+                        className="d-flex"
+                        onMouseOver={(e) => {
+                          e.currentTarget.classList.add(
+                            "bg-white",
+                            "text-danger"
+                          );
+                          e.currentTarget.querySelector("img").style.display =
+                            "inline";
+                        }}
+                        onMouseOut={(e) => {
+                          e.currentTarget.classList.remove(
+                            "bg-white",
+                            "text-danger"
+                          );
+                          e.currentTarget.querySelector("img").style.display =
+                            "none"; // Hide the arrow image
+                        }}
+                      >
+                        {category.name}
+                        <span className="bg-transparent">
+                          <img
+                            src="icons8-right-arrow-50.png"
+                            style={{
+                              display: "none",
+                              width: "70%",
+                              background: "white",
+                            }}
+                          />
+                        </span>
+                      </p>
                     </button>
                   </div>
                 </li>
