@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect,useMemo } from "react";
+import { Fragment, useState, useEffect, useMemo } from "react";
 import Paginator from "react-hooks-paginator";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
@@ -32,115 +32,90 @@ const ShopGridStandard = () => {
   const pageLimit = 15;
   let { pathname } = useLocation();
   const [selectedCategories, setSelectedCategories] = useState([]);
-
+  const [subcategory,setSubcategory]=useState(false);
   const categoryIds = categories.map((category) => category.id);
 
-  
- 
+  const handleSortParams = (type, value, isSubcategory = false) => {
+    if (type !== "category") {
+      return;
+    }
 
-  const handleSortParams = (type, value) => {
-    if (type === "category") {
-      if (Array.isArray(value)) {
-        setSelectedCategories([value]);
-        // console.log("selected",selectedCategories(value))
-        console.log("selected",(value))
-        
+    if (Array.isArray(value)) {
+      setSelectedCategories([value]);
+      const allCategoriesButton = document.getElementById(
+        "allCategoriesButton"
+      );
+      allCategoriesButton?.classList.add("active");
+    } else {
+      let updatedCategories;
+      if (selectedCategories.includes(value)) {
+        updatedCategories = selectedCategories.filter((cat) => cat !== value);
+      } else {
+        updatedCategories = [...selectedCategories, value];
+      }
 
-        const allCategoriesButton = document.getElementById(
-          "allCategoriesButton"
-        );
-        allCategoriesButton.classList.add("active");
-      } else if (selectedCategories.length >= 0 && !Array.isArray(value)) {
-        const [first, ...rest] = selectedCategories;
-        if (Array.isArray(first)) {
-          const filterButtons = document.querySelectorAll(
-            ".sidebar-widget-list-left button, .sidebar-widget-tag button, .product-filter button"
-          );
-          filterButtons.forEach((item) => {
-            if (item.id == "allCategoriesButton") {
-              item.classList.remove("active");
-            }
-          });
-          const updatedCategories = [...rest];
-          const categoryIndex = updatedCategories.indexOf(value);
-          if (categoryIndex !== -1) {
-            updatedCategories.splice(categoryIndex, 1);
-          } else {
-            updatedCategories.push(value);
-          }
-          setSelectedCategories(updatedCategories);
-        } else {
-          const updatedCategories = [...selectedCategories];
-          const categoryIndex = updatedCategories.indexOf(value);
-          if (categoryIndex !== -1) {
-            updatedCategories.splice(categoryIndex, 1);
-          } else {
-            updatedCategories.push(value);
-          }
-          const isMatch = updatedCategories.every(
-            (value) =>
-              categoryIds.includes(value) &&
-              updatedCategories.length === categoryIds.length
-          );
-          if (isMatch) {
-            const filterButtons = document.querySelectorAll(
-              ".sidebar-widget-list-left button, .sidebar-widget-tag button, .product-filter button"
-            );
-            filterButtons.forEach((item) => {
-              if (item.id == "allCategoriesButton") {
-                item.classList.add("active");
-              }
-            });
-          } else {
-            const filterButtons = document.querySelectorAll(
-              ".sidebar-widget-list-left button, .sidebar-widget-tag button, .product-filter button"
-            );
-            filterButtons.forEach((item) => {
-              if (item.id == "allCategoriesButton") {
-                item.classList.remove("active");
-              }
-            });
-          }
-          setSelectedCategories(updatedCategories);
-        }
+      setSelectedCategories(updatedCategories);
+
+      const isAllCategoriesSelected =
+        updatedCategories.length === categoryIds.length &&
+        updatedCategories.every((cat) => categoryIds.includes(cat));
+
+      const allCategoriesButton = document.getElementById(
+        "allCategoriesButton"
+      );
+      if (isAllCategoriesSelected || updatedCategories.length === 0) {
+        allCategoriesButton?.classList.add("active");
+      } else {
+        allCategoriesButton?.classList.remove("active");
       }
     }
 
-    console.log(value);
+    if (isSubcategory) {
+      // Handle subcategory request
+      // console.log("Subcategory clicked:", value);
+      setSelectedCategories([value]);
+      setSubcategory(true);
+    }else {
+      setSubcategory(false); // Reset isSubcategory state when selecting a single category
+    }
+
+    // console.log(value);
   };
 
-  
-  // const handleSortParams = (type, value) => {
-  //   if (type !== "category") {
-  //     return;
-  //   }
-  
-  //   if (Array.isArray(value)) {
-  //     setSelectedCategories([value]);
-  //     const allCategoriesButton = document.getElementById("allCategoriesButton");
-  //     allCategoriesButton?.classList.add("active");
-  //   } else {
-  //     const updatedCategories = selectedCategories.includes(value)
-  //       ? selectedCategories.filter((cat) => cat !== value)
-  //       : [...selectedCategories, value];
-  
-  //     setSelectedCategories(updatedCategories);
-  
-  //     const isAllCategoriesSelected = updatedCategories.length === categoryIds.length &&
-  //                                      updatedCategories.every((cat) => categoryIds.includes(cat));
-  
-  //     const allCategoriesButton = document.getElementById("allCategoriesButton");
-  //     if (isAllCategoriesSelected) {
-  //       allCategoriesButton?.classList.add("active");
-  //     } else {
-  //       allCategoriesButton?.classList.remove("active");
-  //     }
-  //   }
-  
-  //   console.log(value);
-  // };
-  
+  useEffect(() => {
+    if (selectedCategories.length > 0) {
+      const fetchData = async () => {
+        try {
+          const data = await fetchProductsByCategories(
+            selectedCategories,
+            subcategory,// Consider it as a subcategory if only one category is selected
+            offset,
+            sortValue
+          );
+          dispatch(setProducts(data));
+          setCurrentData(data);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+      fetchData();
+    }
+  }, [offset, sortValue, selectedCategories, dispatch]);
 
+  useEffect(() => {
+    if (selectedCategories.length > 0) {
+      const filteredProducts = products.filter((product) =>
+        selectedCategories.includes(product.categoryId)
+      );
+      setCurrentData(filteredProducts);
+    } else {
+      setCurrentData(products);
+    }
+  }, [products, selectedCategories]);
+
+  useEffect(() => {
+    dispatch(fetchProducts());
+  }, []);
 
   const getLayout = (layout) => {
     setLayout(layout);
@@ -165,104 +140,24 @@ const ShopGridStandard = () => {
     }
   };
 
-  const tagFilterSortParams=(tag,value)=>{
+  const tagFilterSortParams = (tag, value) => {
     setSortType(sortType);
     setSortValue(sortValue);
-    console.log(tag,value);
-
-  }
-
-  useEffect(() => {
-    if (selectedCategories.length > 0) {
-      const fetchData = async () => {
-        try {
-          const data = await fetchProductsByCategories(
-            `${selectedCategories}`,
-            offset,
-            sortValue
-          );
-          dispatch(setProducts(data));
-          setCurrentData(data);
-        } catch (error) {
-          console.error("Error fetching data:", error);
-        }
-      };
-      fetchData();
-    }
-  }, [offset, sortValue, selectedCategories, dispatch]);
-
-  useEffect(() => {
-    if (selectedCategories.length > 0) {
-      const filteredProducts = products.filter((product) =>
-        selectedCategories.includes(product.categoryId)
-      );
-    } else {
-      setCurrentData(products);
-    }
-  }, [products, selectedCategories]);
-
-  useEffect(() => {
-    dispatch(fetchProducts());
-  }, []);
-
- 
+    console.log(tag, value);
+  };
 
   useEffect(() => {
     let sortedProducts = getSortedProducts(products, sortType, sortValue);
-    const filterSortedProducts = getSortedProducts(sortedProducts, filterSortType, filterSortValue);
+    const filterSortedProducts = getSortedProducts(
+      sortedProducts,
+      filterSortType,
+      filterSortValue
+    );
     sortedProducts = filterSortedProducts;
     setSortedProducts(sortedProducts);
     setCurrentData(sortedProducts.slice(offset, offset + pageLimit));
-    window.scrollTo({top: 0})
-}, [offset, products, sortType, sortValue, filterSortType, filterSortValue ]);
-
-
-// const handleScroll = () => {
-//   let userScrollHeight = window.innerHeight + window.scrollY;
-//   let windowBottomHeight = document.documentElement.offsetHeight;
-
-//   if (userScrollHeight >= windowBottomHeight) {
-//     setCurrentData(sortedProducts.slice(offset, offset + pageLimit));
-//     // setOffset(offset + pageLimit); // Update the offset for pagination
-//     setCurrentPage(currentPage + 1);
-//   }
-// };
-
-// useEffect(() => {
-//   window.addEventListener("scroll", handleScroll);
-
-//   return () => {
-//     window.removeEventListener("scroll", handleScroll);
-//   };
-// }, []);
-
-
- 
-// const [subcategories, setSubcategories] = useState([]);
-  
-
-
-// useEffect(() => {
-//   const fetchCategories = async (id) => {
-//     try {
-//       const response = await axios.get(`${APIHost}/api/categories/subCategories/all/${id}`);
-//       console.log("response", response.data); // Log the full response to see its structure
-//       setSubcategories(response.data);
-//     } catch (error) {
-//       console.error('Error fetching categories:', error);
-//     }
-//   };
-
-//   // Assuming `id` is a variable containing the ID you want to fetch
-//   fetchCategories(id);
-// }, [id]); // Include `id` in the dependency array so the effect runs when `id` changes
-
-
-
-
-
-
-
+    window.scrollTo({ top: 0 });
+  }, [offset, products, sortType, sortValue, filterSortType, filterSortValue]);
 
   return (
     <Fragment>
@@ -281,7 +176,7 @@ const ShopGridStandard = () => {
         />
 
         <div className="shop-area pt-95 pb-100 ">
-          <div className="container-fluid " >
+          <div className="container-fluid ">
             <div className="row">
               <div className="col-lg-3 order-2 order-lg-1 p-0">
                 {/* shop sidebar */}
@@ -293,21 +188,22 @@ const ShopGridStandard = () => {
                   // subcategories={subcategories}
                 />
               </div>
-              <div className="col-lg-9 order-1 order-lg-2" style={{zIndex:2}}>
+              <div
+                className="col-lg-9 order-1 order-lg-2"
+                style={{ zIndex: 2 }}
+              >
                 {/* shop topbar default */}
                 <ShopTopbar
                   getLayout={getLayout}
                   getFilterSortParams={getFilterSortParams}
                   productCount={products.length}
                   sortedProductCount={currentData.length}
-                
                 />
                 {/* shop page content default */}
                 <ShopProducts layout={layout} products={currentData} />
 
                 {/* shop product pagination */}
                 <div className="pro-pagination-style text-center mt-30">
-                
                   <Paginator
                     totalRecords={sortedProducts.length}
                     pageLimit={pageLimit}
@@ -319,7 +215,6 @@ const ShopGridStandard = () => {
                     pagePrevText="«"
                     pageNextText="»"
                   />
-                  
                 </div>
               </div>
             </div>

@@ -38,7 +38,7 @@ const ShopCategories = ({ categories, getSortParams, selectedCategories }) => {
                     <li key={subIndex}>
                       <button
                         onClick={(e) => {
-                        getSortParams("category", subcategory.id)
+                        getSortParams("category", subcategory.id,true)
                           setActiveSort(e);
                         }}
                         className="border-0 mb-1 bg-gray p-10"

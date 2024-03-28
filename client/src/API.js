@@ -7,21 +7,50 @@ export const APIHost = "https://devcares.com"
 
 
 const selectCategory= `${APIHost}/api/products`;
-export const fetchProductsByCategories = async (selectedCategories, offset, sortValue) => {
+// export const fetchProductsByCategories = async (selectedCategories, isSubCategory=false, offset, sortValue) => {
+//   try {
+//     var urlEndpoint = selectCategory
+//     if(isSubCategory){
+//       urlEndpoint = `${APIHost}/api/products/subCategoryProducts`
+//     }
+//     const response = await axios.get(`${urlEndpoint}/${selectedCategories}`, {
+//       params: { offset, sortValue },
+//     });
+//     if (!response) {
+//       throw new Error(`HTTP error! Status: ${response.status}`);
+//     }
+//     return response.data;
+    
+//   } catch (error) {
+//     console.error('Error fetching products by categories:', error);
+//     throw error;
+//   }
+// };
+export const fetchProductsByCategories = async (selectedCategories, isSubCategory = false, offset, sortValue) => {
   try {
-    const response = await axios.get(`${selectCategory}/${selectedCategories}`, {
+    let urlEndpoint;
+    if (isSubCategory) {
+      urlEndpoint = `${APIHost}/api/products/subCategoryProducts`;
+    } else {
+      urlEndpoint = selectCategory; // Assuming selectCategory is defined elsewhere
+    }
+
+    const response = await axios.get(`${urlEndpoint}/${selectedCategories}`, {
       params: { offset, sortValue },
     });
+
     if (!response) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
+
     return response.data;
-    
+
   } catch (error) {
     console.error('Error fetching products by categories:', error);
     throw error;
   }
 };
+
 
 
 
