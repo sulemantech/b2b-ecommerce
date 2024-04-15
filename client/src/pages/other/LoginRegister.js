@@ -13,6 +13,7 @@ import { postRegistration } from "../../API";
 
 const LoginRegister = () => {
   const dispatch = useDispatch();
+  const [notificationCount, setNotificationCount] = useState(0);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [error, setError] = useState(null);
   const [values, setvalues] = useState({
@@ -44,7 +45,8 @@ const LoginRegister = () => {
   };
 
   const SubmitLogin = () => {
-    dispatch(submitLoginAsync(values, navigate, setError));
+    dispatch(submitLoginAsync(values, navigate, setError, setNotificationCount));
+    console.log("helooooooooooooooooooo",notificationCount)
   };
 
   let { pathname } = useLocation();

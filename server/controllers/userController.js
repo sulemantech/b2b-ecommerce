@@ -12,7 +12,7 @@ const login = async (req, res) => {
   try {
     const user = await registerationModel.findOne({ where: { email } });
     if (!user) {
-      res.status(401).send({ auth: false, message: 'Incorrect email' });
+      return res.status(401).send({ auth: false, message: 'Incorrect email' });
     } else if(bcrypt.compareSync(password, user.password)) {
       const tokenData = {
         id: user.id,

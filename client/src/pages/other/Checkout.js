@@ -42,6 +42,51 @@ const Checkout = () => {
     contactNumber: "",
   });
 
+  // const handlePlaceOrder = async (event) => {
+  //   event.preventDefault();
+  //   let totalPrice = 0;
+  //   const cartItemsData = cartItems.map((cartItem) => {
+  //     const itemTotalPrice =
+  //       (cartItem.price - cartItem.discount) * cartItem.quantity;
+  //     totalPrice += itemTotalPrice;
+  //     return {
+  //       productId: cartItem.id,
+  //       quantity: cartItem.quantity,
+  //       price: cartItem.price,
+  //       discount: cartItem.discount,
+  //       vendorId: cartItem.supplier_id,
+  //       totalPrice: itemTotalPrice,
+  //     };
+  //   });
+
+  //   const orderData = {
+  //     address: users.address,
+  //     totalPrice: totalPrice,
+  //     status: "Pending",
+  //     discount: 5,
+  //     paymentMethod: "Cash on delivery",
+  //     trackingNumber: Math.floor(Math.random() * 1000000).toString(),
+  //     orderItems: cartItemsData,
+  //     name: update.firstname,
+  //     lastname: update.lastname,
+  //     country: formvalue.country,
+  //     city: formvalue.city,
+  //     zipCode: parseInt(formvalue.zipCode),
+  //     contactNumber: users.contactNumber,
+  //     email: update.email,
+  //     additionalInfo: formvalue.additionalInfo,
+  //     shippingAddress: formvalue.shippingAddress,
+  //   };
+
+  //   try {
+  //     const response = await placeOrder(storedToken, orderData);
+  //     navigate("/order/success");
+  //     console.log("Order placed successfully:", response);
+  //     dispatch(deleteAllFromCart());
+  //   } catch (error) {
+  //     console.error("Error placing order:", error.message);
+  //   }
+  // };
   const handlePlaceOrder = async (event) => {
     event.preventDefault();
     let totalPrice = 0;
@@ -58,7 +103,7 @@ const Checkout = () => {
         totalPrice: itemTotalPrice,
       };
     });
-
+  
     const orderData = {
       address: users.address,
       totalPrice: totalPrice,
@@ -77,9 +122,28 @@ const Checkout = () => {
       additionalInfo: formvalue.additionalInfo,
       shippingAddress: formvalue.shippingAddress,
     };
-
+  
     try {
       const response = await placeOrder(storedToken, orderData);
+  
+      // Call the API to create a notification type for the user placing the order
+      const notificationResponse = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notifications/types`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${storedToken}`,
+        },
+        body: JSON.stringify({
+          typeName: `Order successful for order ${response.id}`,
+          description: `Notification for successful order ${response.id}`,
+          userId: response.userId, // Assuming response contains the userId of the user placing the order
+        }),
+      });
+  
+      // Show the notification response in an alert
+      const notificationData = await notificationResponse.json();
+      alert(`Notification created: ${notificationData.typeName}`);
+  
       navigate("/order/success");
       console.log("Order placed successfully:", response);
       dispatch(deleteAllFromCart());
@@ -87,6 +151,8 @@ const Checkout = () => {
       console.error("Error placing order:", error.message);
     }
   };
+  
+  
 
   useEffect(() => {
     const fetchUser = async () => {

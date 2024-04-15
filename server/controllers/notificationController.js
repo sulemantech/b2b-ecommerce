@@ -45,15 +45,35 @@ const createNotification = async (req, res) => {
   }
 };
 
+// const createNotificationType = async (req, res) => {
+//   try {
+//     // Extract data from request body
+//     const { typeName, description } = req.body;
+
+//     // Create a new notificationType
+//     const newNotificationType = await notificationTypeModel.create({
+//       typeName,
+//       description
+//     });
+
+//     // Send a success response with the created notificationType
+//     res.status(201).json(newNotificationType);
+//   } catch (error) {
+//     // If an error occurs, send an error response
+//     console.error(error);
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// };
 const createNotificationType = async (req, res) => {
   try {
     // Extract data from request body
-    const { typeName, description } = req.body;
+    const { typeName, description, userId } = req.body;
 
     // Create a new notificationType
     const newNotificationType = await notificationTypeModel.create({
       typeName,
-      description
+      description,
+      userId, // Assuming userId is a field in your notificationType model
     });
 
     // Send a success response with the created notificationType
@@ -64,6 +84,7 @@ const createNotificationType = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
 
 const createNotificationConfiguration = async (req, res) => {
   try {
@@ -86,27 +107,78 @@ const createNotificationConfiguration = async (req, res) => {
   }
 };
 
+// const getSpecificNotifications = async (req, res) => {
+//   const userId = req.user.id; 
+
+//   try {
+//     // Fetch notifications for the specific user with their associated type and configuration
+//     const notifications = await notificationModel.findAll({
+//       where: { recipient_id: userId }, 
+//       include: [
+//         { 
+//           model: notificationTypeModel,
+//            attributes: ['id','typeName', 'description']
+//            }, 
+//       ]
+//     });
+
+//     res.status(200).json(notifications);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// };
+// const createNotification = async (req, res) => {
+//   try {
+//     const { notification_type_id, related_entity_type, related_entity_id, message, sender_id, recipient_id, status } = req.body;
+
+//     // Create the notification
+//     const newNotification = await notificationModel.create({
+//       notification_type_id,
+//       related_entity_type,
+//       related_entity_id,
+//       message,
+//       sender_id,
+//       recipient_id,
+//       status
+//     });
+
+//     // Increment notification count for the recipient user
+//     await notificationConfigurationModel.increment('notification_count', {
+//       where: { user_id: recipient_id }
+//     });
+
+//     res.status(201).json(newNotification);
+//   } catch (error) {
+//     console.error(error);
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// };
+
 const getSpecificNotifications = async (req, res) => {
   const userId = req.user.id; 
 
   try {
-    // Fetch notifications for the specific user with their associated type and configuration
     const notifications = await notificationModel.findAll({
       where: { recipient_id: userId }, 
       include: [
         { 
           model: notificationTypeModel,
-           attributes: ['id','typeName', 'description']
-           }, 
+          attributes: ['id','typeName', 'description']
+        }, 
       ]
     });
 
-    res.status(200).json(notifications);
+    const notificationCount = notifications.length;
+
+    res.status(200).json({ notifications, notificationCount });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 };
+
+
 
 module.exports = {
   sendNotification,

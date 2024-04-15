@@ -37,12 +37,11 @@ const ShopCategories = ({ categories, getSortParams, selectedCategories }) => {
                   {category.subcategories.map((subcategory, subIndex) => (
                     <li key={subIndex}>
                       <button
-                        onClick={(e) => {
-                        getSortParams("category", subcategory.id,true)
+                        onMouseOver={(e) => {
+                          getSortParams("category", subcategory.id, true);
                           setActiveSort(e);
                         }}
                         className="border-0 mb-1 bg-gray p-10"
-                        
                       >
                         <p
                           className="d-flex "
@@ -64,6 +63,7 @@ const ShopCategories = ({ categories, getSortParams, selectedCategories }) => {
                           }}
                         >
                           {subcategory.name}
+
                           <span className="bg-transparent">
                             <img
                               src="icons8-right-arrow-50.png"
