@@ -4,17 +4,20 @@ import { useDispatch, useSelector } from "react-redux";
 import clsx from "clsx";
 import MenuCart from "./sub-components/MenuCart";
 import { logoutAsync } from "../../store/slices/Auth-Action";
+import { useState, useEffect } from "react";
 // import { logoutAsync } from "../../store/slices/API";
 
 const IconGroup = ({ iconWhiteClass }) => {
+  const [notifi , setNotifi]= useState(false)
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const authToken = useSelector((state) => state.auth.token);
+  const [notificationCount, setNotificationCount] = useState(null);
 
   const handleLogout = () => {
     dispatch(logoutAsync(authToken));
   };
-  const handleClick = e => {
+  const handleClick = (e) => {
     e.currentTarget.nextSibling.classList.toggle("active");
   };
 
@@ -27,11 +30,40 @@ const IconGroup = ({ iconWhiteClass }) => {
   const { compareItems } = useSelector((state) => state.compare);
   const { wishlistItems } = useSelector((state) => state.wishlist);
   const { cartItems } = useSelector((state) => state.cart);
+  const notificatiohandker =()=>{
+    setNotifi(!notifi)
+  }
+
+  useEffect(() => {
+    const fetchNotifications = async () => {
+      try {
+        const notificationResponse = await fetch(
+          `${process.env.REACT_APP_PUBLIC_URL}/notifications/specific`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+        const notifications = await notificationResponse.json();
+        // const notificationCount = notifications.length;
+        console.log("NotificationCount", notificationCount);
+        setNotificationCount(notifications);
+        debugger;
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+      }
+    };
+
+    fetchNotifications();
+  }, [authToken]);
 
   return (
-    <div className={clsx("header-right-wrap", iconWhiteClass)} >
+    <div className={clsx("header-right-wrap", iconWhiteClass)}>
       <div className="same-style header-search d-none d-lg-block">
-        <button className="search-active" onClick={e => handleClick(e)}>
+        <button className="search-active" onClick={(e) => handleClick(e)}>
           <i className="pe-7s-search" />
         </button>
         <div className="search-content">
@@ -46,14 +78,13 @@ const IconGroup = ({ iconWhiteClass }) => {
       <div className="same-style account-setting  d-lg-block">
         <button
           className="account-setting-active"
-          onClick={e => handleClick(e)}
+          onClick={(e) => handleClick(e)}
         >
           <i className="pe-7s-user-female" />
         </button>
         <div className="account-dropdown">
           <ul>
-
-          {isLoggedIn ? (
+            {isLoggedIn ? (
               <>
                 <li>
                   <Link to={process.env.PUBLIC_URL + "/my-account"}>
@@ -61,26 +92,29 @@ const IconGroup = ({ iconWhiteClass }) => {
                   </Link>
                 </li>
                 <li>
-                <Link to={process.env.PUBLIC_URL + "/my-Order"}>
+                  <Link to={process.env.PUBLIC_URL + "/my-Order"}>
                     My Orders
                   </Link>
                 </li>
 
                 <li>
-                <Link to={process.env.PUBLIC_URL + "/logout"} onClick={handleLogout}>
-              logout
-              </Link>
-
+                  <Link
+                    to={process.env.PUBLIC_URL + "/logout"}
+                    onClick={handleLogout}
+                  >
+                    logout
+                  </Link>
                 </li>
               </>
             ) : (
               <>
-            <li>
-              <Link to={process.env.PUBLIC_URL + "/login-register"}>Login</Link>
-            </li>
-          
-            </>
-  )}
+                <li>
+                  <Link to={process.env.PUBLIC_URL + "/login-register"}>
+                    Login
+                  </Link>
+                </li>
+              </>
+            )}
           </ul>
         </div>
       </div>
@@ -101,7 +135,7 @@ const IconGroup = ({ iconWhiteClass }) => {
         </Link>
       </div>
       <div className="same-style cart-wrap d-none d-lg-block">
-        <button className="icon-cart" onClick={e => handleClick(e)}>
+        <button className="icon-cart" onClick={(e) => handleClick(e)}>
           <i className="pe-7s-shopbag" />
           <span className="count-style">
             {cartItems && cartItems.length ? cartItems.length : 0}
@@ -109,6 +143,25 @@ const IconGroup = ({ iconWhiteClass }) => {
         </button>
         {/* menu cart */}
         <MenuCart />
+      </div>
+      <div className="same-style cart-wrap d-none d-lg-block">
+        <button onClick={notificatiohandker}>
+          <i class="fa fa-bell position-relative border-0" aria-hidden="true">
+            <span className="count-style">
+              {notificationCount && notificationCount.length
+                ? notificationCount.length
+                : 0}
+            </span>
+          </i>
+         {notifi &&  <ul className="position-absolute">
+         {notificationCount.map(notification => (
+      <li key={notification.id}>
+        {notification.notificationType.typeName}
+      </li>
+    ))}
+           
+          </ul>}
+        </button>
       </div>
       <div className="same-style cart-wrap d-block d-lg-none">
         <Link className="icon-cart" to={process.env.PUBLIC_URL + "/cart"}>
@@ -133,7 +186,5 @@ const IconGroup = ({ iconWhiteClass }) => {
 IconGroup.propTypes = {
   iconWhiteClass: PropTypes.string,
 };
-
-
 
 export default IconGroup;

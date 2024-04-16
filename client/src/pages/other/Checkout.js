@@ -16,6 +16,8 @@ import FooterCopyright from "../../components/footer/FooterCopyright";
 import { Container } from "react-bootstrap";
 import FooterCheckout from "../../components/footer/FooterCheckout";
 import { APIHost } from "../../API";
+import { jwtDecode } from 'jwt-decode';
+
 
 const Checkout = () => {
   let cartTotalPrice = 0;
@@ -41,6 +43,16 @@ const Checkout = () => {
     email: "",
     contactNumber: "",
   });
+
+
+  var userId = null;
+  try {
+    const decodedToken = jwtDecode(storedToken);
+    userId = decodedToken.id;
+  } catch (error) {
+    console.error('Error decoding token:', error.message);
+  }
+  
 
   // const handlePlaceOrder = async (event) => {
   //   event.preventDefault();
@@ -80,6 +92,21 @@ const Checkout = () => {
 
   //   try {
   //     const response = await placeOrder(storedToken, orderData);
+
+  //     const notificationResponse = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notifications/types`, {
+      
+      
+  //       const notificationData = {
+  //         notification_type_id: YOUR_NOTIFICATION_TYPE_ID,
+  //         related_entity_type: 'order',
+  //         related_entity_id: response.order.id, // Assuming the order ID is in the response
+  //         message: 'Your order has been placed successfully.',
+  //         sender_id: SENDER_ID,
+  //         recipient_id:userId,
+  //         status: 'unread'
+  //       };
+  //     });
+
   //     navigate("/order/success");
   //     console.log("Order placed successfully:", response);
   //     dispatch(deleteAllFromCart());
@@ -103,7 +130,7 @@ const Checkout = () => {
         totalPrice: itemTotalPrice,
       };
     });
-  
+
     const orderData = {
       address: users.address,
       totalPrice: totalPrice,
@@ -122,28 +149,35 @@ const Checkout = () => {
       additionalInfo: formvalue.additionalInfo,
       shippingAddress: formvalue.shippingAddress,
     };
-  
+
     try {
       const response = await placeOrder(storedToken, orderData);
-  
-      // Call the API to create a notification type for the user placing the order
-      const notificationResponse = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notifications/types`, {
+
+      const notificationData = {
+        notification_type_id: 2,
+        related_entity_type: "order",
+        related_entity_id: 1, // Assuming the order ID is in the response
+        message: "Your order has been placed successfully.",
+        sender_id: 9, // Assuming admin is the sender
+        recipient_id: userId,
+        status: "pending"
+      };
+
+      // Call the API to create the notification
+      const notificationResponse = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notifications/send`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${storedToken}`,
         },
-        body: JSON.stringify({
-          typeName: `Order successful for order ${response.id}`,
-          description: `Notification for successful order ${response.id}`,
-          userId: response.userId, // Assuming response contains the userId of the user placing the order
-        }),
+        body: JSON.stringify(notificationData),
       });
-  
-      // Show the notification response in an alert
-      const notificationData = await notificationResponse.json();
-      alert(`Notification created: ${notificationData.typeName}`);
-  
+      if (notificationResponse.ok) {
+        console.log("Notification created successfully");
+      } else {
+        console.error("Failed to create notification");
+      }
+
       navigate("/order/success");
       console.log("Order placed successfully:", response);
       dispatch(deleteAllFromCart());
@@ -151,6 +185,12 @@ const Checkout = () => {
       console.error("Error placing order:", error.message);
     }
   };
+
+ 
+ 
+ 
+  
+ 
   
   
 
