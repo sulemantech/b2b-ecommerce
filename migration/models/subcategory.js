@@ -1,9 +1,9 @@
-const sequelize = require('../config/config.js');
-const { Sequelize } = require('sequelize');
-// const categoryModel = require('./categoryModel.js');
+'use strict';
 
-const subCategoryModel = sequelize.define('subCategories', {
-    id: {
+module.exports = {
+  up: async (queryInterface, Sequelize) => {
+    await queryInterface.createTable('subCategories', {
+      id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
@@ -30,11 +30,8 @@ const subCategoryModel = sequelize.define('subCategories', {
         type: Sequelize.DATE
       }
     });
-// sequelize.sync({ force: false }) // This will drop the existing tables and recreate them
-//   .then(() => {
-//     console.log('Database synchronized');
-//   })
-//   .catch(err => {
-//     console.error('An error occurred while synchronizing the database:', err);
-//   });
-module.exports = subCategoryModel;
+  },
+  down: async (queryInterface, Sequelize) => {
+    // await queryInterface.dropTable('subCategories');
+  }
+};

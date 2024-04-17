@@ -1,6 +1,5 @@
 const categoryModel = require('../models/categoryModel');
 const productModel = require('../models/productModel');
-const subCategoryModel = require('../models/subCategoryModel');
 
 const getAllCategories = async (req, res) => {
   try {
@@ -20,22 +19,39 @@ const getAllCategories = async (req, res) => {
 };
 
 const getCategoryWithSubcategories = async (req, res) => {
+ 
   try {
-    // Fetch all categories along with their associated subcategories
-    const categoriesWithSubcategories = await categoryModel.findAll({
-      include: [{
-        model: subCategoryModel,
-        as: 'subCategories', // Assuming you've defined the association alias in categoryModel
-        attributes: ['id', 'name'] // Include only necessary attributes of subcategories
-      }]
+    const id = req.params.id;
+    console.log("iddddddddddddd", req.params.id);
+    
+    const subcategories = await categoryModel.findAll({
+      // Condition for main categories
+      attributes: ['id', 'name'],
+      include: [
+        // { model: categoryModel,  },
+        { 
+          model: categoryModel,
+          as: 'subcategories',
+          where: { parentId: id },
+          include: [
+            {
+              model: categoryModel,
+              as: 'subcategories',
+              
+              
+            }
+          ]
+        }
+      ]
     });
-
-    res.status(200).json(categoriesWithSubcategories);
-  } catch (error) {
-    console.error('Error:', error.message);
-    res.status(500).json({ error: 'Internal Server Error' });
+    
+    res.json(subcategories);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Internal Server Error in categoryController' });
   }
-};
+  
+  }
 
 const getCategoryById = async (req, res) => {
   try {
@@ -132,7 +148,7 @@ module.exports = {
         method: getCategoryById,
       },
       {
-        path: '/api/categories/subCategories/all',
+        path: '/api/categories/subCategories/all/:id',
         method: getCategoryWithSubcategories,
       },
     ],
