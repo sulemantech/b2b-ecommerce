@@ -61,7 +61,7 @@ const server = new ApolloServer({
 app.use('/notifications',notificationRoute)
 
 //swagger Api's
-app.use('/n5store', swaggerUi.serve, swaggerUi.setup(require('./swagger_output.json')));
+// app.use('/n5store', swaggerUi.serve, swaggerUi.setup(require('./swagger_output.json')));
 
 //products
 app.use('/', productRoutes);

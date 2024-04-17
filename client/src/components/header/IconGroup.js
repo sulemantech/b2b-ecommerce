@@ -5,10 +5,11 @@ import clsx from "clsx";
 import MenuCart from "./sub-components/MenuCart";
 import { logoutAsync } from "../../store/slices/Auth-Action";
 import { useState, useEffect } from "react";
+import Editdata from "./sub-components/UpdateNotification";
 // import { logoutAsync } from "../../store/slices/API";
 
 const IconGroup = ({ iconWhiteClass }) => {
-  const [notifi , setNotifi]= useState(false)
+  const [notifi, setNotifi] = useState(false);
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const authToken = useSelector((state) => state.auth.token);
@@ -30,15 +31,14 @@ const IconGroup = ({ iconWhiteClass }) => {
   const { compareItems } = useSelector((state) => state.compare);
   const { wishlistItems } = useSelector((state) => state.wishlist);
   const { cartItems } = useSelector((state) => state.cart);
-  const notificatiohandker =()=>{
-    setNotifi(!notifi)
-  }
+  const notificatiohandker = () => {
+    setNotifi(!notifi);
+  };
 
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const notificationResponse = await fetch(
-          `${process.env.REACT_APP_PUBLIC_URL}/notifications/specific`,
+        const notificationResponse = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notifications/specific`,
           {
             method: "GET",
             headers: {
@@ -51,7 +51,6 @@ const IconGroup = ({ iconWhiteClass }) => {
         // const notificationCount = notifications.length;
         console.log("NotificationCount", notificationCount);
         setNotificationCount(notifications);
-        debugger;
       } catch (error) {
         console.error("Error fetching notifications:", error);
       }
@@ -145,7 +144,10 @@ const IconGroup = ({ iconWhiteClass }) => {
         <MenuCart />
       </div>
       <div className="same-style cart-wrap d-none d-lg-block">
-        <button onClick={notificatiohandker}>
+        <button
+          className="account-setting-active"
+          onClick={(e) => handleClick(e)}
+        >
           <i class="fa fa-bell position-relative border-0" aria-hidden="true">
             <span className="count-style">
               {notificationCount && notificationCount.length
@@ -153,15 +155,43 @@ const IconGroup = ({ iconWhiteClass }) => {
                 : 0}
             </span>
           </i>
-         {notifi &&  <ul className="position-absolute">
-         {notificationCount.map(notification => (
-      <li key={notification.id}>
-        {notification.notificationType.typeName}
-      </li>
-    ))}
-           
-          </ul>}
         </button>
+        <div className="account-dropdown">
+          <ul>
+            {isLoggedIn ? (
+              notificationCount &&
+              notificationCount.map((notification) => (
+              <Link to={`/product-tab-right/${notification.id}`}>
+                <li key={notification.id}>
+                  {notification.notificationType.typeName}
+                </li>
+                </Link>
+              ))
+            ) : (
+              <li>no notification</li>
+            )}
+          </ul>
+        </div>
+        <div className="account-dropdown">
+          <ul>
+            {isLoggedIn ? (
+              notificationCount &&
+              notificationCount.map((notification) => (
+              <Link to={`/product-tab-right/${notification.id}`}>
+                <li key={notification.id}>
+                  {notification.notificationType.typeName}
+                </li>
+                </Link>
+              ))
+            ) : (
+              <li>no notification</li>
+            )}
+          </ul>
+        </div>
+      </div>
+      <div>
+            <Editdata />
+
       </div>
       <div className="same-style cart-wrap d-block d-lg-none">
         <Link className="icon-cart" to={process.env.PUBLIC_URL + "/cart"}>

@@ -221,6 +221,10 @@ const ShopGridStandard = () => {
           </div>
         </div>
       </LayoutOne>
+      <div className="position-absolute top-0 w-full h-full bg-black-2">
+        <div>
+        </div>
+      </div>
     </Fragment>
   );
 };

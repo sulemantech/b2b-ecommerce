@@ -205,7 +205,8 @@ const updateNotificationDate = async (req, res) => {
     is_read
   } = req.body;
   try {
-    const updatedNotification = await notificationModel.update(
+    // Perform the update operation
+    await notificationModel.update(
       {
         notification_type_id,
         related_entity_type,
@@ -217,16 +218,18 @@ const updateNotificationDate = async (req, res) => {
         is_read
       },
       {
-        where: {id:id },
+        where: { id: id }
       }
     );
 
-    res.json({ message: "Order updated successfully", updatedNotification });
+    const updatedNotification = await notificationModel.findByPk(id);
+    res.json({ message: "Notification updated successfully", updatedNotification });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal Server Error in order update" });
+    res.status(500).json({ message: "Internal Server Error in notification update" });
   }
 };
+
 
 module.exports = {
   sendNotification,

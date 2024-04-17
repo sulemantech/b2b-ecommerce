@@ -5,7 +5,7 @@ const Sequelize = require('sequelize');
 //   dialect: process.env.DIALECT
 // });
 
-const sequelize = new Sequelize('b2becommerce3', 'root', '', {
+const sequelize = new Sequelize('b2becommerce', 'root', '', {
   host: 'localhost',
   dialect: 'mariadb'
 });
