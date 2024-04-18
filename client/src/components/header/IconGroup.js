@@ -48,8 +48,7 @@ const IconGroup = ({ iconWhiteClass }) => {
           }
         );
         const notifications = await notificationResponse.json();
-        // const notificationCount = notifications.length;
-        console.log("NotificationCount", notificationCount);
+        // console.log("NotificationCount", notificationCount);
         setNotificationCount(notifications);
       } catch (error) {
         console.error("Error fetching notifications:", error);
@@ -144,44 +143,31 @@ const IconGroup = ({ iconWhiteClass }) => {
         <MenuCart />
       </div>
       <div className="same-style cart-wrap d-none d-lg-block">
-        <button
-          className="account-setting-active"
-          onClick={(e) => handleClick(e)}
-        >
-          <i class="fa fa-bell position-relative border-0" aria-hidden="true">
-            <span className="count-style">
-              {notificationCount && notificationCount.length
-                ? notificationCount.length
-                : 0}
-            </span>
-          </i>
-        </button>
+      <button
+  className="account-setting-active"
+  onClick={(e) => handleClick(e)}
+>
+  <i className="fa fa-bell position-relative border-0" aria-hidden="true">
+    <span className="count-style">
+      {notificationCount && notificationCount.length 
+        ? notificationCount.filter(notification => notification.is_read === false).length 
+        : 0}
+    </span>
+  </i>
+</button>
+
         <div className="account-dropdown">
           <ul>
             {isLoggedIn ? (
               notificationCount &&
               notificationCount.map((notification) => (
-              <Link to={`/product-tab-right/${notification.id}`}>
+              // <Link to={`/product-tab-right/${notification.id}`}>
                 <li key={notification.id}>
-                  {notification.notificationType.typeName}
+                <Editdata name={notification.notificationType.typeName} filteredData={notification}/>
+
                 </li>
-                </Link>
-              ))
-            ) : (
-              <li>no notification</li>
-            )}
-          </ul>
-        </div>
-        <div className="account-dropdown">
-          <ul>
-            {isLoggedIn ? (
-              notificationCount &&
-              notificationCount.map((notification) => (
-              <Link to={`/product-tab-right/${notification.id}`}>
-                <li key={notification.id}>
-                  {notification.notificationType.typeName}
-                </li>
-                </Link>
+                
+                // </Link>
               ))
             ) : (
               <li>no notification</li>
@@ -190,7 +176,6 @@ const IconGroup = ({ iconWhiteClass }) => {
         </div>
       </div>
       <div>
-            <Editdata />
 
       </div>
       <div className="same-style cart-wrap d-block d-lg-none">
