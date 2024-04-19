@@ -162,8 +162,6 @@ const Checkout = () => {
         recipient_id: userId,
         status: "pending"
       };
-
-      // Call the API to create the notification
       const notificationResponse = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notifications/send`, {
         method: 'POST',
         headers: {
@@ -177,6 +175,14 @@ const Checkout = () => {
       } else {
         console.error("Failed to create notification");
       }
+      const ws = new WebSocket("ws://localhost:8000");
+
+      ws.onopen = () => {
+        console.log("WebSocket connection established");
+        ws.send(JSON.stringify(notificationData));
+        setNoti(notificationData);
+        console.log("websokitkkkkkkkkkkkkkk",notificationData);
+      };
 
       navigate("/order/success");
       console.log("Order placed successfully:", response);

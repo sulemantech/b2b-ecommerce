@@ -38,7 +38,8 @@ const IconGroup = ({ iconWhiteClass }) => {
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const notificationResponse = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notifications/specific`,
+        const notificationResponse = await fetch(
+          `${process.env.REACT_APP_PUBLIC_URL}/notifications/specific`,
           {
             method: "GET",
             headers: {
@@ -143,41 +144,47 @@ const IconGroup = ({ iconWhiteClass }) => {
         <MenuCart />
       </div>
       <div className="same-style cart-wrap d-none d-lg-block">
-      <button
-  className="account-setting-active"
-  onClick={(e) => handleClick(e)}
->
-  <i className="fa fa-bell position-relative border-0" aria-hidden="true">
-    <span className="count-style">
-      {notificationCount && notificationCount.length 
-        ? notificationCount.filter(notification => notification.is_read === false).length 
-        : 0}
-    </span>
-  </i>
-</button>
+        <button
+          className="account-setting-active"
+          onClick={(e) => handleClick(e)}
+        >
+          <i
+            className="fa fa-bell position-relative border-0"
+            aria-hidden="true"
+          >
+            <span className="count-style">
+              {notificationCount && notificationCount.length
+                ? notificationCount.filter(
+                    (notification) => notification.is_read === false
+                  ).length
+                : 0}
+            </span>
+          </i>
+        </button>
 
         <div className="account-dropdown">
           <ul>
             {isLoggedIn ? (
-              notificationCount &&
-              notificationCount.map((notification) => (
-              // <Link to={`/product-tab-right/${notification.id}`}>
-                <li key={notification.id}>
-                <Editdata name={notification.notificationType.typeName} filteredData={notification}/>
-
-                </li>
-                
-                // </Link>
-              ))
+              Array.isArray(notificationCount) &&
+              notificationCount.length > 0 ? (
+                notificationCount.map((notification) => (
+                  <li key={notification.id}>
+                    <Editdata
+                      name={notification.notificationType.typeName}
+                      filteredData={notification}
+                    />
+                  </li>
+                ))
+              ) : (
+                <li>no notification</li>
+              )
             ) : (
               <li>no notification</li>
             )}
           </ul>
         </div>
       </div>
-      <div>
-
-      </div>
+      <div></div>
       <div className="same-style cart-wrap d-block d-lg-none">
         <Link className="icon-cart" to={process.env.PUBLIC_URL + "/cart"}>
           <i className="pe-7s-shopbag" />

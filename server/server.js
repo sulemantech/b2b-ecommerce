@@ -24,6 +24,8 @@ const swaggerUi = require('swagger-ui-express');
 // const authRoutes = require('./routes/authRoutes');
 const notificationRoute=require('./routes/notificationRoute.js')
 const sequelize = require('./config/config.js');
+const WebSocket = require('ws');
+
 
 
 require('dotenv').config();
@@ -37,6 +39,23 @@ app.use(cookieParser());
 app.get('/', (req,res)=>{
     res.send("getting ")
 })
+
+const wss = new WebSocket.Server({ port: 8000 });
+
+wss.on('connection', function connection(ws) {
+    console.log('Client connected');
+
+    ws.on('message', function incoming(message) {
+        console.log('Received: %s', message);
+        // Handle incoming messages (e.g., send notifications)
+    });
+
+    ws.on('close', function close() {
+        console.log('Client disconnected');
+    });
+});
+
+// Start the server
 
 
 // sequelize.sync({ force: false }) // This will drop the existing tables and recreate them
