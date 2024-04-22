@@ -11,6 +11,7 @@ import { addToWishlist } from "../../store/slices/wishlist-slice";
 import { addToCompare } from "../../store/slices/compare-slice";
 import { useSelector } from "react-redux";
 import { APIHost } from "../../API";
+import { useEffect } from "react";
 
 const ProductGridListSingle = ({
   product,
@@ -30,39 +31,121 @@ const ProductGridListSingle = ({
     discountedPrice * currency.currencyRate
   ).toFixed(2);
   const dispatch = useDispatch();
+
+  const [sellingTime, setSellingTime] = useState("");
+
+  // useEffect(() => {
+  //   const fetchSellingTime = async () => {
+  //     try {
+  //       const response = await fetch(`${APIHost}/api/order`);
+  //       const data = await response.json();
+
+  //       const currentTime = new Date();
+  //       const order = data.find((order) =>
+  //         order.orderItems.some((item) => item.productId === product.id)
+  //       );
+  //       if (order) {
+  //         const orderCreatedAt = new Date(order.createdAt);
+  //         const timeDifference = currentTime - orderCreatedAt;
+  //         let sellingTime;
+  //         if (timeDifference < 60 * 1000) {
+  //           sellingTime = "just now";
+  //         } else if (timeDifference < 60 * 60 * 1000) {
+  //           const minutes = Math.floor(timeDifference / (60 * 1000));
+  //           sellingTime = `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+  //         } else if (timeDifference < 24 * 60 * 60 * 1000) {
+  //           const hours = Math.floor(timeDifference / (60 * 60 * 1000));
+  //           sellingTime = `${hours} hour${hours > 1 ? "s" : ""} ago`;
+  //         } else {
+  //           const days = Math.floor(timeDifference / (24 * 60 * 60 * 1000));
+  //           sellingTime = `${days} day${days > 1 ? "s" : ""} ago`;
+  //         }
+  //         setSellingTime(sellingTime);
+  //         console.log("sellingggggg",sellingTime);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching selling time:", error);
+  //     }
+  //   };
+
+  //   fetchSellingTime();
+  // }, [product.id]);
+
+  useEffect(() => {
+    const fetchSellingTime = async () => {
+      try {
+        const response = await fetch(`${APIHost}/api/order`);
+        const data = await response.json();
+
+        const currentTime = new Date();
+        const latestOrder = data
+          .filter((order) =>
+            order.orderItems.some((item) => item.productId === product.id)
+          )
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
+
+        if (latestOrder) {
+          const orderCreatedAt = new Date(latestOrder.createdAt);
+          const timeDifference = currentTime - orderCreatedAt;
+          let sellingTime;
+          if (timeDifference < 60 * 1000) {
+            sellingTime = "just now";
+          } else if (timeDifference < 60 * 60 * 1000) {
+            const minutes = Math.floor(timeDifference / (60 * 1000));
+            sellingTime = `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+          } else if (timeDifference < 24 * 60 * 60 * 1000) {
+            const hours = Math.floor(timeDifference / (60 * 60 * 1000));
+            sellingTime = `${hours} hour${hours > 1 ? "s" : ""} ago`;
+          } else {
+            const days = Math.floor(timeDifference / (24 * 60 * 60 * 1000));
+            sellingTime = `${days} day${days > 1 ? "s" : ""} ago`;
+          }
+          setSellingTime(sellingTime);
+          // console.log("sellingggggg",sellingTime);
+        }
+      } catch (error) {
+        console.error("Error fetching selling time:", error);
+      }
+    };
+
+    fetchSellingTime();
+
+    // Set up a timer to fetch selling time every minute
+    const interval = setInterval(fetchSellingTime, 60000);
+    return () => clearInterval(interval);
+  }, [product.id]);
+
   return (
     <Fragment>
-  
       <div className={clsx("product-wrap", spaceBottomClass)}>
         <div className="product-img ">
-        <Link to={process.env.PUBLIC_URL + "/product-tab-right/" + product.id}>
-    {product?.productImages?.[0]?.images?.[0] ? (
-      <img
-        className="default-img"
-        src={`${APIHost}${product?.productImages?.[0]?.images?.[0]}`}
-        alt="Product"
-      />
-    ) : (
-      <img
-        className="default-img"
-        src="https://www.cureuppharma.in/wp-content/uploads/2018/06/dummy.jpg"
-        alt="Dummy Image"
-      />
-    )}
+          <Link
+            to={process.env.PUBLIC_URL + "/product-tab-right/" + product.id}
+          >
+            {product?.productImages?.[0]?.images?.[0] ? (
+              <img
+                className="default-img"
+                src={`${APIHost}${product?.productImages?.[0]?.images?.[0]}`}
+                alt="Product"
+              />
+            ) : (
+              <img
+                className="default-img"
+                src="https://www.cureuppharma.in/wp-content/uploads/2018/06/dummy.jpg"
+                alt="Dummy Image"
+              />
+            )}
 
-    {product.productImages.length > 1 ? (
-      <img
-        className="hover-img"
-        src={
-          `${APIHost}${
-          product?.productImages[0]?.images[0]
-        }`}
-        alt="Product Hover"
-      />
-    ) : (
-      ""
-    )}
-  </Link>
+            {product.productImages.length > 1 ? (
+              <img
+                className="hover-img"
+                src={`${APIHost}${product?.productImages[0]?.images[0]}`}
+                alt="Product Hover"
+              />
+            ) : (
+              ""
+            )}
+          </Link>
 
           {product.discount || product.new ? (
             <div className="product-img-badges">
@@ -139,6 +222,7 @@ const ProductGridListSingle = ({
             </div>
           </div>
         </div>
+        <div>{sellingTime && <p>Sold {sellingTime}</p>}</div>
         <div className="product-content text-center">
           <h3>
             <Link to={process.env.PUBLIC_URL + "/product/" + product.id}>
@@ -163,154 +247,6 @@ const ProductGridListSingle = ({
             ) : (
               <span>{currency.currencySymbol + finalProductPrice} </span>
             )}
-          </div>
-        </div>
-      </div>
-      <div className="shop-list-wrap mb-30">
-        <div className="row">
-          <div className="col-xl-4 col-md-5 col-sm-6">
-            <div className="product-list-image-wrap">
-              <div className="product-img">
-              <Link to={process.env.PUBLIC_URL + "/product-tab-right/" + product.id}>
-                  <img
-                    className="default-img img-fluid "
-                    src={`${APIHost}${product?.productImages?.[0]?.images?.[0]}`}
-                  
-                    alt=""
-                  />
-                  {product.productImages.length > 1 ? (
-                    <img
-                      className="hover-img img-fluid"
-                      src={
-                        process.env.PUBLIC_URL +
-                        product?.productImages[0]?.images[0]
-                      }
-                      alt=""
-                    />
-                  ) : (
-                    ""
-                  )}
-                </Link>
-                {product.discount || product.new ? (
-                  <div className="product-img-badges">
-                    {product.discount ? (
-                      <span className="pink">-{product.discount}%</span>
-                    ) : (
-                      ""
-                    )}
-                    {product.new ? <span className="purple">New</span> : ""}
-                  </div>
-                ) : (
-                  ""
-                )}
-              </div>
-            </div>
-          </div>
-          <div className="col-xl-8 col-md-7 col-sm-6">
-            <div className="shop-list-content">
-              <h3>
-                <Link to={process.env.PUBLIC_URL + "/product/" + product.id}>
-                  {product.name}
-                </Link>
-              </h3>
-              <div className="product-list-price">
-                {discountedPrice !== null ? (
-                  <Fragment>
-                    <span>
-                      {currency.currencySymbol + finalDiscountedPrice}
-                    </span>{" "}
-                    <span className="old">
-                      {currency.currencySymbol + finalProductPrice}
-                    </span>
-                  </Fragment>
-                ) : (
-                  <span>{currency.currencySymbol + finalProductPrice} </span>
-                )}
-              </div>
-              {product.rating && product.rating > 0 ? (
-                <div className="rating-review">
-                  <div className="product-list-rating">
-                    <Rating ratingValue={product.rating} />
-                  </div>
-                </div>
-              ) : (
-                ""
-              )}
-              {product.description ? <p>{product.description}</p> : ""}
-
-              <div className="shop-list-actions d-flex align-items-center">
-                <div className="shop-list-btn btn-hover">
-                  {product.affiliateLink ? (
-                    <a
-                      href={product.affiliateLink}
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
-                      {" "}
-                      Buy now{" "}
-                    </a>
-                  ) : product.variation && product.variation.length >= 1 ? (
-                    <Link
-                      to={`${process.env.PUBLIC_URL}/product/${product.id}`}
-                    >
-                      Select Option
-                    </Link>
-                  ) : product.stock && product.stock > 0 ? (
-                    <button
-                      onClick={() => dispatch(addToCart(product))}
-                      className={
-                        cartItem !== undefined && cartItem.quantity > 0
-                          ? "active"
-                          : ""
-                      }
-                      disabled={cartItem !== undefined && cartItem.quantity > 0}
-                      title={
-                        cartItem !== undefined ? "Added to cart" : "Add to cart"
-                      }
-                    >
-                      {" "}
-                      <i className="pe-7s-cart"></i>{" "}
-                      {cartItem !== undefined && cartItem.quantity > 0
-                        ? "Added"
-                        : "Add to cart"}
-                    </button>
-                  ) : (
-                    <button disabled className="active">
-                      Out of Stock
-                    </button>
-                  )}
-                </div>
-
-                <div className="shop-list-wishlist ml-10">
-                  <button
-                    className={wishlistItem !== undefined ? "active" : ""}
-                    disabled={wishlistItem !== undefined}
-                    title={
-                      wishlistItem !== undefined
-                        ? "Added to wishlist"
-                        : "Add to wishlist"
-                    }
-                    onClick={() => dispatch(addToWishlist(product))}
-                  >
-                    <i className="pe-7s-like" />
-                  </button>
-                </div>
-                <div className="shop-list-compare ml-10">
-                  <button
-                    className={compareItem !== undefined ? "active" : ""}
-                    disabled={compareItem !== undefined}
-                    title={
-                      compareItem !== undefined
-                        ? "Added to compare"
-                        : "Add to compare"
-                    }
-                    onClick={() => dispatch(addToCompare(product))}
-                  >
-                    <i className="pe-7s-shuffle" />
-                  </button>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -340,12 +276,3 @@ ProductGridListSingle.propTypes = {
 };
 
 export default ProductGridListSingle;
-// {
-//     searchResults?.data.search?.map((result)=>(
-//       <div key={result.id}>
-//       <h3>{result.name}</h3>
-//       <p>{result.description}</p>
-//       <p>Price: {result.price}</p>
-//     </div>
-// ))
-// }
