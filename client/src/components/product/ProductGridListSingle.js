@@ -222,7 +222,8 @@ const ProductGridListSingle = ({
             </div>
           </div>
         </div>
-        <div>{sellingTime && <p>Sold {sellingTime}</p>}</div>
+        <div>
+          {sellingTime && <p>Sold {sellingTime}</p>}</div>
         <div className="product-content text-center">
           <h3>
             <Link to={process.env.PUBLIC_URL + "/product/" + product.id}>

@@ -4,6 +4,7 @@
   "homepage": "https://dev.devcares.com",
   "private": true,
   "dependencies": {
+    "@react-oauth/google": "^0.12.1",
     "@reduxjs/toolkit": "^1.8.6",
     "animate.css": "^4.1.1",
     "axios": "^1.1.3",

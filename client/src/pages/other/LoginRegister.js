@@ -10,10 +10,14 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { submitLoginAsync } from "../../store/slices/Auth-Action";
 import { postRegistration } from "../../API";
+import { GoogleLogin } from "@react-oauth/google";
+import { jwtDecode } from "jwt-decode";
+
 
 const LoginRegister = () => {
   const dispatch = useDispatch();
   const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [decode,setdecode]=useState();
   const [error, setError] = useState(null);
   const [values, setvalues] = useState({
     firstname: "",
@@ -29,12 +33,6 @@ const LoginRegister = () => {
   const SubmitRegistration = async (e) => {
     e.preventDefault();
     try {
-      // const contactNumberInt = parseInt(values.contactNumber, 10);
-      // if (isNaN(contactNumberInt)) {
-      //   throw new Error('Contact number must be an INTEGER.');
-      // }
-      // const updatedValues = { ...values, contactNumber: contactNumberInt };
-
       const result = await postRegistration("/customer", values);
       console.log("user registerd", result);
       window.location.reload();
@@ -42,13 +40,52 @@ const LoginRegister = () => {
       console.error("Error during registration:", error);
     }
   };
-  
 
   const SubmitLogin = () => {
     dispatch(submitLoginAsync(values, navigate, setError));
   };
 
   let { pathname } = useLocation();
+
+  const registerUser = async (firstName, email) => {
+    try {
+      const userData = {
+        firstname: firstName,
+        email: email,
+        address: "123 Main St",
+        businessName: "ABC Company",
+        contactNumber: "123-456-7890",
+        password: "password123"
+      };
+  
+      const response = await fetch('http://localhost:5001/api/user/register/sso', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error(error);
+      // Handle error
+      return { error: 'Something went wrong' };
+    }
+  };
+  
+  const firstName = decode?.given_name || '';
+  const email = decode?.email || '';
+  
+  registerUser(firstName, email)
+    .then((data) => {
+      console.log(data);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  
+  
 
   return (
     <Fragment>
@@ -67,6 +104,7 @@ const LoginRegister = () => {
             },
           ]}
         />
+       
         <div className="login-register-area pt-100 pb-100">
           <div className="container">
             <div className="row">
@@ -143,6 +181,21 @@ const LoginRegister = () => {
                                   </button>
                                 </div>
                               </div>
+                              <div>
+                                <GoogleLogin
+                                  onSuccess={(credentialResponse) =>{
+                                    var decodeCredential=jwtDecode(credentialResponse.credential)
+                                    // console.log(credentialResponse);
+                                    setdecode(decodeCredential);
+                                    console.log(decodeCredential);
+                                  
+                                  }}
+                                  onError={() => {
+                                    console.log("Login Failed");
+                                  }}
+                                />
+                              </div>
+                             
                             </form>
                           </div>
                         </div>
@@ -250,11 +303,9 @@ const LoginRegister = () => {
                                 type="button"
                                 className="btn btn-success"
                                 onClick={SubmitRegistration}
-                                
                               >
                                 Register
-                                </button>
-                              
+                              </button>
                             </form>
                           </div>
                         </div>

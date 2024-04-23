@@ -1,3 +1,4 @@
+import { GoogleOAuthProvider } from '@react-oauth/google';
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import { Suspense, lazy } from "react";
@@ -56,6 +57,7 @@ const App = () => {
             </div>
           }
         >
+            <GoogleOAuthProvider clientId="411512100990-m681qd5nh2a6iuo8g2vip09e8om9mddg.apps.googleusercontent.com">
           <Routes>
             <Route
               // path={process.env.PUBLIC_URL + "/"}
@@ -153,6 +155,7 @@ const App = () => {
 
             <Route path="*" element={<NotFound />} />
           </Routes>
+          </GoogleOAuthProvider>
         </Suspense>
       </ScrollToTop>
     </Router>
