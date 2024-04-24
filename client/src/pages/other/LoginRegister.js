@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Link, json, useLocation } from "react-router-dom";
 import Tab from "react-bootstrap/Tab";
 import Nav from "react-bootstrap/Nav";
@@ -12,11 +12,13 @@ import { submitLoginAsync } from "../../store/slices/Auth-Action";
 import { postRegistration } from "../../API";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
+import { login } from "../../store/slices/Auth-slice";
 
 
 const LoginRegister = () => {
   const dispatch = useDispatch();
   const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [shouldRegister, setShouldRegister] = useState(false);
   const [decode,setdecode]=useState();
   const [error, setError] = useState(null);
   const [values, setvalues] = useState({
@@ -28,6 +30,7 @@ const LoginRegister = () => {
     contactNumber: 0,
     businessName: "",
   });
+
   const navigate = useNavigate();
 
   const SubmitRegistration = async (e) => {
@@ -46,46 +49,107 @@ const LoginRegister = () => {
   };
 
   let { pathname } = useLocation();
-
-  const registerUser = async (firstName, email) => {
-    try {
-      const userData = {
-        firstname: firstName,
-        email: email,
-        address: "123 Main St",
-        businessName: "ABC Company",
-        contactNumber: "123-456-7890",
-        password: "password123"
+  
+  // useEffect(()=>{
+  // const registerUser = async (firstName, email) => {
+  //   try {
+  //     const userData = {
+  //       firstname: firstName,
+  //       email: email,
+  //       address: "123 Main St",
+  //       businessName: "ABC Company",
+  //       contactNumber: "123-456-7890",
+  //       password: "password123"
+  //     };
+  
+  //     const response = await fetch('http://localhost:5001/api/user/register/sso', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(userData),
+  //     });
+  //     const data = await response.json();
+  //     return data;
+  //   } catch (error) {
+  //     console.error(error);
+  //     // Handle error
+  //     return { error: 'Something went wrong' };
+  //   }
+  // };
+ 
+  
+  // const firstName = decode?.given_name || '';
+  // const email = decode?.email || '';
+  
+  // registerUser(firstName, email)
+  //   .then((data) => {
+  //     console.log(data);
+  //     // console.log(data.token);
+  //     if (typeof data.token === 'string' && typeof data.role === 'string') {
+  //       dispatch(login({ token: data.token, role: data.role }));
+  //     } else {
+  //       console.error('Token or role is not a string');
+  //     }
+      
+      
+  //   })
+  //   .catch((error) => {
+  //     console.error(error);
+  //   });
+  // },decode)
+  
+  useEffect(() => {
+    // Check if registration should occur
+    if (shouldRegister) {
+      const registerUser = async (firstName, email) => {
+        try {
+          const userData = {
+            firstname: firstName,
+            email: email,
+            address: "123 Main St",
+            businessName: "ABC Company",
+            contactNumber: "123-456-7890",
+            password: "password123"
+          };
+      
+          const response = await fetch('http://localhost:5001/api/user/register/sso', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData),
+          });
+          const data = await response.json();
+          return data;
+        } catch (error) {
+          console.error(error);
+          // Handle error
+          return { error: 'Something went wrong' };
+        }
       };
+      
+      const firstName = decode?.given_name || '';
+      const email = decode?.email || '';
+      
+      registerUser(firstName, email)
+        .then((data) => {
+          console.log(data);
+          if (typeof data.token === 'string' && typeof data.role === 'string') {
+            dispatch(login({ token: data.token, role: data.role }));
+            navigate('/');
+          } else {
+            console.error('Token or role is not a string');
+          }
+        })
+        .catch((error) => {
+          console.error(error);
+        });
   
-      const response = await fetch('http://localhost:5001/api/user/register/sso', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),
-      });
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error(error);
-      // Handle error
-      return { error: 'Something went wrong' };
+      // Reset the state variable to false after registration
+      setShouldRegister(false);
     }
-  };
-  
-  const firstName = decode?.given_name || '';
-  const email = decode?.email || '';
-  
-  registerUser(firstName, email)
-    .then((data) => {
-      console.log(data);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-  
-  
+  }, [shouldRegister, decode]);
 
   return (
     <Fragment>
@@ -188,6 +252,7 @@ const LoginRegister = () => {
                                     // console.log(credentialResponse);
                                     setdecode(decodeCredential);
                                     console.log(decodeCredential);
+                                    setShouldRegister(true);
                                   
                                   }}
                                   onError={() => {
@@ -323,3 +388,4 @@ const LoginRegister = () => {
 };
 
 export default LoginRegister;
+

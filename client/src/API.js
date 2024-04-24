@@ -92,22 +92,7 @@ const API_Registration = axios.create({
 };
 
 
-const RegistrationSso= `${APIHost}api/user/register/ssol`;
-const API_RegistrationSso = axios.create({
-  baseURL: RegistrationSso,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
- export const postRegistrationSSO = async (endpoint, data) => {
-  try {
-    const response = await API_RegistrationSso.post(endpoint, data);
-    return response.data;
-  } catch (error) {
-    console.error(`Error making POST request to ${endpoint}:`, error);
-    throw error;
-  }
-};
+
 
 
 

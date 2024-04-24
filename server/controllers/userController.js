@@ -59,65 +59,105 @@ const registerCustomer = async (req, res) => {
   }
 };
 
+
+
 // const registerSSO = async (req, res) => {
 //   const { firstname, lastname, address, businessName, contactNumber, email, password } = req.body;
 
 //   try {
 //     const customer = await customerModel.create({ name: firstname + ' ' + lastname, address, email, contactNumber });
 //     // const passwordHash = await bcrypt.hash(password, 10);
+
+//     // Generate a token for the user
+//     const token = jwt.sign(
+//       {
+//         id: customer.id,
+//         email: email,
+//         firstname: firstname,
+//         role: 'user', // Add the role field with the value 'user'
+//       },
+//       process.env.JWT_SECRET, // Use a secure secret key for signing
+//       {
+//         expiresIn: '1h', // Token expiration time
+//       }
+//     );
+    
+
 //     const newUser = await registerationModel.create({
 //       firstname,
-//       lastname: lastname || "", // Use an empty string if lastname is falsy (null, undefined, etc.)
-//       address: address || "", // Use an empty string if address is falsy
-//       businessName: businessName || "", // Use an empty string if businessName is falsy
-//       contactNumber: contactNumber || "", // Use an empty string if contactNumber is falsy
-//       password: password || "", // Use an empty string if password is falsy
+//       lastname: lastname || "", 
+//       address: address || "", 
+//       businessName: businessName || "", 
+//       contactNumber: contactNumber || "",
+//       password: password || "", 
 //       email,
 //       customerId: customer.id,
+      
 //     });
 
-//     res.status(201).json(newUser);
+//     res.status(201).json({ auth: true, token, role: newUser.role });
+//     console.log("token generated",token);
 //   } catch (error) {
 //     console.error(error);
 //     res.status(500).json({ error: 'Internal Server Error' });
 //   }
 // };
 
-
 const registerSSO = async (req, res) => {
   const { firstname, lastname, address, businessName, contactNumber, email, password } = req.body;
 
   try {
-    const customer = await customerModel.create({ name: firstname + ' ' + lastname, address, email, contactNumber });
-    // const passwordHash = await bcrypt.hash(password, 10);
+    // Check if the email already exists
+    const existingUser = await registerationModel.findOne({ where: { email } });
 
-    // Generate a token for the user
-    const token = jwt.sign(
-      {
-        id: customer.id,
-        email: email,
-        firstname: firstname
-        // Add any other relevant user information here
-      },
-      'process.env.JWT_SECRET', // Use a secure secret key for signing
-      {
-        expiresIn: '1h', // Token expiration time
-      }
-    );
+    if (existingUser) {
+      // Email already exists, generate a token for the existing user
+      const token = jwt.sign(
+        {
+          id: existingUser.customerId,
+          email: email,
+          firstname: existingUser.firstname,
+          role: 'user', // Add the role field with the value 'user'
+        },
+        process.env.JWT_SECRET, // Use a secure secret key for signing
+        {
+          expiresIn: '1h', // Token expiration time
+        }
+      );
 
-    const newUser = await registerationModel.create({
-      firstname,
-      lastname: lastname || "", 
-      address: address || "", 
-      businessName: businessName || "", 
-      contactNumber: contactNumber || "",
-      password: password || "", 
-      email,
-      customerId: customer.id,
-    });
+      res.status(200).json({ auth: true, token, role: existingUser.role });
+      console.log("token generated", token);
+    } else {
+      // Email does not exist, create a new user
+      const customer = await customerModel.create({ name: firstname + ' ' + lastname, address, email, contactNumber });
+      const newUser = await registerationModel.create({
+        firstname,
+        lastname: lastname || "",
+        address: address || "",
+        businessName: businessName || "",
+        contactNumber: contactNumber || "",
+        password: password || "",
+        email,
+        customerId: customer.id,
+      });
 
-    res.status(201).json({ newUser, token });
-    console.log("token generated",token);
+      // Generate a token for the new user
+      const token = jwt.sign(
+        {
+          id: newUser.customerId,
+          email: email,
+          firstname: firstname,
+          role: 'user', // Add the role field with the value 'user'
+        },
+        process.env.JWT_SECRET, // Use a secure secret key for signing
+        {
+          expiresIn: '1h', // Token expiration time
+        }
+      );
+
+      res.status(201).json({ auth: true, token, role: newUser.role });
+      console.log("token generated", token);
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
