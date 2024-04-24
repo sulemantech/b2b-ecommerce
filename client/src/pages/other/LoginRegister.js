@@ -10,16 +10,18 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { submitLoginAsync } from "../../store/slices/Auth-Action";
 import { postRegistration } from "../../API";
-import { GoogleLogin } from "@react-oauth/google";
+import { GoogleLogin , useGoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
 import { login } from "../../store/slices/Auth-slice";
-
+import { FacebookLoginButton } from "react-social-login-buttons";
+import { LoginSocialFacebook } from "reactjs-social-login";
+// import { useGoogleLogin } from "@react-oauth/google";
 
 const LoginRegister = () => {
   const dispatch = useDispatch();
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [shouldRegister, setShouldRegister] = useState(false);
-  const [decode,setdecode]=useState();
+  const [decode, setdecode] = useState();
   const [error, setError] = useState(null);
   const [values, setvalues] = useState({
     firstname: "",
@@ -49,56 +51,7 @@ const LoginRegister = () => {
   };
 
   let { pathname } = useLocation();
-  
-  // useEffect(()=>{
-  // const registerUser = async (firstName, email) => {
-  //   try {
-  //     const userData = {
-  //       firstname: firstName,
-  //       email: email,
-  //       address: "123 Main St",
-  //       businessName: "ABC Company",
-  //       contactNumber: "123-456-7890",
-  //       password: "password123"
-  //     };
-  
-  //     const response = await fetch('http://localhost:5001/api/user/register/sso', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(userData),
-  //     });
-  //     const data = await response.json();
-  //     return data;
-  //   } catch (error) {
-  //     console.error(error);
-  //     // Handle error
-  //     return { error: 'Something went wrong' };
-  //   }
-  // };
- 
-  
-  // const firstName = decode?.given_name || '';
-  // const email = decode?.email || '';
-  
-  // registerUser(firstName, email)
-  //   .then((data) => {
-  //     console.log(data);
-  //     // console.log(data.token);
-  //     if (typeof data.token === 'string' && typeof data.role === 'string') {
-  //       dispatch(login({ token: data.token, role: data.role }));
-  //     } else {
-  //       console.error('Token or role is not a string');
-  //     }
-      
-      
-  //   })
-  //   .catch((error) => {
-  //     console.error(error);
-  //   });
-  // },decode)
-  
+
   useEffect(() => {
     // Check if registration should occur
     if (shouldRegister) {
@@ -107,49 +60,65 @@ const LoginRegister = () => {
           const userData = {
             firstname: firstName,
             email: email,
-            address: "123 Main St",
-            businessName: "ABC Company",
-            contactNumber: "123-456-7890",
-            password: "password123"
+            address: "",
+            businessName: "",
+            contactNumber: "",
+            password: "",
           };
-      
-          const response = await fetch('http://localhost:5001/api/user/register/sso', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(userData),
-          });
+
+          const response = await fetch(
+            "http://localhost:5001/api/user/register/sso",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(userData),
+            }
+          );
           const data = await response.json();
           return data;
         } catch (error) {
           console.error(error);
           // Handle error
-          return { error: 'Something went wrong' };
+          return { error: "Something went wrong" };
         }
       };
-      
-      const firstName = decode?.given_name || '';
-      const email = decode?.email || '';
-      
+
+      const firstName = decode?.given_name || "";
+      const email = decode?.email || "";
+
       registerUser(firstName, email)
         .then((data) => {
           console.log(data);
-          if (typeof data.token === 'string' && typeof data.role === 'string') {
+          if (typeof data.token === "string" && typeof data.role === "string") {
             dispatch(login({ token: data.token, role: data.role }));
-            navigate('/');
+            navigate("/");
           } else {
-            console.error('Token or role is not a string');
+            console.error("Token or role is not a string");
           }
         })
         .catch((error) => {
           console.error(error);
         });
-  
+
       // Reset the state variable to false after registration
       setShouldRegister(false);
     }
   }, [shouldRegister, decode]);
+
+  // const loginSSO = useGoogleLogin({
+  //   onSuccess: (codeResponse) => console.log(codeResponse),
+  //   flow: "auth-code",
+  // });
+  
+  // const loginSSO = useGoogleLogin({
+  //   onSuccess: tokenResponse => console.log(tokenResponse),
+    
+  // });
+  const login = useGoogleLogin({
+    onSuccess: tokenResponse => console.log(tokenResponse),
+  });
 
   return (
     <Fragment>
@@ -168,7 +137,7 @@ const LoginRegister = () => {
             },
           ]}
         />
-       
+
         <div className="login-register-area pt-100 pb-100">
           <div className="container">
             <div className="row">
@@ -245,22 +214,62 @@ const LoginRegister = () => {
                                   </button>
                                 </div>
                               </div>
-                              <div>
-                                <GoogleLogin
-                                  onSuccess={(credentialResponse) =>{
-                                    var decodeCredential=jwtDecode(credentialResponse.credential)
+                              <div className="mt-60">
+                                <LoginSocialFacebook
+                                  appId="1601719023701531"
+                                  onResolved={(response) => {
+                                    console.log(response);
+                                  }}
+                                  onReject={(error) => {
+                                    console.log(error);
+                                  }}
+                                >
+                                  <FacebookLoginButton />
+                                </LoginSocialFacebook>
+
+                                {/* <GoogleLogin
+                                  onSuccess={(credentialResponse) => {
+                                    var decodeCredential = jwtDecode(
+                                      credentialResponse.credential
+                                    );
                                     // console.log(credentialResponse);
                                     setdecode(decodeCredential);
                                     console.log(decodeCredential);
                                     setShouldRegister(true);
-                                  
                                   }}
                                   onError={() => {
                                     console.log("Login Failed");
                                   }}
-                                />
+                                /> */}
+
+
+                                {/* <div className="btn btn-primary" onClick={() => login()}>Sign in with Google 🚀</div> */}
+
+                                <button
+                                className="d-flex justify-between"
+                                  onClick={() => loginSSO()}
+                                  style={{
+                                    color: "white",
+                                    width: "99%",
+                                    background: "#d34836",
+                                    padding: "10px",
+                                    borderRadius: "5px",
+                                    marginLeft: "2px",
+                                    fontSize: "20px",
+                                  }}
+                                >
+                                  <span>
+                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-google" width="28" height="28" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+  <path d="M20.945 11a9 9 0 1 1 -3.284 -5.997l-2.655 2.392a5.5 5.5 0 1 0 2.119 6.605h-4.125v-3h7.945z" />
+</svg>
+                                  </span>
+                                  <span className="mx-2">
+
+                                  Google
+                                  </span>
+                                </button>
                               </div>
-                             
                             </form>
                           </div>
                         </div>
@@ -388,4 +397,3 @@ const LoginRegister = () => {
 };
 
 export default LoginRegister;
-
