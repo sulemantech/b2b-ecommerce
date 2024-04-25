@@ -10,18 +10,19 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { submitLoginAsync } from "../../store/slices/Auth-Action";
 import { postRegistration } from "../../API";
-import { GoogleLogin , useGoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
-import { login } from "../../store/slices/Auth-slice";
+import { useGoogleLogin } from "@react-oauth/google";
 import { FacebookLoginButton } from "react-social-login-buttons";
 import { LoginSocialFacebook } from "reactjs-social-login";
+import axios from "axios";
+import { login } from "../../store/slices/Auth-slice";
+
 // import { useGoogleLogin } from "@react-oauth/google";
 
 const LoginRegister = () => {
   const dispatch = useDispatch();
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [shouldRegister, setShouldRegister] = useState(false);
-  const [decode, setdecode] = useState();
+  const [google, setGoogle] = useState();
   const [error, setError] = useState(null);
   const [values, setvalues] = useState({
     firstname: "",
@@ -85,13 +86,15 @@ const LoginRegister = () => {
         }
       };
 
-      const firstName = decode?.given_name || "";
-      const email = decode?.email || "";
+      const firstName = google?.data.given_name || "";
+      console.log("tokenn", firstName);
+      const email = google?.data.email || "";
 
       registerUser(firstName, email)
         .then((data) => {
           console.log(data);
           if (typeof data.token === "string" && typeof data.role === "string") {
+            // Dispatch login action here
             dispatch(login({ token: data.token, role: data.role }));
             navigate("/");
           } else {
@@ -105,20 +108,45 @@ const LoginRegister = () => {
       // Reset the state variable to false after registration
       setShouldRegister(false);
     }
-  }, [shouldRegister, decode]);
+  }, [shouldRegister, google, dispatch, navigate]);
 
-  // const loginSSO = useGoogleLogin({
-  //   onSuccess: (codeResponse) => console.log(codeResponse),
-  //   flow: "auth-code",
-  // });
-  
-  // const loginSSO = useGoogleLogin({
-  //   onSuccess: tokenResponse => console.log(tokenResponse),
-    
-  // });
-  const login = useGoogleLogin({
-    onSuccess: tokenResponse => console.log(tokenResponse),
+  const loginsso = useGoogleLogin({
+    onSuccess: async (response) => {
+      try {
+        const res = await axios.get(
+          "https://www.googleapis.com/oauth2/v3/userinfo",
+          {
+            headers: {
+              Authorization: `Bearer${response.access_token}`,
+            },
+          }
+        );
+        setGoogle(res);
+        setShouldRegister(true);
+      } catch (err) {
+        console.log(err);
+      }
+    },
   });
+
+
+  const [userData, setUserData] = useState(null);
+  console.log("dtaaaaaaaaaaaaaaa",userData);
+
+  const handleFacebookLogin = async (response) => {
+    const accessToken = response.accessToken;
+    const userID = response.userID;
+
+    try {
+      const res = await axios.get(`https://graph.facebook.com/${userID}?fields=name,email&access_token=${accessToken}`);
+      console.log(res.data);
+      setUserData(res.data);
+    } catch (error) {
+      console.error("Error fetching user data:", error);
+    }
+  };
+
+  
 
   return (
     <Fragment>
@@ -215,7 +243,7 @@ const LoginRegister = () => {
                                 </div>
                               </div>
                               <div className="mt-60">
-                                <LoginSocialFacebook
+                                {/* <LoginSocialFacebook
                                   appId="1601719023701531"
                                   onResolved={(response) => {
                                     console.log(response);
@@ -225,29 +253,20 @@ const LoginRegister = () => {
                                   }}
                                 >
                                   <FacebookLoginButton />
-                                </LoginSocialFacebook>
+                                </LoginSocialFacebook> */}
+                                <LoginSocialFacebook
+      appId="1601719023701531"
+      onResolved={handleFacebookLogin}
+      onReject={(error) => {
+        console.log(error);
+      }}
+    >
+      <FacebookLoginButton />
+    </LoginSocialFacebook>
 
-                                {/* <GoogleLogin
-                                  onSuccess={(credentialResponse) => {
-                                    var decodeCredential = jwtDecode(
-                                      credentialResponse.credential
-                                    );
-                                    // console.log(credentialResponse);
-                                    setdecode(decodeCredential);
-                                    console.log(decodeCredential);
-                                    setShouldRegister(true);
-                                  }}
-                                  onError={() => {
-                                    console.log("Login Failed");
-                                  }}
-                                /> */}
-
-
-                                {/* <div className="btn btn-primary" onClick={() => login()}>Sign in with Google 🚀</div> */}
-
-                                <button
-                                className="d-flex justify-between"
-                                  onClick={() => loginSSO()}
+                                <div
+                                  className="btn btn-primary"
+                                  onClick={() => loginsso()}
                                   style={{
                                     color: "white",
                                     width: "99%",
@@ -258,17 +277,8 @@ const LoginRegister = () => {
                                     fontSize: "20px",
                                   }}
                                 >
-                                  <span>
-                                  <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-google" width="28" height="28" viewBox="0 0 24 24" stroke-width="1.5" stroke="#ffffff" fill="none" stroke-linecap="round" stroke-linejoin="round">
-  <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
-  <path d="M20.945 11a9 9 0 1 1 -3.284 -5.997l-2.655 2.392a5.5 5.5 0 1 0 2.119 6.605h-4.125v-3h7.945z" />
-</svg>
-                                  </span>
-                                  <span className="mx-2">
-
-                                  Google
-                                  </span>
-                                </button>
+                                  Sign in with Google 
+                                </div>
                               </div>
                             </form>
                           </div>
