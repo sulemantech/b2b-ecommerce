@@ -12,15 +12,17 @@ import { submitLoginAsync } from "../../store/slices/Auth-Action";
 import { postRegistration } from "../../API";
 import { useGoogleLogin } from "@react-oauth/google";
 import { FacebookLoginButton } from "react-social-login-buttons";
-import { LoginSocialFacebook } from "reactjs-social-login";
+// import FacebookLogin from "react-facebook-login";
 import axios from "axios";
 import { login } from "../../store/slices/Auth-slice";
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 
 // import { useGoogleLogin } from "@react-oauth/google";
 
 const LoginRegister = () => {
   const dispatch = useDispatch();
   const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [facebook, setFacebook] = useState();
   const [shouldRegister, setShouldRegister] = useState(false);
   const [google, setGoogle] = useState();
   const [error, setError] = useState(null);
@@ -53,20 +55,65 @@ const LoginRegister = () => {
 
   let { pathname } = useLocation();
 
-  useEffect(() => {
-    // Check if registration should occur
-    if (shouldRegister) {
-      const registerUser = async (firstName, email) => {
-        try {
-          const userData = {
-            firstname: firstName,
-            email: email,
-            address: "",
-            businessName: "",
-            contactNumber: "",
-            password: "",
-          };
+  // useEffect(() => {
+  //   if (shouldRegister) {
+  //     const registerUser = async (firstName, email) => {
+  //       try {
+  //         const userData = {
+  //           firstname: firstName,
+  //           email: email,
+  //           address: "",
+  //           businessName: "",
+  //           contactNumber: "",
+  //           password: "",
+  //         };
 
+  //         const response = await fetch(
+  //           "http://localhost:5001/api/user/register/sso",
+  //           {
+  //             method: "POST",
+  //             headers: {
+  //               "Content-Type": "application/json",
+  //             },
+  //             body: JSON.stringify(userData),
+  //           }
+  //         );
+  //         const data = await response.json();
+  //         return data;
+  //       } catch (error) {
+  //         console.error(error);
+  //         // Handle error
+  //         return { error: "Something went wrong" };
+  //       }
+  //     };
+
+  //     const firstName = google?.data.given_name || "";
+  //     console.log("tokenn", firstName);
+  //     const email = google?.data.email || "";
+
+  //     registerUser(firstName, email)
+  //       .then((data) => {
+  //         console.log(data);
+  //         if (typeof data.token === "string" && typeof data.role === "string") {
+  //           // Dispatch login action here
+  //           dispatch(login({ token: data.token, role: data.role }));
+  //           navigate("/");
+  //         } else {
+  //           console.error("Token or role is not a string");
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.error(error);
+  //       });
+
+  //     // Reset the state variable to false after registration
+  //     setShouldRegister(false);
+  //   }
+  // }, [shouldRegister, google, dispatch, navigate]);
+  useEffect(() => {
+    if (shouldRegister) {
+      const registerUser = async (userData) => {
+        try {
           const response = await fetch(
             "http://localhost:5001/api/user/register/sso",
             {
@@ -86,11 +133,34 @@ const LoginRegister = () => {
         }
       };
 
-      const firstName = google?.data.given_name || "";
-      console.log("tokenn", firstName);
-      const email = google?.data.email || "";
+      let userData = {};
+      if (google) {
+        const firstName = google.data.given_name || "";
+        const email = google.data.email || "";
+        userData = {
+          firstname: firstName,
+          email: email,
+          address: "",
+          businessName: "",
+          contactNumber: "",
+          password: "",
+          socialMedia: "google", // Add a field to indicate Google login
+        };
+      } else if (facebook) {
+        const firstName = facebook?.name || "";
+        const email = facebook?.email || "";
+        userData = {
+          firstname: firstName,
+          email: email,
+          address: "",
+          businessName: "",
+          contactNumber: "",
+          password: "",
+          socialMedia: "facebook", // Add a field to indicate Facebook login
+        };
+      }
 
-      registerUser(firstName, email)
+      registerUser(userData)
         .then((data) => {
           console.log(data);
           if (typeof data.token === "string" && typeof data.role === "string") {
@@ -104,11 +174,9 @@ const LoginRegister = () => {
         .catch((error) => {
           console.error(error);
         });
-
-      // Reset the state variable to false after registration
       setShouldRegister(false);
     }
-  }, [shouldRegister, google, dispatch, navigate]);
+  }, [shouldRegister, google, facebook, dispatch, navigate]);
 
   const loginsso = useGoogleLogin({
     onSuccess: async (response) => {
@@ -129,24 +197,11 @@ const LoginRegister = () => {
     },
   });
 
-
-  const [userData, setUserData] = useState(null);
-  console.log("dtaaaaaaaaaaaaaaa",userData);
-
-  const handleFacebookLogin = async (response) => {
-    const accessToken = response.accessToken;
-    const userID = response.userID;
-
-    try {
-      const res = await axios.get(`https://graph.facebook.com/${userID}?fields=name,email&access_token=${accessToken}`);
-      console.log(res.data);
-      setUserData(res.data);
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-    }
+  const responseFacebook = (response) => {
+    setFacebook(response);
+    console.log(response);
+    setShouldRegister(true);
   };
-
-  
 
   return (
     <Fragment>
@@ -242,42 +297,101 @@ const LoginRegister = () => {
                                   </button>
                                 </div>
                               </div>
-                              <div className="mt-60">
-                                {/* <LoginSocialFacebook
-                                  appId="1601719023701531"
-                                  onResolved={(response) => {
-                                    console.log(response);
-                                  }}
-                                  onReject={(error) => {
-                                    console.log(error);
-                                  }}
-                                >
-                                  <FacebookLoginButton />
-                                </LoginSocialFacebook> */}
-                                <LoginSocialFacebook
-      appId="1601719023701531"
-      onResolved={handleFacebookLogin}
-      onReject={(error) => {
-        console.log(error);
-      }}
-    >
-      <FacebookLoginButton />
-    </LoginSocialFacebook>
+                              <div className="mt-60 ">
+                                {/* <FacebookLogin
+                                className="bg-danger"
+                                  appId="1353052488720779"
+                                  autoLoad={true}
+                                  fields="name,email,picture"
+                                  onClick={responseFacebook}
+                                  callback={responseFacebook}
+                                  
+                                /> */}
+                                <div className="m-auto w-50 ">
+                                  <FacebookLogin
+                                    appId="1353052488720779"
+                                    autoLoad={true}
+                                    fields="name,email,picture"
+                                    onClick={responseFacebook}
+                                    callback={responseFacebook}
+                                    render={(renderProps) => (
+                                      <button
+                                        style={{
+                                          color: "white",
+                                          width: "100%",
+                                          background: "#3b5998",
+                                          padding: "10px",
+                                          borderRadius: "5px",
+                                          marginLeft: "2px",
+                                          fontSize: "20px",
+                                        }}
+                                      >
+                                        <span>
+                                          <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            class="icon icon-tabler icon-tabler-brand-facebook"
+                                            width="28"
+                                            height="28"
+                                            viewBox="0 0 24 24"
+                                            stroke-width="1.5"
+                                            stroke="#ffffff"
+                                            fill="none"
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                          >
+                                            <path
+                                              stroke="none"
+                                              d="M0 0h24v24H0z"
+                                              fill="none"
+                                            />
+                                            <path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3" />
+                                          </svg>
+                                        </span>
+                                        facebook
+                                      </button>
+                                    )}
+                                  />
+                                </div>
+                                <div className="m-auto w-50 ">
+                                  <div
+                                    className="btn "
+                                    onClick={() => loginsso()}
+                                    style={{
+                                      color: "white",
+                                      width: "100%",
 
-                                <div
-                                  className="btn btn-primary"
-                                  onClick={() => loginsso()}
-                                  style={{
-                                    color: "white",
-                                    width: "99%",
-                                    background: "#d34836",
-                                    padding: "10px",
-                                    borderRadius: "5px",
-                                    marginLeft: "2px",
-                                    fontSize: "20px",
-                                  }}
-                                >
-                                  Sign in with Google 
+                                      background: "#d34836",
+                                      padding: "10px",
+                                      borderRadius: "5px",
+                                      marginLeft: "2px",
+                                      fontSize: "20px",
+                                      marginTop: "5px",
+                                      paddingLeft:"10px"
+                                    }}
+                                  >
+                                    <span>
+                                      <svg
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="icon icon-tabler icon-tabler-brand-google"
+                                        width="28"
+                                        height="28"
+                                        viewBox="0 0 24 24"
+                                        stroke-width="1.5"
+                                        stroke="#ffffff"
+                                        fill="none"
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                      >
+                                        <path
+                                          stroke="none"
+                                          d="M0 0h24v24H0z"
+                                          fill="none"
+                                        />
+                                        <path d="M20.945 11a9 9 0 1 1 -3.284 -5.997l-2.655 2.392a5.5 5.5 0 1 0 2.119 6.605h-4.125v-3h7.945z" />
+                                      </svg>
+                                    </span>
+                                     + Google
+                                  </div>
                                 </div>
                               </div>
                             </form>
