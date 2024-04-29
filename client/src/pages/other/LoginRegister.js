@@ -53,7 +53,7 @@ const LoginRegister = () => {
 
   let { pathname } = useLocation();
 
-
+  
 
   useEffect(() => {
     if (shouldRegister) {
@@ -121,7 +121,7 @@ const LoginRegister = () => {
       }
     },
   });
-
+  
   const responseFacebook = (response) => {
     setFacebook(response);
     console.log(response);
@@ -223,16 +223,8 @@ const LoginRegister = () => {
                                 </div>
                               </div>
                               <div className="mt-60 ">
-                                {/* <FacebookLogin
-                                className="bg-danger"
-                                  appId="1353052488720779"
-                                  autoLoad={true}
-                                  fields="name,email,picture"
-                                  onClick={responseFacebook}
-                                  callback={responseFacebook}
-                                  
-                                /> */}
                                 <div className="m-auto w-50 ">
+
                                   <FacebookLogin
                                     appId="1353052488720779"
                                     autoLoad={true}

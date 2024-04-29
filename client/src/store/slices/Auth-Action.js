@@ -49,11 +49,8 @@ export const submitLoginAsync =
 
 export const logoutAsync = () => async (dispatch) => {
   try {
-    const result = await logoutAsync();
     dispatch(logout());
     localStorage.clear();
-
-    // Clear the token expiration timeout when logging out
     const tokenExpirationTimeout = localStorage.getItem(
       "tokenExpirationTimeout"
     );
