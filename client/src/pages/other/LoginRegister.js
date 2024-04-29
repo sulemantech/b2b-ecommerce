@@ -12,12 +12,10 @@ import { submitLoginAsync } from "../../store/slices/Auth-Action";
 import { postRegistration } from "../../API";
 import { useGoogleLogin } from "@react-oauth/google";
 import { FacebookLoginButton } from "react-social-login-buttons";
-// import FacebookLogin from "react-facebook-login";
 import axios from "axios";
 import { login } from "../../store/slices/Auth-slice";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
-
-// import { useGoogleLogin } from "@react-oauth/google";
+import { registerUserSSO } from "../../API";
 
 const LoginRegister = () => {
   const dispatch = useDispatch();
@@ -55,84 +53,10 @@ const LoginRegister = () => {
 
   let { pathname } = useLocation();
 
-  // useEffect(() => {
-  //   if (shouldRegister) {
-  //     const registerUser = async (firstName, email) => {
-  //       try {
-  //         const userData = {
-  //           firstname: firstName,
-  //           email: email,
-  //           address: "",
-  //           businessName: "",
-  //           contactNumber: "",
-  //           password: "",
-  //         };
 
-  //         const response = await fetch(
-  //           "http://localhost:5001/api/user/register/sso",
-  //           {
-  //             method: "POST",
-  //             headers: {
-  //               "Content-Type": "application/json",
-  //             },
-  //             body: JSON.stringify(userData),
-  //           }
-  //         );
-  //         const data = await response.json();
-  //         return data;
-  //       } catch (error) {
-  //         console.error(error);
-  //         // Handle error
-  //         return { error: "Something went wrong" };
-  //       }
-  //     };
 
-  //     const firstName = google?.data.given_name || "";
-  //     console.log("tokenn", firstName);
-  //     const email = google?.data.email || "";
-
-  //     registerUser(firstName, email)
-  //       .then((data) => {
-  //         console.log(data);
-  //         if (typeof data.token === "string" && typeof data.role === "string") {
-  //           // Dispatch login action here
-  //           dispatch(login({ token: data.token, role: data.role }));
-  //           navigate("/");
-  //         } else {
-  //           console.error("Token or role is not a string");
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         console.error(error);
-  //       });
-
-  //     // Reset the state variable to false after registration
-  //     setShouldRegister(false);
-  //   }
-  // }, [shouldRegister, google, dispatch, navigate]);
   useEffect(() => {
     if (shouldRegister) {
-      const registerUser = async (userData) => {
-        try {
-          const response = await fetch(
-            "http://localhost:5001/api/user/register/sso",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify(userData),
-            }
-          );
-          const data = await response.json();
-          return data;
-        } catch (error) {
-          console.error(error);
-          // Handle error
-          return { error: "Something went wrong" };
-        }
-      };
-
       let userData = {};
       if (google) {
         const firstName = google.data.given_name || "";
@@ -159,8 +83,8 @@ const LoginRegister = () => {
           socialMedia: "facebook", // Add a field to indicate Facebook login
         };
       }
-
-      registerUser(userData)
+  
+      registerUserSSO(userData)
         .then((data) => {
           console.log(data);
           if (typeof data.token === "string" && typeof data.role === "string") {
@@ -177,6 +101,7 @@ const LoginRegister = () => {
       setShouldRegister(false);
     }
   }, [shouldRegister, google, facebook, dispatch, navigate]);
+  
 
   const loginsso = useGoogleLogin({
     onSuccess: async (response) => {

@@ -17,6 +17,7 @@ import { Container } from "react-bootstrap";
 import FooterCheckout from "../../components/footer/FooterCheckout";
 import { APIHost } from "../../API";
 import { jwtDecode } from 'jwt-decode';
+import { sendNotification } from "../../API";
 
 
 const Checkout = () => {
@@ -93,19 +94,36 @@ const Checkout = () => {
   //   try {
   //     const response = await placeOrder(storedToken, orderData);
 
-  //     const notificationResponse = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notifications/types`, {
-      
-      
-  //       const notificationData = {
-  //         notification_type_id: YOUR_NOTIFICATION_TYPE_ID,
-  //         related_entity_type: 'order',
-  //         related_entity_id: response.order.id, // Assuming the order ID is in the response
-  //         message: 'Your order has been placed successfully.',
-  //         sender_id: SENDER_ID,
-  //         recipient_id:userId,
-  //         status: 'unread'
-  //       };
+  //     const notificationData = {
+  //       notification_type_id: 2,
+  //       related_entity_type: "order",
+  //       related_entity_id: 1, // Assuming the order ID is in the response
+  //       message: "Your order has been placed successfully.",
+  //       sender_id: 9, // Assuming admin is the sender
+  //       recipient_id: userId,
+  //       status: "pending"
+  //     };
+  //     const notificationResponse = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notifications/send`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${storedToken}`,
+  //       },
+  //       body: JSON.stringify(notificationData),
   //     });
+  //     if (notificationResponse.ok) {
+  //       console.log("Notification created successfully");
+  //     } else {
+  //       console.error("Failed to create notification");
+  //     }
+  //     const ws = new WebSocket("ws://localhost:8000");
+
+  //     ws.onopen = () => {
+  //       console.log("WebSocket connection established");
+  //       ws.send(JSON.stringify(notificationData));
+  //       setNoti(notificationData);
+  //       console.log("websokitkkkkkkkkkkkkkk",notificationData);
+  //     };
 
   //     navigate("/order/success");
   //     console.log("Order placed successfully:", response);
@@ -162,26 +180,16 @@ const Checkout = () => {
         recipient_id: userId,
         status: "pending"
       };
-      const notificationResponse = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notifications/send`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${storedToken}`,
-        },
-        body: JSON.stringify(notificationData),
-      });
-      if (notificationResponse.ok) {
-        console.log("Notification created successfully");
-      } else {
-        console.error("Failed to create notification");
-      }
+
+      await sendNotification(storedToken, notificationData);
+
       const ws = new WebSocket("ws://localhost:8000");
 
       ws.onopen = () => {
         console.log("WebSocket connection established");
         ws.send(JSON.stringify(notificationData));
-        setNoti(notificationData);
-        console.log("websokitkkkkkkkkkkkkkk",notificationData);
+        // console.log(notificationData);
+        // setNoti(notificationData);
       };
 
       navigate("/order/success");
@@ -192,13 +200,8 @@ const Checkout = () => {
     }
   };
 
- 
- 
- 
-  
- 
-  
-  
+
+
 
   useEffect(() => {
     const fetchUser = async () => {

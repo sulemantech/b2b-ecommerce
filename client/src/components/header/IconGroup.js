@@ -7,9 +7,9 @@ import { logoutAsync } from "../../store/slices/Auth-Action";
 import { useState, useEffect } from "react";
 import Editdata from "./sub-components/UpdateNotification";
 // import { logoutAsync } from "../../store/slices/API";
+import { fetchNotifications } from "../../API";
 
 const IconGroup = ({ iconWhiteClass }) => {
-  const [notifi, setNotifi] = useState(false);
   const dispatch = useDispatch();
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const authToken = useSelector((state) => state.auth.token);
@@ -31,34 +31,22 @@ const IconGroup = ({ iconWhiteClass }) => {
   const { compareItems } = useSelector((state) => state.compare);
   const { wishlistItems } = useSelector((state) => state.wishlist);
   const { cartItems } = useSelector((state) => state.cart);
-  const notificatiohandker = () => {
-    setNotifi(!notifi);
-  };
+
+  
 
   useEffect(() => {
-    const fetchNotifications = async () => {
+    const getNotifications = async () => {
       try {
-        const notificationResponse = await fetch(
-          `${process.env.REACT_APP_PUBLIC_URL}/notifications/specific`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${authToken}`,
-            },
-          }
-        );
-        const notifications = await notificationResponse.json();
-        // console.log("NotificationCount", notificationCount);
+        const notifications = await fetchNotifications(authToken);
         setNotificationCount(notifications);
       } catch (error) {
         console.error("Error fetching notifications:", error);
       }
     };
-
-    fetchNotifications();
+  
+    getNotifications();
   }, [authToken]);
-
+  
   return (
     <div className={clsx("header-right-wrap", iconWhiteClass)}>
       <div className="same-style header-search d-none d-lg-block">

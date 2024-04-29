@@ -206,3 +206,66 @@ export const fetchProducts = (page, pageSize) => async (dispatch) => {
   }
 };
 
+export const sendNotification = async (storedToken, notificationData) => {
+  try {
+    const response = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notifications/send`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${storedToken}`,
+      },
+      body: JSON.stringify(notificationData),
+    });
+
+    if (response.ok) {
+      console.log("Notification created successfully");
+    } else {
+      console.error("Failed to create notification");
+    }
+  } catch (error) {
+    console.error("Error creating notification:", error.message);
+  }
+};
+
+
+export const fetchNotifications = async (authToken) => {
+  try {
+    const notificationResponse = await fetch(
+      `${process.env.REACT_APP_PUBLIC_URL}/notifications/specific`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    );
+    const notifications = await notificationResponse.json();
+    return notifications;
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+    throw error;
+  }
+};
+
+
+
+export const registerUserSSO = async (userData) => {
+  try {
+    const response = await fetch(
+      "http://localhost:5001/api/user/register/sso",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      }
+    );
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    return { error: "Something went wrong" };
+  }
+};
