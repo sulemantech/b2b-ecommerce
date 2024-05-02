@@ -14,8 +14,9 @@ import { useGoogleLogin } from "@react-oauth/google";
 import { FacebookLoginButton } from "react-social-login-buttons";
 import axios from "axios";
 import { login } from "../../store/slices/Auth-slice";
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+import FacebookLogin from "react-facebook-login";
 import { registerUserSSO } from "../../API";
+import "./stylFb.css";
 
 const LoginRegister = () => {
   const dispatch = useDispatch();
@@ -33,6 +34,21 @@ const LoginRegister = () => {
     contactNumber: 0,
     businessName: "",
   });
+
+  function handleMouseOver(e) {
+    const tagName = e.target.tagName.toLowerCase();
+    if (tagName === "div" || tagName === "span") {
+      e.currentTarget.style.background = "#ff6347"; // Use currentTarget to reference the <div> element
+    }
+  }
+  
+  function handleMouseOut(e) {
+    const tagName = e.target.tagName.toLowerCase();
+    if (tagName === "div" || tagName === "span") {
+      e.currentTarget.style.background = "#d34836"; // Use currentTarget to reference the <div> element
+    }
+  }
+  
 
   const navigate = useNavigate();
 
@@ -52,8 +68,6 @@ const LoginRegister = () => {
   };
 
   let { pathname } = useLocation();
-
-  
 
   useEffect(() => {
     if (shouldRegister) {
@@ -83,7 +97,7 @@ const LoginRegister = () => {
           socialMedia: "facebook", // Add a field to indicate Facebook login
         };
       }
-  
+
       registerUserSSO(userData)
         .then((data) => {
           console.log(data);
@@ -101,7 +115,6 @@ const LoginRegister = () => {
       setShouldRegister(false);
     }
   }, [shouldRegister, google, facebook, dispatch, navigate]);
-  
 
   const loginsso = useGoogleLogin({
     onSuccess: async (response) => {
@@ -121,8 +134,9 @@ const LoginRegister = () => {
       }
     },
   });
-  
+
   const responseFacebook = (response) => {
+    debugger;
     setFacebook(response);
     console.log(response);
     setShouldRegister(true);
@@ -223,91 +237,77 @@ const LoginRegister = () => {
                                 </div>
                               </div>
                               <div className="mt-60 ">
-                                <div className="m-auto w-50 ">
-
+                                <div
+                                  className="m-auto"
+                                  style={{ width: "60%" }}
+                                >
                                   <FacebookLogin
                                     appId="1353052488720779"
-                                    autoLoad={true}
                                     fields="name,email,picture"
+                                    autoLoad={false}
                                     onClick={responseFacebook}
                                     callback={responseFacebook}
-                                    render={(renderProps) => (
-                                      <button
-                                        style={{
-                                          color: "white",
-                                          width: "100%",
-                                          background: "#3b5998",
-                                          padding: "10px",
-                                          borderRadius: "5px",
-                                          marginLeft: "2px",
-                                          fontSize: "20px",
-                                        }}
-                                      >
-                                        <span>
-                                          <svg
-                                            xmlns="http://www.w3.org/2000/svg"
-                                            class="icon icon-tabler icon-tabler-brand-facebook"
-                                            width="28"
-                                            height="28"
-                                            viewBox="0 0 24 24"
-                                            stroke-width="1.5"
-                                            stroke="#ffffff"
-                                            fill="none"
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                          >
-                                            <path
-                                              stroke="none"
-                                              d="M0 0h24v24H0z"
-                                              fill="none"
-                                            />
-                                            <path d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3" />
-                                          </svg>
-                                        </span>
-                                        facebook
-                                      </button>
-                                    )}
+                                    cssClass="btnFacebook"
+                                    icon={
+                                      <i
+                                        className="fa fa-facebook "
+                                        style={{ marginRight: "10px" }}
+                                      ></i>
+                                    }
+                                    textButton={
+                                      <span className="mr-200">
+                                        Continue with Facebook
+                                      </span>
+                                    }
                                   />
                                 </div>
-                                <div className="m-auto w-50 ">
+                                <div
+                                  className="m-auto"
+                                  style={{ width: "60%" }}
+                                >
                                   <div
-                                    className="btn "
+                                    className="btn"
                                     onClick={() => loginsso()}
+                                    onMouseOver={handleMouseOver}
+                                    onMouseOut={handleMouseOut}
                                     style={{
                                       color: "white",
                                       width: "100%",
-
                                       background: "#d34836",
-                                      padding: "10px",
                                       borderRadius: "5px",
                                       marginLeft: "2px",
                                       fontSize: "20px",
                                       marginTop: "5px",
-                                      paddingLeft:"10px"
                                     }}
                                   >
-                                    <span>
+                                    <span style={{ marginRight: "5px" }}>
                                       <svg
                                         xmlns="http://www.w3.org/2000/svg"
-                                        class="icon icon-tabler icon-tabler-brand-google"
-                                        width="28"
+                                        className="icon icon-tabler icon-tabler-brand-google-filled"
+                                        width="25"
                                         height="28"
                                         viewBox="0 0 24 24"
-                                        stroke-width="1.5"
+                                        strokeWidth="0.5"
                                         stroke="#ffffff"
                                         fill="none"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
                                       >
                                         <path
                                           stroke="none"
                                           d="M0 0h24v24H0z"
                                           fill="none"
                                         />
-                                        <path d="M20.945 11a9 9 0 1 1 -3.284 -5.997l-2.655 2.392a5.5 5.5 0 1 0 2.119 6.605h-4.125v-3h7.945z" />
+                                        <path
+                                          d="M12 2a9.96 9.96 0 0 1 6.29 2.226a1 1 0 0 1 .04 1.52l-1.51 1.362a1 1 0 0 1 -1.265 .06a6 6 0 1 0 2.103 6.836l.001 -.004h-3.66a1 1 0 0 1 -.992 -.883l-.007 -.117v-2a1 1 0 0 1 1 -1h6.945a1 1 0 0 1 .994 .89c.04 .367 .061 .737 .061 1.11c0 5.523 -4.477 10 -10 10s-10 -4.477 -10 -10s4.477 -10 10 -10z"
+                                          strokeWidth="0"
+                                          fill="currentColor"
+                                        />
                                       </svg>
                                     </span>
-                                     + Google
+                                    <span style={{ marginRight: "30px" }}>
+                                      Continue with Google
+                                    </span>
                                   </div>
                                 </div>
                               </div>
