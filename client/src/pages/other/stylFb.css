@@ -1,12 +1,16 @@
 .btnFacebook {
     color: white;
     width: 100%;
-    background: #3b5998;
-    padding: 5px;
-    height: 45px;
-    border-radius: 5px;
-    margin-left: 2px;
-    font-size: 20px;
+    background: #1877F2;
+    font-family: Helvetica;
+    border: none;
+    padding: 10px;
+    height: 50px;
+    border-radius: 10px;
+    /* border-radius: 50%; */
+    /* margin-left: 2px; */
+    text-align: start;
+    font-size: 18px;
 }
 .btnFacebook:hover{
     background-color: #4267B2;
