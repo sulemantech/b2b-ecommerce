@@ -20,6 +20,7 @@ const resolvers = require('./resolvers/resolver');
 const path = require('path');
 const customerRoute=require('./routes/customerRoute')
 const businessRoute=require('./routes/businessRoute')
+const DealRoute=require('./routes/DealRoutes.js')
 const swaggerUi = require('swagger-ui-express');
 // const authRoutes = require('./routes/authRoutes');
 const notificationRoute=require('./routes/notificationRoute.js')
@@ -58,13 +59,13 @@ wss.on('connection', function connection(ws) {
 // Start the server
 
 
-// sequelize.sync({ force: false }) // This will drop the existing tables and recreate them
-//   .then(() => {
-//     console.log('Database synchronized');
-//   })
-//   .catch(err => {
-//     console.error('An error occurred while synchronizing the database:', err);
-//   });
+sequelize.sync() // This will drop the existing tables and recreate them
+  .then(() => {
+    console.log('Database synchronized');
+  })
+  .catch(err => {
+    console.error('An error occurred while synchronizing the database:', err);
+  });
 
 
 const server = new ApolloServer({
@@ -115,6 +116,7 @@ app.use('/', orderItemsRoute)
 
 //companies
 app.use('/',companiesRoute)
+app.use('/',DealRoute);
 
 //customer
 app.use('/',customerRoute)
