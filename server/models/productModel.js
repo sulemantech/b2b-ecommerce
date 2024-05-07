@@ -184,6 +184,13 @@ const productModel = sequelize.define('products', {
     type: DataTypes.INTEGER,
     allowNull: true   
   },
+  
+    SalePrice:{
+      type:DataTypes.INTEGER,
+      allowNull:true
+    },
+
+  
   DealId: {
     type: DataTypes.INTEGER,
     allowNull: true,
@@ -196,7 +203,7 @@ const productModel = sequelize.define('products', {
 
 productModel.hasMany(productImages, { foreignKey: 'productId' });
 productModel.belongsTo(supplierModel, { foreignKey: 'supplier_id' });
-productModel.belongsTo(categoryModel, { foreignKey: 'catagory_id' });
+productModel.belongsTo(categoryModel, { foreignKey: 'category_id' });
 productModel.belongsTo(FlashDeal,{foreignKey:'DealId'});
 // productModel.belongsToMany(categoryModel, { through: productCategoriesModel });
 categoryModel.belongsToMany(productModel, { through: productCategoriesModel }); 

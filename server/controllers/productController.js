@@ -5,6 +5,7 @@ const {Op}= require('sequelize')
 // const path = require('path');
 const productModel = require('../models/productModel');
 const productImages= require('../models/productImages');
+const FlashDeal=require('../models/FlashDealModel')
 // const categoryModel=require('../models/categoryModel');
 const productVariantModel=require('../models/productVariantModel')
 
@@ -173,7 +174,13 @@ const getAllProductsForClients = async (req,res) => {
           model: productVariantModel,
           attributes: [ 'weight', 'unit', 'key', 'value', 'availableQuantity', 'optionValues'],
           required: false,
-        }
+        },
+        {
+          model: FlashDeal,
+          attributes: ['discountPercentage', 'startTime', 'endTime', 'isLimitedTime'],
+          required: false,
+        },
+       
       ],
       order: [['id', 'ASC']],
     });

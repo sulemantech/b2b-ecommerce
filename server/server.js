@@ -59,13 +59,13 @@ wss.on('connection', function connection(ws) {
 // Start the server
 
 
-sequelize.sync() // This will drop the existing tables and recreate them
-  .then(() => {
-    console.log('Database synchronized');
-  })
-  .catch(err => {
-    console.error('An error occurred while synchronizing the database:', err);
-  });
+// sequelize.sync() // This will drop the existing tables and recreate them
+//   .then(() => {
+//     console.log('Database synchronized');
+//   })
+//   .catch(err => {
+//     console.error('An error occurred while synchronizing the database:', err);
+//   });
 
 
 const server = new ApolloServer({

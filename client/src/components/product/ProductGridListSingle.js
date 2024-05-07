@@ -27,13 +27,11 @@ const ProductGridListSingle = ({
   const hasSearched = useSelector((state) => state.searchpro.hasSearched);
   const searchResults = useSelector((state) => state.searchpro.searchResults);
 
-  const finalDiscountedPrice = +(
-    discountedPrice * currency.currencyRate
-  ).toFixed(2);
+  const finalDiscountedPrice = +(discountedPrice * currency.currencyRate ).toFixed(2);
   const dispatch = useDispatch();
 
   const [sellingTime, setSellingTime] = useState("");
-
+// console.log("enddddddddddddddddddddddddddddddddddd",product?.FlashDeal?.endTime)
   // useEffect(() => {
   //   const fetchSellingTime = async () => {
   //     try {
@@ -114,6 +112,38 @@ const ProductGridListSingle = ({
     const interval = setInterval(fetchSellingTime, 60000);
     return () => clearInterval(interval);
   }, [product.id]);
+
+ // Use the endTime from your API response
+
+//  const [timeLeft, setTimeLeft] = useState(0);
+
+//   useEffect(() => {
+//     const endTime = new Date(product.FlashDeal.endTime).getTime();
+//     const interval = setInterval(() => {
+//       const now = new Date().getTime();
+//       const timeLeft = endTime - now;
+//       setTimeLeft(timeLeft);
+//       console.log("remaning TImeeeee",timeLeft);
+//     }, 1000);
+
+//     return () => clearInterval(interval);
+//   }, [product.FlashDeal.endTime]);
+
+//   const formatTime = (time) => {
+//     if (time < 0) {
+//       return 'Sale ended';
+//     }
+
+//     const days = Math.floor(time / (1000 * 60 * 60 * 24));
+//     const hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+//     const minutes = Math.floor((time % (1000 * 60 * 60)) / (1000 * 60));
+//     const seconds = Math.floor((time % (1000 * 60)) / 1000);
+
+//     return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+//   };
+
+
+
 
   return (
     <Fragment>
@@ -238,9 +268,12 @@ const ProductGridListSingle = ({
             ""
           )}
           <div className="product-price">
-            {discountedPrice !== null ? (
+            { product.SalePrice !== 0 ? (
               <Fragment>
-                <span>{currency.currencySymbol + finalDiscountedPrice}</span>{" "}
+                <span style={{background:"#CC0C39",color:"white", marginRight:"50px",padding:"2px",borderRadius:"2px"}}>{product.discount} % off </span>
+                <span></span>
+                <br></br>
+                <span>{currency.currencySymbol  + product.SalePrice}</span>{" "}
                 <span className="old">
                   {currency.currencySymbol + finalProductPrice}
                 </span>
