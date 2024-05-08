@@ -1,8 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import SidebarLinkGroup from './SidebarLinkGroup';
-import { IoMdPricetag } from "react-icons/io";
+import { IoMdPricetag } from 'react-icons/io';
 import Cookies from 'js-cookie';
+import Logo from '../images/logo/logo-icon.svg';
+import { Link } from 'react-router-dom';
 // import { useNavigate } from "react-router-dom";
 
 import './styl.css';
@@ -13,13 +15,11 @@ interface SidebarProps {
 }
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
-
-  const isadmin=Cookies.get('role');
+  const isadmin = Cookies.get('role');
 
   const location = useLocation();
   const { pathname } = location;
   // const navigate = useNavigate();
-  
 
   const trigger = useRef<any>(null);
   const sidebar = useRef<any>(null);
@@ -64,17 +64,24 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     }
   }, [sidebarExpanded]);
 
-
   return (
     <aside
-    style={{backgroundColor:"lightgray"}}
+      style={{ backgroundColor: 'white' }}
       ref={sidebar}
       className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
-
-<div className="flex items-center justify-between gap-2 px-6 py-5.5 lg:py-6.5">
+      <p className=" bg-[#1c2434] text-center py-7 font-semibold  text-white w-full">
+        <Link
+          className="block flex-shrink-0 lg:block absolute -mt-1 ml-10"
+          to="/"
+        >
+          <img src={Logo} alt="Logo" />
+        </Link>
+        MetaMart Admin
+      </p>
+      <div className="absolute py-8 ml-2 lg:py-6.5">
         <button
           ref={trigger}
           onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -97,13 +104,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           </svg>
         </button>
       </div>
-     
+
       <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
-        <nav className="px-4 lg:mt-9 lg:px-6">
+        <nav className="px-4 lg:mt-6 lg:px-6">
           <div>
-            <h1 className="mb-4 ml-4  font-semibold  text-black bg-white p-2  rounded-full">
+            <h1 className="mb-4  font-semibold  text-black bg-white p-2  rounded-full">
               Home
-              
             </h1>
 
             <ul className="mb-6 flex flex-col gap-1.5">
@@ -119,9 +125,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       <NavLink
                         to="#"
                         className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out hover:bg-bodydark1  dark:hover:bg-meta-4 ${
-                          (pathname === '/' ||
-                            pathname.includes('dashboard')) 
-                          
+                          pathname === '/' || pathname.includes('dashboard')
                         }`}
                         onClick={(e) => {
                           e.preventDefault();
@@ -200,57 +204,59 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       >
                         <ul className="mb-5.5 flex flex-col gap-2.5 pl-6 ">
                           <li>
-                            <div className="group relative flex items-center gap-2.5 rounded-md px-4 font-medium
-                             text-black duration-300 ease-in-out hover:bg-bodydark1">
-                             <IoMdPricetag />
-                             <h1>
-                             Products
-                             </h1>
+                            <div
+                              className="group relative flex items-center gap-2.5 rounded-md px-4 font-medium
+                             text-black duration-300 ease-in-out hover:bg-bodydark1"
+                            >
+                              <IoMdPricetag />
+                              <h1>Products</h1>
                             </div>
-                            </li>
-                            <li >
-                              <NavLink
-                                to="/product"
-                                className={({ isActive }) =>
-                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-bodydark1 ' +
-                                  (isActive && '!text-black-2')
-                                }
-                              >
-                                 <span className="opacity-0 group-hover:opacity-100 ">&#8594;</span>
+                          </li>
+                          <li>
+                            <NavLink
+                              to="/product"
+                              className={({ isActive }) =>
+                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-bodydark1 ' +
+                                (isActive && '!text-black-2')
+                              }
+                            >
+                              <span className="opacity-0 group-hover:opacity-100 ">
+                                &#8594;
+                              </span>
+                              New Products
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink
+                              to="/products"
+                              className={({ isActive }) =>
+                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2  hover:text-black duration-300 ease-in-out hover:bg-bodydark1 ' +
+                                (isActive && '!text-black-2')
+                              }
+                            >
+                              <span className="opacity-0 group-hover:opacity-100">
+                                &#8594;
+                              </span>
+                              Final Products
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink
+                              to="/import"
+                              className={({ isActive }) =>
+                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-bodydark1 ' +
+                                (isActive && '!text-black-2')
+                              }
+                            >
+                              <span className="opacity-0 group-hover:opacity-100">
+                                &#8594;
+                              </span>
+                              Import
+                            </NavLink>
+                          </li>
 
-                                New Products
-                              </NavLink>
-                            </li>
+                          {isadmin == 'admin' ? (
                             <li>
-                              <NavLink
-                                to="/products"
-                                className={({ isActive }) =>
-                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2  hover:text-black duration-300 ease-in-out hover:bg-bodydark1 ' +
-                                  (isActive && '!text-black-2')
-                                }
-                              >
-                                 <span className="opacity-0 group-hover:opacity-100">&#8594;</span>
-
-                                Final Products
-                              </NavLink>
-                            </li>
-                            <li >
-                              <NavLink
-                                to="/import"
-                                className={({ isActive }) =>
-                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-bodydark1 ' +
-                                  (isActive && '!text-black-2')
-                                }
-                              >
-                                 <span className="opacity-0 group-hover:opacity-100">&#8594;</span>
-
-                                Import
-                              </NavLink>
-                            </li>
-
-                       {isadmin=="admin" ?(
-                            <li>
-
                               <NavLink
                                 to="/users"
                                 className={({ isActive }) =>
@@ -258,37 +264,38 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                   (isActive && '!text-black-2')
                                 }
                               >
-                                 <span className="opacity-0 group-hover:opacity-100">&#8594;</span>
-
+                                <span className="opacity-0 group-hover:opacity-100">
+                                  &#8594;
+                                </span>
                                 Users
                               </NavLink>
                             </li>
-                       ):(
-                        ""
-                            )}
-                            <li >
-                              <NavLink
-                                to="/orders"
-                                className={({ isActive }) =>
-                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium hover:text-black  text-bodydark2 duration-300 ease-in-out hover:bg-bodydark1  ' +
-                                  (isActive && '!text-black-2')
-                                }
-                              >
-                                 <span className="opacity-0 group-hover:opacity-100">&#8594;</span>
-                                 
-                                Order
-                              </NavLink>
-                            </li>
+                          ) : (
+                            ''
+                          )}
+                          <li>
+                            <NavLink
+                              to="/orders"
+                              className={({ isActive }) =>
+                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium hover:text-black  text-bodydark2 duration-300 ease-in-out hover:bg-bodydark1  ' +
+                                (isActive && '!text-black-2')
+                              }
+                            >
+                              <span className="opacity-0 group-hover:opacity-100">
+                                &#8594;
+                              </span>
+                              Order
+                            </NavLink>
+                          </li>
                         </ul>
 
-                        <ul className='hidden'>
+                        <ul className="hidden">
                           <li>
-                            <div className=" group relative flex items-center gap-2.5 rounded-md px-4 font-medium ml-4
-                             text-black duration-300 ease-in-out hover:bg-bodydark1">
-                              <h1 >
-                              Supplier
-
-                              </h1>
+                            <div
+                              className=" group relative flex items-center gap-2.5 rounded-md px-4 font-medium ml-4
+                             text-black duration-300 ease-in-out hover:bg-bodydark1"
+                            >
+                              <h1>Supplier</h1>
                             </div>
                             <li className="ml-3">
                               <NavLink
@@ -298,8 +305,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                   (isActive && '!text-black-2')
                                 }
                               >
-                                 <span className="opacity-0 group-hover:opacity-100">&#8594;</span>
-
+                                <span className="opacity-0 group-hover:opacity-100">
+                                  &#8594;
+                                </span>
                                 Sign Up
                               </NavLink>
                             </li>
@@ -341,11 +349,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {/* <!-- Menu Item Calendar --> */}
 
               {/* <!-- Menu Item Profile --> */}
-             
+
               {/* <!-- Menu Item Profile --> */}
 
               {/* <!-- Menu Item Forms --> */}
-            
+
               {/* <!-- Menu Item Forms --> */}
 
               {/* <!-- Menu Item Tables --> */}
@@ -432,7 +440,6 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
           </div>
 
           {/* <!-- Others Group --> */}
-         
         </nav>
         {/* <!-- Sidebar Menu --> */}
       </div>
