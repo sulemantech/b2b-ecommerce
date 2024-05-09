@@ -5,6 +5,9 @@ import { IoMdPricetag } from 'react-icons/io';
 import Cookies from 'js-cookie';
 import Logo from '../images/logo/logo-icon.svg';
 import { Link } from 'react-router-dom';
+import { IoHomeOutline } from 'react-icons/io5';
+import { LiaUserSolid } from "react-icons/lia";
+import { TbAlignBoxLeftMiddle } from "react-icons/tb";
 // import { useNavigate } from "react-router-dom";
 
 import './styl.css';
@@ -66,15 +69,15 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
 
   return (
     <aside
-      style={{ backgroundColor: 'white' }}
+      style={{ backgroundColor: '#ebebeb' }}
       ref={sidebar}
-      className={`absolute left-0 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
+      className={`absolute left-0 top-0 z-9999 flex h-screen w-60 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
-      <p className=" bg-[#1c2434] text-center py-7 font-semibold  text-white w-full">
+      <p className=" bg-[#1c2434] text-center py-7 pl-6 font-semibold  text-white w-full">
         <Link
-          className="block flex-shrink-0 lg:block absolute -mt-1 ml-10"
+          className="block flex-shrink-0 lg:block absolute -mt-1 ml-2"
           to="/"
         >
           <img src={Logo} alt="Logo" />
@@ -106,13 +109,24 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
       </div>
 
       <div className="no-scrollbar flex flex-col overflow-y-auto duration-300 ease-linear">
-        <nav className="px-4 lg:mt-6 lg:px-6">
+        <nav className="px-4 mt-4">
           <div>
-            <h1 className="mb-4  font-semibold  text-black bg-white p-2  rounded-full">
-              Home
-            </h1>
+            {/* <h1 className="flex mb-4  font-semibold  text-black bg-#ebebeb p-2  rounded-full">
+            <IoHomeOutline />Home
+            </h1> */}
 
-            <ul className="mb-6 flex flex-col gap-1.5">
+            <ul className="mb-6  flex flex-col">
+              
+              <NavLink
+                to="/"
+                className={
+                  'group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded-lg py-1 px-2 text-sm font-bold text-black duration-300 ease-in-out hover:bg-[#f1f1f1]  dark:hover:bg-meta-4'
+                }
+              >
+                <IoHomeOutline />
+                Home
+              </NavLink>
+
               {/* <!-- Menu Item Dashboard --> */}
               <SidebarLinkGroup
                 activeCondition={
@@ -124,7 +138,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <React.Fragment>
                       <NavLink
                         to="#"
-                        className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out hover:bg-bodydark1  dark:hover:bg-meta-4 ${
+                        className={`group focus:bg-white relative flex items-center gap-2.5 rounded-lg py-1 px-2 text-sm font-bold text-black duration-300 ease-in-out hover:bg-[#f1f1f1]  dark:hover:bg-meta-4 ${
                           pathname === '/' || pathname.includes('dashboard')
                         }`}
                         onClick={(e) => {
@@ -136,8 +150,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                       >
                         <svg
                           className="fill-current"
-                          width="18"
-                          height="18"
+                          width="14"
+                          height="14"
                           viewBox="0 0 18 18"
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
@@ -161,8 +175,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         </svg>
                         Dashboard
                         <svg
-                          className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current ${
-                            open && 'rotate-180'
+                          className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current hidden ${
+                            open && 'block'
                           }`}
                           width="20"
                           height="20"
@@ -170,6 +184,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           fill="none"
                           xmlns="http://www.w3.org/2000/svg"
                         >
+                          {/* arrow */}
                           <path
                             fillRule="evenodd"
                             clipRule="evenodd"
@@ -178,7 +193,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           />
                         </svg>
                       </NavLink>
-                      <div
+                      {/* <div
                         className={`translate transform overflow-hidden ${
                           !open && 'hidden'
                         }`}
@@ -188,79 +203,45 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <NavLink
                               to="/"
                               className={({ isActive }) =>
-                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-black duration-300 ease-in-out hover:bg-bodydark1  ' +
+                                'group relative flex items-center gap-2.5 rounded--1 text-sm font-bold text-black duration-300 ease-in-out hover:bg-[#f1f1f1]  ' +
                                 (isActive && '!text-black')
                               }
                             >
-                              eCommerce
+                              MetaMart
                             </NavLink>
                           </li>
                         </ul>
-                      </div>
+                      </div> */}
+
                       <div
                         className={`translate transform overflow-hidden ${
                           !open && 'hidden'
                         }`}
                       >
-                        <ul className="mb-5.5 flex flex-col gap-2.5 pl-6 ">
-                          <li>
-                            <div
-                              className="group relative flex items-center gap-2.5 rounded-md px-4 font-medium
-                             text-black duration-300 ease-in-out hover:bg-bodydark1"
-                            >
-                              <IoMdPricetag />
-                              <h1>Products</h1>
-                            </div>
-                          </li>
+                        <ul className="flex flex-col">
                           <li>
                             <NavLink
-                              to="/product"
+                              to="/"
                               className={({ isActive }) =>
-                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-bodydark1 ' +
+                                'group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded-lg px-3 py-1 text-sm font-bold text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-[#f1f1f1] ' +
                                 (isActive && '!text-black-2')
                               }
                             >
                               <span className="opacity-0 group-hover:opacity-100 ">
                                 &#8594;
                               </span>
-                              New Products
+                              MetaMart
                             </NavLink>
                           </li>
-                          <li>
-                            <NavLink
-                              to="/products"
-                              className={({ isActive }) =>
-                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2  hover:text-black duration-300 ease-in-out hover:bg-bodydark1 ' +
-                                (isActive && '!text-black-2')
-                              }
-                            >
-                              <span className="opacity-0 group-hover:opacity-100">
-                                &#8594;
-                              </span>
-                              Final Products
-                            </NavLink>
-                          </li>
-                          <li>
-                            <NavLink
-                              to="/import"
-                              className={({ isActive }) =>
-                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-bodydark1 ' +
-                                (isActive && '!text-black-2')
-                              }
-                            >
-                              <span className="opacity-0 group-hover:opacity-100">
-                                &#8594;
-                              </span>
-                              Import
-                            </NavLink>
-                          </li>
+                          
+                          
 
                           {isadmin == 'admin' ? (
-                            <li>
+                            <li className='hidden'>
                               <NavLink
                                 to="/users"
                                 className={({ isActive }) =>
-                                  `group relative flex items-center gap-2.5 rounded-md px-4 font-medium hover:text-black text-bodydark2 duration-300 ease-in-out hover:bg-bodydark1 ` +
+                                  `group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded--1 text-sm font-bold hover:text-black text-bodydark2 duration-300 ease-in-out hover:bg-[#f1f1f1] ` +
                                   (isActive && '!text-black-2')
                                 }
                               >
@@ -273,11 +254,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           ) : (
                             ''
                           )}
-                          <li>
+                          <li className='hidden'>
                             <NavLink
                               to="/orders"
                               className={({ isActive }) =>
-                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium hover:text-black  text-bodydark2 duration-300 ease-in-out hover:bg-bodydark1  ' +
+                                'group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded--1 text-sm font-bold hover:text-black  text-bodydark2 duration-300 ease-in-out hover:bg-[#f1f1f1]  ' +
                                 (isActive && '!text-black-2')
                               }
                             >
@@ -292,8 +273,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         <ul className="hidden">
                           <li>
                             <div
-                              className=" group relative flex items-center gap-2.5 rounded-md px-4 font-medium ml-4
-                             text-black duration-300 ease-in-out hover:bg-bodydark1"
+                              className=" group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded--1 text-sm font-bold ml-4
+                             text-black duration-300 ease-in-out hover:bg-[#f1f1f1]"
                             >
                               <h1>Supplier</h1>
                             </div>
@@ -301,7 +282,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               <NavLink
                                 to="/auth/signup"
                                 className={({ isActive }) =>
-                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:bg-bodydark1  hover:text-black ' +
+                                  'group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded--1 text-sm font-bold text-bodydark2 duration-300 ease-in-out hover:bg-[#f1f1f1]  hover:text-black ' +
                                   (isActive && '!text-black-2')
                                 }
                               >
@@ -321,19 +302,265 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               </SidebarLinkGroup>
               {/* <!-- Menu Item Dashboard --> */}
 
+              {/* Products Menu Start Here */}
+              <SidebarLinkGroup
+                activeCondition={
+                  pathname === '/' || pathname.includes('dashboard')
+                }
+              >
+                {(handleClick, open) => {
+                  return (
+                    <React.Fragment>
+                      <NavLink
+                        to="#"
+                        className={`group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded-lg py-1 px-2 text-sm font-bold text-black duration-300 ease-in-out hover:bg-[#f1f1f1]  dark:hover:bg-meta-4 ${
+                          pathname === '/' || pathname.includes('dashboard')
+                        }`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          sidebarExpanded
+                            ? handleClick()
+                            : setSidebarExpanded(true);
+                        }}
+                      >
+                        <IoMdPricetag />
+                        Products
+                        <svg
+                          className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current hidden ${
+                            open && 'block'
+                          }`}
+                          width="20"
+                          height="20"
+                          viewBox="0 0 20 20"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          {/* arrow */}
+                          <path
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M4.41107 6.9107C4.73651 6.58527 5.26414 6.58527 5.58958 6.9107L10.0003 11.3214L14.4111 6.91071C14.7365 6.58527 15.2641 6.58527 15.5896 6.91071C15.915 7.23614 15.915 7.76378 15.5896 8.08922L10.5896 13.0892C10.2641 13.4147 9.73651 13.4147 9.41107 13.0892L4.41107 8.08922C4.08563 7.76378 4.08563 7.23614 4.41107 6.9107Z"
+                            fill=""
+                          />
+                        </svg>
+                      </NavLink>
+                      <div
+                        className={`translate transform overflow-hidden ${
+                          !open && 'hidden'
+                        }`}
+                      >
+                        <ul className="flex flex-col">
+                          <li>
+                            <NavLink
+                              to="/product"
+                              className={({ isActive }) =>
+                                'group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded-lg px-3 py-1 text-sm font-bold text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-[#f1f1f1] ' +
+                                (isActive && '!text-black-2')
+                              }
+                            >
+                              <span className="opacity-0 group-hover:opacity-100 ">
+                                &#8594;
+                              </span>
+                              New Products
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink
+                              to="/products"
+                              className={({ isActive }) =>
+                                'group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded-lg px-3 py-1 text-sm font-bold text-bodydark2  hover:text-black duration-300 ease-in-out hover:bg-[#f1f1f1] ' +
+                                (isActive && '!text-black-2 bg-white')
+                              }
+                            >
+                              <span className="opacity-0 group-hover:opacity-100">
+                                &#8594;
+                              </span>
+                              Final Products
+                            </NavLink>
+                          </li>
+                          <li>
+                            <NavLink
+                              to="/import"
+                              className={({ isActive }) =>
+                                'group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded-lg px-3 py-1 text-sm font-bold text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-[#f1f1f1] ' +
+                                (isActive && '!text-black-2  bg-white')
+                              }
+                            >
+                              <span className="opacity-0 group-hover:opacity-100">
+                                &#8594;
+                              </span>
+                              Import
+                            </NavLink>
+                          </li>
+                        </ul>
+                      </div>
+                      {/* <!-- Products Menu End --> */}
+                    </React.Fragment>
+                  );
+                }}
+              </SidebarLinkGroup>
+              {/* <!-- Menu Item Products --> */}
+
+              {/* Costumer Menu Start Here */}
+              <SidebarLinkGroup
+                activeCondition={
+                  pathname === '/' || pathname.includes('dashboard')
+                }
+              >
+                {(handleClick, open) => {
+                  return (
+                    <React.Fragment>
+                      <NavLink
+                        to="#"
+                        className={`group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded-lg py-1 px-2 text-sm font-bold text-black duration-300 ease-in-out hover:bg-[#f1f1f1]  dark:hover:bg-meta-4 ${
+                          pathname === '/' || pathname.includes('dashboard')
+                        }`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          sidebarExpanded
+                            ? handleClick()
+                            : setSidebarExpanded(true);
+                        }}
+                      >
+                        <LiaUserSolid className='w-3.5 h-4'/>
+                        Costumer
+                        <svg
+                          className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current hidden ${
+                            open && 'block'
+                          }`}
+                          width="20"
+                          height="20"
+                          viewBox="0 0 20 20"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          {/* arrow */}
+                          <path
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M4.41107 6.9107C4.73651 6.58527 5.26414 6.58527 5.58958 6.9107L10.0003 11.3214L14.4111 6.91071C14.7365 6.58527 15.2641 6.58527 15.5896 6.91071C15.915 7.23614 15.915 7.76378 15.5896 8.08922L10.5896 13.0892C10.2641 13.4147 9.73651 13.4147 9.41107 13.0892L4.41107 8.08922C4.08563 7.76378 4.08563 7.23614 4.41107 6.9107Z"
+                            fill=""
+                          />
+                        </svg>
+                      </NavLink>
+                      <div
+                        className={`translate transform overflow-hidden ${
+                          !open && 'hidden'
+                        }`}
+                      >
+                        <ul className="flex flex-col">
+                          <li>
+                            <NavLink
+                              to="/Users"
+                              className={({ isActive }) =>
+                                'group relative focus:bg-[#ffffff] flex items-center rounded-lg px-3 py-1 gap-2.5 text-sm font-bold text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-[#f1f1f1] ' +
+                                (isActive && '!text-black-2')
+                              }
+                            >
+                              <span className="opacity-0 group-hover:opacity-100 ">
+                                &#8594;
+                              </span>
+                              Users
+                            </NavLink>
+                          </li>
+                          
+                        </ul>
+                      </div>
+                      {/* <!-- Costumer Menu End --> */}
+                    </React.Fragment>
+                  );
+                }}
+              </SidebarLinkGroup>
+              {/* <!-- Menu Item Costumer --> */}
+
+              {/* Order Managment Menu Start Here */}
+              <SidebarLinkGroup
+                activeCondition={
+                  pathname === '/' || pathname.includes('dashboard')
+                }
+              >
+                {(handleClick, open) => {
+                  return (
+                    <React.Fragment>
+                      <NavLink
+                        to="#"
+                        className={`group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded-lg py-1 px-2 text-sm font-bold text-black duration-300 ease-in-out hover:bg-[#f1f1f1]  dark:hover:bg-meta-4 ${
+                          pathname === '/' || pathname.includes('dashboard')
+                        }`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          sidebarExpanded
+                            ? handleClick()
+                            : setSidebarExpanded(true);
+                        }}
+                      >
+
+                        <TbAlignBoxLeftMiddle />
+                        Order Managments
+                        <svg
+                          className={`absolute right-4 top-1/2 -translate-y-1/2 fill-current hidden ${
+                            open && 'block'
+                          }`}
+                          width="20"
+                          height="20"
+                          viewBox="0 0 20 20"
+                          fill="none"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          {/* arrow */}
+                          <path
+                            fillRule="evenodd"
+                            clipRule="evenodd"
+                            d="M4.41107 6.9107C4.73651 6.58527 5.26414 6.58527 5.58958 6.9107L10.0003 11.3214L14.4111 6.91071C14.7365 6.58527 15.2641 6.58527 15.5896 6.91071C15.915 7.23614 15.915 7.76378 15.5896 8.08922L10.5896 13.0892C10.2641 13.4147 9.73651 13.4147 9.41107 13.0892L4.41107 8.08922C4.08563 7.76378 4.08563 7.23614 4.41107 6.9107Z"
+                            fill=""
+                          />
+                        </svg>
+                      </NavLink>
+                      <div
+                        className={`translate transform overflow-hidden ${
+                          !open && 'hidden'
+                        }`}
+                      >
+                        <ul className="flex flex-col">
+                          <li>
+                            <NavLink
+                              to="/orders"
+                              className={({ isActive }) =>
+                                'group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded-lg px-3 py-1 text-sm font-bold text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-[#f1f1f1]  '
+                               +
+                                (isActive && '!text-black-2')
+                                
+                              }
+                            >
+                              <span className="opacity-0 group-hover:opacity-100 ">
+                                &#8594;
+                              </span>
+                              Orders
+                            </NavLink>
+                          </li>
+                          
+                        </ul>
+                      </div>
+                      {/* <!-- Order Managment Menu End --> */}
+                    </React.Fragment>
+                  );
+                }}
+              </SidebarLinkGroup>
+              {/* <!-- Menu Item Order Managment --> */}
+
+
               {/* <!-- Menu Item Calendar --> */}
               <li>
                 <NavLink
                   to="/calendar"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out hover:bg-bodydark1 dark:hover:bg-meta-4 ${
-                    pathname.includes('calendar') &&
-                    'bg-graydark dark:bg-meta-4'
+                  className={`group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded-lg py-1 px-2 text-sm font-bold text-black duration-300 ease-in-out hover:bg-[#f1f1f1] dark:hover:bg-meta-4 ${
+                    pathname.includes('calendar') && ' dark:bg-meta-4'
                   }`}
                 >
                   <svg
                     className="fill-current"
-                    width="18"
-                    height="18"
+                    width="14"
+                    height="14"
                     viewBox="0 0 18 18"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
@@ -360,7 +587,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {/* <li>
                 <NavLink
                   to="/tables"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
+                  className={`group relative flex items-center gap-2.5 rounded-lg py-1 px-2 text-sm font-bold text-bodydark1 duration-300 ease-in-out hover:bg-graydark dark:hover:bg-meta-4 ${
                     pathname.includes('tables') && 'bg-graydark dark:bg-meta-4'
                   }`}
                 >
@@ -398,15 +625,14 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <li>
                 <NavLink
                   to="/settings"
-                  className={`group relative flex items-center gap-2.5 rounded-sm py-2 px-4 font-medium text-black duration-300 ease-in-out hover:bg-bodydark1 dark:hover:bg-meta-4 ${
-                    pathname.includes('calendar') &&
-                    'bg-graydark dark:bg-meta-4'
+                  className={`absolute bottom-5 min-w-50 ml-1 focus:bg-[#ffffff] flex items-center gap-2.5 rounded-lg py-1 px-2 text-sm font-bold text-black duration-300 ease-in-out hover:bg-[#f1f1f1] dark:hover:bg-meta-4 ${
+                    pathname.includes('calendar') && ' dark:bg-meta-4'
                   }`}
                 >
                   <svg
                     className="fill-current"
-                    width="18"
-                    height="19"
+                    width="14"
+                    height="14"
                     viewBox="0 0 18 19"
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"

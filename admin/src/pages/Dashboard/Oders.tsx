@@ -57,11 +57,11 @@ const TableTwo: React.FC  = () => {
     <div className="rounded-lg border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
     <p className='text-center font-semibold text-2xl py-5 uppercase'>orders</p>
 
-      <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5">
-        <div className="col-span-2 flex items-center">
+      <div className="grid grid-cols-5 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-6 md:px-6 2xl:px-7.5">
+        <div className="col-span-1 flex items-center">
           <p className="font-medium text-black">Order Date</p>
         </div>
-        <div className="col-span-2 hidden items-center sm:flex">
+        <div className="col-span-1 hidden items-center sm:flex">
           <p className="font-medium text-black">Total Price</p>
         </div>
         <div className="col-span-1 flex items-center">
@@ -81,8 +81,8 @@ const TableTwo: React.FC  = () => {
       
       {orders.map((index) => (
         <div  key={index.id}
-        className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5"  id={`${index.id}`}>
-    <div className="col-span-2 flex items-center">
+        className="grid grid-cols-5 border-t border-stroke py-4.5 px-4 dark:border-strokedark text-sm sm:grid-cols-6 md:px-6 2xl:px-7.5"  id={`${index.id}`}>
+    <div className="col-span-1 flex items-center">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
         <div className="h-12.5 w-15 rounded-md">
         {new Date(index.orderDate).toLocaleString()}
@@ -93,7 +93,7 @@ const TableTwo: React.FC  = () => {
         </p>
       </div>
     </div>
-    <div className="col-span-2 hidden items-center sm:flex">
+    <div className="col-span-1 hidden items-center sm:flex">
       <p className="text-sm text-black dark:text-white">{index.totalPrice}</p>
     </div>
     <div className="col-span-1 flex items-center">
