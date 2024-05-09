@@ -6,6 +6,7 @@ const categoryModel=require('./categoryModel')
 const productCategoriesModel=require('./productCategoriesModel')
 const supplierModel=require('./supplierModel');
 const productVariantModel = require('./productVariantModel');
+const FlashDeal=require('./FlashDealModel.js');
 
 
 // const productModel = sequelize.define('products', {
@@ -183,11 +184,27 @@ const productModel = sequelize.define('products', {
     type: DataTypes.INTEGER,
     allowNull: true   
   },
+  
+    SalePrice:{
+      type:DataTypes.INTEGER,
+      allowNull:true
+    },
+
+  
+  DealId: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    references: {
+      model: FlashDeal,
+      key: 'DealId',
+    }
+  }
 });
 
 productModel.hasMany(productImages, { foreignKey: 'productId' });
 productModel.belongsTo(supplierModel, { foreignKey: 'supplier_id' });
-productModel.belongsTo(categoryModel, { foreignKey: 'catagory_id' });
+productModel.belongsTo(categoryModel, { foreignKey: 'category_id' });
+productModel.belongsTo(FlashDeal,{foreignKey:'DealId'});
 // productModel.belongsToMany(categoryModel, { through: productCategoriesModel });
 categoryModel.belongsToMany(productModel, { through: productCategoriesModel }); 
 productModel.hasMany(productVariantModel, { foreignKey: 'productId' });
