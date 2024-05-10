@@ -177,8 +177,8 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
         <br />
         <br />
         {this.state.products.length > 0 ? (
-          <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5">
-            <div className="col-span-2 flex items-center">
+          <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-6 md:px-6 2xl:px-7.5">
+            <div className="col-span-6 flex items-center">
               <p className="font-medium text-black">Product Name</p>
             </div>
             <div className="col-span-1 hidden items-center sm:flex">
@@ -198,17 +198,17 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
             <div className="col-span-1 flex items-center">
               <p className="font-medium text-black">Status</p>
             </div>
-            <div className="col-span-2 flex items-center">
+            <div className="col-span-1 flex items-center">
               <p className="font-medium text-black">Edit</p>
             </div>
           </div>
         ) : null}
         {this.state.products.map((product: Products) => (
           <div
-            className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5"
+            className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-6 md:px-6 2xl:px-7.5"
             id={`${product.id}`}
           >
-            <div className="col-span-2 flex items-center">
+            <div className="col-span-1 flex items-center">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                 {/* <div className="h-12.5 w-15 rounded-md">
                   <img src={product.productImages[0]?.images[0]} alt="" />
@@ -246,7 +246,7 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
               </p>
             </div>
 
-            <div className="col-span-2 flex items-center">
+            <div className="col-span-1 flex items-center">
               <div>
                 <Link
                   to={`/UpdateProducts/${product.id}`}

@@ -33,54 +33,54 @@ const User: React.FC = () => {
     <>
       <div className=" border border-stroke bg-white shadow-md dark:border-strokedark dark:bg-boxdark rounded-xl">
           <p className='text-center font-semibold text-2xl py-5 uppercase'>Users</p>
-        <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5">
-          <div className="col-span-2 flex items-center">
-            <p className="font-medium text-black">FirstName</p>
+        <div className="grid text-xs sm:text-sm grid-cols-4 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-5 md:px-6 2xl:px-7.5">
+          <div className="col-span-1 flex items-center justify-center">
+            <p className="font-medium text-black">First Name</p>
           </div>
-          <div className="col-span-1 hidden items-center sm:flex">
-            <p className="font-medium text-black">lastName</p>
+          <div className="col-span-1 flex items-center justify-center">
+            <p className="font-medium text-black">Last Name</p>
           </div>
-          <div className="col-span-2 flex items-center">
+          <div className="col-span-1 hidden sm:flex items-center justify-center">
             <p className="font-medium text-black">Email</p>
           </div>
-          <div className="col-span-2 flex items-center">
-            <p className="font-medium text-black">ContactNumber</p>
+          <div className="col-span-1 flex items-center  justify-center">
+            <p className="font-medium text-black text-center">Contact Number</p>
           </div>
-          <div className="col-span-2 flex items-center">
-            <p className="font-medium text-black">businessName</p>
+          <div className="col-span-1 flex items-center  justify-center">
+            <p className="font-medium text-black text-center">Business Name</p>
           </div>
         </div>
 
         {users.map((index) => (
           <div
             key={index.id}
-            className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5"
+            className="grid grid-cols-4 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-5 md:px-6 2xl:px-7.5"
             id={`${index.id}`}
           >
-            <div className="col-span-2 flex items-center">
+            <div className="col-span-1 flex items-center justify-center">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-                <p className="text-sm text-black dark:text-white">
+                <p className="text-xs sm:text-sm flex flex-col text-black dark:text-white text-center">
                   {index.firstname}
                 </p>
               </div>
             </div>
-            <div className="col-span-1 hidden items-center sm:flex">
-              <p className="text-sm text-black dark:text-white">
+            <div className="col-span-1 flex items-center sm:flex justify-center">
+              <p className="text-xs sm:text-sm flex flex-col text-black dark:text-white text-center">
                 {index.lastname}
               </p>
             </div>
-            <div className="col-span-2 hidden items-center sm:flex">
-              <p className="text-sm text-black dark:text-white">
+            <div className="col-span-1 hidden items-center sm:flex justify-center">
+              <p className="text-xs sm:text-sm flex flex-col text-black dark:text-white text-center">
                 {index.email}
               </p>
             </div>
-            <div className="col-span-2 hidden items-center sm:flex">
-              <p className="text-sm text-black dark:text-white">
+            <div className="col-span-1 flex items-center sm:flex justify-center">
+              <p className="text-xs sm:text-sm flex flex-col text-black dark:text-white text-center">
                 {index.contactNumber}
               </p>
             </div>
-            <div className="col-span-2 hidden items-center sm:flex">
-              <p className="text-sm text-black dark:text-white">
+            <div className="col-span-1 flex items-center sm:flex justify-center">
+              <p className="text-xs sm:text-sm flex flex-col text-black dark:text-white text-center">
                 {index.businessName}
               </p>
             </div>

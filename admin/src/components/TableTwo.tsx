@@ -61,60 +61,61 @@ useEffect(() => {
       {Token ? (
       <>
          <p className='text-center font-semibold text-2xl py-5 uppercase'>products</p>
-      <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5">
-        <div className="col-span-2 flex items-center">
-          <p className="font-medium text-black">Product Name</p>
+      <div className="grid text-xs sm:text-sm grid-cols-5 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-7 md:px-6 2xl:px-7.5">
+        <div className="col-span-1 flex items-center justify-center">
+          <p className="font-medium text-black text-center">Product Name</p>
         </div>
-        <div className="col-span-2 hidden items-center sm:flex">
-          <p className="font-medium text-black">Category</p>
+        <div className="col-span-1 hidden items-center justify-center sm:flex">
+          <p className="font-medium text-black text-center">Category</p>
         </div>
-        <div className="col-span-1 flex items-center">
-          <p className="font-medium text-black">Price</p>
+        <div className="col-span-1 flex items-center justify-center">
+          <p className="font-medium text-black text-center">Price</p>
         </div>
-        <div className="col-span-1 flex items-center">
-          <p className="font-medium text-black">Discount</p>
+        <div className="col-span-1 hidden items-center justify-center sm:flex">
+          <p className="font-medium text-black text-center">Discount</p>
         </div>
-        <div className="col-span-1 flex items-center">
-          <p className="font-medium text-black">Manufacturer</p>
+        <div className="col-span-1 flex items-center justify-center">
+          <p className="font-medium text-black text-center hidden sm:block">Manufacturer</p>
+          <p className="font-medium text-black text-center sm:hidden">Mfr.</p>
         </div>
-         <div className="col-span-1 flex items-center">
-          <p className="font-medium text-black">Action</p>
+         <div className="col-span-1 flex items-center justify-center">
+          <p className="font-medium text-black text-center">Action</p>
         </div>
-        <div className="col-span-1 flex items-center">
-          <p className="font-medium text-black">New</p>
+        <div className="col-span-1 flex items-center justify-center">
+          <p className="font-medium text-black text-center">New</p>
         </div>
       </div>
       
       {products.map((product) => (
         <div  key={product.id}
-        className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5"  id={`${product.id}`}>
-    <div className="col-span-2 flex items-center">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-        <div className="h-12.5 w-15 rounded-md">
+        className="grid grid-cols-5 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-7 md:px-6 2xl:px-7.5"  id={`${product.id}`}>
+    <div className="col-span-1 flex items-center justify-center text-center">
+      <div className="flex flex-col gap-2 sm:flex-col sm:items-center">
+        <div className="h-15 w-15 rounded-md flex mx-auto justify-center items-center overflow-hidden">
         {/* <img src={process.env.RESOURCE_SERVER_HOST + product.productImages[0]?.images[0]} alt="" /> */}
         <img src={`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}${product?.productImages[0]?.images[0]}`} />
 
            {/* console.log("pppppppppppppppppp",)   */}
         </div>
-        <p className="text-sm text-black dark:text-white">
+        <p className="text-xs sm:text-sm text-black dark:text-white">
           {product.name}
           {/* {product.id} */}
         </p>
       </div>
     </div>
-    <div className="col-span-2 hidden items-center sm:flex">
-      <p className="text-sm text-black dark:text-white">{product.categoryName}</p>
+    <div className="col-span-1 hidden items-center justify-center sm:flex">
+      <p className="text-xs sm:text-sm text-black dark:text-white text-center">{product.categoryName}</p>
     </div>
-    <div className="col-span-1 flex items-center">
-      <p className="text-sm text-black dark:text-white">{product.price}</p>
+    <div className="col-span-1 flex items-center justify-center">
+      <p className="text-xs sm:text-sm text-black dark:text-white text-center">{product.price}</p>
     </div>
-    <div className="col-span-1 flex items-center">
-      <p className="text-sm text-black dark:text-white">{product.discount}</p>
+    <div className="col-span-1 hidden items-center justify-center sm:flex">
+      <p className="text-xs sm:text-sm text-black dark:text-white text-center">{product.discount}</p>
     </div>
-    <div className="col-span-1 flex items-center">
-      <p className="text-sm text-black dark:text-white">{product.manufacturer}</p>
+    <div className="col-span-1 flex items-center justify-center">
+      <p className="text-xs sm:text-sm text-black dark:text-white text-center">{product.manufacturer}</p>
     </div>
-    <div className="col-span-1 flex items-center">
+    <div className="text-xs sm:text-sm col-span-1 flex items-center justify-center">
       <div>
         <Link to={`/UpdateProducts/${product.id}`} className="bg-blue hover:bg-blue-700 font-bold py-2 px-4 rounded-full">
         Edit
@@ -122,7 +123,7 @@ useEffect(() => {
 
       </div>
     </div>
-    <div className="col-span-1 flex items-center">
+    <div className="text-xs sm:text-sm col-span-1 flex items-center justify-center">
       <Link to={`/product`} className="bg-blue hover:bg-blue-700 font-bold py-2 px-4 rounded-full">
         AddNew
       </Link>
