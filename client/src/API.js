@@ -1,7 +1,7 @@
 import { setCategory } from './store/slices/category-Slice';
 import axios from 'axios';
-// const APIHost = "http://localhost:5001"
-export const APIHost = "https://devcares.com"
+export const APIHost = "http://localhost:5001"
+// export const APIHost = "https://devcares.com"
 
 
 

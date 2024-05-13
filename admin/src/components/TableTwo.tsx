@@ -24,9 +24,6 @@ const TableTwo: React.FC  = () => {
   
 const fetchAllProducts = () => {
   const API_Urlfetch = `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products/clients/all`;
-
-  
-
   fetch(API_Urlfetch ,{
   headers: {
     Authorization: `Bearer ${Token}`,
@@ -40,6 +37,7 @@ const fetchAllProducts = () => {
     })
     .then(data => {
       setProducts(data);
+      
     })
     .catch(error => {
       console.error('Error fetching all products:', error.message);

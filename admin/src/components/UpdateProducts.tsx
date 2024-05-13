@@ -158,6 +158,7 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [SalePrice, setSalePrice] = useState('');
   const [price, setPrice] = useState('');
   const [weight, setWeight] = useState('');
   const [quantity, setQuantity] = useState('');
@@ -218,6 +219,7 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
         const product = response.data;
         setName(product.name || '');
         setDescription(product.description || '');
+        setSalePrice(product.SalePrice || '');
         setPrice(product.price || '');
         setWeight(product.weight || '');
         setQuantity(product.quantity || '');
@@ -294,6 +296,7 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
             name,
             description,
             price,
+            SalePrice,
             quantity,
             manufacturer,
             discount,
@@ -496,8 +499,8 @@ async function deleteVariant(variantId: number) {
               px-5 font-medium outline-none transition focus:border-primary active:border-primary
              disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
              dark:bg-form-input dark:focus:border-primary"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
+                    value={SalePrice}
+                    onChange={(e) => setSalePrice(e.target.value)}
                   />
                 </div>
                 <div>
@@ -513,8 +516,8 @@ async function deleteVariant(variantId: number) {
              px-5 font-medium outline-none transition focus:border-primary active:border-primary
             disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
              dark:focus:border-primary"
-                    //      onChange={(e)=>setvalues({...value, categoryName: e.target.value})}
-                    //      value={value. categoryName}
+             value={price}
+             onChange={(e) => setPrice(e.target.value)}
                   />
                 </div>
               </div>
@@ -988,7 +991,7 @@ async function deleteVariant(variantId: number) {
         </div>
 
         {/* //////////////////////////////////////second column/////////////////////////////////////////////////////////////////////////////////////////// */}
-        <div className="flex flex-col gap-9 ">
+        <div className="flex flex-col gap- ">
           <div className="rounded-xl border-stroke bg-white text-black shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="p-5">
               <select
@@ -1124,7 +1127,7 @@ async function deleteVariant(variantId: number) {
         <div></div>
         <div
           style={{ border: '20px', padding: '10px' }}
-          className="flex justify-end"
+          className="flex"
         >
           <button
             className="inline-flex items-center justify-center rounded-md bg-primary py-4 px-10 text-center

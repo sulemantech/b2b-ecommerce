@@ -34,43 +34,6 @@ const ProductGridListSingle = ({
 
   const [sellingTime, setSellingTime] = useState("");
 
-  // useEffect(() => {
-  //   const fetchSellingTime = async () => {
-  //     try {
-  //       const response = await fetch(`${APIHost}/api/order`);
-  //       const data = await response.json();
-
-  //       const currentTime = new Date();
-  //       const order = data.find((order) =>
-  //         order.orderItems.some((item) => item.productId === product.id)
-  //       );
-  //       if (order) {
-  //         const orderCreatedAt = new Date(order.createdAt);
-  //         const timeDifference = currentTime - orderCreatedAt;
-  //         let sellingTime;
-  //         if (timeDifference < 60 * 1000) {
-  //           sellingTime = "just now";
-  //         } else if (timeDifference < 60 * 60 * 1000) {
-  //           const minutes = Math.floor(timeDifference / (60 * 1000));
-  //           sellingTime = `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
-  //         } else if (timeDifference < 24 * 60 * 60 * 1000) {
-  //           const hours = Math.floor(timeDifference / (60 * 60 * 1000));
-  //           sellingTime = `${hours} hour${hours > 1 ? "s" : ""} ago`;
-  //         } else {
-  //           const days = Math.floor(timeDifference / (24 * 60 * 60 * 1000));
-  //           sellingTime = `${days} day${days > 1 ? "s" : ""} ago`;
-  //         }
-  //         setSellingTime(sellingTime);
-  //         console.log("sellingggggg",sellingTime);
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching selling time:", error);
-  //     }
-  //   };
-
-  //   fetchSellingTime();
-  // }, [product.id]);
-
   useEffect(() => {
     const fetchSellingTime = async () => {
       try {
@@ -114,6 +77,93 @@ const ProductGridListSingle = ({
     const interval = setInterval(fetchSellingTime, 60000);
     return () => clearInterval(interval);
   }, [product.id]);
+
+  const [remainingTime, setRemainingTime] = useState("");
+
+  useEffect(() => {
+    let flashDeal = product.FlashDeal;
+
+    // Check if FlashDeal is an array, if yes, find the deal with the matching DealId
+    if (Array.isArray(product.FlashDeal)) {
+      flashDeal = product.FlashDeal.find(
+        (deal) => deal.DealId === product.DealId
+      );
+    }
+
+    if (!flashDeal) {
+      setRemainingTime("");
+      return;
+    }
+
+    // const calculateRemainingTime = () => {
+    //   const startTime = new Date(product?.FlashDeal?.startTime);
+    //   const endTime = new Date(product?.FlashDeal?.endTime);
+     
+    //   const currentTime = new Date();
+
+    //   const startTimeDifference = startTime - currentTime;
+
+    //   if (startTimeDifference > 0) {
+    //     const startHours = Math.floor(
+    //       (startTimeDifference / (1000 * 60 * 60)) % 24
+    //     );
+    //     const startMinutes = Math.floor(
+    //       (startTimeDifference / (1000 * 60)) % 60
+    //     );
+    //     const startSeconds = Math.floor((startTimeDifference / 1000) % 60);
+    //     setRemainingTime(` ${startHours} : ${startMinutes} : ${startSeconds} `);
+    //   } else {
+    //     const timeDifference = endTime - currentTime;
+    //     if (timeDifference > 0) {
+    //       const remainingHours = Math.floor(
+    //         (timeDifference / (1000 * 60 * 60)) % 24
+    //       );
+    //       const remainingMinutes = Math.floor(
+    //         (timeDifference / (1000 * 60)) % 60
+    //       );
+    //       const remainingSeconds = Math.floor((timeDifference / 1000) % 60);
+    //       setRemainingTime( `${remainingHours} : ${remainingMinutes} : ${remainingSeconds}`);
+    //     } else {
+    //       setRemainingTime("Deal expired");
+    //     }
+    //   }
+    // };
+    const calculateRemainingTime = () => {
+      const startTime = new Date(product?.FlashDeal?.startTime);
+      const endTime = new Date(product?.FlashDeal?.endTime);
+      const currentTime = new Date();
+    
+      const startTimeDifference = startTime - currentTime;
+    
+      if (startTimeDifference > 0) {
+        const startHours = String(Math.floor((startTimeDifference / (1000 * 60 * 60)) % 24)).padStart(2, '0');
+        const startMinutes = String(Math.floor((startTimeDifference / (1000 * 60)) % 60)).padStart(2, '0');
+        const startSeconds = String(Math.floor((startTimeDifference / 1000) % 60)).padStart(2, '0');
+        setRemainingTime(`${startHours}:${startMinutes}:${startSeconds}`);
+      } else {
+        const timeDifference = endTime - currentTime;
+        if (timeDifference > 0) {
+          const remainingHours = String(Math.floor((timeDifference / (1000 * 60 * 60)) % 24)).padStart(2, '0');
+          const remainingMinutes = String(Math.floor((timeDifference / (1000 * 60)) % 60)).padStart(2, '0');
+          const remainingSeconds = String(Math.floor((timeDifference / 1000) % 60)).padStart(2, '0');
+          setRemainingTime(`${remainingHours}:${remainingMinutes}:${remainingSeconds}`);
+        } else {
+          setRemainingTime("Deal expired");
+        }
+      }
+    };
+    
+
+    calculateRemainingTime(); // Initial call to calculate remaining time
+
+    const timer = setInterval(() => {
+      calculateRemainingTime(); // Update remaining time every second
+    }, 1000);
+
+    return () => clearInterval(timer); // Clear interval on component unmount
+  }, [product]);
+
+  // console.log('Remaining Time:', new Date());
 
   return (
     <Fragment>
@@ -222,25 +272,22 @@ const ProductGridListSingle = ({
             </div>
           </div>
         </div>
-        <div>
-          {sellingTime && <p>Sold {sellingTime}</p>}</div>
-        <div className="product-content text-center">
-          <h3>
-            <Link to={process.env.PUBLIC_URL + "/product/" + product.id}>
-              {product.name}
-            </Link>
-          </h3>
-          {product.rating && product.rating > 0 ? (
-            <div className="product-rating">
-              <Rating ratingValue={product.rating} />
-            </div>
+        {remainingTime.length>0?(
+        <div style={{background:"#fef2f2"}}>
+          {remainingTime !== null ? (
+            <span className="">Lightning deal | {remainingTime}</span>
           ) : (
             ""
           )}
+        </div>
+  ):(
+    ""
+  )}
+        <div className="product-content d-flex">
           <div className="product-price">
-            {discountedPrice !== null ? (
+            {product.SalePrice !== 0 ? (
               <Fragment>
-                <span>{currency.currencySymbol + finalDiscountedPrice}</span>{" "}
+                <span>{currency.currencySymbol + product.SalePrice}</span>{" "}
                 <span className="old">
                   {currency.currencySymbol + finalProductPrice}
                 </span>
@@ -249,7 +296,39 @@ const ProductGridListSingle = ({
               <span>{currency.currencySymbol + finalProductPrice} </span>
             )}
           </div>
+          <div>{sellingTime && <p>Sold {sellingTime}</p>}</div>
+          <div>
+          <span
+                  style={{
+                    marginLeft:"10px",
+                    padding:"0 4px",
+                    color: "rgb(251, 119, 1)",
+                    border:"1px solid rgb(251, 119, 1)",
+                    borderRadius: "2px",
+                    alignItems:"center",
+                  }}
+                >
+                  {product.discount} % {" "}
+                </span>
+          </div>
         </div>
+          <div className="product-content">
+          <h3>
+              <Link to={process.env.PUBLIC_URL + "/product/" + product.id}>
+                {product.name}
+              </Link>
+            </h3>
+
+            {product.rating && product.rating > 0 ? (
+              <div className="product-rating">
+                <Rating ratingValue={product.rating} />
+              </div>
+            ) : (
+              ""
+            )}
+
+          </div>
+        
       </div>
       {/* product modal */}
       <ProductModal
