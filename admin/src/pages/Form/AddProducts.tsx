@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import Breadcrumb from '../../components/Breadcrumb';
 // import { log } from 'console';
 
 interface FormData {
@@ -308,6 +309,7 @@ const FormElements = () => {
 
   return (
     <>
+    <Breadcrumb pageName="" />
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-[2fr,1fr]">
         <div className="flex flex-col gap-9">
           <div className="rounded-xl border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-5">
@@ -327,7 +329,7 @@ const FormElements = () => {
             </div>
             <br />
             <div className="ml-5 font-bold">
-              <label htmlFor="">Desccription</label>
+              <label htmlFor="">Description</label>
               <CKEditor
                 editor={ClassicEditor}
                 config={

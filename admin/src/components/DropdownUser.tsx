@@ -121,11 +121,11 @@ const DropdownUser = () => {
 
         <span className="h-12 w-12 rounded-full">
           {/* <img src={UserOne} alt="User" /> */}
-          <FaRegUserCircle size={40} />
+          <FaRegUserCircle className='mt-1 mx-auto fill-[#676767]' size={40} />
         </span>
 
         <svg
-          className={`hidden fill-current sm:block ${
+          className={`hidden fill-[#676767] sm:block ${
             dropdownOpen ? 'rotate-180' : ''
           }`}
           width="12"
@@ -148,7 +148,7 @@ const DropdownUser = () => {
         ref={dropdown}
         onFocus={() => setDropdownOpen(true)}
         onBlur={() => setDropdownOpen(false)}
-        className={`absolute right-0 mt-4 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark ${
+        className={`absolute right-0 mt-1.5 flex w-62.5 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark ${
           dropdownOpen === true ? 'block' : 'hidden'
         }`}
       >

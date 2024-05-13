@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import Breadcrumb from '../../components/Breadcrumb';
 
 interface User {
   id: number;
@@ -31,6 +32,7 @@ const User: React.FC = () => {
 
   return (
     <>
+      <Breadcrumb pageName="Users" />
       <div className=" border border-stroke bg-white shadow-md dark:border-strokedark dark:bg-boxdark rounded-xl">
           <p className='text-center font-semibold text-2xl py-5 uppercase'>Users</p>
         <div className="grid text-xs sm:text-sm grid-cols-4 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-5 md:px-6 2xl:px-7.5">

@@ -26,7 +26,6 @@ interface Products {
   // productImages?: { date: string; images: string[] }[] | undefined;
 }
 
-
 interface SheetJSAppProps {}
 
 interface SheetJSAppState {
@@ -314,12 +313,10 @@ class DataInput extends React.Component<{ handleFile: (file: File) => void }> {
     if (files && files[0]) this.props.handleFile(files[0]);
   }
 
- 
-
   render() {
     return (
-      <form className="form-inline flex justify-end">
-        <div className="form-group ">
+      <form className="flex justify-end">
+        <div className="form-group">
           {/* <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
             Spreadsheet
           </label> */}
@@ -336,21 +333,20 @@ class DataInput extends React.Component<{ handleFile: (file: File) => void }> {
                      dark:file:bg-white/30 dark:file:text-white dark:focus:border-primary"
           />
         </div>
-          <div className=' ml-4'>
-            <button
-              // disabled={!this.state.data.length}
-              className="inline-flex items-center justify-center w-1 h-2  rounded-md bg-primary py-6 text-center
-               font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
-              // onClick={this.exportFile}
-            >
-              Export
-            </button>
-          </div>
+        <div className="mx-4 my-auto">
+          <button
+            // disabled={!this.state.data.length}
+            className="flex items-center justify-center px-8 rounded-md bg-black-2 py-2.5 text-center
+               font-medium text-white hover:bg-opacity-90"
+            // onClick={this.exportFile}
+          >
+            Export
+          </button>
+        </div>
       </form>
     );
   }
 }
-
 
 interface SheetJSAppState {
   data: any[];
@@ -382,7 +378,6 @@ class OutTable extends React.Component<
       category_name: rowData[15],
       status: rowData[16],
     };
-
 
     fetch('http://localhost:5001/api/products', {
       method: 'POST',
@@ -481,14 +476,13 @@ class OutTable extends React.Component<
 
   render() {
     const { selectedRows } = this.state;
-   
 
     return (
       <div>
         <div>
           <button
             onClick={this.handleMultiple}
-            className="inline-flex items-center justify-center rounded-md bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+            className="inline-flex items-center justify-center rounded-md bg-black-2 py-2.5 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
           >
             SelectedProducts
           </button>
