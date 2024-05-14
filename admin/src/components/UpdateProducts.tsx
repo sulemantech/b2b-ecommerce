@@ -6,6 +6,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { ChangeEvent } from 'react';
 import { useNavigate } from "react-router-dom";
+import Breadcrumb from './Breadcrumb';
 
 
 
@@ -371,6 +372,7 @@ async function deleteVariant(variantId: number) {
 
   return (
     <>
+    {/* <Breadcrumb pageName="Product Update" /> */}
       <div className="grid grid-cols-1 gap-9 sm:grid-cols-[2fr,1fr]">
         <div className="flex flex-col gap-9">
           <div className="rounded-xl border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-5">
@@ -389,7 +391,7 @@ async function deleteVariant(variantId: number) {
             </div>
             <br />
             <div className="ml-5 font-bold">
-              <label htmlFor="">Desccription</label>
+              <label htmlFor="">Description</label>
               <CKEditor
                 editor={ClassicEditor}
                 data={description}

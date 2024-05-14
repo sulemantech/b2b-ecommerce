@@ -75,16 +75,16 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         sidebarOpen ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
-      <p className=" bg-[#1c2434] text-center py-7 pl-6 font-semibold  text-white w-full">
+      <p className=" bg-[rgba(26,26,26,255)] text-center py-4 pl-2 font-semibold  text-white w-full">
         <Link
-          className="block flex-shrink-0 lg:block absolute -mt-1 ml-2"
+          className="block flex-shrink-0 lg:block absolute -mt-1 ml-3"
           to="/"
         >
           <img src={Logo} alt="Logo" />
         </Link>
         MetaMart Admin
       </p>
-      <div className="absolute py-8 ml-2 lg:py-6.5">
+      <div className="absolute py-5 ml-50 lg:py-6.5">
         <button
           ref={trigger}
           onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -120,7 +120,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               <NavLink
                 to="/"
                 className={
-                  'group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded-lg py-1 px-2 text-sm font-bold text-black duration-300 ease-in-out hover:bg-[#f1f1f1]  dark:hover:bg-meta-4'
+                  'group relative active:bg-white flex items-center gap-2.5 rounded-lg py-1 px-2 text-sm font-bold text-black duration-300 ease-in-out hover:bg-[#f1f1f1]  dark:hover:bg-meta-4'
                 }
               >
                 <IoHomeOutline />
@@ -138,7 +138,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <React.Fragment>
                       <NavLink
                         to="#"
-                        className={`group focus:bg-white relative flex items-center gap-2.5 rounded-lg py-1 px-2 text-sm font-bold text-black duration-300 ease-in-out hover:bg-[#f1f1f1]  dark:hover:bg-meta-4 ${
+                        className={`group active:bg-white relative flex items-center gap-2.5 rounded-lg py-1 px-2 text-sm font-bold text-black duration-300 ease-in-out hover:bg-[#f1f1f1]  dark:hover:bg-meta-4 ${
                           pathname === '/' || pathname.includes('dashboard')
                         }`}
                         onClick={(e) => {
@@ -223,8 +223,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <NavLink
                               to="/"
                               className={({ isActive }) =>
-                                'group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded-lg px-3 py-1 text-sm font-bold text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-[#f1f1f1] ' +
-                                (isActive && '!text-black-2')
+                                'group relative flex items-center gap-2.5 rounded-lg px-3 py-1 text-sm font-bold text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-[#f1f1f1] ' +
+                                (isActive && '!text-black-2 bg-white')
                               }
                             >
                               <span className="opacity-0 group-hover:opacity-100 ">
@@ -241,7 +241,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               <NavLink
                                 to="/users"
                                 className={({ isActive }) =>
-                                  `group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded--1 text-sm font-bold hover:text-black text-bodydark2 duration-300 ease-in-out hover:bg-[#f1f1f1] ` +
+                                  `group relative flex items-center gap-2.5 rounded--1 text-sm font-bold hover:text-black text-bodydark2 duration-300 ease-in-out hover:bg-[#f1f1f1] ` +
                                   (isActive && '!text-black-2')
                                 }
                               >
@@ -258,7 +258,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             <NavLink
                               to="/orders"
                               className={({ isActive }) =>
-                                'group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded--1 text-sm font-bold hover:text-black  text-bodydark2 duration-300 ease-in-out hover:bg-[#f1f1f1]  ' +
+                                'group relative flex items-center gap-2.5 rounded--1 text-sm font-bold hover:text-black  text-bodydark2 duration-300 ease-in-out hover:bg-[#f1f1f1]  ' +
                                 (isActive && '!text-black-2')
                               }
                             >
@@ -270,10 +270,10 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           </li>
                         </ul>
 
-                        <ul className="hidden">
+                        <ul className="">
                           <li>
                             <div
-                              className=" group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded--1 text-sm font-bold ml-4
+                              className=" group relative flex items-center gap-2.5 rounded--1 text-sm font-bold ml-4
                              text-black duration-300 ease-in-out hover:bg-[#f1f1f1]"
                             >
                               <h1>Supplier</h1>
@@ -282,7 +282,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               <NavLink
                                 to="/auth/signup"
                                 className={({ isActive }) =>
-                                  'group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded--1 text-sm font-bold text-bodydark2 duration-300 ease-in-out hover:bg-[#f1f1f1]  hover:text-black ' +
+                                  'group relative flex items-center gap-2.5 rounded--1 text-sm font-bold text-bodydark2 duration-300 ease-in-out hover:bg-[#f1f1f1]  hover:text-black ' +
                                   (isActive && '!text-black-2')
                                 }
                               >
@@ -305,7 +305,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {/* Products Menu Start Here */}
               <SidebarLinkGroup
                 activeCondition={
-                  pathname === '/' || pathname.includes('dashboard')
+                  pathname === '/' || pathname.includes('products')
                 }
               >
                 {(handleClick, open) => {
@@ -313,7 +313,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <React.Fragment>
                       <NavLink
                         to="#"
-                        className={`group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded-lg py-1 px-2 text-sm font-bold text-black duration-300 ease-in-out hover:bg-[#f1f1f1]  dark:hover:bg-meta-4 ${
+                        className={`group relative active:bg-white flex items-center gap-2.5 rounded-lg py-1 px-2 text-sm font-bold text-black duration-300 ease-in-out hover:bg-[#f1f1f1]  dark:hover:bg-meta-4 ${
                           pathname === '/' || pathname.includes('dashboard')
                         }`}
                         onClick={(e) => {
@@ -352,10 +352,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         <ul className="flex flex-col">
                           <li>
                             <NavLink
+                               onClick={() => setSidebarOpen(!sidebarOpen)}
                               to="/product"
                               className={({ isActive }) =>
-                                'group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded-lg px-3 py-1 text-sm font-bold text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-[#f1f1f1] ' +
-                                (isActive && '!text-black-2')
+                                'group relative flex items-center gap-2.5 rounded-lg px-3 py-1 text-sm font-bold text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-[#f1f1f1] ' +
+                                (isActive && '!text-black-2 bg-white')
                               }
                             >
                               <span className="opacity-0 group-hover:opacity-100 ">
@@ -366,9 +367,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           </li>
                           <li>
                             <NavLink
+                                            onClick={() => setSidebarOpen(!sidebarOpen)}
+
                               to="/products"
                               className={({ isActive }) =>
-                                'group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded-lg px-3 py-1 text-sm font-bold text-bodydark2  hover:text-black duration-300 ease-in-out hover:bg-[#f1f1f1] ' +
+                                'group relative flex items-center gap-2.5 rounded-lg px-3 py-1 text-sm font-bold text-bodydark2  hover:text-black duration-300 ease-in-out hover:bg-[#f1f1f1] ' +
                                 (isActive && '!text-black-2 bg-white')
                               }
                             >
@@ -380,9 +383,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           </li>
                           <li>
                             <NavLink
+                                            onClick={() => setSidebarOpen(!sidebarOpen)}
+
                               to="/import"
                               className={({ isActive }) =>
-                                'group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded-lg px-3 py-1 text-sm font-bold text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-[#f1f1f1] ' +
+                                'group relative flex items-center gap-2.5 rounded-lg px-3 py-1 text-sm font-bold text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-[#f1f1f1] ' +
                                 (isActive && '!text-black-2  bg-white')
                               }
                             >
@@ -404,7 +409,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {/* Costumer Menu Start Here */}
               <SidebarLinkGroup
                 activeCondition={
-                  pathname === '/' || pathname.includes('dashboard')
+                  pathname === '/' || pathname.includes('costomer')
                 }
               >
                 {(handleClick, open) => {
@@ -412,7 +417,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <React.Fragment>
                       <NavLink
                         to="#"
-                        className={`group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded-lg py-1 px-2 text-sm font-bold text-black duration-300 ease-in-out hover:bg-[#f1f1f1]  dark:hover:bg-meta-4 ${
+                        className={`group relative active:bg-white flex items-center gap-2.5 rounded-lg py-1 px-2 text-sm font-bold text-black duration-300 ease-in-out hover:bg-[#f1f1f1]  dark:hover:bg-meta-4 ${
                           pathname === '/' || pathname.includes('dashboard')
                         }`}
                         onClick={(e) => {
@@ -451,10 +456,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         <ul className="flex flex-col">
                           <li>
                             <NavLink
+                                            onClick={() => setSidebarOpen(!sidebarOpen)}
+
                               to="/Users"
                               className={({ isActive }) =>
-                                'group relative focus:bg-[#ffffff] flex items-center rounded-lg px-3 py-1 gap-2.5 text-sm font-bold text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-[#f1f1f1] ' +
-                                (isActive && '!text-black-2')
+                                'group relative flex items-center rounded-lg px-3 py-1 gap-2.5 text-sm font-bold text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-[#f1f1f1] ' +
+                                (isActive && '!text-black-2 bg-white')
                               }
                             >
                               <span className="opacity-0 group-hover:opacity-100 ">
@@ -476,7 +483,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {/* Order Managment Menu Start Here */}
               <SidebarLinkGroup
                 activeCondition={
-                  pathname === '/' || pathname.includes('dashboard')
+                  pathname === '/' || pathname.includes('ordermanagment')
                 }
               >
                 {(handleClick, open) => {
@@ -484,9 +491,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     <React.Fragment>
                       <NavLink
                         to="#"
-                        className={`group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded-lg py-1 px-2 text-sm font-bold text-black duration-300 ease-in-out hover:bg-[#f1f1f1]  dark:hover:bg-meta-4 ${
-                          pathname === '/' || pathname.includes('dashboard')
-                        }`}
+                        className={`group relative active:bg-white flex items-center gap-2.5 rounded-lg py-1 px-2 text-sm font-bold text-black duration-300 ease-in-out hover:bg-[#f1f1f1]  dark:hover:bg-meta-4`}
                         onClick={(e) => {
                           e.preventDefault();
                           sidebarExpanded
@@ -524,11 +529,13 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                         <ul className="flex flex-col">
                           <li>
                             <NavLink
+                                            onClick={() => setSidebarOpen(!sidebarOpen)}
+
                               to="/orders"
                               className={({ isActive }) =>
-                                'group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded-lg px-3 py-1 text-sm font-bold text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-[#f1f1f1]  '
+                                'group relative flex items-center gap-2.5 rounded-lg px-3 py-1 text-sm font-bold text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-[#f1f1f1]  '
                                +
-                                (isActive && '!text-black-2')
+                                (isActive && '!text-black-2 bg-white &&')
                                 
                               }
                             >
@@ -552,9 +559,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {/* <!-- Menu Item Calendar --> */}
               <li>
                 <NavLink
+                                onClick={() => setSidebarOpen(!sidebarOpen)}
+
                   to="/calendar"
                   className={`group relative focus:bg-[#ffffff] flex items-center gap-2.5 rounded-lg py-1 px-2 text-sm font-bold text-black duration-300 ease-in-out hover:bg-[#f1f1f1] dark:hover:bg-meta-4 ${
-                    pathname.includes('calendar') && ' dark:bg-meta-4'
+                  ' dark:bg-meta-4'
                   }`}
                 >
                   <svg
@@ -624,9 +633,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
               {/* <!-- Menu Item Settings --> */}
               <li>
                 <NavLink
+                                onClick={() => setSidebarOpen(!sidebarOpen)}
+
                   to="/settings"
                   className={`absolute bottom-5 min-w-50 ml-1 focus:bg-[#ffffff] flex items-center gap-2.5 rounded-lg py-1 px-2 text-sm font-bold text-black duration-300 ease-in-out hover:bg-[#f1f1f1] dark:hover:bg-meta-4 ${
-                    pathname.includes('calendar') && ' dark:bg-meta-4'
+                    ' dark:bg-meta-4'
                   }`}
                 >
                   <svg

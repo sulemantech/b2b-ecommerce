@@ -26,7 +26,6 @@ interface Products {
   // productImages?: { date: string; images: string[] }[] | undefined;
 }
 
-
 interface SheetJSAppProps {}
 
 interface SheetJSAppState {
@@ -177,8 +176,8 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
         <br />
         <br />
         {this.state.products.length > 0 ? (
-          <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5">
-            <div className="col-span-2 flex items-center">
+          <div className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-6 md:px-6 2xl:px-7.5">
+            <div className="col-span-6 flex items-center">
               <p className="font-medium text-black">Product Name</p>
             </div>
             <div className="col-span-1 hidden items-center sm:flex">
@@ -198,17 +197,17 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
             <div className="col-span-1 flex items-center">
               <p className="font-medium text-black">Status</p>
             </div>
-            <div className="col-span-2 flex items-center">
+            <div className="col-span-1 flex items-center">
               <p className="font-medium text-black">Edit</p>
             </div>
           </div>
         ) : null}
         {this.state.products.map((product: Products) => (
           <div
-            className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-9 md:px-6 2xl:px-7.5"
+            className="grid grid-cols-6 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-6 md:px-6 2xl:px-7.5"
             id={`${product.id}`}
           >
-            <div className="col-span-2 flex items-center">
+            <div className="col-span-1 flex items-center">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                 {/* <div className="h-12.5 w-15 rounded-md">
                   <img src={product.productImages[0]?.images[0]} alt="" />
@@ -246,7 +245,7 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
               </p>
             </div>
 
-            <div className="col-span-2 flex items-center">
+            <div className="col-span-1 flex items-center">
               <div>
                 <Link
                   to={`/UpdateProducts/${product.id}`}
@@ -314,12 +313,10 @@ class DataInput extends React.Component<{ handleFile: (file: File) => void }> {
     if (files && files[0]) this.props.handleFile(files[0]);
   }
 
- 
-
   render() {
     return (
-      <form className="form-inline flex justify-end">
-        <div className="form-group ">
+      <form className="flex justify-end">
+        <div className="form-group">
           {/* <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
             Spreadsheet
           </label> */}
@@ -336,21 +333,20 @@ class DataInput extends React.Component<{ handleFile: (file: File) => void }> {
                      dark:file:bg-white/30 dark:file:text-white dark:focus:border-primary"
           />
         </div>
-          <div className=' ml-4'>
-            <button
-              // disabled={!this.state.data.length}
-              className="inline-flex items-center justify-center w-1 h-2  rounded-md bg-primary py-6 text-center
-               font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
-              // onClick={this.exportFile}
-            >
-              Export
-            </button>
-          </div>
+        <div className="mx-4 my-auto">
+          <button
+            // disabled={!this.state.data.length}
+            className="flex items-center justify-center px-8 rounded-md bg-black-2 py-2.5 text-center
+               font-medium text-white hover:bg-opacity-90"
+            // onClick={this.exportFile}
+          >
+            Export
+          </button>
+        </div>
       </form>
     );
   }
 }
-
 
 interface SheetJSAppState {
   data: any[];
@@ -382,7 +378,6 @@ class OutTable extends React.Component<
       category_name: rowData[15],
       status: rowData[16],
     };
-
 
     fetch('http://localhost:5001/api/products', {
       method: 'POST',
@@ -481,14 +476,13 @@ class OutTable extends React.Component<
 
   render() {
     const { selectedRows } = this.state;
-   
 
     return (
       <div>
         <div>
           <button
             onClick={this.handleMultiple}
-            className="inline-flex items-center justify-center rounded-md bg-primary py-4 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+            className="inline-flex items-center justify-center rounded-md bg-black-2 py-2.5 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
           >
             SelectedProducts
           </button>
