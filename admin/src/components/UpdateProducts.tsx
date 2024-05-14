@@ -989,7 +989,7 @@ async function deleteVariant(variantId: number) {
         </div>
 
         {/* //////////////////////////////////////second column/////////////////////////////////////////////////////////////////////////////////////////// */}
-        <div className="flex flex-col gap- ">
+        <div className="flex flex-col gap-4 ">
           <div className="rounded-xl border-stroke bg-white text-black shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="p-5">
               <select
