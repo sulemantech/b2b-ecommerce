@@ -175,7 +175,7 @@ const ShopGridStandard = () => {
           ]}
         />
 
-        <div className="shop-area pt-41 pb-100 ">
+        <div className="shop-area pt-45 pb-100 ">
           <div className="container-fluid ">
             <div className="row">
               <div className="col-lg-3 order-2 order-lg-1 p-0">

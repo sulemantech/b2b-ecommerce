@@ -13,7 +13,7 @@ const NavMenu = ({ menuWhiteClass, sidebarMenu }) => {
           : `main-menu ${menuWhiteClass ? menuWhiteClass : ""}`)}
     >
       <nav>
-        <ul>
+        <ul className="ul-element">
           <li>
             <Link to={process.env.PUBLIC_URL + "/"}>
               {t("home")}

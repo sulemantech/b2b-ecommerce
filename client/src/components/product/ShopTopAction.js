@@ -12,7 +12,7 @@ const ShopTopAction = ({
 
 
   return (
-    <div className="shop-top-bar mb-35">
+    <div className="shop-top-bar ">
       <div className="select-shoing-wrap m-auto">
         <p>
           Showing {sortedProductCount} of {productCount} result

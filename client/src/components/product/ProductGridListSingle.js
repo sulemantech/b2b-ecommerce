@@ -298,6 +298,7 @@ const ProductGridListSingle = ({
           </div>
           <div>{sellingTime && <p>Sold {sellingTime}</p>}</div>
           <div>
+            {product.discount!==0  && product.SalePrice?(
           <span
                   style={{
                     marginLeft:"10px",
@@ -310,10 +311,13 @@ const ProductGridListSingle = ({
                 >
                   {product.discount} % {" "}
                 </span>
+            ):(
+              ""
+            )}
           </div>
         </div>
           <div className="product-content">
-          <h3>
+          <h3 style={{lineHeight:"15px"}}>
               <Link to={process.env.PUBLIC_URL + "/product/" + product.id}>
                 {product.name}
               </Link>
