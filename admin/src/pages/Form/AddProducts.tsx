@@ -154,6 +154,9 @@ const FormElements = () => {
     supplier_id: '',
     categoryName: '',
     status: '',
+    DealStatus:'',
+    SaleStatus:'',
+    SalePrice:''
   });
 
   // console.log("Data",Deal);
@@ -188,10 +191,12 @@ const FormElements = () => {
         },
       );
 
-      // Prepare the full request data
+      const dealStatus = dealChecked ;
+    
+
       const requestData = {
         // products: {...value,DealId:DealRes?.DealId},
-        products: { ...value, DealId: DealRes?.DealId },
+        products: { ...value, DealId: DealRes?.DealId, DealStatus: dealStatus},
         variants: variantsData,
       };
       const response = await axios.post(
@@ -201,23 +206,24 @@ const FormElements = () => {
       console.log('Product and Variants created:', response.data);
       setTableInputValues([]);
       setSubmittedData({});
-      setvalues({
-        name: '',
-        description: 'best',
-        price: '',
-        weight: 20,
-        new: 'true',
-        rating: 5,
-        manufacturer: 'china',
-        tag: [],
-        quantityInStock: '',
-        sku: '',
-        quantity: '',
-        category_id: '',
-        supplier_id: '',
-        categoryName: '',
-        status: '',
-      });
+      // setvalues({
+      //   name: '',
+      //   description: 'best',
+      //   price: '',
+      //   weight: 20,
+      //   new: 'true',
+      //   rating: 5,
+      //   manufacturer: 'china',
+      //   tag: [],
+      //   quantityInStock: '',
+      //   sku: '',
+      //   quantity: '',
+      //   category_id: '',
+      //   supplier_id: '',
+      //   categoryName: '',
+      //   DealStatus:'',
+      //   status: '',
+      // });
 
       setFormData({
         selectedOption: '',
@@ -979,7 +985,7 @@ const FormElements = () => {
         />
                 </div>
                 <label className="font-bold" htmlFor="">
-                  Discount
+                  Percentage
                 </label>
                 <br />
 

@@ -16,11 +16,18 @@ const Orders =lazy(()=>import('../pages/Dashboard/Oders'));
 const UpdateProducts =lazy(()=>import('../components/UpdateProducts'));
 const ProductNavigate=lazy(()=>import('../components/PoductNavigator'));
 const ECommerce =lazy(()=>import ('../pages/Dashboard/ECommerce'));
+const BulkUpdate=lazy(()=>import ('../components/BulkUpdate'));
 
 
 
 
 const coreRoutes = [
+  {
+    path: '/BulkUpdate/product',
+    title: 'Bulk',
+    component:BulkUpdate,
+
+  },
   {
     path: '/dashboard',
     title: 'ecomerce',

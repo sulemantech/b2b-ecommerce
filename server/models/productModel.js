@@ -198,6 +198,14 @@ const productModel = sequelize.define('products', {
       model: FlashDeal,
       key: 'DealId',
     }
+  },
+  DealStatus:{
+    type:DataTypes.BOOLEAN,
+    allowNull:false
+  },
+  SaleStatus:{
+    type:DataTypes.BOOLEAN,
+    allowNull:false
   }
 });
 
