@@ -389,9 +389,50 @@ const deleteProductAndVariants = async (req,res) => {
 };
 
 
+
+const bulkUpdateProducts = async (req, res) => {
+  try {
+    const { products, variants } = req.body;
+
+    // Check if the request body contains products and variants arrays
+    if (!Array.isArray(products) || !Array.isArray(variants)) {
+      return res.status(400).json({ error: 'Invalid input. Expected arrays of products and variants.' });
+    }
+
+    // Use Promise.all to asynchronously update all products
+    const updatedProducts = await Promise.all(products.map(async (productData) => {
+      const productId = productData.id;
+      const { SaleStatus, DealStatus, ...rest } = productData;
+
+      // Find the product by ID
+      const existingProduct = await productModel.findByPk(productId);
+
+      if (!existingProduct) {
+        return { id: productId, error: 'Product not found.' };
+      }
+
+      // Update the product
+      await existingProduct.update({
+        ...rest,
+        SaleStatus,
+        DealStatus,
+      });
+
+      return { id: productId, message: 'Product updated successfully.' };
+    }));
+
+    res.status(200).json({ message: 'Bulk update completed.', updatedProducts });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+
 module.exports = {
   deleteVariant,deleteProductAndVariants,updateProductAndVariants,getProductById,getProductsByCategoryId,getAllProductsForClientsSortPrice,
-  getAllProductsForClients,getAllProductsByUserRole,createBulkProducts,createProductAndVariants,
+  getAllProductsForClients,getAllProductsByUserRole,createBulkProducts,createProductAndVariants,bulkUpdateProducts,
   get: [
     {
       path: '/api/products/all',
@@ -428,6 +469,10 @@ module.exports = {
     {
       path: '/api/products/:productId',
       method: updateProductAndVariants,
+    },
+    {
+      path: '/api/products/bulk-update',
+      method: bulkUpdateProducts,
     },
   ],
   delete: [

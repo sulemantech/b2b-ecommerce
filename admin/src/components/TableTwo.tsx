@@ -2,11 +2,13 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
 
+import BulkUpdate from './BulkUpdate';
 
 const TableTwo: React.FC = () => {
   const Token = Cookies.get('token');
   // console.log(import.meta.env)
   const [products, setProducts] = useState<Products[]>([]);
+  
 
   interface Products {
     id: number;
@@ -16,6 +18,9 @@ const TableTwo: React.FC = () => {
     categoryName: string;
     discount: number;
     manufacturer: string;
+    SalePrice:number;
+    DealStatus:boolean;
+    SaleStatus:boolean;
     productImages: Array<{ date: string; images: string[] }>;
     // productImages?: { date: string; images: string[] }[] | undefined;
   }
@@ -64,11 +69,18 @@ const TableTwo: React.FC = () => {
 
   useEffect(() => {
     console.log('Selected Products:', selectedProducts);
-  }, [selectedProducts]);
+  }, []);
+  const [showBulk,setShowBulk]=useState(false);
+  const toggleClick=()=>{
+    setShowBulk(true);
+  }
 
   return (
     <>
-    
+   {showBulk ?(
+
+    <BulkUpdate selectedProducts={selectedProducts}/>
+   ):(
       <div className="rounded-lg border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         {Token ? (
           <>
@@ -94,7 +106,7 @@ const TableTwo: React.FC = () => {
                 <p className="font-medium text-black text-center">Discount</p>
               </div>
               <div className="col-span-1 flex items-center justify-center">
-                <p className="font-medium text-black text-center hidden sm:block">
+                <p className="font-medi9um text-black text-center hidden sm:block">
                   Manufacturer
                 </p>
                 <p className="font-medium text-black text-center sm:hidden">
@@ -119,16 +131,14 @@ const TableTwo: React.FC = () => {
                  
                 </div> */}
                 <div className="col-span-1 flex items-center justify-center text-center">
-                  
-                <input
-                      className='ml-5'
-                        type="checkbox"
-                        checked={selectedProducts.includes(product)}
-                        onChange={() => toggleProductSelection(product.id)}
-                      />
+                  <input
+                    className="ml-5"
+                    type="checkbox"
+                    checked={selectedProducts.includes(product)}
+                    onChange={() => toggleProductSelection(product.id)}
+                  />
                   <div className="flex flex-col gap-2 sm:flex-col sm:items-center">
                     <div className="h-15 w-15 rounded-md flex mx-auto justify-center items-center overflow-hidden">
-                    
                       {/* <img src={process.env.RESOURCE_SERVER_HOST + product.productImages[0]?.images[0]} alt="" /> */}
 
                       <img
@@ -188,17 +198,17 @@ const TableTwo: React.FC = () => {
           <h1 className="text-center my-54 font-semibold">No products Found</h1>
         )}
         <div>
-          
-        <Link
-  to={`/BulkUpdate/product?selectedProducts=${encodeURIComponent(JSON.stringify(selectedProducts))}`}
-  className="bg-blue hover:bg-blue-700 font-bold py-2 px-4 rounded-full"
->
-  BulkUpdate
-</Link>
+          <button
+          onClick={toggleClick}
 
+          
+            className="bg-blue hover:bg-blue-700 font-bold py-2 px-4 rounded-full"
+          >
+            BulkUpdate
+          </button>
         </div>
-        
       </div>
+   )}
       {/* {console.log("process.env.RESOURCE_SERVER_HOST ", )} */}
     </>
   );
