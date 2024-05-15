@@ -61,7 +61,7 @@ useEffect(() => {
          <p className='text-center font-semibold text-2xl py-5 uppercase'>products</p>
       <div className="grid text-xs sm:text-sm grid-cols-5 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-7 md:px-6 2xl:px-7.5">
         <div className="col-span-1 flex items-center justify-center">
-          <p className="font-medium text-black text-center">Product Name</p>
+          <p className="font-medium text-black text-center">Product</p>
         </div>
         <div className="col-span-1 hidden items-center justify-center sm:flex">
           <p className="font-medium text-black text-center">Category</p>
