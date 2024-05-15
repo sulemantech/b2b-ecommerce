@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Breadcrumb from '../../components/Breadcrumb';
+import ProductWrapper from '../../components/ProductWrapper'
+
 
 interface User {
   id: number;
@@ -34,7 +36,7 @@ const User: React.FC = () => {
     <>
       <Breadcrumb pageName="Users" />
       <div className=" border border-stroke bg-white shadow-md dark:border-strokedark dark:bg-boxdark rounded-xl">
-          <p className='text-center font-semibold text-2xl py-5 uppercase'>Users</p>
+      <ProductWrapper Value='Users'>
         <div className="grid text-xs sm:text-sm grid-cols-4 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-5 md:px-6 2xl:px-7.5">
           <div className="col-span-1 flex items-center justify-center">
             <p className="font-medium text-black">First Name</p>
@@ -88,6 +90,7 @@ const User: React.FC = () => {
             </div>
           </div>
         ))}
+      </ProductWrapper>
       </div>
     </>
   );
