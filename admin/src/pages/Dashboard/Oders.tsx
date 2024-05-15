@@ -53,6 +53,7 @@ const TableTwo: React.FC = () => {
   return (
     <>
       <Breadcrumb pageName="Orders" />
+      
       <div className="rounded-lg border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <p className="text-center font-semibold text-2xl py-5 uppercase">
           orders
@@ -73,7 +74,7 @@ const TableTwo: React.FC = () => {
           </div>
 
           <div className="col-span-1 flex items-center justify-center">
-            <p className="font-medium text-black text-center">Payment Method</p>
+            <p className="font-medium text-black text-center">Payment</p>
           </div>
           <div className="col-span-1 flex items-center justify-center">
             <p className="font-medium text-black text-center">
