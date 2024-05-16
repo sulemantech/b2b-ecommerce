@@ -290,7 +290,7 @@ const updateProductAndVariants = async (req,res) => {
     // Check if the product exists
     const existingProduct = await productModel.findByPk(productId);
     if (!existingProduct) {
-      return res.status(404).json({ message: 'Product not found.' });
+      return res.status(404).json({ message: 'Product123 not found.' });
     }
 
     // Update product data
@@ -347,7 +347,7 @@ const deleteProductAndVariants = async (req,res) => {
     // Check if the product exists
     const existingProduct = await productModel.findByPk(productId);
     if (!existingProduct) {
-      return res.status(404).json({ message: 'Product not found.' });
+      return res.status(404).json({ message: 'Product not found4.' });
     }
 
     // Delete associated variants
@@ -367,7 +367,6 @@ const deleteProductAndVariants = async (req,res) => {
   }
 };
 
-// DELETE API to delete a specific variant by ID     /variants/:variantId
   const deleteVariant = async (req, res) => {
   try {
     const variantId = req.params.variantId;
@@ -388,51 +387,100 @@ const deleteProductAndVariants = async (req,res) => {
   }
 };
 
-
-
-const bulkUpdateProducts = async (req, res) => {
+const updateBulkProducts = async (req, res) => {
   try {
     const { products, variants } = req.body;
+    let updatedProducts = [];
+    await Promise.all(
+      products.map(async (productData) => {
+        const productId = productData.id;
+        const existingProduct = await productModel.findByPk(productId);
+        if (!existingProduct) {
+          throw new Error(`Product with ID ${productId} not found.`);
+        }
 
-    // Check if the request body contains products and variants arrays
-    if (!Array.isArray(products) || !Array.isArray(variants)) {
-      return res.status(400).json({ error: 'Invalid input. Expected arrays of products and variants.' });
-    }
+        await existingProduct.update(productData);
+        const updatedProduct = await productModel.findByPk(productId);
+        updatedProducts.push(updatedProduct.toJSON()); // Push the updated product into the array
+      })
+    );
 
-    // Use Promise.all to asynchronously update all products
-    const updatedProducts = await Promise.all(products.map(async (productData) => {
-      const productId = productData.id;
-      const { SaleStatus, DealStatus, ...rest } = productData;
 
-      // Find the product by ID
-      const existingProduct = await productModel.findByPk(productId);
+    const updatedVariants = await Promise.all(
+      variants.map(async ({ id, key, values, optionValues, ...rest }) => {
+        const existingVariant = await productVariantModel.findByPk(id);
 
-      if (!existingProduct) {
-        return { id: productId, error: 'Product not found.' };
-      }
+        if (existingVariant) {
+          await existingVariant.update({
+            ...rest,
+            key,
+            value: values,
+            optionValues,
+            productId: existingVariant.productId,
+          });
 
-      // Update the product
-      await existingProduct.update({
-        ...rest,
-        SaleStatus,
-        DealStatus,
-      });
+          return existingVariant.toJSON();
+        } else {
+          const newVariant = await productVariantModel.create({
+            ...rest,
+            key,
+            value: values,
+            optionValues,
+            productId: existingVariant.productId,
+          });
 
-      return { id: productId, message: 'Product updated successfully.' };
-    }));
+          return newVariant.toJSON();
+        }
+      })
+    );
 
-    res.status(200).json({ message: 'Bulk update completed.', updatedProducts });
+    res.status(200).json({
+      message: 'Products and Variants updated successfully.',
+      updatedProducts,
+      updatedVariants,
+    });
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
+// const updateBulkProducts = async (req, res) => {
+//   try {
+//     const { products, variants } = req.body;
+//     let updatedProducts = [];
+//     await Promise.all(
+//       products.map(async (productData) => {
+//         const productId = productData.id;
+//         const existingProduct = await productModel.findByPk(productId);
+//         if (!existingProduct) {
+//           throw new Error(`Product with ID ${productId} not found.`);
+//         }
+
+//         await existingProduct.update(productData);
+//         const updatedProduct = await productModel.findByPk(productId);
+//         updatedProducts.push(updatedProduct.toJSON()); // Push the updated product into the array
+//       })
+//     );
+
+//     res.status(200).json({
+//       message: 'Products updated successfully.',
+//       updatedProducts,
+//     });
+//   } catch (error) {
+//     console.error('Error:', error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// };
+
+
+
+
 
 
 module.exports = {
   deleteVariant,deleteProductAndVariants,updateProductAndVariants,getProductById,getProductsByCategoryId,getAllProductsForClientsSortPrice,
-  getAllProductsForClients,getAllProductsByUserRole,createBulkProducts,createProductAndVariants,bulkUpdateProducts,
+  getAllProductsForClients,getAllProductsByUserRole,createBulkProducts,createProductAndVariants,updateBulkProducts,
   get: [
     {
       path: '/api/products/all',
@@ -471,8 +519,8 @@ module.exports = {
       method: updateProductAndVariants,
     },
     {
-      path: '/api/products/bulk-update',
-      method: bulkUpdateProducts,
+      path: '/api/bulk/products/update',
+      method: updateBulkProducts,
     },
   ],
   delete: [

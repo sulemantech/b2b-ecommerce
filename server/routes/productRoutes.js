@@ -25,7 +25,7 @@ router.get('/api/products/specific/:id', productController.getProductById);
 
 // PUT endpoint to update a product and its variants by product ID
 router.put('/api/products/:productId', productController.updateProductAndVariants);
-router.put('/api/products/bulk-update', productController.bulkUpdateProducts);
+router.put('/api/bulk/products/update', productController.updateBulkProducts);
 
 
 // DELETE endpoint to delete a product and its variants by product ID
