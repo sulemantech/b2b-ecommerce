@@ -154,6 +154,9 @@ const FormElements = () => {
     supplier_id: '',
     categoryName: '',
     status: '',
+    DealStatus:'',
+    SaleSta:'',
+    SalePrice:''
   });
 
   // console.log("Data",Deal);
@@ -164,6 +167,7 @@ const FormElements = () => {
       if (dealChecked) {
         await postData();
       }
+      const saleStatus = parseFloat(value.SalePrice) > 0;
       const variantsData = Object.entries(submittedData).map(
         ([option, values], index) => {
           const tableInput = tableInputValues[index];
@@ -188,10 +192,12 @@ const FormElements = () => {
         },
       );
 
-      // Prepare the full request data
+      const dealStatus = dealChecked ;
+    
+
       const requestData = {
         // products: {...value,DealId:DealRes?.DealId},
-        products: { ...value, DealId: DealRes?.DealId },
+        products: { ...value, DealId: DealRes?.DealId, DealStatus: dealStatus,   SaleStatus: saleStatus,},
         variants: variantsData,
       };
       const response = await axios.post(
@@ -201,23 +207,24 @@ const FormElements = () => {
       console.log('Product and Variants created:', response.data);
       setTableInputValues([]);
       setSubmittedData({});
-      setvalues({
-        name: '',
-        description: 'best',
-        price: '',
-        weight: 20,
-        new: 'true',
-        rating: 5,
-        manufacturer: 'china',
-        tag: [],
-        quantityInStock: '',
-        sku: '',
-        quantity: '',
-        category_id: '',
-        supplier_id: '',
-        categoryName: '',
-        status: '',
-      });
+      // setvalues({
+      //   name: '',
+      //   description: 'best',
+      //   price: '',
+      //   weight: 20,
+      //   new: 'true',
+      //   rating: 5,
+      //   manufacturer: 'china',
+      //   tag: [],
+      //   quantityInStock: '',
+      //   sku: '',
+      //   quantity: '',
+      //   category_id: '',
+      //   supplier_id: '',
+      //   categoryName: '',
+      //   DealStatus:'',
+      //   status: '',
+      // });
 
       setFormData({
         selectedOption: '',
@@ -446,9 +453,9 @@ const FormElements = () => {
                    disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
                    dark:bg-form-input dark:focus:border-primary"
                     onChange={(e) =>
-                      setvalues({ ...value, price: e.target.value })
+                      setvalues({ ...value, SalePrice: e.target.value })
                     }
-                    value={value.price}
+                    value={value.SalePrice}
                   />
                 </div>
                 <div>
@@ -464,6 +471,11 @@ const FormElements = () => {
                    px-5 font-medium outline-none transition focus:border-primary active:border-primary
                   disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
                    dark:focus:border-primary"
+                   onChange={(e) =>
+                    setvalues({ ...value, price: e.target.value })
+                  }
+                  value={value.price}
+
                     //      onChange={(e)=>setvalues({...value, categoryName: e.target.value})}
                     //      value={value. categoryName}
                   />
@@ -683,7 +695,9 @@ const FormElements = () => {
                               values.map((value, innerIndex) => (
                                 <tr key={`${index}-${innerIndex}`}>
                                   <td className="border font-bold border-stroke p-2">
-                                    {value}
+                                    <p title={value} className='w-20 text-ellipsis overflow-hidden'>
+                                      {value}
+                                      </p>
                                   </td>
                                   <td className="border font-bold border-stroke p-2">
                                     <input
@@ -979,7 +993,7 @@ const FormElements = () => {
         />
                 </div>
                 <label className="font-bold" htmlFor="">
-                  Discount
+                  Percentage
                 </label>
                 <br />
 
