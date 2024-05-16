@@ -4,6 +4,7 @@ import { IoFilterOutline } from "react-icons/io5";
 import { BiSortAlt2 } from "react-icons/bi";
 import { IoIosArrowRoundUp, IoIosArrowRoundDown } from "react-icons/io";
 
+
 interface SearchproductProps {
   Header: string;
 }
@@ -28,7 +29,7 @@ const Searchproduct: React.FC<SearchproductProps> = ({ Header }) => {
   const toggleSearch = () => {
     setShowSearch(!showSearch);
   };
-
+  
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
@@ -40,7 +41,7 @@ const Searchproduct: React.FC<SearchproductProps> = ({ Header }) => {
           <div className={`flex my-auto pl-5 ${showSearch ? "hidden" : "block"}`}>
             <h2 className="text-black-2 font-semibold text-xl">{Header}</h2>
           </div>
-          <div className={`flex font-semibold ${showSearch ? "block" : "hidden"}`}>
+          <div className={`flex transition-height font-semibold ${showSearch ? "block" : "hidden"}`}>
             <IoSearch className="absolute fill-[#8a8a8a] mt-2 ml-3.5 h-4 w-4"/>
             <input
               id="inputField"
@@ -78,8 +79,8 @@ const Searchproduct: React.FC<SearchproductProps> = ({ Header }) => {
                 {/* Dropdown content */}
                 Sort by
                 <ul className="text-sm font-semibold">
-                  <li className="px-2 py-1 hover:bg-gray-100 cursor-pointer rounded-md">Collection Title</li>
-                  <li className="px-2 py-1 hover:bg-gray-100 cursor-pointer rounded-md mb-1">Updated</li>
+                  <li className="px-2 py-1 hover:bg-[#ebebeb] cursor-pointer rounded-md">Collection Title</li>
+                  <li className="px-2 py-1 hover:bg-[#ebebeb] cursor-pointer rounded-md mb-1">Updated</li>
                   <hr className="text-[#ebebeb]" />
                   <li>
                     <button className="flex items-center justify-start pl-1 mt-2 mx-auto w-32 active:bg-[rgba(241,241,241,0.45)] active:shadow-inner hover:bg-[#f1f1f1] hover:border border-[#ebebeb] rounded-md text-xs font-semibold"><IoIosArrowRoundUp className="h-5 w-5" />Oldest first</button>

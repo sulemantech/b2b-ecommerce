@@ -394,6 +394,7 @@ const updateBulkProducts = async (req, res) => {
     await Promise.all(
       products.map(async (productData) => {
         const productId = productData.id;
+        console.log("idddddddddddddddddddddddddd",productId)
         const existingProduct = await productModel.findByPk(productId);
         if (!existingProduct) {
           throw new Error(`Product with ID ${productId} not found.`);
