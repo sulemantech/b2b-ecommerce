@@ -1,15 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import ProductWrapper from '../components/ProductWrapper'
+import ProductWrapper from '../components/ProductWrapper';
+import { ImBin } from "react-icons/im";
 
 import BulkUpdate from './BulkUpdate';
 
 const TableTwo: React.FC = () => {
   const Token = Cookies.get('token');
-  // console.log(import.meta.env)
+  const [showHeight, setShowHeight] = useState(false); // State for controlling height
   const [products, setProducts] = useState<Products[]>([]);
-  
 
   interface Products {
     id: number;
@@ -19,13 +19,14 @@ const TableTwo: React.FC = () => {
     categoryName: string;
     discount: number;
     manufacturer: string;
-    SalePrice:number;
-    DealStatus:boolean;
-    SaleStatus:boolean;
+    SalePrice: number;
+    DealStatus: boolean;
+    SaleStatus: boolean;
     productImages: Array<{ date: string; images: string[] }>;
     // productImages?: { date: string; images: string[] }[] | undefined;
   }
 
+  // Function to fetch all products
   const fetchAllProducts = () => {
     const API_Urlfetch = `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products/clients/all`;
     fetch(API_Urlfetch, {
@@ -51,8 +52,15 @@ const TableTwo: React.FC = () => {
     fetchAllProducts();
   }, []);
 
+  // Function to toggle the height
+  const toggleHeight = () => { 
+    setShowHeight(!showHeight); 
+  };
+
+  // State for selected products
   const [selectedProducts, setSelectedProducts] = useState<Products[]>([]);
 
+  // Function to toggle product selection
   const toggleProductSelection = (productId: number) => {
     if (selectedProducts.some((product) => product.id === productId)) {
       setSelectedProducts(
@@ -71,232 +79,177 @@ const TableTwo: React.FC = () => {
   useEffect(() => {
     console.log('Selected Products:', selectedProducts);
   }, []);
-  const [showBulk,setShowBulk]=useState(false);
-  const toggleClick=()=>{
+
+  // State for showing bulk update
+  const [showBulk, setShowBulk] = useState(false);
+
+  // Function to toggle bulk update
+  const toggleClick = () => {
     setShowBulk(true);
-  }
+  };
 
   return (
     <>
-    <div className="rounded-lg border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-      {Token ? (
-        <>
-    <ProductWrapper Value='Final Products'>
-         {/* <p className='text-center font-semibold text-2xl py-5 uppercase'>products</p> */}
-      <div className="grid text-xs sm:text-sm grid-cols-5 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-7 md:px-6 2xl:px-7.5">
-        <div className="col-span-1 flex items-center justify-center">
-          <p className="font-medium text-black text-center">Product</p>
-        </div>
-        <div className="col-span-1 hidden items-center justify-center sm:flex">
-          <p className="font-medium text-black text-center">Category</p>
-        </div>
-        <div className="col-span-1 flex items-center justify-center">
-          <p className="font-medium text-black text-center">Price</p>
-        </div>
-        <div className="col-span-1 hidden items-center justify-center sm:flex">
-          <p className="font-medium text-black text-center">Discount</p>
-        </div>
-        <div className="col-span-1 flex items-center justify-center">
-          <p className="font-medium text-black text-center hidden sm:block">Manufacturer</p>
-          <p className="font-medium text-black text-center sm:hidden">Mfr.</p>
-        </div>
-         <div className="col-span-1 flex items-center justify-center">
-          <p className="font-medium text-black text-center">Action</p>
-        </div>
-        <div className="col-span-1 flex items-center justify-center">
-          <p className="font-medium text-black text-center">New</p>
-        </div>
-      </div>
-      </ProductWrapper>
-    
-      
-      {products.map((product) => (
-        <div  key={product.id}
-        className="grid grid-cols-5 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-7 md:px-6 2xl:px-7.5"  id={`${product.id}`}>
-    <div className="col-span-1 flex items-center justify-center text-center">
-      <div className="flex flex-col gap-2 sm:flex-col sm:items-center">
-        <div className="h-15 w-15 rounded-md flex mx-auto justify-center items-center overflow-hidden">
-        {/* <img src={process.env.RESOURCE_SERVER_HOST + product.productImages[0]?.images[0]} alt="" /> */}
-        <img src={`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}${product?.productImages[0]?.images[0]}`} />
-
-           {/* console.log("pppppppppppppppppp",)   */}
-        </div>
-        <p className="text-xs sm:text-sm text-black dark:text-white">
-          {product.name}
-          {/* {product.id} */}
-        </p>
-      </div>
-    </div>
-    <div className="col-span-1 hidden items-center justify-center sm:flex">
-      <p className="text-xs sm:text-sm text-black dark:text-white text-center">{product.categoryName}</p>
-    </div>
-    <div className="col-span-1 flex items-center justify-center">
-      <p className="text-xs sm:text-sm text-black dark:text-white text-center">{product.price}</p>
-    </div>
-    <div className="col-span-1 hidden items-center justify-center sm:flex">
-      <p className="text-xs sm:text-sm text-black dark:text-white text-center">{product.discount}</p>
-    </div>
-    <div className="col-span-1 flex items-center justify-center">
-      <p className="text-xs sm:text-sm text-black dark:text-white text-center">{product.manufacturer}</p>
-    </div>
-    <div className="text-xs sm:text-sm col-span-1 flex items-center justify-center">
-      <div>
-        <Link to={`/UpdateProducts/${product.id}`} className="bg-blue hover:bg-blue-700 font-bold py-2 px-4 rounded-full">
-        Edit
-      </Link>
-
-      </div>
-    </div>
-    <div className="text-xs sm:text-sm col-span-1 flex items-center justify-center">
-      <Link to={`/product`} className="bg-blue hover:bg-blue-700 font-bold py-2 px-4 rounded-full">
-        AddNew
-      </Link>
-    </div>
-  </div>
-))}
-</>
-      ):(
-        <h1 className='text-center my-54 font-semibold'>
-          No products Found
-        </h1>
-      )}
-</div>
-{/* {console.log("process.env.RESOURCE_SERVER_HOST ", )} */}
-
-  </>
-   {showBulk ?(
-
-    <BulkUpdate selectedProducts={selectedProducts}/>
-   ):(
-      <div className="rounded-lg border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        {Token ? (
-          <>
-            <p className="text-center font-semibold text-2xl py-5 uppercase">
-              products
-            </p>
-            <div className="grid text-xs sm:text-sm grid-cols-7 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-7 md:px-6 2xl:px-7.5">
-              <div className="col-span-1 flex items-center justify-center">
-                <p className="font-medium text-black text-center">
-                  <input className="mr-4" type="checkbox" name="" id="" />
-                </p>
-                <p className="font-medium text-black text-center">
-                  Product Name
-                </p>
-              </div>
-              <div className="col-span-1 hidden items-center justify-center sm:flex">
-                <p className="font-medium text-black text-center">Category</p>
-              </div>
-              <div className="col-span-1 flex items-center justify-center">
-                <p className="font-medium text-black text-center">Price</p>
-              </div>
-              <div className="col-span-1 hidden items-center justify-center sm:flex">
-                <p className="font-medium text-black text-center">Discount</p>
-              </div>
-              <div className="col-span-1 flex items-center justify-center">
-                <p className="font-medi9um text-black text-center hidden sm:block">
-                  Manufacturer
-                </p>
-                <p className="font-medium text-black text-center sm:hidden">
-                  Mfr.
-                </p>
-              </div>
-              <div className="col-span-1 flex items-center justify-center">
-                <p className="font-medium text-black text-center">Action</p>
-              </div>
-              <div className="col-span-1 flex items-center justify-center">
-                <p className="font-medium text-black text-center">New</p>
-              </div>
-            </div>
-
-            {products.map((product) => (
-              <div
-                key={product.id}
-                className="grid grid-cols-5 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-7 md:px-6 2xl:px-7.5"
-                id={`${product.id}`}
-              >
-                {/* <div className="col-span-1 hidden items-center justify-center sm:flex">
-                 
-                </div> */}
-                <div className="col-span-1 flex items-center justify-center text-center">
-                  <input
-                    className="ml-5"
-                    type="checkbox"
-                    checked={selectedProducts.includes(product)}
-                    onChange={() => toggleProductSelection(product.id)}
-                  />
-                  <div className="flex flex-col gap-2 sm:flex-col sm:items-center">
-                    <div className="h-15 w-15 rounded-md flex mx-auto justify-center items-center overflow-hidden">
-                      {/* <img src={process.env.RESOURCE_SERVER_HOST + product.productImages[0]?.images[0]} alt="" /> */}
-
-                      <img
-                        src={`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}${product?.productImages[0]?.images[0]}`}
+      {showBulk ? (
+        <BulkUpdate selectedProducts={selectedProducts} />
+      ) : (
+        <div className="rounded-lg border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+          {Token ? (
+            <>
+              <ProductWrapper Value="Final product">
+                <div className={`transition-height duration-300 flex items-center justify-between text-black-2 font-semibold text-xs h-10 border border-t-stroke border-white overflow-hidden ${showHeight ? "h-10" : "h-[0px] border-none"}`}>
+                  <p className="flex items-center ml-10 text-center text-[#616161] ">
+                    <input className="mr-2" type="checkbox" name="" id="" />
+                    Selected
+                  </p>
+                  <div className='flex items-center space-x-2 p-4'>
+                    
+                    <button
+                      onClick={toggleClick}
+                      className="p-1.5 active:shadow-inner hover:bg-[rgba(241,241,241,0.45)] rounded-md shadow-sm shadow-[#00000079]"
+                    >
+                      Bulk Edit
+                    </button>
+                    {/* ImBin onClick function is updated here */}
+                    <button title='Delete Selection' className="p-1.5 active:shadow-inner hover:bg-[rgba(241,241,241,0.45)] rounded-md shadow-sm shadow-[#00000079]">
+                      <ImBin className="fill-meta-1 h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+                <div className="grid bg-[#f7f7f7] text-xs sm:text-sm grid-cols-5 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-7 md:px-6 2xl:px-7.5">
+                  <div className="col-span-1 flex items-center justify-around">
+                    <p className="font-medium text-[#616161] text-center">
+                      <input
+                        
+                        className="mr-2 sm:mr-0"
+                        type="checkbox"
+                        name=""
+                        id=""
                       />
-
-                      {/* console.log("pppppppppppppppppp",)   */}
-                    </div>
-                    <p className="text-xs sm:text-sm text-black dark:text-white">
-                      {product.name}
-                      {/* {product.id} */}
+                    </p>
+                    <p className="w-20 font-medium text-[#616161] text-center">
+                      Product
+                    </p>
+                  </div>
+                  <div className="col-span-1 hidden items-center justify-center sm:flex">
+                    <p className="font-medium text-[#616161] text-center">
+                      Category
+                    </p>
+                  </div>
+                  <div className="col-span-1 flex items-center justify-center">
+                    <p className="font-medium text-[#616161] text-center">
+                      Price
+                    </p>
+                  </div>
+                  <div className="col-span-1 hidden items-center justify-center sm:flex">
+                    <p className="font-medium text-[#616161] text-center">
+                      Discount
+                    </p>
+                  </div>
+                  <div className="col-span-1 flex items-center justify-center">
+                    <p className="font-medium text-[#616161] text-center hidden sm:block">
+                      Manufacturer
+                    </p>
+                    <p className="font-medium text-[#616161] text-center sm:hidden">
+                      Mfr.
+                    </p>
+                  </div>
+                  <div className="col-span-1 flex items-center justify-center">
+                    <p className="font-medium text-[#616161] text-center">
+                      Action
+                    </p>
+                  </div>
+                  <div className="col-span-1 flex items-center justify-center">
+                    <p className="font-medium text-[#616161] text-center">
+                      New
                     </p>
                   </div>
                 </div>
-                <div className="col-span-1 hidden items-center justify-center sm:flex">
-                  <p className="text-xs sm:text-sm text-black dark:text-white text-center">
-                    {product.categoryName}
-                  </p>
-                </div>
-                <div className="col-span-1 flex items-center justify-center">
-                  <p className="text-xs sm:text-sm text-black dark:text-white text-center">
-                    {product.price}
-                  </p>
-                </div>
-                <div className="col-span-1 hidden items-center justify-center sm:flex">
-                  <p className="text-xs sm:text-sm text-black dark:text-white text-center">
-                    {product.discount}
-                  </p>
-                </div>
-                <div className="col-span-1 flex items-center justify-center">
-                  <p className="text-xs sm:text-sm text-black dark:text-white text-center">
-                    {product.manufacturer}
-                  </p>
-                </div>
-                <div className="text-xs sm:text-sm col-span-1 flex items-center justify-center">
-                  <div>
+              </ProductWrapper>
+              {products.map((product) => (
+                <div
+                  key={product.id}
+                  className="grid grid-cols-5 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-7 md:px-6 2xl:px-7.5"
+                  id={`${product.id}`}
+                >
+                  {/* <div className="col-span-1 hidden items-center justify-center sm:flex">
+                 
+                </div> */}
+
+                  <div className="col-span-1 flex items-center justify-around text-center">
+                    <input
+                      onClick={toggleHeight}
+                      className="mr-2 sm:mr-0"
+                      type="checkbox"
+                      checked={selectedProducts.includes(product)}
+                      onChange={() => toggleProductSelection(product.id)}
+                    />
+
+                    <div className="w-20 flex flex-col gap-2 sm:flex-col sm:items-center">
+                      <div className="h-10 w-10 sm:w-15 sm:h-15 rounded-md flex mx-auto justify-center items-center overflow-hidden">
+                        {/* <img src={process.env.RESOURCE_SERVER_HOST + product.productImages[0]?.images[0]} alt="" /> */}
+
+                        <img
+                          src={`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}${product?.productImages[0]?.images[0]}`}
+                        />
+
+                        {/* console.log("pppppppppppppppppp",)   */}
+                      </div>
+                      <p className="text-xs sm:text-sm text-black dark:text-white">
+                        {product.name}
+                        {/* {product.id} */}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="col-span-1 hidden items-center justify-center sm:flex">
+                    <p className="text-xs sm:text-sm text-black dark:text-white text-center">
+                      {product.categoryName}
+                    </p>
+                  </div>
+                  <div className="col-span-1 flex items-center justify-center">
+                    <p className="text-xs sm:text-sm text-black dark:text-white text-center">
+                      {product.price}
+                    </p>
+                  </div>
+                  <div className="col-span-1 hidden items-center justify-center sm:flex">
+                    <p className="text-xs sm:text-sm text-black dark:text-white text-center">
+                      {product.discount}
+                    </p>
+                  </div>
+                  <div className="col-span-1 flex items-center justify-center">
+                    <p className="text-xs sm:text-sm text-black dark:text-white text-center">
+                      {product.manufacturer}
+                    </p>
+                  </div>
+                  <div className="text-xs sm:text-sm col-span-1 flex items-center justify-center">
+                    <div>
+                      <Link
+                        to={`/UpdateProducts/${product.id}`}
+                        className="bg-blue hover:bg-blue-700 font-bold py-2 px-4 rounded-full"
+                      >
+                        Edit
+                      </Link>
+                    </div>
+                  </div>
+                  <div className="text-xs sm:text-sm col-span-1 flex items-center justify-center">
                     <Link
-                      to={`/UpdateProducts/${product.id}`}
+                      to={`/product`}
                       className="bg-blue hover:bg-blue-700 font-bold py-2 px-4 rounded-full"
                     >
-                      Edit
+                      AddNew
                     </Link>
                   </div>
                 </div>
-                <div className="text-xs sm:text-sm col-span-1 flex items-center justify-center">
-                  <Link
-                    to={`/product`}
-                    className="bg-blue hover:bg-blue-700 font-bold py-2 px-4 rounded-full"
-                  >
-                    AddNew
-                  </Link>
-                </div>
-              </div>
-            ))}
-          </>
-        ) : (
-          <h1 className="text-center my-54 font-semibold">No products Found</h1>
-        )}
-        <div>
-          <button
-          onClick={toggleClick}
-
-          
-            className="bg-blue hover:bg-blue-700 font-bold py-2 px-4 rounded-full"
-          >
-            BulkUpdate
-          </button>
+              ))}
+            </>
+          ) : (
+            <h1 className="text-center my-54 font-semibold">
+              No products Found
+            </h1>
+          )}
+          <div></div>
         </div>
-      </div>
-   )}
-      {/* {console.log("process.env.RESOURCE_SERVER_HOST ", )} */}
+      )}
     </>
   );
 };
