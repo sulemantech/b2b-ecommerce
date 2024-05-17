@@ -17,6 +17,7 @@ const UpdateProducts =lazy(()=>import('../components/UpdateProducts'));
 const ProductNavigate=lazy(()=>import('../components/PoductNavigator'));
 const ECommerce =lazy(()=>import ('../pages/Dashboard/ECommerce'));
 const BulkUpdate=lazy(()=>import ('../components/BulkUpdate'));
+const ApproveProducts=lazy(()=>import ('../components/ApproveProducts'));
 
 
 
@@ -26,6 +27,12 @@ const coreRoutes = [
     path: '/BulkUpdate/product',
     title: 'Bulk',
     component:BulkUpdate,
+
+  },
+  {
+    path: '/ApproveProducts',
+    title: 'ApproveProduct',
+    component:ApproveProducts,
 
   },
   {

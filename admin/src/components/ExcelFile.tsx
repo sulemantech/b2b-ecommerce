@@ -1,6 +1,7 @@
 import React, { ChangeEvent } from 'react';
 import * as XLSX from 'xlsx';
 import { Link } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 interface Products {
   id: number;
@@ -46,10 +47,22 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
     this.exportFile = this.exportFile.bind(this);
     // console.log("dataaaaaaaaaaaaaaaaaaaaaaaaaaaaa",this.data)
   }
+
   componentDidMount() {
+    
     const fetchPendingProducts = () => {
+    
+      const token = Cookies.get('token');
+    
       fetch(
-        `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products/all?page=1&pageSize=500&status=pending`,
+        `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products/all?page=2&pageSize=500&status=active`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}` // Add the Authorization header
+          }
+        }
       )
         .then((response) => {
           if (!response.ok) {
@@ -59,15 +72,16 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
         })
         .then((data) => {
           const pendingProducts = data.filter(
-            (product: Products) => product.status === 'pending',
+            (product: Products) => product.status === 'active'
           );
           this.setState({ products: pendingProducts });
           // console.log('Pending products:', pendingProducts);
         })
         .catch((error) => {
-          console.error('Error fetching pending products:', error.message);
+          console.error('Error fetching inactive products:', error.message);
         });
     };
+    
 
     fetchPendingProducts();
   }

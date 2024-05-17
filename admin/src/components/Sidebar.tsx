@@ -19,6 +19,7 @@ interface SidebarProps {
 
 const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
   const isadmin = Cookies.get('role');
+  // console.log("helooooooooooooooooooooooo",isadmin);
 
   const location = useLocation();
   const { pathname } = location;
@@ -233,7 +234,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                             </NavLink>
                           </li>
 
-                          {isadmin == 'admin' ? (
+                          {/* {isadmin == 'admin' ? (
                             <li className="hidden">
                               <NavLink
                                 to="/users"
@@ -245,12 +246,12 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                                 <span className="opacity-0 group-hover:opacity-100">
                                   &#8594;
                                 </span>
-                                Users
+                                Users3333
                               </NavLink>
                             </li>
                           ) : (
-                            ''
-                          )}
+                            ""
+                          )} */}
                           <li className="hidden">
                             <NavLink
                               to="/orders"
@@ -410,6 +411,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 {(handleClick, open) => {
                   return (
                     <React.Fragment>
+                     {isadmin == 'admin' ? (
+                    <div>
+                   
                       <NavLink
                         to="#"
                         className={`group relative active:bg-white flex items-center gap-2.5 rounded-lg py-1 px-2 text-sm font-bold text-black duration-300 ease-in-out hover:bg-[#f1f1f1]  dark:hover:bg-meta-4 ${
@@ -448,6 +452,8 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           !open && 'hidden'
                         }`}
                       >
+                        {}
+                        
                         <ul className="flex flex-col">
                           <li>
                             <NavLink
@@ -464,8 +470,27 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                               Users
                             </NavLink>
                           </li>
+                           <li>
+                            <NavLink
+                              onClick={() => setSidebarOpen(!sidebarOpen)}
+                              to="/ApproveProducts"
+                              className={({ isActive }) =>
+                                'group relative flex items-center rounded-lg px-3 py-1 gap-2.5 text-sm font-bold text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-[#f1f1f1] ' +
+                                (isActive && '!text-black-2 bg-white')
+                              }
+                            >
+                              <span className="opacity-0 group-hover:opacity-100 ">
+                                &#8594;
+                              </span>
+                              ApproveProducts
+                            </NavLink>
+                          </li>
                         </ul>
                       </div>
+                      </div>
+                      ):(
+                      ""
+                      )}
                       {/* <!-- Costumer Menu End --> */}
                     </React.Fragment>
                   );

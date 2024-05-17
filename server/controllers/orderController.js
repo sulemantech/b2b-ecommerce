@@ -60,7 +60,7 @@ const getOrdersByRole = async (req, res) => {
         order: [['orderId', 'ASC']],
       });
       res.json(orders);
-    } else if (userRole === 'user') {
+    } else if (userRole === 'user' || userRole==='supplier') {
       const userId = req.user.vendorid;
       const supplierOrders = await orderModel.findAll({
         where: { '$orderItems.vendorId$': userId },

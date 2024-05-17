@@ -206,6 +206,10 @@ const productModel = sequelize.define('products', {
   SaleStatus:{
     type:DataTypes.BOOLEAN,
     allowNull:false
+  },
+  Approved:{
+    type:DataTypes.BOOLEAN,
+    allowNull:false
   }
 });
 

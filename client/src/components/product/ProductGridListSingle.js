@@ -95,10 +95,9 @@ const ProductGridListSingle = ({
       return;
     }
 
-    // const calculateRemainingTime = () => {
     //   const startTime = new Date(product?.FlashDeal?.startTime);
     //   const endTime = new Date(product?.FlashDeal?.endTime);
-     
+
     //   const currentTime = new Date();
 
     //   const startTimeDifference = startTime - currentTime;
@@ -132,27 +131,40 @@ const ProductGridListSingle = ({
       const startTime = new Date(product?.FlashDeal?.startTime);
       const endTime = new Date(product?.FlashDeal?.endTime);
       const currentTime = new Date();
-    
+
       const startTimeDifference = startTime - currentTime;
-    
+
       if (startTimeDifference > 0) {
-        const startHours = String(Math.floor((startTimeDifference / (1000 * 60 * 60)) % 24)).padStart(2, '0');
-        const startMinutes = String(Math.floor((startTimeDifference / (1000 * 60)) % 60)).padStart(2, '0');
-        const startSeconds = String(Math.floor((startTimeDifference / 1000) % 60)).padStart(2, '0');
+        const startHours = String(
+          Math.floor((startTimeDifference / (1000 * 60 * 60)) % 24)
+        ).padStart(2, "0");
+        const startMinutes = String(
+          Math.floor((startTimeDifference / (1000 * 60)) % 60)
+        ).padStart(2, "0");
+        const startSeconds = String(
+          Math.floor((startTimeDifference / 1000) % 60)
+        ).padStart(2, "0");
         setRemainingTime(`${startHours}:${startMinutes}:${startSeconds}`);
       } else {
         const timeDifference = endTime - currentTime;
         if (timeDifference > 0) {
-          const remainingHours = String(Math.floor((timeDifference / (1000 * 60 * 60)) % 24)).padStart(2, '0');
-          const remainingMinutes = String(Math.floor((timeDifference / (1000 * 60)) % 60)).padStart(2, '0');
-          const remainingSeconds = String(Math.floor((timeDifference / 1000) % 60)).padStart(2, '0');
-          setRemainingTime(`${remainingHours}:${remainingMinutes}:${remainingSeconds}`);
+          const remainingHours = String(
+            Math.floor((timeDifference / (1000 * 60 * 60)) % 24)
+          ).padStart(2, "0");
+          const remainingMinutes = String(
+            Math.floor((timeDifference / (1000 * 60)) % 60)
+          ).padStart(2, "0");
+          const remainingSeconds = String(
+            Math.floor((timeDifference / 1000) % 60)
+          ).padStart(2, "0");
+          setRemainingTime(
+            `${remainingHours}:${remainingMinutes}:${remainingSeconds}`
+          );
         } else {
           setRemainingTime("Deal expired");
         }
       }
     };
-    
 
     calculateRemainingTime(); // Initial call to calculate remaining time
 
@@ -167,6 +179,8 @@ const ProductGridListSingle = ({
 
   return (
     <Fragment>
+     
+      
       <div className={clsx("product-wrap", spaceBottomClass)}>
         <div className="product-img ">
           <Link
@@ -272,20 +286,20 @@ const ProductGridListSingle = ({
             </div>
           </div>
         </div>
-        {remainingTime.length>0?(
-        <div style={{background:"#fef2f2"}}>
-          {remainingTime !== null ? (
-            <span className="">Lightning deal | {remainingTime}</span>
-          ) : (
-            ""
-          )}
-        </div>
-  ):(
-    ""
-  )}
+        {product.DealStatus == true ? (
+          <div style={{ background: "#fef2f2" }}>
+            {remainingTime !== null ? (
+              <span className="">Lightning deal | {remainingTime}</span>
+            ) : (
+              ""
+            )}
+          </div>
+        ) : (
+          ""
+        )}
         <div className="product-content d-flex">
           <div className="product-price">
-            {product.SalePrice !== 0 ? (
+            {product.SaleStatus == true ? (
               <Fragment>
                 <span>{currency.currencySymbol + product.SalePrice}</span>{" "}
                 <span className="old">
@@ -297,42 +311,41 @@ const ProductGridListSingle = ({
             )}
           </div>
           <div>{sellingTime && <p>Sold {sellingTime}</p>}</div>
+
           <div>
-            {product.discount!==0  && product.SalePrice?(
-          <span
-                  style={{
-                    marginLeft:"10px",
-                    padding:"0 4px",
-                    color: "rgb(251, 119, 1)",
-                    border:"1px solid rgb(251, 119, 1)",
-                    borderRadius: "2px",
-                    alignItems:"center",
-                  }}
-                >
-                  {product.discount} % {" "}
-                </span>
-            ):(
+            {product.SaleStatus == true && product.discount !== 0 ? (
+              <span
+                style={{
+                  marginLeft: "10px",
+                  padding: "0 4px",
+                  color: "rgb(251, 119, 1)",
+                  border: "1px solid rgb(251, 119, 1)",
+                  borderRadius: "2px",
+                  alignItems: "center",
+                }}
+              >
+                {product.discount} %{" "}
+              </span>
+            ) : (
               ""
             )}
           </div>
         </div>
-          <div className="product-content">
-          <h3 style={{lineHeight:"15px"}}>
-              <Link to={process.env.PUBLIC_URL + "/product/" + product.id}>
-                {product.name}
-              </Link>
-            </h3>
+        <div className="product-content">
+          <h3 style={{ lineHeight: "15px" }}>
+            <Link to={process.env.PUBLIC_URL + "/product/" + product.id}>
+              {product.name}
+            </Link>
+          </h3>
 
-            {product.rating && product.rating > 0 ? (
-              <div className="product-rating">
-                <Rating ratingValue={product.rating} />
-              </div>
-            ) : (
-              ""
-            )}
-
-          </div>
-        
+          {product.rating && product.rating > 0 ? (
+            <div className="product-rating">
+              <Rating ratingValue={product.rating} />
+            </div>
+          ) : (
+            ""
+          )}
+        </div>
       </div>
       {/* product modal */}
       <ProductModal

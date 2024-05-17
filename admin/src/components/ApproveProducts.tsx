@@ -6,7 +6,7 @@ import { ImBin } from "react-icons/im";
 
 import BulkUpdate from './BulkUpdate';
 
-const TableTwo: React.FC = () => {
+const ApproveProducts: React.FC = () => {
   const Token = Cookies.get('token');
 
   const [products, setProducts] = useState<Products[]>([]);
@@ -23,8 +23,8 @@ const TableTwo: React.FC = () => {
     manufacturer: string;
     SalePrice: number;
     DealStatus: boolean;
-    Approved:boolean;
     SaleStatus: boolean;
+    Approved:boolean;
     productImages: Array<{ date: string; images: string[] }>;
     // productImages?: { date: string; images: string[] }[] | undefined;
   }
@@ -37,19 +37,25 @@ const TableTwo: React.FC = () => {
         Authorization: `Bearer ${Token}`,
       },
     })
-      .then((response) => {
+    .then((response) => {
         if (!response.ok) {
           console.log('Network error');
+          throw new Error('Network response was not ok');
         }
         return response.json();
       })
-      .then((data) => {
-        setProducts(data);
+    .then((data) => {
+        const pendingProducts = data.filter(
+          (product: Products) => product.Approved === false
+        );
+        setProducts(pendingProducts);
+        // console.log("filterrrrrrrrrrrrrrrrrrrrrrrrr",pendingProducts);
       })
-      .catch((error) => {
+    .catch((error) => {
         console.error('Error fetching all products:', error.message);
       });
   };
+  
 
   useEffect(() => {
     fetchAllProducts();
@@ -75,7 +81,7 @@ const TableTwo: React.FC = () => {
       }
     }
   };
-
+debugger
   useEffect(() => {
     console.log('Selected Products:', selectedProducts);
   }, []);
@@ -258,4 +264,4 @@ const TableTwo: React.FC = () => {
   );
 };
 
-export default TableTwo;
+export default ApproveProducts;
