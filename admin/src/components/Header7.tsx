@@ -133,7 +133,7 @@ const Searchproduct: React.FC<SearchproductProps> = ({ Header , searchValue , se
             </button>
             {/* Dropdown menu */}
             {showDropdown && (
-              <div className="absolute p-2.5 -right-4 mt-3.5 w-40 text-black text-xs font-semibold border border-[#ebebeb] bg-white rounded-xl shadow-xl shadow-[#ebebeb]">
+              <div className="absolute z-10 p-2.5 -right-4 mt-3.5 w-40 text-black text-xs font-semibold border border-[#ebebeb] bg-white rounded-xl shadow-xl shadow-[#ebebeb]">
                 {/* Dropdown content */}
                 Sort by
                 <ul className="text-sm font-semibold">
