@@ -41,7 +41,7 @@ function App() {
                 element={
                   isLogin ? (
                     <Suspense fallback={<Loader />}>
-                      <Component />
+                      <Component selectedProducts={[]} />
                     </Suspense>
                   ) : (
                     <Navigate to="/auth/signin" />

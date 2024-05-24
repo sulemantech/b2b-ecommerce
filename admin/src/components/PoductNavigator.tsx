@@ -1,12 +1,12 @@
 import { NavLink, Link } from 'react-router-dom';
 // import { CiImport } from "react-icons/ci";
 import MyModal from './Modal';
-import Breadcrumb from './Breadcrumb';
+// import Breadcrumb from './Breadcrumb';
 
 const ProductNavigate = () => {
   return (
     <>
-    <Breadcrumb pageName="New Product" />
+    {/* <Breadcrumb pageName="New Product" /> */}
     <div></div>
       <h1 className="font-bold text-black-2 text-xl ">Products</h1>
       <br />

@@ -3,6 +3,8 @@ import { IoSearch } from "react-icons/io5";
 import { IoFilterOutline } from "react-icons/io5";
 import { BiSortAlt2 } from "react-icons/bi";
 import { IoIosArrowRoundUp, IoIosArrowRoundDown } from "react-icons/io";
+import "./styl.css";
+
 
 
 interface SearchproductProps {
@@ -101,10 +103,10 @@ const Searchproduct: React.FC<SearchproductProps> = ({ Header , searchValue , se
               <input
                 id="inputField"
                 type="text"
-                placeholder="Type to search..."
+                placeholder="Search product..."
                 value={searchValue}
                 onChange={handleSearch}
-                className="grow w-full h-8 pl-9 my-auto p-2 pb-2 text-xs sm:text-base overflow-auto focus:outline-[#3977f2] placeholder-[#616161] text-black rounded-md"
+                className="inputField grow w-full h-8 pl-9 my-auto p-2 pb-2 text-xs sm:text-base overflow-auto hover:bg-[#ebebeb75] bg-[#ebebeb45] focus:outline-[#3977f2] placeholder-[#616161] text-black rounded-md"
               />
             </form>
           </div>

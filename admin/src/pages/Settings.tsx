@@ -1,4 +1,4 @@
-import Breadcrumb from '../components/Breadcrumb';
+// import Breadcrumb from '../components/Breadcrumb';
 import userThree from '../images/user/user-03.png';
 import fireToast from '../hooks/fireToast';
 import { Table } from "../components/TableSettings";
@@ -39,7 +39,7 @@ const Settings = () => {
     <>
       <div className="mx-auto max-w-270">
         
-        <Breadcrumb pageName="Settings" />
+        {/* <Breadcrumb pageName="Settings" /> */}
 
         <div className="grid grid-cols-5 gap-8">
           <div className="col-span-5 xl:col-span-3">

@@ -6,6 +6,7 @@ import BulkUpdate from './BulkUpdate';
 import { MdOutlineDeleteOutline } from 'react-icons/md';
 import { LuArchive } from 'react-icons/lu';
 import { IoMdArrowDropdown } from 'react-icons/io';
+import { IoMdArrowRoundBack } from "react-icons/io";
 
 const TableTwo: React.FC = () => {
   const Token = Cookies.get('token');
@@ -162,7 +163,7 @@ const TableTwo: React.FC = () => {
     <>
       {showBulk ? (
         <div>
-          <button onClick={() => setShowBulk(false)}>back</button>
+          <button className='flex px-1 mb-3 ml-1.5 pr-2 rounded-md text-black-2 font-semibold text-sm shadow-lg shadow-[#ebebeb] hover:bg-white py-1' onClick={() => setShowBulk(false)}><IoMdArrowRoundBack className='flex items-center justify-center mr-1 h-5 w-5' /> Back</button>
           <BulkUpdate selectedProducts={selectedProducts} />
         </div>
       ) : (
@@ -192,7 +193,7 @@ const TableTwo: React.FC = () => {
                     <div className="mt-2 flex items-center justify-center">
                       <button
                         onClick={toggleClick}
-                        className="w-[80px] px-2 py-1 active:shadow-inner hover:bg-[rgba(241,241,241,0.45)] rounded-l-sm border-2 border-[#ebebeb]"
+                        className="w-[80px] px-2 py-1 active:shadow-inner hover:bg-[rgba(241,241,241,0.45)] border-2 border-[rgb(241,241,241)]"
                       >
                         Bulk Edit
                       </button>
