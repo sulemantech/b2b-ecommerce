@@ -152,10 +152,11 @@ const FormElements = () => {
     quantity: '',
     category_id: '1',
     supplier_id: '',
-    categoryName: '',
+    categoryName: 'electronics',
     status: '',
     DealStatus: '',
-    SaleSta: '',
+    SaleSta: 0,
+    Approved:0,
     SalePrice: '',
   });
 
