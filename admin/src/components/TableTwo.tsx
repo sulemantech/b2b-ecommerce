@@ -4,6 +4,8 @@ import Cookies from 'js-cookie';
 import ProductWrapper from '../components/ProductWrapper';
 import { ImBin } from "react-icons/im";
 import BulkUpdate from './BulkUpdate';
+import debounce from 'lodash/debounce';
+
 
 const TableTwo: React.FC = () => {
   const Token = Cookies.get('token');
@@ -83,10 +85,55 @@ const TableTwo: React.FC = () => {
     setShowBulk(true);
   };
 
-  useEffect(() => {
+  // useEffect(() => {
+  //   if (searchTerm.trim() === '') return;    
+
+  //   const fetchData = async () => {
+  //     setLoading(true);
+  //     setError(null);
+
+  //     try {
+  //       const response = await fetch(`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/product/`, {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //         body: JSON.stringify({
+  //           query: `query { search(query: "${searchTerm}") { 
+  //                     id
+  //                     name
+  //                     description
+  //                     price
+  //                     sku
+  //                     productImages {
+  //                       date
+  //                       images
+  //                     }
+  //                   }}`,
+  //         }),
+  //       });
+
+  //       const data = await response.json();
+  //       console.log(data.data.search)
+        
+  //         setResults(data.data.search);
+        
+  //       console.log('Search results:', data);
+  //     } catch (error) {
+  //       console.error('Error during search:', error);
+  //       setError('An error occurred during the search. Please try again.');
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, [searchTerm]);
+
+    useEffect(() => {
     if (searchTerm.trim() === '') return;
 
-    const fetchData = async () => {
+    const debouncedFetchData = debounce(async (term) => {
       setLoading(true);
       setError(null);
 
@@ -97,7 +144,7 @@ const TableTwo: React.FC = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            query: `query { search(query: "${searchTerm}") { 
+            query: `query { search(query: "${term}") { 
                       id
                       name
                       description
@@ -112,10 +159,8 @@ const TableTwo: React.FC = () => {
         });
 
         const data = await response.json();
-        console.log(data.data.search)
-        
-          setResults(data.data.search);
-        
+        console.log(data.data.search);
+        setResults(data.data.search);
         console.log('Search results:', data);
       } catch (error) {
         console.error('Error during search:', error);
@@ -123,12 +168,16 @@ const TableTwo: React.FC = () => {
       } finally {
         setLoading(false);
       }
-    };
+    }, 300); // 300ms debounce delay
 
-    fetchData();
+    debouncedFetchData(searchTerm);
+
+    // Cleanup function to cancel debounce on unmount or change
+    return () => {
+      debouncedFetchData.cancel();
+    };
   }, [searchTerm]);
 
-  // const displayProducts = searchTerm ? results : products;
 console.log("products",products);
   return (
     <>

@@ -104,7 +104,7 @@ const Searchproduct: React.FC<SearchproductProps> = ({ Header , searchValue , se
                 placeholder="Type to search..."
                 value={searchValue}
                 onChange={handleSearch}
-                className="grow h-8 pl-9 my-auto p-2 pb-2 text-xs sm:text-base overflow-auto focus:outline-[#3977f2] placeholder-[#616161] text-black rounded-md"
+                className="grow h-8 pl-9 my-auto p-2 pb-2 text-xs w-full sm:text-base overflow-auto focus:outline-[#3977f2] placeholder-[#616161] text-black rounded-md"
               />
             </form>
           </div>
