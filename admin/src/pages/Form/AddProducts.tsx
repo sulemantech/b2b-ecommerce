@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useState, useEffect,ChangeEvent } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 // import Breadcrumb from '../../components/Breadcrumb';
@@ -154,9 +154,9 @@ const FormElements = () => {
     supplier_id: '',
     categoryName: '',
     status: '',
-    DealStatus:'',
-    SaleSta:'',
-    SalePrice:''
+    DealStatus: '',
+    SaleSta: '',
+    SalePrice: '',
   });
 
   // console.log("Data",Deal);
@@ -192,12 +192,16 @@ const FormElements = () => {
         },
       );
 
-      const dealStatus = dealChecked ;
-    
+      const dealStatus = dealChecked;
 
       const requestData = {
         // products: {...value,DealId:DealRes?.DealId},
-        products: { ...value, DealId: DealRes?.DealId, DealStatus: dealStatus,   SaleStatus: saleStatus,},
+        products: {
+          ...value,
+          DealId: DealRes?.DealId,
+          DealStatus: dealStatus,
+          SaleStatus: saleStatus,
+        },
         variants: variantsData,
       };
       const response = await axios.post(
@@ -360,7 +364,7 @@ const FormElements = () => {
 
   return (
     <>
-    {/* <Breadcrumb pageName="" /> */}
+      {/* <Breadcrumb pageName="" /> */}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-[2fr,1fr]">
         <div className="flex flex-col gap-9">
           <div className="rounded-xl border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-5">
@@ -471,10 +475,10 @@ const FormElements = () => {
                    px-5 font-medium outline-none transition focus:border-primary active:border-primary
                   disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
                    dark:focus:border-primary"
-                   onChange={(e) =>
-                    setvalues({ ...value, price: e.target.value })
-                  }
-                  value={value.price}
+                    onChange={(e) =>
+                      setvalues({ ...value, price: e.target.value })
+                    }
+                    value={value.price}
 
                     //      onChange={(e)=>setvalues({...value, categoryName: e.target.value})}
                     //      value={value. categoryName}
@@ -695,9 +699,12 @@ const FormElements = () => {
                               values.map((value, innerIndex) => (
                                 <tr key={`${index}-${innerIndex}`}>
                                   <td className="border font-bold border-stroke p-2">
-                                    <p title={value} className='w-20 text-ellipsis overflow-hidden'>
+                                    <p
+                                      title={value}
+                                      className="w-20 text-ellipsis overflow-hidden"
+                                    >
                                       {value}
-                                      </p>
+                                    </p>
                                   </td>
                                   <td className="border font-bold border-stroke p-2">
                                     <input
@@ -897,15 +904,16 @@ const FormElements = () => {
                 <label className="font-bold" htmlFor="">
                   Vendor
                 </label>
-                {/* <select
-  onChange={(e) => console.log('Selected Supplier:', e.target.value)}
-  className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
->
-  <option value="">Selected Vendor</option>
-  {suppliers.map(supplier => (
-    <option key={supplier.id} value={supplier.supplier_id}>{supplier.supplier_id}</option>
-  ))}
-</select> */}
+                    {/* <select
+                 onChange={(e) => console.log('Selected Supplier:', e.target.value)}
+                  className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                 >
+                 <option value="">Selected Vendor</option>
+                 {suppliers.map(supplier => (
+                 <option key={supplier.id} value={supplier.supplier_id}>{supplier.supplier_id}</option>
+                  ))}
+                  </select> */
+                  }
                 <select
                   onChange={(e) => {
                     const selectedSupplier = suppliers.find(
@@ -986,11 +994,11 @@ const FormElements = () => {
             <div className="rounded-xl border-stroke  bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-2">
               <div className="ml-5">
                 <div>
-                <input
-          type="checkbox"
-          checked={dealChecked}
-          onChange={handleCheckboxChange}
-        />
+                  <input
+                    type="checkbox"
+                    checked={dealChecked}
+                    onChange={handleCheckboxChange}
+                  />
                 </div>
                 <label className="font-bold" htmlFor="">
                   Percentage
