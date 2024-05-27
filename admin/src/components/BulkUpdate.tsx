@@ -35,6 +35,8 @@ const BulkUpdate: FC<BulkUpdateProps> = ({ selectedProducts }) => {
     );
   };
 
+  const [hover, setHover] = useState(false);
+
   const updateBulkProducts = async () => {
     try {
       // Extract products and variants from editedProducts
@@ -82,25 +84,25 @@ const BulkUpdate: FC<BulkUpdateProps> = ({ selectedProducts }) => {
   return (
     <>
       <div className="rounded-lg border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        <p className="text-center font-semibold text-2xl py-5 uppercase">
-          Product Status Update
+        <p className="pl-10 text-start font-semibold text-black-2 text-xl py-3">
+        Editing Products
         </p>
         <div className="grid text-xs sm:text-sm grid-cols-7 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-7 md:px-6 2xl:px-7.5">
           <div className="col-span-1 flex items-center justify-center">
-            <p className="font-medium text-black text-center">Product Name</p>
+            <p className="font-medium text-black text-center">Product</p>
           </div>
           <div className="col-span-1 hidden items-center justify-center sm:flex">
-            <p className="font-medium text-black text-center">SalePrice</p>
+            <p className="font-medium text-black text-center">Sale Price</p>
           </div>
           <div className="col-span-1 flex items-center justify-center">
             <p className="font-medium text-black text-center">Price</p>
           </div>
           <div className="col-span-1 hidden items-center justify-center sm:flex">
-            <p className="font-medium text-black text-center">SaleStatus</p>
+            <p className="font-medium text-black text-center">Sale Status</p>
           </div>
           <div className="col-span-1 flex items-center justify-center">
             <p className="font-medium text-black text-center hidden sm:block">
-              DealStatus
+              Deal Status
             </p>
           </div>
           <div className="col-span-1 flex items-center justify-center">
@@ -110,7 +112,7 @@ const BulkUpdate: FC<BulkUpdateProps> = ({ selectedProducts }) => {
           </div>
           <div className="col-span-1 flex items-center justify-center">
             <p className="font-medium text-black text-center hidden sm:block">
-              manufacturer
+              Mfr.
             </p>
           </div>
         </div>
@@ -158,7 +160,7 @@ const BulkUpdate: FC<BulkUpdateProps> = ({ selectedProducts }) => {
             </div>
             <div className="col-span-1 flex items-center justify-center text-center">
               <select
-                className={`outline-none ${product.SaleStatus ? 'bg-[#6CBF84] rounded text-black' : 'bg-[#D6EDFF] rounded text-black'}`}
+                className={`outline-none ${product.SaleStatus ? 'bg-[#8af5a8] rounded text-black' : 'bg-[#D6EDFF] rounded text-black'}`}
                 value={product.SaleStatus ? 'active' : 'inactive'}
                 onChange={(e) =>
                   handleFieldChange(
@@ -226,7 +228,16 @@ const BulkUpdate: FC<BulkUpdateProps> = ({ selectedProducts }) => {
             </div>
           </div>
         ))}
-        <button onClick={updateBulkProducts}>save</button>
+        <button 
+        style={{
+        boxShadow: hover
+          ? 'none'
+          : '1.5px 1.5px 4px 0.1px rgb(27, 27, 27, 10)'
+      }}
+        className='absolute text-white text-center font-semibold text-sm border-meta-1 outline-none border-none bg-black-2 px-4 py-1 top-17 right-8 rounded-md'
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
+        onClick={updateBulkProducts}>Save</button>
       </div>
     </>
   );

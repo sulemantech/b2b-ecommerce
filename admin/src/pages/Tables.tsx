@@ -1,4 +1,4 @@
-import Breadcrumb from '../components/Breadcrumb';
+// import Breadcrumb from '../components/Breadcrumb';
 import TableThree from '../components/TableThree';
 import TableTwo from '../components/TableTwo';
 import TableFour from '../components/TableFour';
@@ -6,7 +6,7 @@ import TableFour from '../components/TableFour';
 const Tables = () => {
   return (
     <>
-      <Breadcrumb pageName="Tables" />
+      {/* <Breadcrumb pageName="Tables" /> */}
 
       <div className="flex flex-col gap-10">
         <TableFour/>

@@ -164,9 +164,9 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
   const [quantity, setQuantity] = useState('');
   const [manufacturer, setManufacturer] = useState('');
   const [discount, setDiscount] = useState('');
-  const [newFlag, setNewFlag] = useState('');
+  const [, setNewFlag] = useState('');
   const [rating, setRating] = useState('');
-  const [saleCount, setSaleCount] = useState('');
+  const [, setSaleCount] = useState('');
   const [tag, setTag] = useState('');
   const [stock, setStock] = useState('');
   const [quantityInStock, setQuantityInStock] = useState('');

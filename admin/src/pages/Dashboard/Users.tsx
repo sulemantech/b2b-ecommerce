@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Breadcrumb from '../../components/Breadcrumb';
+// import Breadcrumb from '../../components/Breadcrumb';
 import ProductWrapper from '../../components/ProductWrapper'
 
 
@@ -34,7 +34,7 @@ const User: React.FC = () => {
 
   return (
     <>
-      <Breadcrumb pageName="Users" />
+      {/* <Breadcrumb pageName="Users" /> */}
       <div className=" border border-stroke bg-white shadow-md dark:border-strokedark dark:bg-boxdark rounded-xl">
       <ProductWrapper Value='Users'>
         <div className="grid text-xs sm:text-sm grid-cols-4 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-5 md:px-6 2xl:px-7.5">
