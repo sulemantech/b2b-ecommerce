@@ -1,4 +1,5 @@
 import axios from 'axios';
+import React from 'react';
 import { useState, useEffect, ChangeEvent } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -10,19 +11,6 @@ interface FormData {
   inputValue: string;
   dynamicFields: string[];
 }
-interface VariantData {
-  key: string;
-  values: string[];
-  type?: string;
-  weight?: string;
-  unit?: string;
-  availableQuantity?: string;
-  variantPrice?: string;
-  variantSku: string;
-  optionValues: { id: string; name: string; variantSku: string[] }[];
-  size?: string[]; // Add this line
-}
-
 interface Category {
   id: number;
   name: string;
@@ -169,141 +157,179 @@ const FormElements = () => {
     status: '',
     DealStatus: '',
     SaleSta: 0,
-    Approved:0,
+    Approved: 0,
     SalePrice: '',
   });
 
   // console.log("Data",Deal);
 
- // Define the Variant type
-
-
-
-const handleFormSubmit = async () => {
-  handleSubmitImage();
-  try {
+  const handleFormSubmit = async () => {
+    handleSubmitImage();
+    try {
       if (dealChecked) {
-          await postData();
+        await postData();
       }
       const saleStatus = parseFloat(value.SalePrice) > 0;
-     
-const variantsData: VariantData[] = Object.entries(submittedData).map(
-  ([option, values], index) => {
-    const tableInput = tableInputValues[index];
+      const variantsData = Object.entries(submittedData).map(
+        ([option, values], index) => {
+          const tableInput = tableInputValues[index];
 
-    const variantData: VariantData = {
-      key: option,
-      values: values,
-      type: tableInput?.type || undefined,
-      weight: tableInput?.weight || undefined,
-      unit: tableInput?.unit || undefined,
-      availableQuantity: tableInput?.availableQuantity || undefined,
-      variantPrice: tableInput?.variantPrice || undefined,
-      variantSku: tableInput?.variantSku || '',
-      optionValues: values.map((name, id) => {
-        return {
-          id: id.toString(),
-          name: name,
-          variantSku: [`${value.sku}-${name.toLowerCase()}`],
-        };
-      }),
-    };
-
-    // Check if option is 'size' and values is not empty, then assign size
-    if (option === 'size' && values.length > 0) {
-      variantData.size = values;
-    }
-
-    return variantData;
-  }
-);
-      
-      type GroupedVariants = {
-        [key: string]: {
-            color: string;
-            size: string[];
-            optionValues: {
-                id: string;
-                name: string;
-                variantSku: string[];
-                size: {
-                    id: string;
-                    name: string;
-                    variantSku: string;
-                }[];
-            };
-        };
-    };
-    
-      // Group variants by their first value
-      const groupedVariants: GroupedVariants = {};
-      variantsData.forEach((variant) => {
-          if (variant.key === "color") {
-              variant.values.forEach((color, index) => {
-                  if (!groupedVariants[color]) {
-                      groupedVariants[color] = {
-                          color: color,
-                          size: [],
-                          optionValues: {
-                              id: index.toString(),
-                              name: color,
-                              variantSku: [`${value.sku}-${color.toLowerCase()}`],
-                              size: []
-                          }
-                      };
-                  }
-              });
-          }
-      });
-
-      // Add sizes to the respective colors
-      variantsData.forEach((variant) => {
-          if (variant.key === "size") {
-              variant.values.forEach((size, id) => {
-                  Object.keys(groupedVariants).forEach((color) => {
-                      groupedVariants[color].size.push(size);
-                      groupedVariants[color].optionValues.size.push({
-                          id: id.toString(),
-                          name: size,
-                          variantSku: `${value.sku}-${color.toLowerCase()}-${size.toLowerCase()}`
-                      });
-                  });
-              });
-          }
-      });
+          return {
+            key: option,
+            values: values,
+            type: tableInput?.type || undefined,
+            weight: tableInput?.weight || undefined,
+            unit: tableInput?.unit || undefined,
+            availableQuantity: tableInput?.availableQuantity || undefined,
+            variantPrice: tableInput?.variantPrice || undefined,
+            variantSku: tableInput?.variantSku || '',
+            optionValues: values.map((name, id) => {
+              return {
+                id: id.toString(),
+                name: name,
+                variantSku: [`${value.sku}-${name.toLowerCase()}`],
+              };
+            }),
+          };
+        },
+      );
 
       const dealStatus = dealChecked;
 
       const requestData = {
-          products: {
-              ...value,
-              DealId: DealRes?.DealId,
-              DealStatus: dealStatus,
-              SaleStatus: saleStatus,
-          },
-          variants: Object.values(groupedVariants),
+        // products: {...value,DealId:DealRes?.DealId},
+        products: {
+          ...value,
+          DealId: DealRes?.DealId,
+          DealStatus: dealStatus,
+          SaleStatus: saleStatus,
+        },
+        variants: variantsData,
       };
-
       const response = await axios.post(
-          `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products`,
-          requestData,
+        `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products`,
+        requestData,
       );
-
       console.log('Product and Variants created:', response.data);
       setTableInputValues([]);
       setSubmittedData({});
+      // setvalues({
+      //   name: '',
+      //   description: 'best',
+      //   price: '',
+      //   weight: 20,
+      //   new: 'true',
+      //   rating: 5,
+      //   manufacturer: 'china',
+      //   tag: [],
+      //   quantityInStock: '',
+      //   sku: '',
+      //   quantity: '',
+      //   category_id: '',
+      //   supplier_id: '',
+      //   categoryName: '',
+      //   DealStatus:'',
+      //   status: '',
+      // });
+
       setFormData({
-          selectedOption: '',
-          inputValue: '',
-          dynamicFields: [],
+        selectedOption: '',
+        inputValue: '',
+        dynamicFields: [],
       });
-  } catch (error) {
+    } catch (error) {
       console.error('Error creating product and variants:', error);
-  }
-};
-
-
-
+    }
+  };
+  ///////////////////////////////////////////////////////////////////////////////////////////////////grouping variants/////////////////////////
+  // const handleFormSubmit = async () => {
+  //   handleSubmitImage();
+  //   try {
+  //     if (dealChecked) {
+  //       await postData();
+  //     }
+  
+  //     const saleStatus = parseFloat(value.SalePrice) > 0;
+  
+  //     const variantsData = Object.entries(submittedData).map(([option, values], index) => {
+  //       const tableInput = tableInputValues[index];
+  
+  //       return {
+  //         key: option,
+  //         values: values,
+  //         type: tableInput?.type || undefined,
+  //         weight: tableInput?.weight || undefined,
+  //         unit: tableInput?.unit || undefined,
+  //         availableQuantity: tableInput?.availableQuantity || undefined,
+  //         variantPrice: tableInput?.variantPrice || undefined,
+  //         variantSku: tableInput?.variantSku || '',
+  //         optionValues: values.map((name, id) => {
+  //           return {
+  //             id: id.toString(),
+  //             name: name,
+  //             variantSku: [`${value.sku}-${name.toLowerCase()}`],
+  //           };
+  //         }),
+  //       };
+  //     });
+  
+  //     // Grouping variants based on the first variant's values
+  //     const groupedVariants = [];
+  //     const firstVariantValues = variantsData[0].values;
+  
+  //     for (let i = 1; i < variantsData.length; i++) {
+  //       const variant = variantsData[i];
+  //       const groupedValues = firstVariantValues.map((value) => `${variant.key}:${value}`);
+  //       const groupedVariant = {
+  //         key: variant.key,
+  //         values: groupedValues,
+  //         type: variant.type,
+  //         weight: variant.weight,
+  //         unit: variant.unit,
+  //         availableQuantity: variant.availableQuantity,
+  //         variantPrice: variant.variantPrice,
+  //         variantSku: variant.variantSku,
+  //         optionValues: variant.optionValues.map((optionValue) => {
+  //           return {
+  //             ...optionValue,
+  //             variantSku: groupedValues.map((groupedValue) => `${value.sku}-${groupedValue.toLowerCase()}`),
+  //           };
+  //         }),
+  //       };
+  //       groupedVariants.push(groupedVariant);
+  //     }
+  
+  //     const dealStatus = dealChecked;
+  
+  //     const requestData = {
+  //       products: {
+  //         ...value,
+  //         DealId: DealRes?.DealId,
+  //         DealStatus: dealStatus,
+  //         SaleStatus: saleStatus,
+  //       },
+  //       variants: [variantsData[0], ...groupedVariants],
+  //     };
+  
+  //     const response = await axios.post(
+  //       `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products`,
+  //       requestData,
+  //     );
+  
+  //     console.log('Product and Variants created:', response.data);
+  
+  //     setTableInputValues([]);
+  //     setSubmittedData({});
+  //     setFormData({
+  //       selectedOption: '',
+  //       inputValue: '',
+  //       dynamicFields: [],
+  //     });
+  //   } catch (error) {
+  //     console.error('Error creating product and variants:', error);
+  //   }
+  // };
+  
 
   const handleSubmitImage = async () => {
     if (!productId) {
@@ -728,135 +754,69 @@ const variantsData: VariantData[] = Object.entries(submittedData).map(
                 <div className="table mt-5">
                   {Object.keys(submittedData).length > 0 && (
                     <div>
-                      <table>
+                      <table className="border-collapse">
                         <thead>
                           <tr>
-                            {/* <th className="border font-bold border-stroke p-2">
-            key
-          </th> */}
-                            <th className="border font-bold border-stroke p-2">
-                              values
+                            <th className="p-2">
+                              <input type="checkbox" name="" id="" />
                             </th>
-                            <th className="border font-bold border-stroke p-2">
-                              Type
-                            </th>
-                            <th className="border font-bold border-stroke p-2">
-                              Weight
-                            </th>
-                            <th className="border font-bold border-stroke p-2">
-                              Unit
-                            </th>
-                            <th className="border font-bold border-stroke p-2">
-                              AvailableQuantity
-                            </th>
-
-                            <th className="border font-bold border-stroke p-2">
-                              VarientPrice
-                            </th>
-                            <th className="border font-bold border-stroke p-2">
-                              VariantSku
-                            </th>
+                            <th className="p-2">Expand all</th>
+                            <th className="p-2">Price</th>
+                            <th className="p-2">Available</th>
                           </tr>
                         </thead>
                         <tbody>
                           {Object.entries(submittedData).map(
-                            ([_, values], index) =>
-                              values.map((value, innerIndex) => (
-                                <tr key={`${index}-${innerIndex}`}>
-                                  <td className="border font-bold border-stroke p-2">
-                                    <p
-                                      title={value}
-                                      className="w-20 text-ellipsis overflow-hidden"
-                                    >
-                                      {value}
-                                    </p>
-                                  </td>
-                                  <td className="border font-bold border-stroke p-2">
-                                    <input
-                                      type="text"
-                                      placeholder="type"
-                                      className="w-full min-w-30 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                      onChange={(e) =>
-                                        handleTableInputChange(
-                                          innerIndex,
-                                          'type',
-                                          e.target.value,
-                                        )
-                                      }
-                                    />
-                                  </td>
-                                  <td className="border font-bold border-stroke p-2">
-                                    <input
-                                      type="number"
-                                      placeholder="0.0"
-                                      className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                      onChange={(e) =>
-                                        handleTableInputChange(
-                                          innerIndex,
-                                          'weight',
-                                          e.target.value,
-                                        )
-                                      }
-                                    />
-                                  </td>
-                                  <td className="border font-bold border-stroke p-2">
-                                    <input
-                                      type="text"
-                                      placeholder="Kg"
-                                      className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                      onChange={(e) =>
-                                        handleTableInputChange(
-                                          innerIndex,
-                                          'unit',
-                                          e.target.value,
-                                        )
-                                      }
-                                    />
-                                  </td>
-                                  <td className="border font-bold border-stroke p-2">
-                                    <input
-                                      type="number"
-                                      placeholder="0.0"
-                                      className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                      onChange={(e) =>
-                                        handleTableInputChange(
-                                          innerIndex,
-                                          'availableQuantity',
-                                          e.target.value,
-                                        )
-                                      }
-                                    />
-                                  </td>
-                                  <td className="border font-bold border-stroke p-2">
-                                    <input
-                                      type="number"
-                                      placeholder="0.0"
-                                      className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                      onChange={(e) =>
-                                        handleTableInputChange(
-                                          innerIndex,
-                                          'variantPrice',
-                                          e.target.value,
-                                        )
-                                      }
-                                    />
-                                  </td>
-                                  <td className="border font-bold border-stroke p-2">
-                                    <input
-                                      type="text"
-                                      placeholder="sku"
-                                      className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                      onChange={(e) =>
-                                        handleTableInputChange(
-                                          innerIndex,
-                                          'variantSku',
-                                          e.target.value,
-                                        )
-                                      }
-                                    />
-                                  </td>
-                                </tr>
-                              )),
+                            ([_, values], index) => (
+                              <React.Fragment key={index}>
+                                {values.map((value, innerIndex) => (
+                                  <tr
+                                    key={`${index}-${innerIndex}`}
+                                    className="border-t"
+                                  >
+                                    <td className="p-2">
+                                      <input type="checkbox" name="" id="" />
+                                    </td>
+                                    <td className="p-2">
+                                      <p
+                                        title={value}
+                                        className="w-20 text-ellipsis overflow-hidden"
+                                      >
+                                        {value}
+                                      </p>
+                                    </td>
+                                    <td className="p-2">
+                                      <input
+                                        type="number"
+                                        placeholder="0.00"
+                                        className="w-full min-w-20 rounded-lg bg-transparent border px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input dark:focus:border-primary"
+                                        onChange={(e) =>
+                                          handleTableInputChange(
+                                            innerIndex,
+                                            'price',
+                                            e.target.value,
+                                          )
+                                        }
+                                      />
+                                    </td>
+                                    <td className="p-2">
+                                      <input
+                                        type="text"
+                                        placeholder="0"
+                                        className="w-full min-w-20 rounded-lg bg-transparent px-5 font-medium outline-none border transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input dark:focus:border-primary"
+                                        onChange={(e) =>
+                                          handleTableInputChange(
+                                            innerIndex,
+                                            'available',
+                                            e.target.value,
+                                          )
+                                        }
+                                      />
+                                    </td>
+                                  </tr>
+                                ))}
+                              </React.Fragment>
+                            ),
                           )}
                         </tbody>
                       </table>
@@ -969,7 +929,7 @@ const variantsData: VariantData[] = Object.entries(submittedData).map(
                 <label className="font-bold" htmlFor="">
                   Vendor
                 </label>
-                    {/* <select
+                {/* <select
                  onChange={(e) => console.log('Selected Supplier:', e.target.value)}
                   className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                  >
@@ -977,8 +937,7 @@ const variantsData: VariantData[] = Object.entries(submittedData).map(
                  {suppliers.map(supplier => (
                  <option key={supplier.id} value={supplier.supplier_id}>{supplier.supplier_id}</option>
                   ))}
-                  </select> */
-                  }
+                  </select> */}
                 <select
                   onChange={(e) => {
                     const selectedSupplier = suppliers.find(

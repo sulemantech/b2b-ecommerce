@@ -1,48 +1,65 @@
+// const multer = require('multer');
+// const path = require('path');
+// const categoryModel=require('../models/categoryModel');
 const express = require('express')
 const Sequelize=require('sequelize')
-// const multer = require('multer');
 const {Op}= require('sequelize')
-// const path = require('path');
 const productModel = require('../models/productModel');
 const productImages= require('../models/productImages');
 const FlashDeal=require('../models/FlashDealModel')
-// const categoryModel=require('../models/categoryModel');
 const productVariantModel=require('../models/productVariantModel')
 
 
-// const { validateProduct, validateVariants,validateBulkProducts } = require('../middlewares/validateVariantsMiddleware');
-// const verifyToken = require('../middlewares/verifyToken');
-// const { log } = require('console');
+//post API    ///
 
-//post API    ///////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////grouping variants//////////////////
 const createProductAndVariants = async (req, res) => {
   try {
     const { products, variants } = req.body;
-    // Create product record
     const Product = await productModel.create(products);
-   
-    // Create variant records
-    const Variants = await Promise.all(
-      variants.map(async ({ key, values,optionValues, ...rest }) => {
-        return await productVariantModel.create({
-          ...rest,
-          key,
-          value: values,optionValues,
-          productId: Product.id, 
-        });
-      })
-    );
+    const colors = [];
+    const sizes = [];
+
+    // Iterate over each variant to group them
+    for (const variant of variants) {
+      const { color, size } = variant;
+
+      // Add color to colors array if it's not already present
+      if (!colors.includes(color)) {
+        colors.push(color);
+      }
+      size.forEach((sizeValue) => {
+        if (!sizes.includes(sizeValue)) {
+          sizes.push(sizeValue);
+        }
+      });
+    }
+    const colorVariant = await productVariantModel.create({
+      key: 'color',
+      value: colors, // Store as an array
+      productId: Product.id,
+    });
+    const sizeVariant = await productVariantModel.create({
+      key: 'size',
+      value: sizes, // Store as an array
+      productId: Product.id,
+    });
 
     res.status(201).json({
       message: 'Product and Variants created.',
       Product,
-      Variants,
+      Variants: [colorVariant, sizeVariant],
     });
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+
+
+
+
 
 // Bulk post API and its variants 
 const createBulkProducts = async (req, res) => {
