@@ -38,14 +38,14 @@ const DropdownNotification = () => {
         ref={trigger}
         onClick={() => setDropdownOpen(!dropdownOpen)}
         to="#"
-        className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-stroke bg-gray hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
+        className="relative flex h-8.5 w-8.5 items-center justify-center rounded-full border-[0.5px] border-[#1a1a1a] bg-[#303030] hover:text-primary dark:border-strokedark dark:bg-meta-4 dark:text-white"
       >
         <span className="absolute -top-0.5 right-0 z-1 h-2 w-2 rounded-full bg-meta-1">
           <span className="absolute -z-1 inline-flex h-full w-full animate-ping rounded-full bg-meta-1 opacity-75"></span>
         </span>
 
         <svg
-          className="fill-current duration-300 ease-in-out"
+          className="fill-[#bdbab8] duration-300 ease-in-out"
           width="18"
           height="18"
           viewBox="0 0 18 18"
@@ -63,7 +63,7 @@ const DropdownNotification = () => {
         ref={dropdown}
         onFocus={() => setDropdownOpen(true)}
         onBlur={() => setDropdownOpen(false)}
-        className={`absolute -right-27 mt-2.5 flex h-90 w-75 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark sm:right-0 sm:w-80 ${
+        className={`absolute -right-27 mt-3 flex h-90 w-75 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark sm:right-0 sm:w-80 ${
           dropdownOpen === true ? 'block' : 'hidden'
         }`}
       >

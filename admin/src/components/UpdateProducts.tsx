@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 
 
+
 interface UpdateProductProps {}
 interface ProductVariant {
   key: string;
@@ -157,14 +158,15 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [SalePrice, setSalePrice] = useState('');
   const [price, setPrice] = useState('');
   const [weight, setWeight] = useState('');
   const [quantity, setQuantity] = useState('');
   const [manufacturer, setManufacturer] = useState('');
   const [discount, setDiscount] = useState('');
-  const [newFlag, setNewFlag] = useState('');
+  const [, setNewFlag] = useState('');
   const [rating, setRating] = useState('');
-  const [saleCount, setSaleCount] = useState('');
+  const [, setSaleCount] = useState('');
   const [tag, setTag] = useState('');
   const [stock, setStock] = useState('');
   const [quantityInStock, setQuantityInStock] = useState('');
@@ -217,6 +219,7 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
         const product = response.data;
         setName(product.name || '');
         setDescription(product.description || '');
+        setSalePrice(product.SalePrice || '');
         setPrice(product.price || '');
         setWeight(product.weight || '');
         setQuantity(product.quantity || '');
@@ -282,29 +285,33 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
   
     fetchProduct();
   }, [id]);
+
   
   const handleUpdate = async () => {
     try {
       const response = await axios.put(
-        `http://localhost:5001/api/products/${id}`,
+        `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products/${id}`,
         {
-          name,
-          description,
-          price,
-          quantity,
-          manufacturer,
-          discount,
-          new: newFlag,
-          rating,
-          saleCount,
-          tag: tag.split(',').map((t) => t.trim()),
-          stock,
-          quantityInStock,
-          sku,
-          category_id,
-          supplier_id,
-          status,
-          categoryName,
+          products: {
+            name,
+            description,
+            price,
+            SalePrice,
+            quantity,
+            manufacturer,
+            discount,
+            new: true,
+            rating,
+            saleCount: 20,
+            tag: tag.split(',').map((t) => t.trim()),
+            stock,
+            quantityInStock,
+            sku,
+            category_id,
+            supplier_id,
+            status,
+            categoryName,
+          },
           variants: variants,
         },
         );
@@ -321,7 +328,7 @@ const UpdateProduct: React.FC<UpdateProductProps> = () => {
 
 async function deleteVariant(variantId: number) {
   try {
-    const response = await fetch(`http://localhost:5001/api/products/variants/${variantId}`, {
+    const response = await fetch(`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products/variants/${variantId}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json'
@@ -346,7 +353,7 @@ async function deleteVariant(variantId: number) {
   const handleDeleteImage = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5001/productImages/${id}`,
+        `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/productImages/${id}`,
         {
           method: 'DELETE',
         },
@@ -365,6 +372,7 @@ async function deleteVariant(variantId: number) {
 
   return (
     <>
+    {/* <Breadcrumb pageName="Product Update" /> */}
       <div className="grid grid-cols-1 gap-9 sm:grid-cols-[2fr,1fr]">
         <div className="flex flex-col gap-9">
           <div className="rounded-xl border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-5">
@@ -378,13 +386,12 @@ async function deleteVariant(variantId: number) {
              disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark 
              dark:bg-form-input dark:focus:border-primary"
                 value={name}
-              
                 onChange={(e) => setName(e.target.value)}
               />
             </div>
             <br />
             <div className="ml-5 font-bold">
-              <label htmlFor="">Desccription</label>
+              <label htmlFor="">Description</label>
               <CKEditor
                 editor={ClassicEditor}
                 data={description}
@@ -492,8 +499,8 @@ async function deleteVariant(variantId: number) {
               px-5 font-medium outline-none transition focus:border-primary active:border-primary
              disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
              dark:bg-form-input dark:focus:border-primary"
-                    value={price}
-                    onChange={(e) => setPrice(e.target.value)}
+                    value={SalePrice}
+                    onChange={(e) => setSalePrice(e.target.value)}
                   />
                 </div>
                 <div>
@@ -509,8 +516,8 @@ async function deleteVariant(variantId: number) {
              px-5 font-medium outline-none transition focus:border-primary active:border-primary
             disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
              dark:focus:border-primary"
-                    //      onChange={(e)=>setvalues({...value, categoryName: e.target.value})}
-                    //      value={value. categoryName}
+             value={price}
+             onChange={(e) => setPrice(e.target.value)}
                   />
                 </div>
               </div>
@@ -984,7 +991,7 @@ async function deleteVariant(variantId: number) {
         </div>
 
         {/* //////////////////////////////////////second column/////////////////////////////////////////////////////////////////////////////////////////// */}
-        <div className="flex flex-col gap-9 ">
+        <div className="flex flex-col gap-4 ">
           <div className="rounded-xl border-stroke bg-white text-black shadow-default dark:border-strokedark dark:bg-boxdark">
             <div className="p-5">
               <select
@@ -1120,7 +1127,7 @@ async function deleteVariant(variantId: number) {
         <div></div>
         <div
           style={{ border: '20px', padding: '10px' }}
-          className="flex justify-end"
+          className="flex"
         >
           <button
             className="inline-flex items-center justify-center rounded-md bg-primary py-4 px-10 text-center

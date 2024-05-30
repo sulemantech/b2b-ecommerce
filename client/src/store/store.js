@@ -17,7 +17,8 @@ import compareReducer from "./slices/compare-slice";
 import wishlistReducer from "./slices/wishlist-slice";
 import CategoryReducer from './slices/category-Slice';
 import authReducer from './slices/Auth-slice';
-import searchReducer from './slices/ShopSearch-Slice';
+import searchReducer from './slices/ShopSearch-Slice'
+import NotificationReducer from './slices/Notification-slice';
 
 
 const persistConfig = {
@@ -36,6 +37,7 @@ export const rootReducer = combineReducers({
     category: CategoryReducer,
     auth: authReducer,
     searchpro:searchReducer,
+    notifications:NotificationReducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

@@ -1,15 +1,15 @@
-import Breadcrumb from '../components/Breadcrumb';
+// import Breadcrumb from '../components/Breadcrumb';
 
 const Calendar = () => {
   return (
     <>
-      <Breadcrumb pageName="Calendar" />
+      {/* <Breadcrumb pageName="Calendar" /> */}
 
       {/* <!-- ====== Calendar Section Start ====== --> */}
       <div className="w-full max-w-full rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <table className="w-full">
           <thead>
-            <tr className="grid grid-cols-7 rounded-t-sm bg-primary text-white">
+            <tr className="grid grid-cols-7 rounded-t-sm bg-[#1a1a1a] text-white">
               <th className="flex h-15 items-center justify-center rounded-tl-sm p-1 text-xs font-semibold sm:text-base xl:p-5">
                 <span className="hidden lg:block"> Sunday </span>
                 <span className="block lg:hidden"> Sun </span>

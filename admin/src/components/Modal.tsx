@@ -18,7 +18,7 @@ const MyModal = () => {
       <button
         onClick={openModal}
         className='   className=" items-center justify-center flex
-         rounded-md border py-1 gap-2 px-5 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10"'
+         rounded-md border py-1.5 gap-2 text-xs sm:text-lg sm:lg px-4 sm:px-5 text-center font-medium text-black hover:bg-opacity-90 lg:px-8 xl:px-10"'
    
       >
         <TfiImport/>

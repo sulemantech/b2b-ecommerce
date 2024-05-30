@@ -13,7 +13,7 @@ const NavMenu = ({ menuWhiteClass, sidebarMenu }) => {
           : `main-menu ${menuWhiteClass ? menuWhiteClass : ""}`)}
     >
       <nav>
-        <ul>
+        <ul className="ul-element">
           <li>
             <Link to={process.env.PUBLIC_URL + "/"}>
               {t("home")}
@@ -22,7 +22,7 @@ const NavMenu = ({ menuWhiteClass, sidebarMenu }) => {
             </Link>
             
           </li>
-          <li>
+          <li className="d-none">
           <Link to={process.env.PUBLIC_URL + "/blog-standard"}>
               {t("category")}
               {sidebarMenu ? (
@@ -96,7 +96,7 @@ const NavMenu = ({ menuWhiteClass, sidebarMenu }) => {
               </li>
               <li>
                 <Link to={process.env.PUBLIC_URL + "/about"}>
-                  {t("about_us")}
+                  {t("About")}
                 </Link>
               </li>
               <li>

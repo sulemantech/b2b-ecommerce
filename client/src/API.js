@@ -1,27 +1,56 @@
 import { setCategory } from './store/slices/category-Slice';
 import axios from 'axios';
-// const APIHost = "http://localhost:5001"
-export const APIHost = "https://devcares.com"
+export const APIHost = "http://localhost:5001"
+// export const APIHost = "https://devcares.com"
 
 
 
 
 const selectCategory= `${APIHost}/api/products`;
-export const fetchProductsByCategories = async (selectedCategories, offset, sortValue) => {
+// export const fetchProductsByCategories = async (selectedCategories, isSubCategory=false, offset, sortValue) => {
+//   try {
+//     var urlEndpoint = selectCategory
+//     if(isSubCategory){
+//       urlEndpoint = `${APIHost}/api/products/subCategoryProducts`
+//     }
+//     const response = await axios.get(`${urlEndpoint}/${selectedCategories}`, {
+//       params: { offset, sortValue },
+//     });
+//     if (!response) {
+//       throw new Error(`HTTP error! Status: ${response.status}`);
+//     }
+//     return response.data;
+    
+//   } catch (error) {
+//     console.error('Error fetching products by categories:', error);
+//     throw error;
+//   }
+// };
+export const fetchProductsByCategories = async (selectedCategories, isSubCategory = false, offset, sortValue) => {
   try {
-    const response = await axios.get(`${selectCategory}/${selectedCategories}`, {
+    let urlEndpoint;
+    if (isSubCategory) {
+      urlEndpoint = `${APIHost}/api/products/subCategoryProducts`;
+    } else {
+      urlEndpoint = selectCategory; // Assuming selectCategory is defined elsewhere
+    }
+
+    const response = await axios.get(`${urlEndpoint}/${selectedCategories}`, {
       params: { offset, sortValue },
     });
+
     if (!response) {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
+
     return response.data;
-    
+
   } catch (error) {
     console.error('Error fetching products by categories:', error);
     throw error;
   }
 };
+
 
 
 
@@ -42,9 +71,6 @@ export const post = async (endpoint, data) => {
   }
 };
 
-
-
-
 const Registration= `${APIHost}/api/user/register/`;
 const API_Registration = axios.create({
   baseURL: Registration,
@@ -61,6 +87,9 @@ const API_Registration = axios.create({
     throw error;
   }
 };
+
+
+
 
 
 
@@ -119,7 +148,7 @@ export const placeOrder = async (storedToken, orderData) => {
 
 
 
-const getUser = `${APIHost}/api/user/user/profile`;
+const getUser = `${APIHost}/api/user/profile`;
 
 export const getUserInformation = async (token) => {
   try {
@@ -149,8 +178,8 @@ export const getUserInformation = async (token) => {
 
 export const fetchCategories = async () => {
   try {
-    const response = await axios.get(`${APIHost}/api/categories/all`);
-    return response.data;
+    const response = await axios.get(`${APIHost}/api/categories/all`);    
+    return response.data.filter(category => category.parentId === null);
   } catch (error) {
     console.error('Error fetching categories:', error);
     throw error;
@@ -174,3 +203,66 @@ export const fetchProducts = (page, pageSize) => async (dispatch) => {
   }
 };
 
+export const sendNotification = async (storedToken, notificationData) => {
+  try {
+    const response = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notifications/send`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${storedToken}`,
+      },
+      body: JSON.stringify(notificationData),
+    });
+
+    if (response.ok) {
+      console.log("Notification created successfully");
+    } else {
+      console.error("Failed to create notification");
+    }
+  } catch (error) {
+    console.error("Error creating notification:", error.message);
+  }
+};
+
+
+export const fetchNotifications = async (authToken) => {
+  try {
+    const notificationResponse = await fetch(
+      `${process.env.REACT_APP_PUBLIC_URL}/notifications/specific`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    );
+    const notifications = await notificationResponse.json();
+    return notifications;
+  } catch (error) {
+    console.error("Error fetching notifications:", error);
+    throw error;
+  }
+};
+
+
+
+export const registerUserSSO = async (userData) => {
+  try {
+    const response = await fetch(
+      "http://localhost:5001/api/user/register/sso",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(userData),
+      }
+    );
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(error);
+    return { error: "Something went wrong" };
+  }
+};

@@ -16,7 +16,7 @@ import { useEffect } from "react";
 import { fetchCategory } from "../../store/slices/CategoryAction";
 import { propTypes } from "react-hooks-paginator";
 
-const ShopSidebar = ({ products, getSortParams, sideSpaceClass  , selectedCategories ,tagFilterSortParams}) => {
+const ShopSidebar = ({ products, getSortParams, sideSpaceClass ,subcategories , selectedCategories ,tagFilterSortParams}) => {
 
 
   const uniqueColors = getIndividualColors(products);
@@ -32,7 +32,7 @@ dispatch(fetchCategory(dispatch))
   },[dispatch])
 
   return (
-    <div className={clsx("sidebar-style bg-gray ", sideSpaceClass)} style={{paddingLeft:"20px"}}>
+    <div className={clsx("sidebar-style bg-gray ", sideSpaceClass)} style={{paddingLeft:"20px",position:"flex"}}>
       {/* shop search */}
       <ShopSearch />
 
@@ -41,6 +41,7 @@ dispatch(fetchCategory(dispatch))
          categories={uniqueCategories}
          selectedCategories={selectedCategories}
         getSortParams={getSortParams}
+        subcategories={subcategories}
       />
 
       {/* filter by color */}
@@ -52,6 +53,9 @@ dispatch(fetchCategory(dispatch))
       {/* filter by tag */}
       <ShopTag tags={uniqueTags} getSortParams={getSortParams}  tagFilterSortParams={tagFilterSortParams}/>
     
+      <div>
+
+      </div>
     </div>
   );
 };

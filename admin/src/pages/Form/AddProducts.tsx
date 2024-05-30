@@ -1,7 +1,8 @@
 import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, ChangeEvent } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+// import Breadcrumb from '../../components/Breadcrumb';
 // import { log } from 'console';
 
 interface FormData {
@@ -13,11 +14,14 @@ interface Category {
   id: number;
   name: string;
 }
+interface DealResponse {
+  DealId: string;
+}
 interface supplier {
   id: number;
   name: string;
-  supplier_id:number;
-  supplier_name:string;
+  supplier_id: number;
+  supplier_name: string;
 }
 const FormElements = () => {
   const [productId, setProductId] = useState('');
@@ -139,33 +143,35 @@ const FormElements = () => {
     description: 'best',
     price: '',
     weight: 20,
-    manufacturer:'china',
-    new:'true',
+    manufacturer: 'china',
+    new: 'true',
     rating: 5,
     tag: [] as string[],
     quantityInStock: '',
     sku: '',
-    quantity:'',
-    category_id: '',
+    quantity: '',
+    category_id: '1',
     supplier_id: '',
     categoryName: '',
     status: '',
+    DealStatus: '',
+    SaleSta: '',
+    SalePrice: '',
   });
-  console.log(value);
 
+  // console.log("Data",Deal);
 
- 
- 
- 
- 
   const handleFormSubmit = async () => {
     handleSubmitImage();
     try {
+      if (dealChecked) {
+        await postData();
+      }
+      const saleStatus = parseFloat(value.SalePrice) > 0;
       const variantsData = Object.entries(submittedData).map(
         ([option, values], index) => {
           const tableInput = tableInputValues[index];
 
-  
           return {
             key: option,
             values: values,
@@ -174,7 +180,7 @@ const FormElements = () => {
             unit: tableInput?.unit || undefined,
             availableQuantity: tableInput?.availableQuantity || undefined,
             variantPrice: tableInput?.variantPrice || undefined,
-            variantSku: tableInput?.variantSku || "",
+            variantSku: tableInput?.variantSku || '',
             optionValues: values.map((name, id) => {
               return {
                 id: id.toString(),
@@ -183,50 +189,56 @@ const FormElements = () => {
               };
             }),
           };
-        }
+        },
       );
-  
-      // Prepare the full request data
+
+      const dealStatus = dealChecked;
+
       const requestData = {
-        products: value,
+        // products: {...value,DealId:DealRes?.DealId},
+        products: {
+          ...value,
+          DealId: DealRes?.DealId,
+          DealStatus: dealStatus,
+          SaleStatus: saleStatus,
+        },
         variants: variantsData,
       };
       const response = await axios.post(
         `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products`,
-        requestData
+        requestData,
       );
       console.log('Product and Variants created:', response.data);
       setTableInputValues([]);
       setSubmittedData({});
-      setvalues({
-        name: '',
-        description: 'best',
-        price: '',
-        weight: 20,
-        new:'true',
-        rating: 5,
-        manufacturer:"china",
-        tag: [],
-        quantityInStock: '',
-        sku: '',
-        quantity:'',
-        category_id: '',
-        supplier_id: '',
-        categoryName: '',
-        status: '',
-      });
+      // setvalues({
+      //   name: '',
+      //   description: 'best',
+      //   price: '',
+      //   weight: 20,
+      //   new: 'true',
+      //   rating: 5,
+      //   manufacturer: 'china',
+      //   tag: [],
+      //   quantityInStock: '',
+      //   sku: '',
+      //   quantity: '',
+      //   category_id: '',
+      //   supplier_id: '',
+      //   categoryName: '',
+      //   DealStatus:'',
+      //   status: '',
+      // });
 
       setFormData({
         selectedOption: '',
         inputValue: '',
         dynamicFields: [],
       });
-  
     } catch (error) {
       console.error('Error creating product and variants:', error);
     }
   };
-  
 
   const handleSubmitImage = async () => {
     if (!productId) {
@@ -245,10 +257,13 @@ const FormElements = () => {
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/productImages`, {
-        method: 'POST',
-        body: formData,
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/productImages`,
+        {
+          method: 'POST',
+          body: formData,
+        },
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -274,7 +289,9 @@ const FormElements = () => {
   //categoriesAPI//
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/categories/all`)
+    fetch(
+      `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/categories/all`,
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -291,7 +308,9 @@ const FormElements = () => {
   //Vendor/
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/suppliers/all`)
+    fetch(
+      `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/suppliers/all`,
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
@@ -306,8 +325,46 @@ const FormElements = () => {
       });
   }, []);
 
+  const [Deal, setDeal] = useState({
+    discountPercentage: '',
+    startTime: '',
+    endTime: '',
+    isLimitedTime: '1',
+  });
+  // console.log('Data', Deal);
+  const handleCheckboxChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setDealChecked(event.target.checked);
+  };
+  const [dealChecked, setDealChecked] = useState(false);
+  const [DealRes, setDealRes] = useState<DealResponse | null>(null);
+  // console.log('dealllllllllllid', DealRes?.DealId);
+  const postData = async () => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/create/flashdeal`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(Deal),
+        },
+      );
+      if (response.ok) {
+        console.log('Flash deal created successfully');
+        const data = await response.json(); // Assuming the response is JSON
+        setDealRes(data);
+      } else {
+        console.error('Failed to create flash deal');
+      }
+    } catch (error) {
+      console.error('Error creating flash deal:', error);
+    }
+  };
+
   return (
     <>
+      {/* <Breadcrumb pageName="" /> */}
       <div className="grid grid-cols-1 gap-5 sm:grid-cols-[2fr,1fr]">
         <div className="flex flex-col gap-9">
           <div className="rounded-xl border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-5">
@@ -327,7 +384,7 @@ const FormElements = () => {
             </div>
             <br />
             <div className="ml-5 font-bold">
-              <label htmlFor="">Desccription</label>
+              <label htmlFor="">Description</label>
               <CKEditor
                 editor={ClassicEditor}
                 config={
@@ -337,8 +394,6 @@ const FormElements = () => {
                 }
                 onReady={handleEditorReady}
                 onChange={handleEditorChange}
-                
-
               />
             </div>
           </div>
@@ -402,9 +457,9 @@ const FormElements = () => {
                    disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark
                    dark:bg-form-input dark:focus:border-primary"
                     onChange={(e) =>
-                      setvalues({ ...value, price: e.target.value })
+                      setvalues({ ...value, SalePrice: e.target.value })
                     }
-                    value={value.price}
+                    value={value.SalePrice}
                   />
                 </div>
                 <div>
@@ -420,6 +475,11 @@ const FormElements = () => {
                    px-5 font-medium outline-none transition focus:border-primary active:border-primary
                   disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
                    dark:focus:border-primary"
+                    onChange={(e) =>
+                      setvalues({ ...value, price: e.target.value })
+                    }
+                    value={value.price}
+
                     //      onChange={(e)=>setvalues({...value, categoryName: e.target.value})}
                     //      value={value. categoryName}
                   />
@@ -639,7 +699,12 @@ const FormElements = () => {
                               values.map((value, innerIndex) => (
                                 <tr key={`${index}-${innerIndex}`}>
                                   <td className="border font-bold border-stroke p-2">
-                                    {value}
+                                    <p
+                                      title={value}
+                                      className="w-20 text-ellipsis overflow-hidden"
+                                    >
+                                      {value}
+                                    </p>
                                   </td>
                                   <td className="border font-bold border-stroke p-2">
                                     <input
@@ -736,7 +801,6 @@ const FormElements = () => {
               </div>
             </div>
           </div>
-          
         </div>
 
         {/* //////////////////////////////////////second column/////////////////////////////////////////////////////////////////////////////////////////// */}
@@ -840,38 +904,39 @@ const FormElements = () => {
                 <label className="font-bold" htmlFor="">
                   Vendor
                 </label>
-                {/* <select
-  onChange={(e) => console.log('Selected Supplier:', e.target.value)}
-  className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
->
-  <option value="">Selected Vendor</option>
-  {suppliers.map(supplier => (
-    <option key={supplier.id} value={supplier.supplier_id}>{supplier.supplier_id}</option>
-  ))}
-</select> */}
-<select
-  onChange={(e) => {
-    const selectedSupplier = suppliers.find(
-      (supplier) => supplier.supplier_id === parseInt(e.target.value)
-    );
-    if (selectedSupplier) {
-      setvalues({
-        ...value,
-        supplier_id: String(selectedSupplier.supplier_id),
-      
-      });
-    }
-  }}
-  value={value.supplier_id} 
-  className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
->
-  <option value="">Selected Vendor</option>
-  {suppliers.map((supplier) => (
-    <option key={supplier.id} value={supplier.supplier_id}>
-      {supplier.supplier_name}
-    </option>
-  ))}
-</select>
+                    {/* <select
+                 onChange={(e) => console.log('Selected Supplier:', e.target.value)}
+                  className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                 >
+                 <option value="">Selected Vendor</option>
+                 {suppliers.map(supplier => (
+                 <option key={supplier.id} value={supplier.supplier_id}>{supplier.supplier_id}</option>
+                  ))}
+                  </select> */
+                  }
+                <select
+                  onChange={(e) => {
+                    const selectedSupplier = suppliers.find(
+                      (supplier) =>
+                        supplier.supplier_id === parseInt(e.target.value),
+                    );
+                    if (selectedSupplier) {
+                      setvalues({
+                        ...value,
+                        supplier_id: String(selectedSupplier.supplier_id),
+                      });
+                    }
+                  }}
+                  value={value.supplier_id}
+                  className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
+                >
+                  <option value="">Selected Vendor</option>
+                  {suppliers.map((supplier) => (
+                    <option key={supplier.id} value={supplier.supplier_id}>
+                      {supplier.supplier_name}
+                    </option>
+                  ))}
+                </select>
 
                 {/* <input
                   type="text"
@@ -924,8 +989,84 @@ const FormElements = () => {
               </div>
             </div>
           </div>
+
+          <div className="flex flex-col gap-9 ">
+            <div className="rounded-xl border-stroke  bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-2">
+              <div className="ml-5">
+                <div>
+                  <input
+                    type="checkbox"
+                    checked={dealChecked}
+                    onChange={handleCheckboxChange}
+                  />
+                </div>
+                <label className="font-bold" htmlFor="">
+                  Percentage
+                </label>
+                <br />
+
+                <input
+                  type="number"
+                  placeholder="Discount"
+                  className="w-50 rounded-lg border-[1.5px] border-stroke bg-transparent py-1
+    px-2 font-medium outline-none transition focus:border-primary active:border-primary 
+    disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark 
+    dark:bg-form-input dark:focus:border-primary"
+                  onChange={(e) =>
+                    setDeal({ ...Deal, discountPercentage: e.target.value })
+                  }
+                  value={Deal.discountPercentage}
+                />
+                <br />
+                <br />
+                <label className="font-bold" htmlFor="">
+                  StartTime
+                </label>
+                <br />
+
+                <input
+                  type="datetime-local"
+                  placeholder="EndTime"
+                  className="w-50 rounded-lg border-[1.5px] border-stroke bg-transparent py-1
+    px-2 font-medium outline-none transition focus:border-primary active:border-primary 
+    disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark 
+    dark:bg-form-input dark:focus:border-primary"
+                  onChange={(e) =>
+                    setDeal({
+                      ...Deal,
+                      startTime: e.target.value,
+                    })
+                  }
+                  value={Deal.startTime}
+                />
+
+                <br />
+                <br />
+                <label className="font-bold" htmlFor="">
+                  EndTime
+                </label>
+                <br />
+
+                <input
+                  type="datetime-local"
+                  placeholder="EndTime"
+                  className="w-50 rounded-lg border-[1.5px] border-stroke bg-transparent py-1
+    px-2 font-medium outline-none transition focus:border-primary active:border-primary 
+    disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark 
+    dark:bg-form-input dark:focus:border-primary"
+                  onChange={(e) =>
+                    setDeal({
+                      ...Deal,
+                      endTime: e.target.value,
+                    })
+                  }
+                  value={Deal.endTime}
+                />
+              </div>
+            </div>
+          </div>
         </div>
-        <div></div>
+
         <div
           style={{ border: '20px', padding: '10px' }}
           className="flex justify-end"

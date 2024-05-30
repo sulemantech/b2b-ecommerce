@@ -9,3 +9,7 @@
 .sidebar::-webkit-scrollbar-thumb {
   background: #888; /* Color of the scrollbar thumb */
 }
+
+.inputField::placeholder {
+  color: #8a8a8a; /* Change placeholder color to red */
+}

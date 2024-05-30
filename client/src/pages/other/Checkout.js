@@ -16,6 +16,9 @@ import FooterCopyright from "../../components/footer/FooterCopyright";
 import { Container } from "react-bootstrap";
 import FooterCheckout from "../../components/footer/FooterCheckout";
 import { APIHost } from "../../API";
+import { jwtDecode } from 'jwt-decode';
+import { sendNotification } from "../../API";
+
 
 const Checkout = () => {
   let cartTotalPrice = 0;
@@ -42,6 +45,93 @@ const Checkout = () => {
     contactNumber: "",
   });
 
+
+  var userId = null;
+  try {
+    const decodedToken = jwtDecode(storedToken);
+    userId = decodedToken.id;
+  } catch (error) {
+    console.error('Error decoding token:', error.message);
+  }
+  
+
+  // const handlePlaceOrder = async (event) => {
+  //   event.preventDefault();
+  //   let totalPrice = 0;
+  //   const cartItemsData = cartItems.map((cartItem) => {
+  //     const itemTotalPrice =
+  //       (cartItem.price - cartItem.discount) * cartItem.quantity;
+  //     totalPrice += itemTotalPrice;
+  //     return {
+  //       productId: cartItem.id,
+  //       quantity: cartItem.quantity,
+  //       price: cartItem.price,
+  //       discount: cartItem.discount,
+  //       vendorId: cartItem.supplier_id,
+  //       totalPrice: itemTotalPrice,
+  //     };
+  //   });
+
+  //   const orderData = {
+  //     address: users.address,
+  //     totalPrice: totalPrice,
+  //     status: "Pending",
+  //     discount: 5,
+  //     paymentMethod: "Cash on delivery",
+  //     trackingNumber: Math.floor(Math.random() * 1000000).toString(),
+  //     orderItems: cartItemsData,
+  //     name: update.firstname,
+  //     lastname: update.lastname,
+  //     country: formvalue.country,
+  //     city: formvalue.city,
+  //     zipCode: parseInt(formvalue.zipCode),
+  //     contactNumber: users.contactNumber,
+  //     email: update.email,
+  //     additionalInfo: formvalue.additionalInfo,
+  //     shippingAddress: formvalue.shippingAddress,
+  //   };
+
+  //   try {
+  //     const response = await placeOrder(storedToken, orderData);
+
+  //     const notificationData = {
+  //       notification_type_id: 2,
+  //       related_entity_type: "order",
+  //       related_entity_id: 1, // Assuming the order ID is in the response
+  //       message: "Your order has been placed successfully.",
+  //       sender_id: 9, // Assuming admin is the sender
+  //       recipient_id: userId,
+  //       status: "pending"
+  //     };
+  //     const notificationResponse = await fetch(`${process.env.REACT_APP_PUBLIC_URL}/notifications/send`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         Authorization: `Bearer ${storedToken}`,
+  //       },
+  //       body: JSON.stringify(notificationData),
+  //     });
+  //     if (notificationResponse.ok) {
+  //       console.log("Notification created successfully");
+  //     } else {
+  //       console.error("Failed to create notification");
+  //     }
+  //     const ws = new WebSocket("ws://localhost:8000");
+
+  //     ws.onopen = () => {
+  //       console.log("WebSocket connection established");
+  //       ws.send(JSON.stringify(notificationData));
+  //       setNoti(notificationData);
+  //       console.log("websokitkkkkkkkkkkkkkk",notificationData);
+  //     };
+
+  //     navigate("/order/success");
+  //     console.log("Order placed successfully:", response);
+  //     dispatch(deleteAllFromCart());
+  //   } catch (error) {
+  //     console.error("Error placing order:", error.message);
+  //   }
+  // };
   const handlePlaceOrder = async (event) => {
     event.preventDefault();
     let totalPrice = 0;
@@ -80,6 +170,28 @@ const Checkout = () => {
 
     try {
       const response = await placeOrder(storedToken, orderData);
+
+      const notificationData = {
+        notification_type_id: 2,
+        related_entity_type: "order",
+        related_entity_id: 1, // Assuming the order ID is in the response
+        message: "Your order has been placed successfully.",
+        sender_id: 9, // Assuming admin is the sender
+        recipient_id: userId,
+        status: "pending"
+      };
+
+      await sendNotification(storedToken, notificationData);
+
+      const ws = new WebSocket("ws://localhost:8000");
+
+      ws.onopen = () => {
+        console.log("WebSocket connection established");
+        ws.send(JSON.stringify(notificationData));
+        // console.log(notificationData);
+        // setNoti(notificationData);
+      };
+
       navigate("/order/success");
       console.log("Order placed successfully:", response);
       dispatch(deleteAllFromCart());
@@ -87,6 +199,9 @@ const Checkout = () => {
       console.error("Error placing order:", error.message);
     }
   };
+
+
+
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -346,6 +461,7 @@ const Checkout = () => {
                                     process.env.REACT_APP_PUBLIC_URL +
                                     cartItem?.productImages[0].images
                                   }
+                                  style={{width:"10%"}}
                                 ></img>
                                 <span className="order-middle-left mx-2">
                                   {cartItem.name} X {cartItem.quantity}

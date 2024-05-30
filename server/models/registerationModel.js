@@ -1,4 +1,4 @@
-const sequelize = require('../database/db');
+const sequelize = require('../config/config.js');
 const { DataTypes } = require('sequelize');
 const customerModel = require('./customerModel');
 const businessModel = require('./businessModel');
@@ -38,23 +38,27 @@ const registrationModel = sequelize.define('user', {
     customerId: {
         type: DataTypes.INTEGER,
         references: {
-            model: 'customers',
-            key: 'id',
+            model: customerModel, // Reference to customerModel
+            key: 'id', // Primary key in customerModel
         },
     },
     businessId: {
         type: DataTypes.INTEGER,
         references: {
-            model: 'businesses',
-            key: 'id',
+            model: businessModel, // Reference to businessModel
+            key: 'id', // Primary key in businessModel
         },
     }
 }, {
     timestamps: false,
 });
 
-// Add the association to define a one-to-one relationship
-registrationModel.belongsTo(customerModel, { foreignKey: 'customerId', as: 'customer' });
-registrationModel.belongsTo(businessModel, { foreignKey: 'businessId', as: 'business' });
+
+//============= NOTE: THESE ASSOCIATIONS ARE SEND TO THE ASSOCIATIONS.JS =======================
+
+                                                                                          //    ^
+// Add the association to define a one-to-one relationship                                      |
+// registrationModel.belongsTo(customerModel, { foreignKey: 'customerId', as: 'customer' });    |
+// registrationModel.belongsTo(businessModel, { foreignKey: 'businessId', as: 'business' });    |
 
 module.exports = registrationModel;

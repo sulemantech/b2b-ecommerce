@@ -338,12 +338,12 @@ const MobileNavMenu = () => {
           </ul>
         </li>
         <li>
-          <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
+          {/* <Link to={process.env.PUBLIC_URL + "/shop-grid-standard"}>
             {t("collection")}
-          </Link>
+          </Link> */}
         </li>
         <li className="menu-item-has-children">
-          <Link to={process.env.PUBLIC_URL + "/"}>{t("pages")}</Link>
+          {/* <Link to={process.env.PUBLIC_URL + "/"}>{t("pages")}</Link> */}
           <ul className="sub-menu">
             <li>
               <Link to={process.env.PUBLIC_URL + "/cart"}>
@@ -393,9 +393,9 @@ const MobileNavMenu = () => {
           </ul>
         </li>
         <li className="menu-item-has-children">
-          <Link to={process.env.PUBLIC_URL + "/blog-standard"}>
+          {/* <Link to={process.env.PUBLIC_URL + "/blog-standard"}>
             {t("blog")}
-          </Link>
+          </Link> */}
           <ul className="sub-menu">
             <li>
               <Link to={process.env.PUBLIC_URL + "/blog-standard"}>
