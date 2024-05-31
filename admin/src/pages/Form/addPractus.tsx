@@ -102,35 +102,150 @@ const FormElements = () => {
     console.log('Table Input Values:', tableInputValues);
   };
 
+  // const handleSubmit = () => {
+  //   const { selectedOption, inputValue, dynamicFields } = formData;
+  //   const isDuplicateInForm = (dynamicFields || []).includes(inputValue);
+  //   const isDuplicateInSubmittedData = (
+  //     submittedData[selectedOption] || []
+  //   ).includes(inputValue);
+  //   const nonEmptyDynamicFields = dynamicFields.filter(
+  //     (field) => field.trim() !== '',
+  //   );
+  //   if (isDuplicateInForm || isDuplicateInSubmittedData) {
+  //     console.log(`Duplicate value for ${selectedOption}: ${inputValue}`);
+  //   } else {
+  //     setSubmittedData((prevData) => ({
+  //       ...prevData,
+  //       [selectedOption]: [
+  //         ...(prevData[selectedOption] || []),
+  //         inputValue,
+  //         ...nonEmptyDynamicFields,
+  //       ],
+  //     }));
+  //     setUniqueValuesSet(
+  //       (prevValues) =>
+  //         new Set([...prevValues, inputValue, ...nonEmptyDynamicFields]),
+  //     );
+  //     setDropdownVisible(false);
+  //     setTableInputValues([]);
+  //   }
+  // };
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // type SubmittedData = {
+  //   [key: string]: string[];
+  // };
+  
+  // const handleSubmit = () => {
+  //   const { selectedOption, inputValue, dynamicFields } = formData;
+  //   const isDuplicateInForm = (dynamicFields || []).includes(inputValue);
+  //   const isDuplicateInSubmittedData = (submittedData[selectedOption] || []).includes(inputValue);
+  //   const nonEmptyDynamicFields = dynamicFields.filter((field) => field.trim() !== '');
+  
+  //   if (isDuplicateInForm || isDuplicateInSubmittedData) {
+  //     console.log(`Duplicate value for ${selectedOption}: ${inputValue}`);
+  //   } else {
+  //     setSubmittedData((prevData) => {
+  //       const newData: SubmittedData = {
+  //         ...prevData,
+  //         [selectedOption]: [
+  //           ...(prevData[selectedOption] || []),
+  //           inputValue,
+  //           ...nonEmptyDynamicFields,
+  //         ],
+  //       };
+  
+  //       const groupedData = groupData(newData);
+  //       console.log("group data",groupedData);  // Log the grouped data to verify the structure
+  
+  //       return newData;
+  //     });
+  
+  //     setUniqueValuesSet((prevValues) =>
+  //       new Set([...prevValues, inputValue, ...nonEmptyDynamicFields])
+  //     );
+  
+  //     setDropdownVisible(false);
+  //     setTableInputValues([]);
+  //   }
+  // };
+  const [groupedData, setGroupedData] = useState<any[]>([]);
+
+
+  type SubmittedData = {
+    [key: string]: string[];
+  };
+  
   const handleSubmit = () => {
     const { selectedOption, inputValue, dynamicFields } = formData;
     const isDuplicateInForm = (dynamicFields || []).includes(inputValue);
-    const isDuplicateInSubmittedData = (
-      submittedData[selectedOption] || []
-    ).includes(inputValue);
-    const nonEmptyDynamicFields = dynamicFields.filter(
-      (field) => field.trim() !== '',
-    );
+    const isDuplicateInSubmittedData = (submittedData[selectedOption] || []).includes(inputValue);
+    const nonEmptyDynamicFields = dynamicFields.filter((field) => field.trim() !== '');
+  
     if (isDuplicateInForm || isDuplicateInSubmittedData) {
       console.log(`Duplicate value for ${selectedOption}: ${inputValue}`);
     } else {
-      setSubmittedData((prevData) => ({
-        ...prevData,
-        [selectedOption]: [
-          ...(prevData[selectedOption] || []),
-          inputValue,
-          ...nonEmptyDynamicFields,
-        ],
-      }));
-      setUniqueValuesSet(
-        (prevValues) =>
-          new Set([...prevValues, inputValue, ...nonEmptyDynamicFields]),
+      setSubmittedData((prevData) => {
+        const newData: SubmittedData = {
+          ...prevData,
+          [selectedOption]: [
+            ...(prevData[selectedOption] || []),
+            inputValue,
+            ...nonEmptyDynamicFields,
+          ],
+        };
+  
+        const grouped = groupData(newData);
+        setGroupedData(grouped);
+        console.log(grouped);  // Log the grouped data to verify the structure
+  
+        return newData;
+      });
+  
+      setUniqueValuesSet((prevValues) =>
+        new Set([...prevValues, inputValue, ...nonEmptyDynamicFields])
       );
+  
       setDropdownVisible(false);
       setTableInputValues([]);
     }
   };
+  
 
+  
+  
+  const groupData = (data: SubmittedData): any[] => {
+    const grouped: { [key: string]: string[] } = {};
+  
+    Object.entries(data).forEach(([key, values]) => {
+      values.forEach((value) => {
+        if (!grouped[key]) {
+          grouped[key] = [];
+        }
+        grouped[key].push(value);
+      });
+    });
+  
+    const result: any[] = [];
+    const keys = Object.keys(grouped);
+  
+    if (keys.length >= 2) {
+      const [firstKey, secondKey] = keys;
+  
+      if (grouped[firstKey] && grouped[secondKey]) {
+        grouped[firstKey].forEach((firstValue) => {
+          const item = {
+            [firstKey]: [firstValue],
+            [secondKey]: grouped[secondKey],
+          };
+          result.push(item);
+        });
+      }
+    }
+  
+    return result;
+    
+  };
+  
   const handleEditorReady = (editor: any) => {
     console.log(editor);
   };
@@ -453,6 +568,21 @@ const FormElements = () => {
     }
   };
 
+  const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
+
+const toggleRow = (index: number) => {
+  setExpandedRows((prev) => {
+    const newSet = new Set(prev);
+    if (newSet.has(index)) {
+      newSet.delete(index);
+    } else {
+      newSet.add(index);
+    }
+    return newSet;
+  });
+};
+
+
   return (
     <>
       {/* <Breadcrumb pageName="" /> */}
@@ -751,78 +881,85 @@ const FormElements = () => {
               </div>
 
               <div className="Parent ">
-                <div className="table mt-5">
-                  {Object.keys(submittedData).length > 0 && (
-                    <div>
-                      <table className="border-collapse">
-                        <thead>
-                          <tr>
-                            <th className="p-2">
-                              <input type="checkbox" name="" id="" />
-                            </th>
-                            <th className="p-2">Expand all</th>
-                            <th className="p-2">Price</th>
-                            <th className="p-2">Available</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {Object.entries(submittedData).map(
-                            ([_, values], index) => (
-                              <React.Fragment key={index}>
-                                {values.map((value, innerIndex) => (
-                                  <tr
-                                    key={`${index}-${innerIndex}`}
-                                    className="border-t"
-                                  >
-                                    <td className="p-2">
-                                      <input type="checkbox" name="" id="" />
-                                    </td>
-                                    <td className="p-2">
-                                      <p
-                                        title={value}
-                                        className="w-20 text-ellipsis overflow-hidden"
-                                      >
-                                        {value}
-                                      </p>
-                                    </td>
-                                    <td className="p-2">
-                                      <input
-                                        type="number"
-                                        placeholder="0.00"
-                                        className="w-full min-w-20 rounded-lg bg-transparent border px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input dark:focus:border-primary"
-                                        onChange={(e) =>
-                                          handleTableInputChange(
-                                            innerIndex,
-                                            'price',
-                                            e.target.value,
-                                          )
-                                        }
-                                      />
-                                    </td>
-                                    <td className="p-2">
-                                      <input
-                                        type="text"
-                                        placeholder="0"
-                                        className="w-full min-w-20 rounded-lg bg-transparent px-5 font-medium outline-none border transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input dark:focus:border-primary"
-                                        onChange={(e) =>
-                                          handleTableInputChange(
-                                            innerIndex,
-                                            'available',
-                                            e.target.value,
-                                          )
-                                        }
-                                      />
-                                    </td>
-                                  </tr>
-                                ))}
-                              </React.Fragment>
-                            ),
-                          )}
-                        </tbody>
-                      </table>
-                    </div>
-                  )}
-                </div>
+              <div className="table mt-5">
+  {groupedData.length > 0 && (
+    <div>
+      <table className="border-collapse">
+        <thead>
+          <tr>
+            <th className="p-2">
+              <input type="checkbox" name="" id="" />
+            </th>
+            <th className="p-2">Expand all</th>
+            <th className="p-2">Price</th>
+            <th className="p-2">Available</th>
+          </tr>
+        </thead>
+        <tbody>
+          {groupedData.map((group, index) => {
+            const firstVariantKey = Object.keys(group)[0];
+            const secondVariantKey = Object.keys(group)[1];
+            const isExpanded = expandedRows.has(index);
+
+            return (
+              <React.Fragment key={index}>
+                <tr className="border-t" onClick={() => toggleRow(index)}>
+                  <td className="p-2">
+                    <input type="checkbox" name="" id="" />
+                  </td>
+                  <td className="p-2">
+                    <p title={group[firstVariantKey]} className="w-20 text-ellipsis overflow-hidden">
+                      {group[firstVariantKey]}
+                    </p>
+                  </td>
+                  <td className="p-2">
+                    <input
+                      type="number"
+                      placeholder="0.00"
+                      className="w-full min-w-20 rounded-lg bg-transparent border px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input dark:focus:border-primary"
+                      onChange={(e) => handleTableInputChange(index, 'price', e.target.value)}
+                    />
+                  </td>
+                  <td className="p-2">
+                    <input
+                      type="text"
+                      placeholder="0"
+                      className="w-full min-w-20 rounded-lg bg-transparent px-5 font-medium outline-none border transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input dark:focus:border-primary"
+                      onChange={(e) => handleTableInputChange(index, 'available', e.target.value)}
+                    />
+                  </td>
+                </tr>
+                {isExpanded && group[secondVariantKey].map((secondValue: string, innerIndex: number) => (
+                  <tr key={`${index}-${innerIndex}`} className="border-t">
+                    <td className="p-2"></td>
+                    <td className="p-2">{secondValue}</td>
+                    <td className="p-2">
+                      <input
+                        type="number"
+                        placeholder="0.00"
+                        className="w-full min-w-20 rounded-lg bg-transparent border px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input dark:focus:border-primary"
+                        onChange={(e) => handleTableInputChange(innerIndex, 'price', e.target.value)}
+                      />
+                    </td>
+                    <td className="p-2">
+                      <input
+                        type="text"
+                        placeholder="0"
+                        className="w-full min-w-20 rounded-lg bg-transparent px-5 font-medium outline-none border transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input dark:focus:border-primary"
+                        onChange={(e) => handleTableInputChange(innerIndex, 'available', e.target.value)}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </React.Fragment>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  )}
+</div>
+
               </div>
             </div>
           </div>

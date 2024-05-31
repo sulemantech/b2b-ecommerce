@@ -10,7 +10,8 @@ interface FormData {
   inputValue: string;
   dynamicFields: string[];
 }
-interface VariantData {
+
+type VariantData ={
   key: string;
   values: string[];
   type?: string;
@@ -20,8 +21,11 @@ interface VariantData {
   variantPrice?: string;
   variantSku: string;
   optionValues: { id: string; name: string; variantSku: string[] }[];
-  size?: string[]; // Add this line
+  // size?: string; // Add this line
 }
+
+
+
 
 interface Category {
   id: number;
@@ -117,9 +121,7 @@ const FormElements = () => {
   const handleSubmit = () => {
     const { selectedOption, inputValue, dynamicFields } = formData;
     const isDuplicateInForm = (dynamicFields || []).includes(inputValue);
-    const isDuplicateInSubmittedData = (
-      submittedData[selectedOption] || []
-    ).includes(inputValue);
+    const isDuplicateInSubmittedData = (submittedData[selectedOption] || []).includes(inputValue);
     const nonEmptyDynamicFields = dynamicFields.filter(
       (field) => field.trim() !== '',
     );
@@ -179,128 +181,126 @@ const FormElements = () => {
 
 
 
+
+ type OptionValue = {
+  id: string;
+  name: string;
+  variantSku: string[];
+};
+
+type GroupedVariants = {
+  [key: string]: {
+    firstValue: string[];
+    secondValues: string[];
+    optionValues: OptionValue[];
+  };
+};
+
+
 const handleFormSubmit = async () => {
   handleSubmitImage();
   try {
-      if (dealChecked) {
-          await postData();
-      }
-      const saleStatus = parseFloat(value.SalePrice) > 0;
-     
-const variantsData: VariantData[] = Object.entries(submittedData).map(
-  ([option, values], index) => {
-    const tableInput = tableInputValues[index];
+    if (dealChecked) {
+      await postData();
+    }
+    const saleStatus = parseFloat(value.SalePrice) > 0;
 
-    const variantData: VariantData = {
-      key: option,
-      values: values,
-      type: tableInput?.type || undefined,
-      weight: tableInput?.weight || undefined,
-      unit: tableInput?.unit || undefined,
-      availableQuantity: tableInput?.availableQuantity || undefined,
-      variantPrice: tableInput?.variantPrice || undefined,
-      variantSku: tableInput?.variantSku || '',
-      optionValues: values.map((name, id) => {
-        return {
-          id: id.toString(),
-          name: name,
-          variantSku: [`${value.sku}-${name.toLowerCase()}`],
+    const variantsData: VariantData[] = Object.entries(submittedData).map(
+      ([option, values], index) => {
+        const tableInput = tableInputValues[index];
+
+        const variantData: VariantData = {
+          key: option,
+          values: values,
+          type: tableInput?.type || undefined,
+          weight: tableInput?.weight || undefined,
+          unit: tableInput?.unit || undefined,
+          availableQuantity: tableInput?.availableQuantity || undefined,
+          variantPrice: tableInput?.variantPrice || undefined,
+          variantSku: tableInput?.variantSku || '',
+          optionValues: values.map((name, id) => {
+            return {
+              id: id.toString(),
+              name: name,
+              variantSku: [`${value.sku}-${name.toLowerCase()}`],
+            };
+          }),
         };
-      }),
-    };
 
-    // Check if option is 'size' and values is not empty, then assign size
-    if (option === 'size' && values.length > 0) {
-      variantData.size = values;
+        return variantData;
+      }
+    );
+
+    const groupedVariants: GroupedVariants = {};
+
+    // Determine if the first variant is color or size
+    const firstVariant = variantsData.find(variant => variant.key === 'color' || variant.key === 'size');
+    const secondVariant = variantsData.find(variant => variant.key !== firstVariant?.key);
+
+    if (!firstVariant || !secondVariant) {
+      throw new Error('Both color and size variants are required');
     }
 
-    return variantData;
-  }
-);
-      
-      type GroupedVariants = {
-        [key: string]: {
-            color: string;
-            size: string[];
-            optionValues: {
-                id: string;
-                name: string;
-                variantSku: string[];
-                size: {
-                    id: string;
-                    name: string;
-                    variantSku: string;
-                }[];
-            };
+    // Group variants by their first value
+    firstVariant.values.forEach((firstValue) => {
+      if (!groupedVariants[firstValue]) {
+        groupedVariants[firstValue] = {
+          firstValue: [firstValue],
+          secondValues: [],
+          optionValues: [],
         };
+      }
+    });
+
+    // Add secondary variants to the grouped variants
+    secondVariant.values.forEach((secondValue, id) => {
+      Object.keys(groupedVariants).forEach((firstValue) => {
+        if (!groupedVariants[firstValue].secondValues.includes(secondValue)) {
+          groupedVariants[firstValue].secondValues.push(secondValue);
+          groupedVariants[firstValue].optionValues.push({
+            id: id.toString(),
+            name: secondValue,
+            variantSku: [`${value.sku}-${firstValue.toLowerCase()}-${secondValue.toLowerCase()}`],
+          });
+        }
+      });
+    });
+
+    const dealStatus = dealChecked;
+
+    const requestData = {
+      products: {
+        ...value,
+        DealId: DealRes?.DealId,
+        DealStatus: dealStatus,
+        SaleStatus: saleStatus,
+      },
+      variants: Object.values(groupedVariants).map(group => ({
+        [firstVariant.key]: group.firstValue,
+        [secondVariant.key]: group.secondValues, // Grouped second values as an array
+        optionValues: group.optionValues,
+      })),
     };
-    
-      // Group variants by their first value
-      const groupedVariants: GroupedVariants = {};
-      variantsData.forEach((variant) => {
-          if (variant.key === "color") {
-              variant.values.forEach((color, index) => {
-                  if (!groupedVariants[color]) {
-                      groupedVariants[color] = {
-                          color: color,
-                          size: [],
-                          optionValues: {
-                              id: index.toString(),
-                              name: color,
-                              variantSku: [`${value.sku}-${color.toLowerCase()}`],
-                              size: []
-                          }
-                      };
-                  }
-              });
-          }
-      });
 
-      // Add sizes to the respective colors
-      variantsData.forEach((variant) => {
-          if (variant.key === "size") {
-              variant.values.forEach((size, id) => {
-                  Object.keys(groupedVariants).forEach((color) => {
-                      groupedVariants[color].size.push(size);
-                      groupedVariants[color].optionValues.size.push({
-                          id: id.toString(),
-                          name: size,
-                          variantSku: `${value.sku}-${color.toLowerCase()}-${size.toLowerCase()}`
-                      });
-                  });
-              });
-          }
-      });
+    const response = await axios.post(
+      `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products`,
+      requestData,
+    );
 
-      const dealStatus = dealChecked;
-
-      const requestData = {
-          products: {
-              ...value,
-              DealId: DealRes?.DealId,
-              DealStatus: dealStatus,
-              SaleStatus: saleStatus,
-          },
-          variants: Object.values(groupedVariants),
-      };
-
-      const response = await axios.post(
-          `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products`,
-          requestData,
-      );
-
-      console.log('Product and Variants created:', response.data);
-      setTableInputValues([]);
-      setSubmittedData({});
-      setFormData({
-          selectedOption: '',
-          inputValue: '',
-          dynamicFields: [],
-      });
+    console.log('Product and Variants created:', response.data);
+    setTableInputValues([]);
+    setSubmittedData({});
+    setFormData({
+      selectedOption: '',
+      inputValue: '',
+      dynamicFields: [],
+    });
   } catch (error) {
-      console.error('Error creating product and variants:', error);
+    console.error('Error creating product and variants:', error);
   }
 };
+
+
 
 
 

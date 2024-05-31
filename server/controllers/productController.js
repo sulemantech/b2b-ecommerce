@@ -17,28 +17,38 @@ const createProductAndVariants = async (req, res) => {
   try {
     const { products, variants } = req.body;
     const Product = await productModel.create(products);
-    const colors = [];
-    const sizes = [];
+    const colorMap = new Map();
+    const sizeSet = new Set();
 
     // Iterate over each variant to group them
     for (const variant of variants) {
       const { color, size } = variant;
 
-      // Add color to colors array if it's not already present
-      if (!colors.includes(color)) {
-        colors.push(color);
+      // Add color and size to the appropriate collections
+      if (Array.isArray(color)) {
+        color.forEach((col) => {
+          if (!colorMap.has(col)) {
+            colorMap.set(col, []);
+          }
+          colorMap.get(col).push(size);
+        });
       }
-      size.forEach((sizeValue) => {
-        if (!sizes.includes(sizeValue)) {
-          sizes.push(sizeValue);
-        }
-      });
+
+      if (size) {
+        sizeSet.add(size);
+      }
     }
+
+    // Convert colorMap and sizeSet to arrays
+    const colors = Array.from(colorMap.keys());
+    const sizes = Array.from(sizeSet);
+
     const colorVariant = await productVariantModel.create({
       key: 'color',
       value: colors, // Store as an array
       productId: Product.id,
     });
+
     const sizeVariant = await productVariantModel.create({
       key: 'size',
       value: sizes, // Store as an array
@@ -55,6 +65,7 @@ const createProductAndVariants = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 
 
