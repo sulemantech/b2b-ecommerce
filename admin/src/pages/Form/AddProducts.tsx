@@ -1,7 +1,9 @@
 import axios from 'axios';
+import React from 'react';
 import { useState, useEffect, ChangeEvent } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import Variants from '../Form/Variants';
 // import Breadcrumb from '../../components/Breadcrumb';
 // import { log } from 'console';
 
@@ -10,22 +12,6 @@ interface FormData {
   inputValue: string;
   dynamicFields: string[];
 }
-
-type VariantData ={
-  key: string;
-  values: string[];
-  type?: string;
-  weight?: string;
-  unit?: string;
-  availableQuantity?: string;
-  variantPrice?: string;
-  variantSku: string;
-  optionValues: { id: string; name: string; variantSku: string[] }[];
-  // size?: string; // Add this line
-}
-
-
-
 
 interface Category {
   id: number;
@@ -42,13 +28,14 @@ interface supplier {
 }
 const FormElements = () => {
   const [productId, setProductId] = useState('');
+  const [objsize, setObjsize] = useState<Record<string, string[]>>({});
+  const [objcolor, setObjcolor] = useState<Record<string, string[]>>({});
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [, setEditorContent] = useState('');
   const [submittedData, setSubmittedData] = useState<{
     [key: string]: string[];
   }>({});
-  const [, setUniqueValuesSet] = useState<Set<string>>(new Set());
-  const [, setDropdownVisible] = useState<boolean>(true);
+ 
   const [tableInputValues, setTableInputValues] = useState<
     Array<{ [key: string]: string }>
   >([]);
@@ -61,89 +48,21 @@ const FormElements = () => {
     dynamicFields: [],
   });
 
-  const handleDropdownChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setFormData({
-      selectedOption: e.target.value,
-      inputValue: '',
-      dynamicFields: [],
-    });
-  };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prevData) => ({
-      ...prevData,
-      inputValue: e.target.value,
-    }));
-    if (e.target.value.trim() !== '') {
-      if (
-        formData.dynamicFields.length === 0 ||
-        formData.dynamicFields.slice(-1)[0].trim() !== ''
-      ) {
-        setFormData((prevData) => ({
-          ...prevData,
-          dynamicFields: [...prevData.dynamicFields, ''],
-        }));
-      }
-    }
-  };
 
-  const handleDynamicFieldChange = (index: number, value: string) => {
-    const updatedFields = [...formData.dynamicFields];
-    if (value.trim() === '') {
-      if (updatedFields.length > 1) {
-        updatedFields.splice(index, 1);
-      }
-    } else {
-      updatedFields[index] = value;
-      if (value.length === 1 && index === updatedFields.length - 1) {
-        updatedFields.push('');
-      }
-    }
+  console.log(objcolor ,objsize)
 
-    setFormData({
-      ...formData,
-      dynamicFields: updatedFields,
-    });
-  };
 
-  const handleTableInputChange = (
-    outerIndex: number,
-    property: string,
-    value: string,
-  ) => {
-    const updatedInputValues = [...tableInputValues];
-    updatedInputValues[outerIndex] = { ...updatedInputValues[outerIndex] };
-    updatedInputValues[outerIndex][property] = value;
-    setTableInputValues(updatedInputValues);
-    console.log('Table Input Values:', tableInputValues);
-  };
 
-  const handleSubmit = () => {
-    const { selectedOption, inputValue, dynamicFields } = formData;
-    const isDuplicateInForm = (dynamicFields || []).includes(inputValue);
-    const isDuplicateInSubmittedData = (submittedData[selectedOption] || []).includes(inputValue);
-    const nonEmptyDynamicFields = dynamicFields.filter(
-      (field) => field.trim() !== '',
-    );
-    if (isDuplicateInForm || isDuplicateInSubmittedData) {
-      console.log(`Duplicate value for ${selectedOption}: ${inputValue}`);
-    } else {
-      setSubmittedData((prevData) => ({
-        ...prevData,
-        [selectedOption]: [
-          ...(prevData[selectedOption] || []),
-          inputValue,
-          ...nonEmptyDynamicFields,
-        ],
-      }));
-      setUniqueValuesSet(
-        (prevValues) =>
-          new Set([...prevValues, inputValue, ...nonEmptyDynamicFields]),
-      );
-      setDropdownVisible(false);
-      setTableInputValues([]);
-    }
-  };
+
+
+
+
+
+
+
+  
+
 
   const handleEditorReady = (editor: any) => {
     console.log(editor);
@@ -169,141 +88,175 @@ const FormElements = () => {
     supplier_id: '',
     categoryName: 'electronics',
     status: '',
-    DealStatus: '',
-    SaleSta: 0,
-    Approved:0,
+    DealStatus: 0,
+    SaleStatus: 0,
+    Approved: 0,
     SalePrice: '',
   });
 
   // console.log("Data",Deal);
 
- // Define the Variant type
+  // Define the Variant type
 
+  // const handleFormSubmit = async () => {
+  //   handleSubmitImage();
+  //   try {
+  //     if (dealChecked) {
+  //       await postData();
+  //     }
+  //     const variantsData = Object.entries(submittedData).map(
+  //       ([option, values], index) => {
+  //         const tableInput = tableInputValues[index];
 
+  //         return {
+  //           key: option,
+  //           values: values,
+  //           type: tableInput?.type || undefined,
+  //           weight: tableInput?.weight || undefined,
+  //           unit: tableInput?.unit || undefined,
+  //           availableQuantity: tableInput?.availableQuantity || undefined,
+  //           variantPrice: tableInput?.variantPrice || undefined,
+  //           variantSku: tableInput?.variantSku || '',
+  //           optionValues: values.map((name, id) => {
+  //             return {
+  //               id: id.toString(),
+  //               name: name,
+  //               variantSku: [`${value.sku}-${name.toLowerCase()}`],
+  //             };
+  //           }),
+  //         };
+  //       },
+  //     );
 
+  //     // Prepare the full request data
+  //     const requestData = {
+  //       products: { ...value, DealId: DealRes?.DealId },
+  //       variants: variantsData,
+  //     };
+  //     const response = await axios.post(
+  //       `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products`,
+  //       requestData,
+  //     );
+  //     console.log('Product and Variants created:', response.data);
+  //     setTableInputValues([]);
+  //     setSubmittedData({});
+  //     // setvalues({
+  //     //   name: '',
+  //     //   description: 'best',
+  //     //   price: '',
+  //     //   weight: 20,
+  //     //   new: 'true',
+  //     //   rating: 5,
+  //     //   manufacturer: 'china',
+  //     //   tag: [],
+  //     //   quantityInStock: '',
+  //     //   sku: '',
+  //     //   quantity: '',
+  //     //   category_id: '',
+  //     //   supplier_id: '',
+  //     //   categoryName: '',
+  //     //   status: '',
+  //     //   DealStatus: 0,
+  //     //   SaleStatus: 0,
+  //     //   Approved: 0,
+  //     //   SalePrice: '',
+  //     // });
 
- type OptionValue = {
-  id: string;
-  name: string;
-  variantSku: string[];
-};
-
-type GroupedVariants = {
-  [key: string]: {
-    firstValue: string[];
-    secondValues: string[];
-    optionValues: OptionValue[];
-  };
-};
-
-
-const handleFormSubmit = async () => {
-  handleSubmitImage();
-  try {
-    if (dealChecked) {
-      await postData();
-    }
-    const saleStatus = parseFloat(value.SalePrice) > 0;
-
-    const variantsData: VariantData[] = Object.entries(submittedData).map(
-      ([option, values], index) => {
-        const tableInput = tableInputValues[index];
-
-        const variantData: VariantData = {
-          key: option,
-          values: values,
-          type: tableInput?.type || undefined,
-          weight: tableInput?.weight || undefined,
-          unit: tableInput?.unit || undefined,
-          availableQuantity: tableInput?.availableQuantity || undefined,
-          variantPrice: tableInput?.variantPrice || undefined,
-          variantSku: tableInput?.variantSku || '',
-          optionValues: values.map((name, id) => {
-            return {
-              id: id.toString(),
-              name: name,
-              variantSku: [`${value.sku}-${name.toLowerCase()}`],
-            };
-          }),
-        };
-
-        return variantData;
+  //     setFormData({
+  //       selectedOption: '',
+  //       inputValue: '',
+  //       dynamicFields: [],
+  //     });
+  //   } catch (error) {
+  //     console.error('Error creating product and variants:', error);
+  //   }
+  // };
+  const handleFormSubmit = async () => {
+    handleSubmitImage();
+    try {
+      if (dealChecked) {
+        await postData();
       }
-    );
-
-    const groupedVariants: GroupedVariants = {};
-
-    // Determine if the first variant is color or size
-    const firstVariant = variantsData.find(variant => variant.key === 'color' || variant.key === 'size');
-    const secondVariant = variantsData.find(variant => variant.key !== firstVariant?.key);
-
-    if (!firstVariant || !secondVariant) {
-      throw new Error('Both color and size variants are required');
-    }
-
-    // Group variants by their first value
-    firstVariant.values.forEach((firstValue) => {
-      if (!groupedVariants[firstValue]) {
-        groupedVariants[firstValue] = {
-          firstValue: [firstValue],
-          secondValues: [],
-          optionValues: [],
-        };
-      }
-    });
-
-    // Add secondary variants to the grouped variants
-    secondVariant.values.forEach((secondValue, id) => {
-      Object.keys(groupedVariants).forEach((firstValue) => {
-        if (!groupedVariants[firstValue].secondValues.includes(secondValue)) {
-          groupedVariants[firstValue].secondValues.push(secondValue);
-          groupedVariants[firstValue].optionValues.push({
-            id: id.toString(),
-            name: secondValue,
-            variantSku: [`${value.sku}-${firstValue.toLowerCase()}-${secondValue.toLowerCase()}`],
-          });
-        }
+  
+      // Map objsize and objcolor to the structure required for the variants array
+      const sizeVariants = Object.entries(objsize).map(([key, values]) => ({
+        key: key,
+        values: values,
+        type: "individual",
+        weight: 1.5, // Example value, you can set this dynamically
+        unit: "kg", // Example value, you can set this dynamically
+        availableQuantity: 100, // Example value, you can set this dynamically
+        variantPrice: 24.99, // Example value, you can set this dynamically
+        optionValues: values.map((name, id) => ({
+          id: id.toString(),
+          name: name,
+          variantSku: [`ABC1239-${name.toLowerCase()}`], // Example value, you can set this dynamically
+        })),
+      }));
+  
+      const colorVariants = Object.entries(objcolor).map(([key, values]) => ({
+        key: key,
+        values: values,
+        type: "individual",
+        weight: 1.5, // Example value, you can set this dynamically
+        unit: "kg", // Example value, you can set this dynamically
+        availableQuantity: 100, // Example value, you can set this dynamically
+        variantPrice: 24.99, // Example value, you can set this dynamically
+        optionValues: values.map((name, id) => ({
+          id: id.toString(),
+          name: name,
+          variantSku: [`ABC1239-${name.toLowerCase()}`], // Example value, you can set this dynamically
+        })),
+      }));
+  
+      // Combine sizeVariants and colorVariants into a single array
+      const variantsData = [...sizeVariants, ...colorVariants];
+  
+      // Prepare the full request data
+      const requestData = {
+        products: { ...value, DealId: DealRes?.DealId },
+        variants: variantsData,
+      };
+  
+      const response = await axios.post(
+        `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products`,
+        requestData,
+      );
+      console.log('Product and Variants created:', response.data);
+      setTableInputValues([]);
+      setSubmittedData({});
+      // setvalues({
+      //   name: '',
+      //   description: 'best',
+      //   price: '',
+      //   weight: 20,
+      //   new: 'true',
+      //   rating: 5,
+      //   manufacturer: 'china',
+      //   tag: [],
+      //   quantityInStock: '',
+      //   sku: '',
+      //   quantity: '',
+      //   category_id: '',
+      //   supplier_id: '',
+      //   categoryName: '',
+      //   status: '',
+      //   DealStatus: 0,
+      //   SaleStatus: 0,
+      //   Approved: 0,
+      //   SalePrice: '',
+      // });
+  
+      setFormData({
+        selectedOption: '',
+        inputValue: '',
+        dynamicFields: [],
       });
-    });
-
-    const dealStatus = dealChecked;
-
-    const requestData = {
-      products: {
-        ...value,
-        DealId: DealRes?.DealId,
-        DealStatus: dealStatus,
-        SaleStatus: saleStatus,
-      },
-      variants: Object.values(groupedVariants).map(group => ({
-        [firstVariant.key]: group.firstValue,
-        [secondVariant.key]: group.secondValues, // Grouped second values as an array
-        optionValues: group.optionValues,
-      })),
-    };
-
-    const response = await axios.post(
-      `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products`,
-      requestData,
-    );
-
-    console.log('Product and Variants created:', response.data);
-    setTableInputValues([]);
-    setSubmittedData({});
-    setFormData({
-      selectedOption: '',
-      inputValue: '',
-      dynamicFields: [],
-    });
-  } catch (error) {
-    console.error('Error creating product and variants:', error);
-  }
-};
-
-
-
-
-
+    } catch (error) {
+      console.error('Error creating product and variants:', error);
+    }
+  };
+  
 
   const handleSubmitImage = async () => {
     if (!productId) {
@@ -426,6 +379,21 @@ const handleFormSubmit = async () => {
       console.error('Error creating flash deal:', error);
     }
   };
+
+  const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
+
+  const toggleRow = (index: number) => {
+    setExpandedRows((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(index)) {
+        newSet.delete(index);
+      } else {
+        newSet.add(index);
+      }
+      return newSet;
+    });
+  };
+  // console.log("groupedData",groupedData);
 
   return (
     <>
@@ -649,223 +617,7 @@ const handleFormSubmit = async () => {
             </div>
           </div>
 
-          <div className="flex flex-col">
-            <div className="rounded-xl border-stroke  bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-5">
-              <h1 className="font-bold">Variants</h1>
-              <hr />
-              <div className="mt-5 border-bodydark border-opacity-20 border-4 p-5">
-                <h1>Option name</h1>
-                <select
-                  style={{ background: 'lightgray' }}
-                  id="dropdown"
-                  value={formData.selectedOption}
-                  onChange={handleDropdownChange}
-                  className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
-        px-5  bg-black font-medium outline-none transition focus:border-primary active:border-primary 
-        disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
-        dark:focus:border-primary"
-                >
-                  <option value="color">select-</option>
-                  <option value="color">Color</option>
-                  <option value="size">Size</option>
-                  {/* Add more options as needed */}
-                </select>
-                <br />
-                <br />
-
-                {formData.selectedOption === 'color' ||
-                formData.selectedOption === 'size' ? (
-                  <div>
-                    <h1 className="font-bold">Option Value</h1>
-                    <input
-                      style={{ background: 'lightgray' }}
-                      type="text"
-                      className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
-            px-3 font-medium outline-none transition focus:border-primary active:border-primary 
-            disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
-            dark:focus:border-primary"
-                      id="valueInput"
-                      name="value"
-                      value={formData.inputValue}
-                      onChange={handleInputChange}
-                    />
-                  </div>
-                ) : null}
-
-                {formData.dynamicFields.map((field, index) => (
-                  <div key={index}>
-                    <input
-                      style={{ background: 'lightgray' }}
-                      type="text"
-                      placeholder="Add another value"
-                      className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
-            px-5 font-medium outline-none transition focus:border-primary active:border-primary 
-            disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
-            dark:focus:border-primary"
-                      value={field}
-                      onChange={(e) =>
-                        handleDynamicFieldChange(index, e.target.value)
-                      }
-                    />
-                  </div>
-                ))}
-                <br />
-                <br />
-
-                <button
-                  type="button"
-                  className="inline-flex items-center justify-center rounded-md
-        bg-black p-1  text-center font-medium text-white hover:bg-opacity-90 "
-                  onClick={handleSubmit}
-                >
-                  Done
-                </button>
-                <br />
-                <br />
-              </div>
-
-              <div className="Parent ">
-                <div className="table mt-5">
-                  {Object.keys(submittedData).length > 0 && (
-                    <div>
-                      <table>
-                        <thead>
-                          <tr>
-                            {/* <th className="border font-bold border-stroke p-2">
-            key
-          </th> */}
-                            <th className="border font-bold border-stroke p-2">
-                              values
-                            </th>
-                            <th className="border font-bold border-stroke p-2">
-                              Type
-                            </th>
-                            <th className="border font-bold border-stroke p-2">
-                              Weight
-                            </th>
-                            <th className="border font-bold border-stroke p-2">
-                              Unit
-                            </th>
-                            <th className="border font-bold border-stroke p-2">
-                              AvailableQuantity
-                            </th>
-
-                            <th className="border font-bold border-stroke p-2">
-                              VarientPrice
-                            </th>
-                            <th className="border font-bold border-stroke p-2">
-                              VariantSku
-                            </th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {Object.entries(submittedData).map(
-                            ([_, values], index) =>
-                              values.map((value, innerIndex) => (
-                                <tr key={`${index}-${innerIndex}`}>
-                                  <td className="border font-bold border-stroke p-2">
-                                    <p
-                                      title={value}
-                                      className="w-20 text-ellipsis overflow-hidden"
-                                    >
-                                      {value}
-                                    </p>
-                                  </td>
-                                  <td className="border font-bold border-stroke p-2">
-                                    <input
-                                      type="text"
-                                      placeholder="type"
-                                      className="w-full min-w-30 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                      onChange={(e) =>
-                                        handleTableInputChange(
-                                          innerIndex,
-                                          'type',
-                                          e.target.value,
-                                        )
-                                      }
-                                    />
-                                  </td>
-                                  <td className="border font-bold border-stroke p-2">
-                                    <input
-                                      type="number"
-                                      placeholder="0.0"
-                                      className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                      onChange={(e) =>
-                                        handleTableInputChange(
-                                          innerIndex,
-                                          'weight',
-                                          e.target.value,
-                                        )
-                                      }
-                                    />
-                                  </td>
-                                  <td className="border font-bold border-stroke p-2">
-                                    <input
-                                      type="text"
-                                      placeholder="Kg"
-                                      className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                      onChange={(e) =>
-                                        handleTableInputChange(
-                                          innerIndex,
-                                          'unit',
-                                          e.target.value,
-                                        )
-                                      }
-                                    />
-                                  </td>
-                                  <td className="border font-bold border-stroke p-2">
-                                    <input
-                                      type="number"
-                                      placeholder="0.0"
-                                      className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                      onChange={(e) =>
-                                        handleTableInputChange(
-                                          innerIndex,
-                                          'availableQuantity',
-                                          e.target.value,
-                                        )
-                                      }
-                                    />
-                                  </td>
-                                  <td className="border font-bold border-stroke p-2">
-                                    <input
-                                      type="number"
-                                      placeholder="0.0"
-                                      className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                      onChange={(e) =>
-                                        handleTableInputChange(
-                                          innerIndex,
-                                          'variantPrice',
-                                          e.target.value,
-                                        )
-                                      }
-                                    />
-                                  </td>
-                                  <td className="border font-bold border-stroke p-2">
-                                    <input
-                                      type="text"
-                                      placeholder="sku"
-                                      className="w-full min-w-20 rounded-lg border-[1.5px] border-stroke bg-transparent px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
-                                      onChange={(e) =>
-                                        handleTableInputChange(
-                                          innerIndex,
-                                          'variantSku',
-                                          e.target.value,
-                                        )
-                                      }
-                                    />
-                                  </td>
-                                </tr>
-                              )),
-                          )}
-                        </tbody>
-                      </table>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
+          <Variants setObjsizee={setObjsize}  setObjcolorr={setObjcolor}/>
         </div>
 
         {/* //////////////////////////////////////second column/////////////////////////////////////////////////////////////////////////////////////////// */}
@@ -969,7 +721,7 @@ const handleFormSubmit = async () => {
                 <label className="font-bold" htmlFor="">
                   Vendor
                 </label>
-                    {/* <select
+                {/* <select
                  onChange={(e) => console.log('Selected Supplier:', e.target.value)}
                   className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                  >
@@ -977,8 +729,7 @@ const handleFormSubmit = async () => {
                  {suppliers.map(supplier => (
                  <option key={supplier.id} value={supplier.supplier_id}>{supplier.supplier_id}</option>
                   ))}
-                  </select> */
-                  }
+                  </select> */}
                 <select
                   onChange={(e) => {
                     const selectedSupplier = suppliers.find(

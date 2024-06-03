@@ -13,52 +13,80 @@ const productVariantModel=require('../models/productVariantModel')
 //post API    ///
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////grouping variants//////////////////
+// const createProductAndVariants = async (req, res) => {
+//   try {
+//     const { products, variants } = req.body;
+//     const Product = await productModel.create(products);
+//     const colorMap = new Map();
+//     const sizeSet = new Set();
+
+//     // Iterate over each variant to group them
+//     for (const variant of variants) {
+//       const { color, size } = variant;
+
+//       // Add color and size to the appropriate collections
+//       if (Array.isArray(color)) {
+//         color.forEach((col) => {
+//           if (!colorMap.has(col)) {
+//             colorMap.set(col, []);
+//           }
+//           colorMap.get(col).push(size);
+//         });
+//       }
+
+//       if (size) {
+//         sizeSet.add(size);
+//       }
+//     }
+
+//     // Convert colorMap and sizeSet to arrays
+//     const colors = Array.from(colorMap.keys());
+//     const sizes = Array.from(sizeSet);
+
+//     const colorVariant = await productVariantModel.create({
+//       key: 'color',
+//       value: colors, // Store as an array
+//       productId: Product.id,
+//     });
+
+//     const sizeVariant = await productVariantModel.create({
+//       key: 'size',
+//       value: sizes, // Store as an array
+//       productId: Product.id,
+//     });
+
+//     res.status(201).json({
+//       message: 'Product and Variants created.',
+//       Product,
+//       Variants: [colorVariant, sizeVariant],
+//     });
+//   } catch (error) {
+//     console.error('Error:', error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// };
 const createProductAndVariants = async (req, res) => {
   try {
     const { products, variants } = req.body;
+    // Create product record
     const Product = await productModel.create(products);
-    const colorMap = new Map();
-    const sizeSet = new Set();
-
-    // Iterate over each variant to group them
-    for (const variant of variants) {
-      const { color, size } = variant;
-
-      // Add color and size to the appropriate collections
-      if (Array.isArray(color)) {
-        color.forEach((col) => {
-          if (!colorMap.has(col)) {
-            colorMap.set(col, []);
-          }
-          colorMap.get(col).push(size);
+   
+    // Create variant records
+    const Variants = await Promise.all(
+      variants.map(async ({ key, values,optionValues, ...rest }) => {
+        return await productVariantModel.create({
+          ...rest,
+          key,
+          value: values,optionValues,
+          productId: Product.id, 
         });
-      }
-
-      if (size) {
-        sizeSet.add(size);
-      }
-    }
-
-    // Convert colorMap and sizeSet to arrays
-    const colors = Array.from(colorMap.keys());
-    const sizes = Array.from(sizeSet);
-
-    const colorVariant = await productVariantModel.create({
-      key: 'color',
-      value: colors, // Store as an array
-      productId: Product.id,
-    });
-
-    const sizeVariant = await productVariantModel.create({
-      key: 'size',
-      value: sizes, // Store as an array
-      productId: Product.id,
-    });
+      })
+    );
 
     res.status(201).json({
       message: 'Product and Variants created.',
       Product,
-      Variants: [colorVariant, sizeVariant],
+      Variants,
     });
   } catch (error) {
     console.error('Error:', error);
