@@ -3,7 +3,6 @@ import React from 'react';
 import { useState, useEffect, ChangeEvent } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import Variants from '../Form/Variants';
 // import Breadcrumb from '../../components/Breadcrumb';
 // import { log } from 'console';
 
@@ -12,7 +11,6 @@ interface FormData {
   inputValue: string;
   dynamicFields: string[];
 }
-
 interface Category {
   id: number;
   name: string;
@@ -28,14 +26,13 @@ interface supplier {
 }
 const FormElements = () => {
   const [productId, setProductId] = useState('');
-  const [objsize, setObjsize] = useState<Record<string, string[]>>({});
-  const [objcolor, setObjcolor] = useState<Record<string, string[]>>({});
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [, setEditorContent] = useState('');
   const [submittedData, setSubmittedData] = useState<{
     [key: string]: string[];
   }>({});
- 
+  const [, setUniqueValuesSet] = useState<Set<string>>(new Set());
+  const [, setDropdownVisible] = useState<boolean>(true);
   const [tableInputValues, setTableInputValues] = useState<
     Array<{ [key: string]: string }>
   >([]);
@@ -48,22 +45,207 @@ const FormElements = () => {
     dynamicFields: [],
   });
 
+  const handleDropdownChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setFormData({
+      selectedOption: e.target.value,
+      inputValue: '',
+      dynamicFields: [],
+    });
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prevData) => ({
+      ...prevData,
+      inputValue: e.target.value,
+    }));
+    if (e.target.value.trim() !== '') {
+      if (
+        formData.dynamicFields.length === 0 ||
+        formData.dynamicFields.slice(-1)[0].trim() !== ''
+      ) {
+        setFormData((prevData) => ({
+          ...prevData,
+          dynamicFields: [...prevData.dynamicFields, ''],
+        }));
+      }
+    }
+  };
+
+  const handleDynamicFieldChange = (index: number, value: string) => {
+    const updatedFields = [...formData.dynamicFields];
+    if (value.trim() === '') {
+      if (updatedFields.length > 1) {
+        updatedFields.splice(index, 1);
+      }
+    } else {
+      updatedFields[index] = value;
+      if (value.length === 1 && index === updatedFields.length - 1) {
+        updatedFields.push('');
+      }
+    }
+
+    setFormData({
+      ...formData,
+      dynamicFields: updatedFields,
+    });
+  };
+
+  const handleTableInputChange = (
+    outerIndex: number,
+    property: string,
+    value: string,
+  ) => {
+    const updatedInputValues = [...tableInputValues];
+    updatedInputValues[outerIndex] = { ...updatedInputValues[outerIndex] };
+    updatedInputValues[outerIndex][property] = value;
+    setTableInputValues(updatedInputValues);
+    console.log('Table Input Values:', tableInputValues);
+  };
+
+  // const handleSubmit = () => {
+  //   const { selectedOption, inputValue, dynamicFields } = formData;
+  //   const isDuplicateInForm = (dynamicFields || []).includes(inputValue);
+  //   const isDuplicateInSubmittedData = (
+  //     submittedData[selectedOption] || []
+  //   ).includes(inputValue);
+  //   const nonEmptyDynamicFields = dynamicFields.filter(
+  //     (field) => field.trim() !== '',
+  //   );
+  //   if (isDuplicateInForm || isDuplicateInSubmittedData) {
+  //     console.log(`Duplicate value for ${selectedOption}: ${inputValue}`);
+  //   } else {
+  //     setSubmittedData((prevData) => ({
+  //       ...prevData,
+  //       [selectedOption]: [
+  //         ...(prevData[selectedOption] || []),
+  //         inputValue,
+  //         ...nonEmptyDynamicFields,
+  //       ],
+  //     }));
+  //     setUniqueValuesSet(
+  //       (prevValues) =>
+  //         new Set([...prevValues, inputValue, ...nonEmptyDynamicFields]),
+  //     );
+  //     setDropdownVisible(false);
+  //     setTableInputValues([]);
+  //   }
+  // };
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // type SubmittedData = {
+  //   [key: string]: string[];
+  // };
+  
+  // const handleSubmit = () => {
+  //   const { selectedOption, inputValue, dynamicFields } = formData;
+  //   const isDuplicateInForm = (dynamicFields || []).includes(inputValue);
+  //   const isDuplicateInSubmittedData = (submittedData[selectedOption] || []).includes(inputValue);
+  //   const nonEmptyDynamicFields = dynamicFields.filter((field) => field.trim() !== '');
+  
+  //   if (isDuplicateInForm || isDuplicateInSubmittedData) {
+  //     console.log(`Duplicate value for ${selectedOption}: ${inputValue}`);
+  //   } else {
+  //     setSubmittedData((prevData) => {
+  //       const newData: SubmittedData = {
+  //         ...prevData,
+  //         [selectedOption]: [
+  //           ...(prevData[selectedOption] || []),
+  //           inputValue,
+  //           ...nonEmptyDynamicFields,
+  //         ],
+  //       };
+  
+  //       const groupedData = groupData(newData);
+  //       console.log("group data",groupedData);  // Log the grouped data to verify the structure
+  
+  //       return newData;
+  //     });
+  
+  //     setUniqueValuesSet((prevValues) =>
+  //       new Set([...prevValues, inputValue, ...nonEmptyDynamicFields])
+  //     );
+  
+  //     setDropdownVisible(false);
+  //     setTableInputValues([]);
+  //   }
+  // };
+  const [groupedData, setGroupedData] = useState<any[]>([]);
 
 
-  console.log(objcolor ,objsize)
-
-
-
-
-
-
-
-
-
-
+  type SubmittedData = {
+    [key: string]: string[];
+  };
+  
+  const handleSubmit = () => {
+    const { selectedOption, inputValue, dynamicFields } = formData;
+    const isDuplicateInForm = (dynamicFields || []).includes(inputValue);
+    const isDuplicateInSubmittedData = (submittedData[selectedOption] || []).includes(inputValue);
+    const nonEmptyDynamicFields = dynamicFields.filter((field) => field.trim() !== '');
+  
+    if (isDuplicateInForm || isDuplicateInSubmittedData) {
+      console.log(`Duplicate value for ${selectedOption}: ${inputValue}`);
+    } else {
+      setSubmittedData((prevData) => {
+        const newData: SubmittedData = {
+          ...prevData,
+          [selectedOption]: [
+            ...(prevData[selectedOption] || []),
+            inputValue,
+            ...nonEmptyDynamicFields,
+          ],
+        };
+  
+        const grouped = groupData(newData);
+        setGroupedData(grouped);
+        console.log(grouped);  // Log the grouped data to verify the structure
+  
+        return newData;
+      });
+  
+      setUniqueValuesSet((prevValues) =>
+        new Set([...prevValues, inputValue, ...nonEmptyDynamicFields])
+      );
+  
+      setDropdownVisible(false);
+      setTableInputValues([]);
+    }
+  };
   
 
-
+  
+  
+  const groupData = (data: SubmittedData): any[] => {
+    const grouped: { [key: string]: string[] } = {};
+  
+    Object.entries(data).forEach(([key, values]) => {
+      values.forEach((value) => {
+        if (!grouped[key]) {
+          grouped[key] = [];
+        }
+        grouped[key].push(value);
+      });
+    });
+  
+    const result: any[] = [];
+    const keys = Object.keys(grouped);
+  
+    if (keys.length >= 2) {
+      const [firstKey, secondKey] = keys;
+  
+      if (grouped[firstKey] && grouped[secondKey]) {
+        grouped[firstKey].forEach((firstValue) => {
+          const item = {
+            [firstKey]: [firstValue],
+            [secondKey]: grouped[secondKey],
+          };
+          result.push(item);
+        });
+      }
+    }
+  
+    return result;
+    
+  };
+  
   const handleEditorReady = (editor: any) => {
     console.log(editor);
   };
@@ -88,136 +270,57 @@ const FormElements = () => {
     supplier_id: '',
     categoryName: 'electronics',
     status: '',
-    DealStatus: 0,
-    SaleStatus: 0,
+    DealStatus: '',
+    SaleSta: 0,
     Approved: 0,
     SalePrice: '',
   });
 
   // console.log("Data",Deal);
 
-  // Define the Variant type
-
-  // const handleFormSubmit = async () => {
-  //   handleSubmitImage();
-  //   try {
-  //     if (dealChecked) {
-  //       await postData();
-  //     }
-  //     const variantsData = Object.entries(submittedData).map(
-  //       ([option, values], index) => {
-  //         const tableInput = tableInputValues[index];
-
-  //         return {
-  //           key: option,
-  //           values: values,
-  //           type: tableInput?.type || undefined,
-  //           weight: tableInput?.weight || undefined,
-  //           unit: tableInput?.unit || undefined,
-  //           availableQuantity: tableInput?.availableQuantity || undefined,
-  //           variantPrice: tableInput?.variantPrice || undefined,
-  //           variantSku: tableInput?.variantSku || '',
-  //           optionValues: values.map((name, id) => {
-  //             return {
-  //               id: id.toString(),
-  //               name: name,
-  //               variantSku: [`${value.sku}-${name.toLowerCase()}`],
-  //             };
-  //           }),
-  //         };
-  //       },
-  //     );
-
-  //     // Prepare the full request data
-  //     const requestData = {
-  //       products: { ...value, DealId: DealRes?.DealId },
-  //       variants: variantsData,
-  //     };
-  //     const response = await axios.post(
-  //       `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products`,
-  //       requestData,
-  //     );
-  //     console.log('Product and Variants created:', response.data);
-  //     setTableInputValues([]);
-  //     setSubmittedData({});
-  //     // setvalues({
-  //     //   name: '',
-  //     //   description: 'best',
-  //     //   price: '',
-  //     //   weight: 20,
-  //     //   new: 'true',
-  //     //   rating: 5,
-  //     //   manufacturer: 'china',
-  //     //   tag: [],
-  //     //   quantityInStock: '',
-  //     //   sku: '',
-  //     //   quantity: '',
-  //     //   category_id: '',
-  //     //   supplier_id: '',
-  //     //   categoryName: '',
-  //     //   status: '',
-  //     //   DealStatus: 0,
-  //     //   SaleStatus: 0,
-  //     //   Approved: 0,
-  //     //   SalePrice: '',
-  //     // });
-
-  //     setFormData({
-  //       selectedOption: '',
-  //       inputValue: '',
-  //       dynamicFields: [],
-  //     });
-  //   } catch (error) {
-  //     console.error('Error creating product and variants:', error);
-  //   }
-  // };
   const handleFormSubmit = async () => {
     handleSubmitImage();
     try {
       if (dealChecked) {
         await postData();
       }
-  
-      // Map objsize and objcolor to the structure required for the variants array
-      const sizeVariants = Object.entries(objsize).map(([key, values]) => ({
-        key: key,
-        values: values,
-        type: "individual",
-        weight: 1.5, // Example value, you can set this dynamically
-        unit: "kg", // Example value, you can set this dynamically
-        availableQuantity: 100, // Example value, you can set this dynamically
-        variantPrice: 24.99, // Example value, you can set this dynamically
-        optionValues: values.map((name, id) => ({
-          id: id.toString(),
-          name: name,
-          variantSku: [`ABC1239-${name.toLowerCase()}`], // Example value, you can set this dynamically
-        })),
-      }));
-  
-      const colorVariants = Object.entries(objcolor).map(([key, values]) => ({
-        key: key,
-        values: values,
-        type: "individual",
-        weight: 1.5, // Example value, you can set this dynamically
-        unit: "kg", // Example value, you can set this dynamically
-        availableQuantity: 100, // Example value, you can set this dynamically
-        variantPrice: 24.99, // Example value, you can set this dynamically
-        optionValues: values.map((name, id) => ({
-          id: id.toString(),
-          name: name,
-          variantSku: [`ABC1239-${name.toLowerCase()}`], // Example value, you can set this dynamically
-        })),
-      }));
-  
-      // Combine sizeVariants and colorVariants into a single array
-      const variantsData = [...sizeVariants, ...colorVariants];
-  
-      // Prepare the full request data
+      const saleStatus = parseFloat(value.SalePrice) > 0;
+      const variantsData = Object.entries(submittedData).map(
+        ([option, values], index) => {
+          const tableInput = tableInputValues[index];
+
+          return {
+            key: option,
+            values: values,
+            type: tableInput?.type || undefined,
+            weight: tableInput?.weight || undefined,
+            unit: tableInput?.unit || undefined,
+            availableQuantity: tableInput?.availableQuantity || undefined,
+            variantPrice: tableInput?.variantPrice || undefined,
+            variantSku: tableInput?.variantSku || '',
+            optionValues: values.map((name, id) => {
+              return {
+                id: id.toString(),
+                name: name,
+                variantSku: [`${value.sku}-${name.toLowerCase()}`],
+              };
+            }),
+          };
+        },
+      );
+
+      const dealStatus = dealChecked;
+
       const requestData = {
-        products: { ...value, DealId: DealRes?.DealId },
+        // products: {...value,DealId:DealRes?.DealId},
+        products: {
+          ...value,
+          DealId: DealRes?.DealId,
+          DealStatus: dealStatus,
+          SaleStatus: saleStatus,
+        },
         variants: variantsData,
       };
-  
       const response = await axios.post(
         `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products`,
         requestData,
@@ -240,13 +343,10 @@ const FormElements = () => {
       //   category_id: '',
       //   supplier_id: '',
       //   categoryName: '',
+      //   DealStatus:'',
       //   status: '',
-      //   DealStatus: 0,
-      //   SaleStatus: 0,
-      //   Approved: 0,
-      //   SalePrice: '',
       // });
-  
+
       setFormData({
         selectedOption: '',
         inputValue: '',
@@ -256,6 +356,94 @@ const FormElements = () => {
       console.error('Error creating product and variants:', error);
     }
   };
+  ///////////////////////////////////////////////////////////////////////////////////////////////////grouping variants/////////////////////////
+  // const handleFormSubmit = async () => {
+  //   handleSubmitImage();
+  //   try {
+  //     if (dealChecked) {
+  //       await postData();
+  //     }
+  
+  //     const saleStatus = parseFloat(value.SalePrice) > 0;
+  
+  //     const variantsData = Object.entries(submittedData).map(([option, values], index) => {
+  //       const tableInput = tableInputValues[index];
+  
+  //       return {
+  //         key: option,
+  //         values: values,
+  //         type: tableInput?.type || undefined,
+  //         weight: tableInput?.weight || undefined,
+  //         unit: tableInput?.unit || undefined,
+  //         availableQuantity: tableInput?.availableQuantity || undefined,
+  //         variantPrice: tableInput?.variantPrice || undefined,
+  //         variantSku: tableInput?.variantSku || '',
+  //         optionValues: values.map((name, id) => {
+  //           return {
+  //             id: id.toString(),
+  //             name: name,
+  //             variantSku: [`${value.sku}-${name.toLowerCase()}`],
+  //           };
+  //         }),
+  //       };
+  //     });
+  
+  //     // Grouping variants based on the first variant's values
+  //     const groupedVariants = [];
+  //     const firstVariantValues = variantsData[0].values;
+  
+  //     for (let i = 1; i < variantsData.length; i++) {
+  //       const variant = variantsData[i];
+  //       const groupedValues = firstVariantValues.map((value) => `${variant.key}:${value}`);
+  //       const groupedVariant = {
+  //         key: variant.key,
+  //         values: groupedValues,
+  //         type: variant.type,
+  //         weight: variant.weight,
+  //         unit: variant.unit,
+  //         availableQuantity: variant.availableQuantity,
+  //         variantPrice: variant.variantPrice,
+  //         variantSku: variant.variantSku,
+  //         optionValues: variant.optionValues.map((optionValue) => {
+  //           return {
+  //             ...optionValue,
+  //             variantSku: groupedValues.map((groupedValue) => `${value.sku}-${groupedValue.toLowerCase()}`),
+  //           };
+  //         }),
+  //       };
+  //       groupedVariants.push(groupedVariant);
+  //     }
+  
+  //     const dealStatus = dealChecked;
+  
+  //     const requestData = {
+  //       products: {
+  //         ...value,
+  //         DealId: DealRes?.DealId,
+  //         DealStatus: dealStatus,
+  //         SaleStatus: saleStatus,
+  //       },
+  //       variants: [variantsData[0], ...groupedVariants],
+  //     };
+  
+  //     const response = await axios.post(
+  //       `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products`,
+  //       requestData,
+  //     );
+  
+  //     console.log('Product and Variants created:', response.data);
+  
+  //     setTableInputValues([]);
+  //     setSubmittedData({});
+  //     setFormData({
+  //       selectedOption: '',
+  //       inputValue: '',
+  //       dynamicFields: [],
+  //     });
+  //   } catch (error) {
+  //     console.error('Error creating product and variants:', error);
+  //   }
+  // };
   
 
   const handleSubmitImage = async () => {
@@ -335,7 +523,7 @@ const FormElements = () => {
         }
         return response.json();
       })
-      .then((data) => { 
+      .then((data) => {
         setSuppliers(data);
       })
       .catch((error) => {
@@ -382,18 +570,18 @@ const FormElements = () => {
 
   const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
 
-  const toggleRow = (index: number) => {
-    setExpandedRows((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(index)) {
-        newSet.delete(index);
-      } else {
-        newSet.add(index);
-      }
-      return newSet;
-    });
-  };
-  // console.log("groupedData",groupedData);
+const toggleRow = (index: number) => {
+  setExpandedRows((prev) => {
+    const newSet = new Set(prev);
+    if (newSet.has(index)) {
+      newSet.delete(index);
+    } else {
+      newSet.add(index);
+    }
+    return newSet;
+  });
+};
+
 
   return (
     <>
@@ -617,7 +805,164 @@ const FormElements = () => {
             </div>
           </div>
 
-          <Variants setObjsizee={setObjsize}  setObjcolorr={setObjcolor}/>
+          <div className="flex flex-col">
+            <div className="rounded-xl border-stroke  bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-5">
+              <h1 className="font-bold">Variants</h1>
+              <hr />
+              <div className="mt-5 border-bodydark border-opacity-20 border-4 p-5">
+                <h1>Option name</h1>
+                <select
+                  style={{ background: 'lightgray' }}
+                  id="dropdown"
+                  value={formData.selectedOption}
+                  onChange={handleDropdownChange}
+                  className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
+        px-5  bg-black font-medium outline-none transition focus:border-primary active:border-primary 
+        disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+        dark:focus:border-primary"
+                >
+                  <option value="color">select-</option>
+                  <option value="color">Color</option>
+                  <option value="size">Size</option>
+                  {/* Add more options as needed */}
+                </select>
+                <br />
+                <br />
+
+                {formData.selectedOption === 'color' ||
+                formData.selectedOption === 'size' ? (
+                  <div>
+                    <h1 className="font-bold">Option Value</h1>
+                    <input
+                      style={{ background: 'lightgray' }}
+                      type="text"
+                      className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
+            px-3 font-medium outline-none transition focus:border-primary active:border-primary 
+            disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+            dark:focus:border-primary"
+                      id="valueInput"
+                      name="value"
+                      value={formData.inputValue}
+                      onChange={handleInputChange}
+                    />
+                  </div>
+                ) : null}
+
+                {formData.dynamicFields.map((field, index) => (
+                  <div key={index}>
+                    <input
+                      style={{ background: 'lightgray' }}
+                      type="text"
+                      placeholder="Add another value"
+                      className="w-80 rounded-lg border-[1.5px] border-stroke bg-transparent py-1 mr-4
+            px-5 font-medium outline-none transition focus:border-primary active:border-primary 
+            disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input
+            dark:focus:border-primary"
+                      value={field}
+                      onChange={(e) =>
+                        handleDynamicFieldChange(index, e.target.value)
+                      }
+                    />
+                  </div>
+                ))}
+                <br />
+                <br />
+
+                <button
+                  type="button"
+                  className="inline-flex items-center justify-center rounded-md
+        bg-black p-1  text-center font-medium text-white hover:bg-opacity-90 "
+                  onClick={handleSubmit}
+                >
+                  Done
+                </button>
+                <br />
+                <br />
+              </div>
+
+              <div className="Parent ">
+              <div className="table mt-5">
+  {groupedData.length > 0 && (
+    <div>
+      <table className="border-collapse">
+        <thead>
+          <tr>
+            <th className="p-2">
+              <input type="checkbox" name="" id="" />
+            </th>
+            <th className="p-2">Expand all</th>
+            <th className="p-2">Price</th>
+            <th className="p-2">Available</th>
+          </tr>
+        </thead>
+        <tbody>
+          {groupedData.map((group, index) => {
+            const firstVariantKey = Object.keys(group)[0];
+            const secondVariantKey = Object.keys(group)[1];
+            const isExpanded = expandedRows.has(index);
+
+            return (
+              <React.Fragment key={index}>
+                <tr className="border-t" onClick={() => toggleRow(index)}>
+                  <td className="p-2">
+                    <input type="checkbox" name="" id="" />
+                  </td>
+                  <td className="p-2">
+                    <p title={group[firstVariantKey]} className="w-20 text-ellipsis overflow-hidden">
+                      {group[firstVariantKey]}
+                    </p>
+                  </td>
+                  <td className="p-2">
+                    <input
+                      type="number"
+                      placeholder="0.00"
+                      className="w-full min-w-20 rounded-lg bg-transparent border px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input dark:focus:border-primary"
+                      onChange={(e) => handleTableInputChange(index, 'price', e.target.value)}
+                    />
+                  </td>
+                  <td className="p-2">
+                    <input
+                      type="text"
+                      placeholder="0"
+                      className="w-full min-w-20 rounded-lg bg-transparent px-5 font-medium outline-none border transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input dark:focus:border-primary"
+                      onChange={(e) => handleTableInputChange(index, 'available', e.target.value)}
+                    />
+                  </td>
+                </tr>
+                {isExpanded && group[secondVariantKey].map((secondValue: string, innerIndex: number) => (
+                  <tr key={`${index}-${innerIndex}`} className="border-t">
+                    <td className="p-2"></td>
+                    <td className="p-2">{secondValue}</td>
+                    <td className="p-2">
+                      <input
+                        type="number"
+                        placeholder="0.00"
+                        className="w-full min-w-20 rounded-lg bg-transparent border px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input dark:focus:border-primary"
+                        onChange={(e) => handleTableInputChange(innerIndex, 'price', e.target.value)}
+                      />
+                    </td>
+                    <td className="p-2">
+                      <input
+                        type="text"
+                        placeholder="0"
+                        className="w-full min-w-20 rounded-lg bg-transparent px-5 font-medium outline-none border transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input dark:focus:border-primary"
+                        onChange={(e) => handleTableInputChange(innerIndex, 'available', e.target.value)}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </React.Fragment>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  )}
+</div>
+
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* //////////////////////////////////////second column/////////////////////////////////////////////////////////////////////////////////////////// */}

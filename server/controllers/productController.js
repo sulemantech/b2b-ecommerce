@@ -1,20 +1,70 @@
+// const multer = require('multer');
+// const path = require('path');
+// const categoryModel=require('../models/categoryModel');
 const express = require('express')
 const Sequelize=require('sequelize')
-// const multer = require('multer');
 const {Op}= require('sequelize')
-// const path = require('path');
 const productModel = require('../models/productModel');
 const productImages= require('../models/productImages');
 const FlashDeal=require('../models/FlashDealModel')
-// const categoryModel=require('../models/categoryModel');
 const productVariantModel=require('../models/productVariantModel')
 
 
-// const { validateProduct, validateVariants,validateBulkProducts } = require('../middlewares/validateVariantsMiddleware');
-// const verifyToken = require('../middlewares/verifyToken');
-// const { log } = require('console');
+//post API    ///
 
-//post API    ///////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////grouping variants//////////////////
+// const createProductAndVariants = async (req, res) => {
+//   try {
+//     const { products, variants } = req.body;
+//     const Product = await productModel.create(products);
+//     const colorMap = new Map();
+//     const sizeSet = new Set();
+
+//     // Iterate over each variant to group them
+//     for (const variant of variants) {
+//       const { color, size } = variant;
+
+//       // Add color and size to the appropriate collections
+//       if (Array.isArray(color)) {
+//         color.forEach((col) => {
+//           if (!colorMap.has(col)) {
+//             colorMap.set(col, []);
+//           }
+//           colorMap.get(col).push(size);
+//         });
+//       }
+
+//       if (size) {
+//         sizeSet.add(size);
+//       }
+//     }
+
+//     // Convert colorMap and sizeSet to arrays
+//     const colors = Array.from(colorMap.keys());
+//     const sizes = Array.from(sizeSet);
+
+//     const colorVariant = await productVariantModel.create({
+//       key: 'color',
+//       value: colors, // Store as an array
+//       productId: Product.id,
+//     });
+
+//     const sizeVariant = await productVariantModel.create({
+//       key: 'size',
+//       value: sizes, // Store as an array
+//       productId: Product.id,
+//     });
+
+//     res.status(201).json({
+//       message: 'Product and Variants created.',
+//       Product,
+//       Variants: [colorVariant, sizeVariant],
+//     });
+//   } catch (error) {
+//     console.error('Error:', error);
+//     res.status(500).json({ error: 'Internal Server Error' });
+//   }
+// };
 const createProductAndVariants = async (req, res) => {
   try {
     const { products, variants } = req.body;
@@ -43,6 +93,12 @@ const createProductAndVariants = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
+
+
+
+
+
 
 // Bulk post API and its variants 
 const createBulkProducts = async (req, res) => {

@@ -6,7 +6,8 @@ import BulkUpdate from './BulkUpdate';
 import { MdOutlineDeleteOutline } from 'react-icons/md';
 import { LuArchive } from 'react-icons/lu';
 import { IoMdArrowDropdown } from 'react-icons/io';
-import { IoMdArrowRoundBack } from "react-icons/io";
+import { IoMdArrowRoundBack } from 'react-icons/io';
+import debounce from 'lodash/debounce';
 
 const TableTwo: React.FC = () => {
   const Token = Cookies.get('token');
@@ -38,6 +39,7 @@ const TableTwo: React.FC = () => {
     DealStatus: boolean;
     Approved: boolean;
     SaleStatus: boolean;
+    quantityInStock:string;
     productImages: Array<{ date: string; images: string[] }>;
   }
 
@@ -68,19 +70,16 @@ const TableTwo: React.FC = () => {
 
   const toggleProductSelection = (productId: number) => {
     if (selectedProducts.some((product) => product.id === productId)) {
-      setSelectedProducts(
-        selectedProducts.filter((product) => product.id !== productId),
-      );
+      setSelectedProducts(selectedProducts.filter((product) => product.id !== productId));
     } else {
-      const selectedProduct = products.find(
-        (product) => product.id === productId,
-      );
+      const selectedProduct = products.find((product) => product.id === productId) ||
+                              results.find((product) => product.id === productId);
       if (selectedProduct) {
         setSelectedProducts([...selectedProducts, selectedProduct]);
       }
     }
   };
-
+  
   useEffect(() => {
     setShowHeight(selectedProducts.length > 0);
   }, [selectedProducts]);
@@ -98,7 +97,10 @@ const TableTwo: React.FC = () => {
   };
 
   const handleClickOutside = (event: MouseEvent) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(event.target as Node)
+    ) {
       setDropdownOpen(false);
     }
   };
@@ -113,7 +115,7 @@ const TableTwo: React.FC = () => {
   useEffect(() => {
     if (searchTerm.trim() === '') return;
 
-    const fetchData = async () => {
+    const debouncedFetchData = debounce(async (term) => {
       setLoading(true);
       setError(null);
 
@@ -126,7 +128,7 @@ const TableTwo: React.FC = () => {
               'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-              query: `query { search(query: "${searchTerm}") { 
+              query: `query { search(query: "${term}") { 
                       id
                       name
                       description
@@ -143,9 +145,7 @@ const TableTwo: React.FC = () => {
 
         const data = await response.json();
         console.log(data.data.search);
-
         setResults(data.data.search);
-
         console.log('Search results:', data);
       } catch (error) {
         console.error('Error during search:', error);
@@ -153,17 +153,28 @@ const TableTwo: React.FC = () => {
       } finally {
         setLoading(false);
       }
-    };
+    }, 300); // 300ms debounce delay
 
-    fetchData();
+    debouncedFetchData(searchTerm);
+
+    // Cleanup function to cancel debounce on unmount or change
+    return () => {
+      debouncedFetchData.cancel();
+    };
   }, [searchTerm]);
 
-  console.log('products', products);
+  // console.log('products', products);
   return (
     <>
       {showBulk ? (
         <div>
-          <button className='flex px-1 mb-3 ml-1.5 pr-2 rounded-md text-black-2 font-semibold text-sm shadow-lg shadow-[#ebebeb] hover:bg-white py-1' onClick={() => setShowBulk(false)}><IoMdArrowRoundBack className='flex items-center justify-center mr-1 h-5 w-5' /> Back</button>
+          <button
+            className="flex px-1 mb-3 ml-1.5 pr-2 rounded-md text-black-2 font-semibold text-sm shadow-lg shadow-[#ebebeb] hover:bg-white py-1"
+            onClick={() => setShowBulk(false)}
+          >
+            <IoMdArrowRoundBack className="flex items-center justify-center mr-1 h-5 w-5" />{' '}
+            Back
+          </button>
           <BulkUpdate selectedProducts={selectedProducts} />
         </div>
       ) : (
@@ -185,9 +196,7 @@ const TableTwo: React.FC = () => {
                     <button className="flex flex-row items-center space-x-4 mt-2 px-4 py-1 justify-center active:shadow-inner hover:bg-[rgba(241,241,241,0.45)] rounded-l-md border-2 border-r-0 border-[rgb(241,241,241)]">
                       <input className="mr-0" type="checkbox" name="" id="" />
                       <p className="flex flex-row text-center w-[90px]">
-                        {'Selected'+' '} 
-                        ({selectedProducts.length}) 
-                        
+                        {'Selected' + ' '}({selectedProducts.length})
                       </p>
                     </button>
                     <div className="mt-2 flex items-center justify-center">
@@ -219,8 +228,8 @@ const TableTwo: React.FC = () => {
                           className={`py-2 text-black text-xs font-semibol transition-transfrom delay-200 duration-500 ${dropdownOpen ? 'text-opacity-1 ' : 'text-opacity-0'}`}
                         >
                           <li className="flex items-center px-2 mx-1.5 py-2 hover:bg-[#ebebeb] cursor-pointer rounded-md">
-                            <LuArchive className="h-4 w-4 my-0 mr-1" /> {' '}
-                            Archive products
+                            <LuArchive className="h-4 w-4 my-0 mr-1" /> Archive
+                            products
                           </li>
                           <li
                             className={`flex items-center px-2 mx-1.5 py-2 hover:bg-[#ebebeb] cursor-pointer rounded-md text-meta-1 transition-transfrom delay-200 duration-500 ${dropdownOpen ? 'text-opacity-1 ' : 'text-opacity-0'}`}
@@ -352,12 +361,12 @@ const TableTwo: React.FC = () => {
                     </div>
                     <div className="col-span-1 flex items-center justify-center">
                       <p className="text-xs sm:text-sm text-black dark:text-white text-center">
-                        {product.manufacturer}
+                        {product.quantityInStock}
                       </p>
                     </div>
                     <div className="col-span-1 flex items-center justify-center">
                       <Link
-                        to={`/products/${product.id}`}
+                        to={`/UpdateProducts/${product.id}`}
                         className="text-xs sm:text-sm text-meta-3"
                       >
                         Edit
@@ -370,71 +379,6 @@ const TableTwo: React.FC = () => {
                     </div>
                   </div>
                 ))}
-                {/* below this open slow */}
-                {/* {products.map((product) => (
-                  <div
-                    key={product.id}
-                    className="grid grid-cols-5 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-7 md:px-6 2xl:px-7.5"
-                    id={`${product.id}`}
-                  >
-                    <div className="col-span-1 flex items-center justify-around text-center">
-                      <input
-                        className="mr-2 sm:mr-0"
-                        type="checkbox"
-                        checked={selectedProducts.includes(product)}
-                        onChange={() => toggleProductSelection(product.id)}
-                      />
-                      <div className="w-20 flex flex-col gap-2 sm:flex-col sm:items-center">
-                        <div className="h-10 w-10 sm:w-15 sm:h-15 rounded-md flex mx-auto justify-center items-center overflow-hidden">
-                          <img
-                            src={`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}${product?.productImages[0]?.images[0]}`}
-                          />
-                        </div>
-                        <p className="text-xs sm:text-sm text-black dark:text-white">
-                          {product.name}
-                        </p>
-                      </div>
-                    </div>
-                    <div className="col-span-1 hidden items-center justify-center sm:flex">
-                      <p className="text-xs sm:text-sm text-black dark:text-white text-center">
-                        {product.categoryName}
-                      </p>
-                    </div>
-                    <div className="col-span-1 flex items-center justify-center">
-                      <p className="text-xs sm:text-sm text-black dark:text-white text-center">
-                        {product.price}
-                      </p>
-                    </div>
-                    <div className="col-span-1 hidden items-center justify-center sm:flex">
-                      <p className="text-xs sm:text-sm text-black dark:text-white text-center">
-                        {product.discount}
-                      </p>
-                    </div>
-                    <div className="col-span-1 flex items-center justify-center">
-                      <p className="text-xs sm:text-sm text-black dark:text-white text-center">
-                        {product.manufacturer}
-                      </p>
-                    </div>
-                    <div className="text-xs sm:text-sm col-span-1 flex items-center justify-center">
-                      <div>
-                        <Link
-                          to={`/UpdateProducts/${product.id}`}
-                          className="bg-blue hover:bg-blue-700 font-bold py-2 px-4 rounded-full"
-                        >
-                          Edit
-                        </Link>
-                      </div>
-                    </div>
-                    <div className="text-xs sm:text-sm col-span-1 flex items-center justify-center">
-                      <Link
-                        to={`/product`}
-                        className="bg-blue hover:bg-blue-700 font-bold py-2 px-4 rounded-full"
-                      >
-                        AddNew
-                      </Link>
-                    </div>
-                  </div>
-                ))} */}
               </ProductWrapper>
             </>
           ) : (
@@ -447,4 +391,3 @@ const TableTwo: React.FC = () => {
 };
 
 export default TableTwo;
-

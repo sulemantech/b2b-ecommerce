@@ -3,8 +3,6 @@ import { IoSearch } from "react-icons/io5";
 import { IoFilterOutline } from "react-icons/io5";
 import { BiSortAlt2 } from "react-icons/bi";
 import { IoIosArrowRoundUp, IoIosArrowRoundDown } from "react-icons/io";
-import "./styl.css";
-
 
 
 interface SearchproductProps {
@@ -103,10 +101,10 @@ const Searchproduct: React.FC<SearchproductProps> = ({ Header , searchValue , se
               <input
                 id="inputField"
                 type="text"
-                placeholder="Search product..."
+                placeholder="Type to search..."
                 value={searchValue}
                 onChange={handleSearch}
-                className="inputField grow w-full h-8 pl-9 my-auto p-2 pb-2 text-xs sm:text-base overflow-auto hover:bg-[#ebebeb75] bg-[#ebebeb45] focus:outline-[#3977f2] placeholder-[#616161] text-black rounded-md"
+                className="grow h-8 pl-9 my-auto p-2 pb-2 text-xs w-full sm:text-base overflow-auto focus:outline-[#3977f2] placeholder-[#616161] text-black rounded-md"
               />
             </form>
           </div>
@@ -114,11 +112,11 @@ const Searchproduct: React.FC<SearchproductProps> = ({ Header , searchValue , se
 
         <div className="flex gap-2 p-2 shrink-0">
           <div className={`flex gap-2 text-black-2 text-[10px] sm:text-sm ${showSearch ? "block" : "hidden"}`}>
-            <button className="flex-none my-1 px-2 transition-all duration-300 font-semibold hover:bg-[#3977f2] bg-[#3977f275] text-white borde rounded-md shadow-sm shadow-gray-300" disabled={showDropdown}>
-              Search
-            </button>
             <button onClick={() => setShowSearch(false)} className="my-1 px-2 active:bg-[#ebebeb] hover:bg-[#f1f1f1] borde rounded-md hover:shadow-sm shadow-gray-300 font-semibold">
               Cancel
+            </button>
+            <button className="flex-none my-1 px-2 font-semibold bg-[#ebebeb] borde rounded-md shadow-sm shadow-gray-300" disabled={showDropdown}>
+              Save as
             </button>
           </div>
           <div className={`flex ${showSearch ? "hidden" : "block"}`}>
@@ -135,7 +133,7 @@ const Searchproduct: React.FC<SearchproductProps> = ({ Header , searchValue , se
             </button>
             {/* Dropdown menu */}
             {showDropdown && (
-              <div className="absolute z-10 p-2.5 -right-4 mt-3.5 w-40 text-black text-xs font-semibold border border-[#ebebeb] bg-white rounded-xl shadow-xl shadow-[#ebebeb]">
+              <div className="absolute p-2.5 -right-4 mt-3.5 w-40 text-black text-xs font-semibold border border-[#ebebeb] bg-white rounded-xl shadow-xl shadow-[#ebebeb]">
                 {/* Dropdown content */}
                 Sort by
                 <ul className="text-sm font-semibold">
