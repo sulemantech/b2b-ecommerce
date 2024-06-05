@@ -406,6 +406,7 @@ const FormElements = () => {
             <div className="ml-5">
               <input
                 type="text"
+                required
                 placeholder="name"
                 className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-1
                     px-5 font-medium outline-none transition focus:border-primary active:border-primary 
@@ -435,6 +436,7 @@ const FormElements = () => {
               <div>
                 <input
                   type="text"
+                  required
                   placeholder="ProductId"
                   value={productId}
                   onChange={handleProductIdChange}
@@ -454,6 +456,7 @@ const FormElements = () => {
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
                     <input
                       type="file"
+                      required
                       onChange={handleImageFileChange}
                       className="w-30 cursor-pointer rounded-lg border-[1.5px] border-stroke
                    bg-transparent font-medium outline-none transition file:mr-5 file:border-collapse
@@ -484,6 +487,7 @@ const FormElements = () => {
                   <br />
                   <input
                     type="text"
+                    required
                     placeholder="RS 0.00"
                     className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
                     px-5 font-medium outline-none transition focus:border-primary active:border-primary
@@ -503,6 +507,7 @@ const FormElements = () => {
 
                   <input
                     type="text"
+                    required
                     placeholder=" Rs 0.00"
                     className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
                    px-5 font-medium outline-none transition focus:border-primary active:border-primary
@@ -526,6 +531,7 @@ const FormElements = () => {
                   <br />
                   <input
                     type="text"
+                    required
                     placeholder="RS 0.00"
                     className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
                     px-5 font-medium outline-none transition focus:border-primary active:border-primary
@@ -543,6 +549,7 @@ const FormElements = () => {
 
                   <input
                     type="text"
+                    required
                     placeholder="--"
                     className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent 
                    px-5 font-medium outline-none transition focus:border-primary active:border-primary
@@ -558,6 +565,7 @@ const FormElements = () => {
                   </label>
                   <input
                     type="text"
+                    required
                     placeholder="--"
                     className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent
                    px-5 font-medium outline-none transition focus:border-primary active:border-primary
@@ -594,6 +602,7 @@ const FormElements = () => {
                   <div>
                     <input
                       type="number"
+                      required
                       placeholder="0"
                       className="w-30 rounded-lg border-[1.5px] border-stroke bg-transparent 
                    px-5 font-medium outline-none transition focus:border-primary active:border-primary
@@ -706,6 +715,7 @@ const FormElements = () => {
 
                 <input
                   type="text"
+                  required
                   placeholder="quantityInStock"
                   className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-1
                     px-2 font-medium outline-none transition focus:border-primary active:border-primary 
@@ -774,6 +784,7 @@ const FormElements = () => {
 
                 <input
                   type="text"
+                  required
                   placeholder="Sku"
                   className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-1
                     px-2 font-medium outline-none transition focus:border-primary active:border-primary 
@@ -790,6 +801,7 @@ const FormElements = () => {
 
                 <input
                   type="text"
+                  required
                   placeholder="Tags"
                   className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-1
                     px-2 font-medium outline-none transition focus:border-primary active:border-primary 

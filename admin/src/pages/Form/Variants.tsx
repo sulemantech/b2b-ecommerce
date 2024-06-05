@@ -11,15 +11,12 @@ interface DropdownProps {
   handleInputChange: (index: number, event: ChangeEvent<HTMLInputElement>) => void;
   inputs: Input[];
   handleDoneClick: () => void;
-  // setObjsizee: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
-  // setObjcolorr: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
 }
 
 interface Dropdown {
   setObjsizee: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
   setObjcolorr: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
 }
-
 
 interface OptionListProps {
   title: string;
@@ -49,10 +46,10 @@ const Dropdown: React.FC<Dropdown> = ({ setObjsizee, setObjcolorr }) => {
     setInputs([{ id: 0, value: "" }]);
     if (selectedValue === "size") {
       setEditsize(false);
-      setObjsize({ [selectedValue]: [] });
+      setObjsize((prev) => ({ ...prev, [selectedValue]: [] }));
     } else if (selectedValue === "color") {
       setEditcolor(false);
-      setObjcolor({ [selectedValue]: [] });
+      setObjcolor((prev) => ({ ...prev, [selectedValue]: [] }));
     }
   };
 
@@ -66,12 +63,18 @@ const Dropdown: React.FC<Dropdown> = ({ setObjsizee, setObjcolorr }) => {
     if (selectedOption === "size") {
       setObjsize((prevObj) => ({
         ...prevObj,
-        [selectedOption]: newInputs.map((input) => input.value),
+        [selectedOption]: [
+          ...(prevObj[selectedOption] || []),
+          event.target.value
+        ]
       }));
     } else if (selectedOption === "color") {
       setObjcolor((prevObj) => ({
         ...prevObj,
-        [selectedOption]: newInputs.map((input) => input.value),
+        [selectedOption]: [
+          ...(prevObj[selectedOption] || []),
+          event.target.value
+        ]
       }));
     }
 
@@ -238,14 +241,18 @@ const Dropdown: React.FC<Dropdown> = ({ setObjsizee, setObjcolorr }) => {
                                         ) => (
                                           <tr
                                             key={`${secondaryOptionKey}-${secondaryOptionIndex}`}
-                                            className="border-[1.8px] border-[#ebebeb] bg-gray-100 scale-95"
+                                            className="border-[1.8px] border-[#ebebeb] cursor-pointer hover:bg-slate-200"
                                           >
                                             <td className="w-[5%]">
                                               <input type="checkbox" />
                                             </td>
                                             <td className="text-start text-sm font-medium p-2">
-                                              <input type="image" src="" alt="" />
-                                              {secondaryOptionValue}
+                                              <input
+                                                type="image"
+                                                src=""
+                                                alt=""
+                                              />
+                                              {`${optionValue}-${secondaryOptionValue}`}
                                             </td>
                                             <td className="px-5 py-2 shadow-sm text-center">
                                               <input
@@ -284,50 +291,57 @@ const DropdownSelect: React.FC<DropdownProps> = ({
   handleInputChange,
   inputs,
   handleDoneClick,
-}) => (
-  <div className="w-full flex flex-col space-y-4">
-    <select
-      value={selectedOption}
-      onChange={handleSelectChange}
-      className="border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-primary transition duration-300 ease-in-out"
-    >
-      <option disabled value="">
-        Select an option
-      </option>
-      <option value="size">Size</option>
-      <option value="color">Color</option>
-    </select>
-
-    {inputs.map((input, index) => (
-      <input
-        key={index}
-        type="text"
-        value={input.value}
-        onChange={(event) => handleInputChange(index, event)}
+}) => {
+  return (
+    <>
+      <select
+        value={selectedOption}
+        onChange={handleSelectChange}
         className="border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-primary transition duration-300 ease-in-out"
-      />
-    ))}
-
-    <button
-      onClick={handleDoneClick}
-      className="self-end bg-black text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out"
-    >
-      Done
-    </button>
-  </div>
-);
-
-const OptionList: React.FC<OptionListProps> = ({ title, data }) => (
-  <div className="bg-white shadow-md rounded-lg p-4 w-full">
-    <h3 className="text-lg font-semibold mb-4">{title}</h3>
-    <ul>
-      {Object.entries(data).map(([key, values]) => (
-        <li key={key}>
-          <strong>{key}:</strong> {values.join(", ")}
-        </li>
+      >
+        <option disabled value="">
+          Select option
+        </option>
+        <option value="size">Size</option>
+        <option value="color">Color</option>
+      </select>
+      {inputs.map((input, index) => (
+        <input
+          key={input.id}
+          type="text"
+          value={input.value}
+          onChange={(event) => handleInputChange(index, event)}
+          className="border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-primary transition duration-300 ease-in-out"
+        />
       ))}
-    </ul>
-  </div>
-);
+      <button
+        onClick={handleDoneClick}
+        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out"
+      >
+        Done
+      </button>
+    </>
+  );
+};
+
+const OptionList: React.FC<OptionListProps> = ({ title, data }) => {
+  return (
+    <div className="w-full mx-6 bg-white p-6 rounded shadow-md flex flex-col space-y-4">
+      <h3 className="text-lg font-bold">{title}</h3>
+      <ul>
+        {Object.entries(data).map(([optionKey, optionValues]) =>
+          optionValues.map(
+            (optionValue, optionIndex) =>
+              optionValue && (
+                <li key={`${optionKey}-${optionIndex}`}>
+                  {`${optionKey}: ${optionValue}`}
+                </li>
+              )
+          )
+        )}
+      </ul>
+    </div>
+  );
+};
 
 export default Dropdown;
