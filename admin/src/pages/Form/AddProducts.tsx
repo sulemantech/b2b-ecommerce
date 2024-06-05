@@ -3,7 +3,7 @@ import React from 'react';
 import { useState, useEffect, ChangeEvent } from 'react';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import Variants from '../Form/Variants';
+import Variants from '../../pages/Form/Variants'
 // import Breadcrumb from '../../components/Breadcrumb';
 // import { log } from 'console';
 
@@ -380,19 +380,8 @@ const FormElements = () => {
     }
   };
 
-  const [expandedRows, setExpandedRows] = useState<Set<number>>(new Set());
-
-  const toggleRow = (index: number) => {
-    setExpandedRows((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(index)) {
-        newSet.delete(index);
-      } else {
-        newSet.add(index);
-      }
-      return newSet;
-    });
-  };
+ 
+ 
   // console.log("groupedData",groupedData);
 
   return (

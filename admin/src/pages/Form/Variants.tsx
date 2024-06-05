@@ -1,4 +1,6 @@
-import React, { useState, ChangeEvent } from "react";
+import React, { useState, ChangeEvent } from 'react';
+import { PiDotsSixVerticalBold } from 'react-icons/pi';
+import { BiImageAdd } from 'react-icons/bi';
 
 interface Input {
   id: number;
@@ -7,10 +9,16 @@ interface Input {
 
 interface DropdownProps {
   selectedOption: string;
+  errormessage : string;
   handleSelectChange: (event: ChangeEvent<HTMLSelectElement>) => void;
-  handleInputChange: (index: number, event: ChangeEvent<HTMLInputElement>) => void;
+  handleInputChange: (
+    index: number,
+    event: ChangeEvent<HTMLInputElement>,
+  ) => void;
   inputs: Input[];
   handleDoneClick: () => void;
+  // setObjsizee: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
+  // setObjcolorr: React.Dispatch<React.SetStateAction<Record<string, string[]>>>;
 }
 
 interface Dropdown {
@@ -25,8 +33,8 @@ interface OptionListProps {
 
 const Dropdown: React.FC<Dropdown> = ({ setObjsizee, setObjcolorr }) => {
   const [inputs, setInputs] = useState<Input[]>([]);
-  const [istval, setIstval] = useState<string>("");
-  const [selectedOption, setSelectedOption] = useState<string>("");
+  const [istval, setIstval] = useState<string>('');
+  const [selectedOption, setSelectedOption] = useState<string>('');
   const [objsize, setObjsize] = useState<Record<string, string[]>>({});
   const [objcolor, setObjcolor] = useState<Record<string, string[]>>({});
   const [mappingDoneSize, setMappingDoneSize] = useState<boolean>(false);
@@ -35,46 +43,66 @@ const Dropdown: React.FC<Dropdown> = ({ setObjsizee, setObjcolorr }) => {
   const [editcolor, setEditcolor] = useState<boolean>(false);
   const [showtable, setShowtable] = useState<boolean>(false);
   const [mappingDoneColor, setMappingDoneColor] = useState<boolean>(false);
-  const [expandedSizes, setExpandedSizes] = useState<Record<string, boolean>>({});
+  const [errorMessage, setErrorMessage] = useState<string >("");
+
+  const [expandedSizes, setExpandedSizes] = useState<Record<string, boolean>>(
+    {},
+  );
 
   const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setErrorMessage("")
     const selectedValue = event.target.value;
-    if (istval === "") {
+  
+  
+    if (selectedValue === 'size' && objsize[selectedValue] && objsize[selectedValue].length > 0) {
+      setErrorMessage("Size option already selected");
+      console.log("Size option already selected");
+
+      return; 
+    }
+  
+    if (selectedValue === 'color' && objcolor[selectedValue] && objcolor[selectedValue].length > 0) {
+      setErrorMessage("Color option already selected");
+      return; 
+    }
+  
+    if (istval === '') {
       setIstval(selectedValue);
     }
+  
     setSelectedOption(selectedValue);
-    setInputs([{ id: 0, value: "" }]);
-    if (selectedValue === "size") {
+    setInputs([{ id: 0, value: '' }]);
+  
+    if (selectedValue === 'size') {
       setEditsize(false);
-      setObjsize((prev) => ({ ...prev, [selectedValue]: [] }));
-    } else if (selectedValue === "color") {
+      setObjsize({ [selectedValue]: [] });
+    } else if (selectedValue === 'color') {
       setEditcolor(false);
-      setObjcolor((prev) => ({ ...prev, [selectedValue]: [] }));
+      setObjcolor({ [selectedValue]: [] });
     }
+    console.log("select option",selectedValue);
   };
+  
 
-  const handleInputChange = (index: number, event: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (
+    index: number,
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
     const newInputs = inputs.map((input, i) =>
-      i === index ? { ...input, value: event.target.value } : input
+      i === index ? { ...input, value: event.target.value } : input,
     );
 
     setInputs(newInputs);
 
-    if (selectedOption === "size") {
+    if (selectedOption === 'size') {
       setObjsize((prevObj) => ({
         ...prevObj,
-        [selectedOption]: [
-          ...(prevObj[selectedOption] || []),
-          event.target.value
-        ]
+        [selectedOption]: newInputs.map((input) => input.value),
       }));
-    } else if (selectedOption === "color") {
+    } else if (selectedOption === 'color') {
       setObjcolor((prevObj) => ({
         ...prevObj,
-        [selectedOption]: [
-          ...(prevObj[selectedOption] || []),
-          event.target.value
-        ]
+        [selectedOption]: newInputs.map((input) => input.value),
       }));
     }
 
@@ -86,7 +114,7 @@ const Dropdown: React.FC<Dropdown> = ({ setObjsizee, setObjcolorr }) => {
   const addInput = () => {
     setInputs((prevInputs) => [
       ...prevInputs,
-      { id: prevInputs.length, value: "" },
+      { id: prevInputs.length, value: '' },
     ]);
   };
 
@@ -98,10 +126,10 @@ const Dropdown: React.FC<Dropdown> = ({ setObjsizee, setObjcolorr }) => {
   };
 
   const handleDoneClick = () => {
-    setObjcolorr(objcolor)
-    setObjsizee(objsize)
+    setObjcolorr(objcolor);
+    setObjsizee(objsize);
     setInputs([]);
-    setSelectedOption("");
+    setSelectedOption('');
     setShowtable(true);
     setShowdd(false);
 
@@ -122,164 +150,199 @@ const Dropdown: React.FC<Dropdown> = ({ setObjsizee, setObjcolorr }) => {
 
   return (
     <>
-      <div className="font-mono w-[60vw] m-auto border bg-[#ffffffd8] shadow-md rounded-lg mt-10 ">
-        <span className=" p-2">Variants</span>
-        {editsize && <OptionList title="Size" data={objsize} />}
-        {editcolor && <OptionList title="Colors" data={objcolor} />}
+      <div className="font-mono w-full bg-[#ffffffd8] rounded-lg shadow-md overflow-hidden">
+        <div className="px-4">
+          <div className="font-semibold p-2">Variants</div>
 
-        <div className="font-mono m-auto bg-[#fffff] flex items-center justify-center flex-col mt-3 ">
-          {showdd ? (
-            <div className="w-full mx-6 bg-white p-6 rounded shadow-md flex flex-col space-y-4">
-              <DropdownSelect
-                selectedOption={selectedOption}
-                handleSelectChange={handleSelectChange}
-                handleInputChange={handleInputChange}
-                inputs={inputs}
-                handleDoneClick={handleDoneClick}
-              />
-            </div>
-          ) : (
-            <p
-              onClick={addNewVariant}
-              className="text-blue-600 p-2 underline font-medium text-[14px] cursor-pointer w-full text-left"
-            >
-              + Add new variants Size/Colors
-            </p>
-          )}
-
-          {showtable && (
-            <>
-              <div className="w-full p-2">
-                <div className="flex items-center w-fit space-x-4">
-                  <span className="text-gray-700 font-medium">Group BY</span>
-                  <select
-                    value={istval}
-                    onChange={(e) => {
-                      setIstval(e.target.value);
-                      console.log(istval);
-                    }}
-                    className="border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-primary transition duration-300 ease-in-out"
-                  >
-                    <option disabled value="">
-                      Select value
-                    </option>
-                    <option value="size">Size</option>
-                    <option value="color">Color</option>
-                  </select>
-                </div>
+          <div className="font-mono w-full bg-[#ffffffd8] border border-[#c4c4c4] rounded-lg mb-4">
+          <div className="">
+            {editsize && <OptionList title="Sizes" data={objsize} />}
+            {/* <hr className="text-[#c4c4c4]" /> */}
+            {editcolor && <OptionList title="Colors" data={objcolor} />}
+          </div>
+            
+            {showdd ? (
+              <div className="w-full bg-white p-6 rounded-lg flex flex-col space-y-4">
+                <DropdownSelect
+                  selectedOption={selectedOption}
+                  handleSelectChange={handleSelectChange}
+                  handleInputChange={handleInputChange}
+                  inputs={inputs}
+                  handleDoneClick={handleDoneClick}
+                  errormessage={errorMessage}
+                />
               </div>
-              <table className="overflow-hidden rounded-md w-full">
-                <thead className="border-[1.8px] bg-gray-100 border-[#ebebeb] m-4">
-                  <tr className="rounded-t-md">
-                    <th className="w-[5%]">
-                      <input type="checkbox" />
-                    </th>
-                    <th className="w-[65%] text-start text-sm font-bold p-2">
-                      Variant
-                    </th>
-                    <th className="w-[400px] text-start text-sm font-bold p-2">
-                      Price
-                    </th>
-                    <th className="w-[200px] text-start text-sm font-bold p-2">
-                      Available
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white">
-                  {mappingDoneSize &&
-                    Object.entries(istval === "size" ? objsize : objcolor).map(
-                      ([optionKey, optionValues]) =>
-                        optionValues
-                          .filter((optionValue) => optionValue !== "")
-                          .map((optionValue, optionIndex) => (
-                            <React.Fragment key={`${optionKey}-${optionIndex}`}>
-                              <tr
-                                onClick={() =>
-                                  handleBtnClick(`${optionKey}-${optionIndex}`)
-                                }
-                                className="border-[1.8px] border-[#ebebeb] cursor-pointer hover:bg-slate-200"
-                              >
-                                <td className="w-[5%]">
-                                  <input type="checkbox" />
-                                </td>
-                                <td className="text-start text-sm font-medium p-2">
+            ) : (
+              <p
+                onClick={addNewVariant}
+                className="flex items-center w-full h-12 text-start text-sm font-semibold rounded-b-md p-2 pl-8"
+              >
+                + Add new variants like size or color
+              </p>
+            )}
+          </div>
+        </div>
+        {showtable && (
+          <>
+            <div className="w-full p-2">
+              <div className="flex items-center w-fit space-x-4">
+                <span className="ml-4 text-gray-700 text-xs font-medium">
+                  Group BY
+                </span>
+                
+                <select
+                  value={istval}
+                  onChange={(e) => {
+                    setIstval(e.target.value);
+                    console.log(istval);
+                    
+                  }}
+                  className="border text-xs border-gray-300 rounded-lg p-1 text-gray-700 focus:outline-none focus:shadow-inner transition duration-300 ease-in-out"
+                >
+                  
+                  {/* <option disabled value="">
+                      Select value
+                    </option> */}
+                  <option className="text-xs px-4 font-semibold" value="color">
+                    Color
+                  </option>
+                  <option className="text-xs px-4 font-semibold" value="size" >
+                    Size
+                  </option>
+                </select>
+              
+              </div>
+            </div>
+            <table className="w-[100%]">
+              <thead className="border-t bg-[#e7e7e7] border-[#c4c4c4] m-4">
+                <tr className="rounded-t-md">
+                  <th className="w-[5%] p-2">
+                    <input type="checkbox" />
+                  </th>
+                  <th className="w-[45%] text-start text-sm font-bold p-2">
+                    Variant
+                  </th>
+                  <th className="w-[20%] text-start text-sm font-bold p-2">
+                    Price
+                  </th>
+                  <th className="w-[10%] text-start text-sm font-bold p-2 ">
+                    Available
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="bg-white">
+                {mappingDoneSize &&
+                  Object.entries(istval === 'size' ? objsize : objcolor).map(
+                    ([optionKey, optionValues]) =>
+                      optionValues
+                        .filter((optionValue) => optionValue !== '')
+                        .map((optionValue, optionIndex) => (
+                          <React.Fragment key={`${optionKey}-${optionIndex}`}>
+                            <tr
+                              onClick={() =>
+                                handleBtnClick(`${optionKey}-${optionIndex}`)
+                              }
+                              className="border-t border-[#c4c4c4] cursor-pointer hover:bg-[#f7f7f7]"
+                            >
+                              <td className="">
+                                <input className="w-full" type="checkbox" />
+                              </td>
+                              <td className="text-start text-sm font-medium py-3">
+                                <div className="flex items-center gap-1">
+                                  <span className="w-10 h-10 bg-white flex items-center justify-center border border-dashed rounded-md">
+                                    <BiImageAdd className="w-5 h-5 mt-0.5 ml-[2px]" />
+                                    <img src="" alt="" />
+                                  </span>
                                   <input type="image" src="" alt="" />
-                                  {optionValue}
-                                </td>
-                                <td className="px-5 py-2 shadow-sm text-center">
-                                  <input
-                                    placeholder="Rs. 0.00"
-                                    className="border rounded-xl py-1 pl-4 placeholder:text-black placeholder:opacity-70 border-black"
-                                    type="text"
-                                  />
-                                </td>
-                                <td className="px-5 py-2 shadow-sm text-center">
-                                  <input
-                                    placeholder="0"
-                                    className="border rounded-xl py-1 pl-4 placeholder:text-black placeholder:opacity-70 border-black"
-                                    type="text"
-                                  />
-                                </td>
-                              </tr>
-                              {expandedSizes[`${optionKey}-${optionIndex}`] &&
-                                Object.entries(
-                                  istval === "size" ? objcolor : objsize
-                                ).map(
-                                  ([
-                                    secondaryOptionKey,
-                                    secondaryOptionValues,
-                                  ]) =>
-                                    secondaryOptionValues
-                                      .filter(
-                                        (secondaryOptionValue) =>
-                                          secondaryOptionValue !== ""
-                                      )
-                                      .map(
-                                        (
-                                          secondaryOptionValue,
-                                          secondaryOptionIndex
-                                        ) => (
-                                          <tr
-                                            key={`${secondaryOptionKey}-${secondaryOptionIndex}`}
-                                            className="border-[1.8px] border-[#ebebeb] cursor-pointer hover:bg-slate-200"
-                                          >
-                                            <td className="w-[5%]">
-                                              <input type="checkbox" />
-                                            </td>
-                                            <td className="text-start text-sm font-medium p-2">
+                                  <div>
+                                    {optionValue}
+                                    <p className="text-xs">Variants</p>
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="relative  px-2 py-2 text-center text-sm text-black">
+                                <input
+                                  placeholder="0.00"
+                                  className="border w-full rounded-xl py-1.5 pl-8 placeholder:text-black placeholder:opacity-70 border-[#8a8a8a]"
+                                  type="text"
+                                />
+                                <p className="absolute top-5.5 left-4.5">Rs</p>
+                              </td>
+                              <td className="px-2 py-2 text-center">
+                                <input
+                                  placeholder="0"
+                                  className="border w-full rounded-xl py-1 pl-2 placeholder:text-black placeholder:opacity-70 border-[#8a8a8a]"
+                                  type="text"
+                                />
+                              </td>
+                            </tr>
+                            {expandedSizes[`${optionKey}-${optionIndex}`] &&
+                              Object.entries(
+                                istval === 'size' ? objcolor : objsize,
+                              ).map(
+                                ([secondaryOptionKey, secondaryOptionValues]) =>
+                                  secondaryOptionValues
+                                    .filter(
+                                      (secondaryOptionValue) =>
+                                        secondaryOptionValue !== '',
+                                    )
+                                    .map(
+                                      (
+                                        secondaryOptionValue,
+                                        secondaryOptionIndex,
+                                      ) => (
+                                        <tr
+                                          key={`${secondaryOptionKey}-${secondaryOptionIndex}`}
+                                          className="border-[1.8px] border-[#e7e7e7] border-l-0 border-r-0 hover:bg-[#f7f7f7]"
+                                        >
+                                          <td className="">
+                                            <input
+                                              className="w-full ml-4"
+                                              type="checkbox"
+                                            />
+                                          </td>
+                                          <td className="text-start text-sm font-medium py-3">
+                                            <div className="ml-5 flex items-center gap-1">
+                                              <span className="w-10 h-10 bg-white flex items-center justify-center border border-dashed rounded-md">
+                                                <BiImageAdd className="w-5 h-5 mt-0.5 ml-[2px]" />
+                                                <img src="" alt="" />
+                                              </span>
                                               <input
                                                 type="image"
                                                 src=""
                                                 alt=""
                                               />
-                                              {`${optionValue}-${secondaryOptionValue}`}
-                                            </td>
-                                            <td className="px-5 py-2 shadow-sm text-center">
-                                              <input
-                                                placeholder="Rs. 0.00"
-                                                className="border rounded-xl py-1 pl-4 placeholder:text-black placeholder:opacity-70 border-black"
-                                                type="text"
-                                              />
-                                            </td>
-                                            <td className="px-5 py-2 shadow-sm text-center">
-                                              <input
-                                                placeholder="0"
-                                                className="border rounded-xl py-1 pl-4 placeholder:text-black placeholder:opacity-70 border-black"
-                                                type="text"
-                                              />
-                                            </td>
-                                          </tr>
-                                        )
-                                      )
-                                )}
-                            </React.Fragment>
-                          ))
-                    )}
-                </tbody>
-              </table>
-            </>
-          )}
-        </div>
+                                              {secondaryOptionValue}
+                                            </div>
+                                          </td>
+                                          <td className="relative  px-2 py-2 shadow-sm text-center text-sm text-black">
+                                            <input
+                                              placeholder="0.00"
+                                              className="border w-full rounded-xl py-1.5 pl-8 placeholder:text-black placeholder:opacity-70 border-[#8a8a8a]"
+                                              type="text"
+                                            />
+                                            <p className="absolute top-5.5 left-4.5">
+                                              Rs
+                                            </p>
+                                          </td>
+                                          <td className="px-2 py-2 shadow-sm text-center">
+                                            <input
+                                              placeholder="0"
+                                              className="border w-full rounded-xl  py-1 pl-2 placeholder:text-black placeholder:opacity-70 border-[#8a8a8a]"
+                                              type="text"
+                                            />
+                                          </td>
+                                        </tr>
+                                      ),
+                                    ),
+                              )}
+                          </React.Fragment>
+                        )),
+                  )}
+              </tbody>
+            </table>
+          </>
+        )}
       </div>
     </>
   );
@@ -291,57 +354,98 @@ const DropdownSelect: React.FC<DropdownProps> = ({
   handleInputChange,
   inputs,
   handleDoneClick,
-}) => {
-  return (
-    <>
-      <select
-        value={selectedOption}
-        onChange={handleSelectChange}
-        className="border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-primary transition duration-300 ease-in-out"
-      >
-        <option disabled value="">
-          Select option
-        </option>
-        <option value="size">Size</option>
-        <option value="color">Color</option>
-      </select>
-      {inputs.map((input, index) => (
+  errormessage
+}) => (
+  <div className="w-full flex flex-col">
+    <div className=''>
+      <div className='flex'>
+      <div className="items-center mt-1 w-10 h-6"></div>  
+    <p className='text-sm font-semibold'>Option name</p>
+      </div>
+      <div className='flex'>
+      <div className="items-center mt-2 w-10 h-6"><PiDotsSixVerticalBold className="w-6 h-5 cursor-pointer" /></div>
+    <select
+      value={selectedOption}
+      onChange={handleSelectChange}
+      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:border-primary transition duration-300 ease-in-out"
+    > 
+      <option disabled value="">
+        Select Variants
+      </option>
+      <option value="size">Size</option>
+      <option value="color">Color</option>
+    </select>
+    
+      </div>
+    </div>
+
+      <div className='w-full'>
+        <p className='text-sm ml-10 font-semibold text-meta-1'>{errormessage}</p>
+        <div className='flex mt-2'>
+        <div className="items-center mt-1 w-10 h-6"></div> 
+        <p className='text-sm font-semibold'>Option Value</p>
+        </div>
+        </div>
+    {inputs.map((input, index) => (
+        <div className='flex mb-3'>
+        <div className="items-center mt-2 w-10 h-6"><PiDotsSixVerticalBold className="w-6 h-5 cursor-pointer" /></div>
         <input
-          key={input.id}
+          key={index}
           type="text"
           value={input.value}
           onChange={(event) => handleInputChange(index, event)}
-          className="border border-gray-300 rounded-lg px-3 py-2 text-gray-700 focus:outline-none focus:border-primary transition duration-300 ease-in-out"
+          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-700 focus:outline-none focus:border-primary transition duration-300 ease-in-out"
         />
-      ))}
-      <button
-        onClick={handleDoneClick}
-        className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out"
-      >
-        Done
-      </button>
-    </>
-  );
-};
+        </div>
+    ))}
+    <div className="flex items-center justify-between grow gap-1 rounded-md py-1 px-1 pl-10">
 
-const OptionList: React.FC<OptionListProps> = ({ title, data }) => {
-  return (
-    <div className="w-full mx-6 bg-white p-6 rounded shadow-md flex flex-col space-y-4">
-      <h3 className="text-lg font-bold">{title}</h3>
+    <button className="border border-body text-xs text-[#991b1b] font-semibold rounded-md py-[4.8px] px-2.5">Delete</button>
+    <button
+      onClick={handleDoneClick}
+      className="border text-xs text-white bg-black shadow-inner shadow-[#ffffff80] font-semibold rounded-md py-1.5 px-2.5 transition duration-300 ease-in-out"
+    >
+      Done
+    </button>
+    </div>
+  </div>
+);
+
+const OptionList: React.FC<OptionListProps> = ({ title, data }) => (
+  <div className="flex items-center justify-center p-5 border-b border-[#c4c4c4]">
+    <PiDotsSixVerticalBold className="w-6" />
+    <div className="bg-white  rounded-tr-lg w-full">
+      <div className="flex items-center justify-between gap-2">
+        <div className="w-4 h-6"></div>
+        <h3 className="grow text-lg font-semibold mb-2">{title}</h3>
+        <button className="border text-xs font-semibold rounded-md p-1 px-3">
+          Edit
+        </button>
+      </div>
       <ul>
-        {Object.entries(data).map(([optionKey, optionValues]) =>
-          optionValues.map(
-            (optionValue, optionIndex) =>
-              optionValue && (
-                <li key={`${optionKey}-${optionIndex}`}>
-                  {`${optionKey}: ${optionValue}`}
-                </li>
-              )
-          )
-        )}
+        {Object.entries(data).map(([key, values]) => (
+          <li key={key}>
+            <strong className="bg-[#ebebeb]"></strong>
+            <div className="flex items-center justify-between gap-2">
+              <div className="w-4 h-6"></div>
+              <div className="grow flex space-x-2 ">
+                {values.length > 1
+                  ? values.map((value, index) => (
+                      <div
+                        className="text-xs font-semibold text-[#64748bcf] px-2 rounded-lg bg-[#ebebeb]"
+                        key={index}
+                      >
+                        {value}
+                      </div>
+                    ))
+                  : values.join(', ')}
+              </div>
+            </div>
+          </li>
+        ))}
       </ul>
     </div>
-  );
-};
+  </div>
+);
 
 export default Dropdown;
