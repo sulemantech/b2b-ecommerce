@@ -1134,7 +1134,7 @@ async function deleteVariant(variantId: number) {
         font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
             onClick={handleUpdate}
           >
-            Submite
+            Submit
           </button>
         </div>
       </div>
