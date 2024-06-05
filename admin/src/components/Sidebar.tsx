@@ -644,7 +644,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <NavLink
                   onClick={() => setSidebarOpen(!sidebarOpen)}
                   to="/settings"
-                  className={`absolute bottom-5 min-w-50 ml-1 focus:bg-[#ffffff] flex items-center gap-2.5 rounded-lg py-1 px-2 text-sm font-bold text-black duration-300 ease-in-out hover:bg-[#f1f1f1] dark:hover:bg-meta-4 ${' dark:bg-meta-4'}`}
+                  className={`absolute bottom-0 min-w-50 ml-0.2 bg-[#ebebeb] focus:bg-[#ffffff] flex items-center gap-2.5 rounded-lg py-2 px-2 text-sm font-bold text-black duration-300 ease-in-out hover:bg-[#f1f1f1] dark:hover:bg-meta-4 ${' dark:bg-meta-4'}`}
                 >
                   <svg
                     className="fill-current"

@@ -11,53 +11,52 @@ const ProductNavigate = () => {
       <h1 className="font-bold text-black-2 text-xl ">Products</h1>
       <br />
       <div className="rounded-xl border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark ">
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5.5 p-3">
-          <div>
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 p-3">
+          <div className='border-r'>
             <NavLink
               to={'/'}
               className={
-                'group relative flex items-center gap-2.5 border-r   text-black duration-300 ease-in-out'
+                'h-full group relative flex items-center gap-2.5 text-black duration-300 ease-in-out'
               }
               //             className={({isActive})=>
               //             'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-black duration-300 ease-in-out hover:bg-bodydark1  ' +
               //             (isActive && 'bg-gray')
               // }
             >
-              <p className=" hover:bg-bodydark1 rounded px-2">
+              <p className="w-full sm:h-full hover:bg-bodydark1 rounded px-2 mr-2">
                 Product by sell-through rate <br />0 % -
               </p>
             </NavLink>
           </div>
 
-          <div>
+          <div className='border-r'>
             <NavLink
               to={'/'}
               className={
-                'group relative flex items-center gap-2.5 border-r   text-black duration-300 ease-in-out  '
+                'group relative flex items-center gap-2.5    text-black duration-300 ease-in-out  '
               }
               //             className={({isActive})=>
               //             'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-black duration-300 ease-in-out hover:bg-bodydark1  ' +
               //             (isActive && 'bg-gray')
               // }
             >
-              <p className=" hover:bg-bodydark1 rounded px-2">
+              <p className="w-full h- hover:bg-bodydark1 rounded px-2 mr-2">
                 Products by days of inventory remaining There was no data found
                 for this date range
               </p>
             </NavLink>
           </div>
-          <div>
+          <div className='border-r'>
             <NavLink
               to={'/'}
-              className={
-                'group relative flex items-center gap-2.5 border-r text-black duration-300 ease-in-out  '
+              className={'h-full group relative flex items-center gap-2.5 text-black duration-300 ease-in-out  '
               }
               //             className={({isActive})=>
               //             'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-black duration-300 ease-in-out hover:bg-bodydark1  ' +
               //             (isActive && 'bg-gray')
               // }
             >
-              <p className=" hover:bg-bodydark1 rounded px-2">
+              <p className="h-[48px] sm:h-full hover:bg-bodydark1 rounded px-2 mr-2">
                 ABC product analysis There was no data found for this date range
               </p>
             </NavLink>
@@ -69,14 +68,14 @@ const ProductNavigate = () => {
         <div className="flex p-5">
           <div className='my-auto'>
             <h1
-              className="my-auto w-10 rounded-xl text-center"
+              className="my-auto w-10 rounded-xl text-center cursor-pointer"
               style={{ backgroundColor: 'lightgray' }}
             >
               All
             </h1>
           </div>
           <div>
-            <h1 className="text-xl ml-2">+</h1>
+            <h1 className="text-xl ml-2 cursor-pointer">+</h1>
           </div>
         </div>
         <hr style={{ color: 'gray' }} />
@@ -90,9 +89,9 @@ const ProductNavigate = () => {
           <div className="my-5 flex">
             <Link
               to="/new/product"
-              className="inline-flex items-center justify-center rounded-md text-xs sm:text-lg sm:lg bg-black-2 py-1.5 px-4 sm:px-5 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+              className="inline-flex items-center justify-center rounded-md text-xs sm:text-lg sm:lg bg-black-2 py-1.5 px-4 text-center font-medium text-white hover:bg-opacity-90 "
             >
-              + Add product
+              +&nbsp;&nbsp;Add product
             </Link>
             <div className="ml-5">
                 <MyModal/>

@@ -387,7 +387,7 @@ const FormElements = () => {
   return (
     <>
       {/* <Breadcrumb pageName="" /> */}
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-[2fr,1fr]">
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-[2fr,1fr]">
         <div className="flex flex-col gap-9">
           <div className="rounded-xl border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-5">
             <label className="ml-5 font-bold">Title</label>
@@ -408,16 +408,16 @@ const FormElements = () => {
             <br />
             <div className="ml-5 font-bold">
               <label htmlFor="">Description</label>
-              <CKEditor
+              {/* <CKEditor
                 editor={ClassicEditor}
                 config={
                   {
-                    /* Your CKEditor config options here */
+                  
                   }
                 }
                 onReady={handleEditorReady}
                 onChange={handleEditorChange}
-              />
+              /> */}
             </div>
           </div>
           <div className="flex flex-col gap-9 ">
@@ -885,15 +885,14 @@ const FormElements = () => {
         </div>
 
         <div
-          style={{ border: '20px', padding: '10px' }}
-          className="flex justify-end"
+          // style={{ border: '0px', padding: '0px' }}
+          className="flex justify-end mr-2"
         >
           <button
-            className="inline-flex items-center justify-center rounded-md bg-primary py-4 px-10 text-center
-              font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+            className="inline-flex items-center justify-center border text-sm hover:shadow-none text-white bg-black shadow-inner shadow-[#ffffff80] font-semibold rounded-md py-1.5 px-2.5 transition duration-300 ease-in-out"
             onClick={handleFormSubmit}
           >
-            Submite
+            Submit
           </button>
         </div>
       </div>
