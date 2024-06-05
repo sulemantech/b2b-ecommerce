@@ -9,6 +9,7 @@ interface Input {
 
 interface DropdownProps {
   selectedOption: string;
+  errormessage : string;
   handleSelectChange: (event: ChangeEvent<HTMLSelectElement>) => void;
   handleInputChange: (
     index: number,
@@ -42,17 +43,36 @@ const Dropdown: React.FC<Dropdown> = ({ setObjsizee, setObjcolorr }) => {
   const [editcolor, setEditcolor] = useState<boolean>(false);
   const [showtable, setShowtable] = useState<boolean>(false);
   const [mappingDoneColor, setMappingDoneColor] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string >("");
+
   const [expandedSizes, setExpandedSizes] = useState<Record<string, boolean>>(
     {},
   );
 
   const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    setErrorMessage("")
     const selectedValue = event.target.value;
+  
+  
+    if (selectedValue === 'size' && objsize[selectedValue] && objsize[selectedValue].length > 0) {
+      setErrorMessage("Size option already selected");
+      console.log("Size option already selected");
+
+      return; 
+    }
+  
+    if (selectedValue === 'color' && objcolor[selectedValue] && objcolor[selectedValue].length > 0) {
+      setErrorMessage("Color option already selected");
+      return; 
+    }
+  
     if (istval === '') {
       setIstval(selectedValue);
     }
+  
     setSelectedOption(selectedValue);
     setInputs([{ id: 0, value: '' }]);
+  
     if (selectedValue === 'size') {
       setEditsize(false);
       setObjsize({ [selectedValue]: [] });
@@ -60,7 +80,9 @@ const Dropdown: React.FC<Dropdown> = ({ setObjsizee, setObjcolorr }) => {
       setEditcolor(false);
       setObjcolor({ [selectedValue]: [] });
     }
+    console.log("select option",selectedValue);
   };
+  
 
   const handleInputChange = (
     index: number,
@@ -147,6 +169,7 @@ const Dropdown: React.FC<Dropdown> = ({ setObjsizee, setObjcolorr }) => {
                   handleInputChange={handleInputChange}
                   inputs={inputs}
                   handleDoneClick={handleDoneClick}
+                  errormessage={errorMessage}
                 />
               </div>
             ) : (
@@ -166,24 +189,28 @@ const Dropdown: React.FC<Dropdown> = ({ setObjsizee, setObjcolorr }) => {
                 <span className="ml-4 text-gray-700 text-xs font-medium">
                   Group BY
                 </span>
+                
                 <select
                   value={istval}
                   onChange={(e) => {
                     setIstval(e.target.value);
                     console.log(istval);
+                    
                   }}
                   className="border text-xs border-gray-300 rounded-lg p-1 text-gray-700 focus:outline-none focus:shadow-inner transition duration-300 ease-in-out"
                 >
+                  
                   {/* <option disabled value="">
                       Select value
                     </option> */}
                   <option className="text-xs px-4 font-semibold" value="color">
                     Color
                   </option>
-                  <option className="text-xs px-4 font-semibold" value="size">
+                  <option className="text-xs px-4 font-semibold" value="size" >
                     Size
                   </option>
                 </select>
+              
               </div>
             </div>
             <table className="w-[100%]">
@@ -327,6 +354,7 @@ const DropdownSelect: React.FC<DropdownProps> = ({
   handleInputChange,
   inputs,
   handleDoneClick,
+  errormessage
 }) => (
   <div className="w-full flex flex-col">
     <div className=''>
@@ -347,10 +375,12 @@ const DropdownSelect: React.FC<DropdownProps> = ({
       <option value="size">Size</option>
       <option value="color">Color</option>
     </select>
+    
       </div>
     </div>
 
       <div className='w-full'>
+        <p className='text-sm ml-10 font-semibold text-meta-1'>{errormessage}</p>
         <div className='flex mt-2'>
         <div className="items-center mt-1 w-10 h-6"></div> 
         <p className='text-sm font-semibold'>Option Value</p>
