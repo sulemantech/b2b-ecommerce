@@ -329,7 +329,7 @@ class DataInput extends React.Component<{ handleFile: (file: File) => void }> {
 
   render() {
     return (
-      <form className="flex justify-end">
+      <form className="flex justify-between px-2 flex-col sm:flex-row gap-4 sm:gap-0">
         <div className="form-group">
           {/* <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
             Spreadsheet
@@ -338,7 +338,7 @@ class DataInput extends React.Component<{ handleFile: (file: File) => void }> {
             type="file"
             accept={SheetJSFT}
             onChange={this.handleChange}
-            className="w-1/3cursor-pointer rounded-lg border-[1.5px] border-stroke
+            className="w-full cursor-pointer rounded-lg border-[1.5px] border-stroke
                    bg-transparent font-medium outline-none transition file:mr-5 file:border-collapse 
                    file:cursor-pointer file:border-0 file:border-r file:border-solid file:border-stroke
                     file:bg-whiter file:py-3 file:px-5 file:hover:bg-primary file:hover:bg-opacity-10 
@@ -347,10 +347,10 @@ class DataInput extends React.Component<{ handleFile: (file: File) => void }> {
                      dark:file:bg-white/30 dark:file:text-white dark:focus:border-primary"
           />
         </div>
-        <div className="mx-4 my-auto">
+        <div className=" my-auto">
           <button
             // disabled={!this.state.data.length}
-            className="flex items-center justify-center px-8 rounded-md bg-black-2 py-2.5 text-center
+            className="flex items-center justify-center px-4 rounded-md bg-black-2 py-2.5 text-center
                font-medium text-white hover:bg-opacity-90"
             // onClick={this.exportFile}
           >
@@ -493,10 +493,10 @@ class OutTable extends React.Component<
 
     return (
       <div>
-        <div>
+        <div className='text-center mr-8 my-2 sm:text-left sm:mx-3.5'>
           <button
             onClick={this.handleMultiple}
-            className="inline-flex items-center justify-center rounded-md bg-black-2 py-2.5 px-10 text-center font-medium text-white hover:bg-opacity-90 lg:px-8 xl:px-10"
+            className="rounded-md bg-black-2 py-2.5 px-4 font-medium text-white hover:bg-opacity-90"
           >
             SelectedProducts
           </button>
