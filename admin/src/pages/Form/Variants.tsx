@@ -128,18 +128,19 @@ const Dropdown: React.FC<Dropdown> = ({ setObjsizee, setObjcolorr }) => {
 
   return (
     <>
-      <div className="font-mono w-full bg-[#ffffffd8] border border-[#c4c4c4] shadow-md rounded-lg py-2 pb-4">
+      <div className="font-mono w-full bg-[#ffffffd8] rounded-lg shadow-md overflow-hidden">
         <div className="px-4">
           <div className="font-semibold p-2">Variants</div>
-          <div className="border border-[#c4c4c4] rounded-t-lg">
+
+          <div className="font-mono w-full bg-[#ffffffd8] border border-[#c4c4c4] rounded-lg mb-4">
+          <div className="">
             {editsize && <OptionList title="Sizes" data={objsize} />}
-            <hr className="text-[#c4c4c4]" />
+            {/* <hr className="text-[#c4c4c4]" /> */}
             {editcolor && <OptionList title="Colors" data={objcolor} />}
           </div>
-
-          <div className="font-mono m-auto bg-[#fffff] flex items-center justify-center flex-col">
+            
             {showdd ? (
-              <div className="w-full mx-6 bg-white p-6 rounded shadow-md flex flex-col space-y-4">
+              <div className="w-full bg-white p-6 rounded-lg flex flex-col space-y-4">
                 <DropdownSelect
                   selectedOption={selectedOption}
                   handleSelectChange={handleSelectChange}
@@ -151,7 +152,7 @@ const Dropdown: React.FC<Dropdown> = ({ setObjsizee, setObjcolorr }) => {
             ) : (
               <p
                 onClick={addNewVariant}
-                className="flex items-center w-full h-14 text-start text-sm font-semibold border border-[#c4c4c4] border-t-0 rounded-b-md p-2 pl-8 mb-2 text-[]"
+                className="flex items-center w-full h-12 text-start text-sm font-semibold rounded-b-md p-2 pl-8"
               >
                 + Add new variants like size or color
               </p>
@@ -173,20 +174,20 @@ const Dropdown: React.FC<Dropdown> = ({ setObjsizee, setObjcolorr }) => {
                   }}
                   className="border text-xs border-gray-300 rounded-lg p-1 text-gray-700 focus:outline-none focus:shadow-inner transition duration-300 ease-in-out"
                 >
-                  <option disabled value="">
+                  {/* <option disabled value="">
                       Select value
-                    </option>
-                  <option className="text-sm" value="color">
+                    </option> */}
+                  <option className="text-xs px-4 font-semibold" value="color">
                     Color
                   </option>
-                  <option className="text-sm" value="size">
+                  <option className="text-xs px-4 font-semibold" value="size">
                     Size
                   </option>
                 </select>
               </div>
             </div>
-            <table className=" rounded-md w-[100%]">
-              <thead className="border-[1.8px] bg-[#e7e7e7] border-[#ebebeb] border-l-0 border-r-0 m-4">
+            <table className="w-[100%]">
+              <thead className="border-t bg-[#e7e7e7] border-[#c4c4c4] m-4">
                 <tr className="rounded-t-md">
                   <th className="w-[5%] p-2">
                     <input type="checkbox" />
@@ -214,7 +215,7 @@ const Dropdown: React.FC<Dropdown> = ({ setObjsizee, setObjcolorr }) => {
                               onClick={() =>
                                 handleBtnClick(`${optionKey}-${optionIndex}`)
                               }
-                              className="border-[1.8px] border-[#e7e7e7] border-l-0 border-r-0 cursor-pointer hover:bg-[#f7f7f7]"
+                              className="border-t border-[#c4c4c4] cursor-pointer hover:bg-[#f7f7f7]"
                             >
                               <td className="">
                                 <input className="w-full" type="checkbox" />
@@ -232,7 +233,7 @@ const Dropdown: React.FC<Dropdown> = ({ setObjsizee, setObjcolorr }) => {
                                   </div>
                                 </div>
                               </td>
-                              <td className="relative  px-2 py-2 shadow-sm text-center text-sm text-black">
+                              <td className="relative  px-2 py-2 text-center text-sm text-black">
                                 <input
                                   placeholder="0.00"
                                   className="border w-full rounded-xl py-1.5 pl-8 placeholder:text-black placeholder:opacity-70 border-[#8a8a8a]"
@@ -240,7 +241,7 @@ const Dropdown: React.FC<Dropdown> = ({ setObjsizee, setObjcolorr }) => {
                                 />
                                 <p className="absolute top-5.5 left-4.5">Rs</p>
                               </td>
-                              <td className="px-2 py-2 shadow-sm text-center">
+                              <td className="px-2 py-2 text-center">
                                 <input
                                   placeholder="0"
                                   className="border w-full rounded-xl py-1 pl-2 placeholder:text-black placeholder:opacity-70 border-[#8a8a8a]"
@@ -327,11 +328,11 @@ const DropdownSelect: React.FC<DropdownProps> = ({
   inputs,
   handleDoneClick,
 }) => (
-  <div className="w-full flex flex-col space-y-4">
+  <div className="w-full flex flex-col">
     <div className=''>
       <div className='flex'>
       <div className="items-center mt-1 w-10 h-6"></div>  
-    <p>Option name</p>
+    <p className='text-sm font-semibold'>Option name</p>
       </div>
       <div className='flex'>
       <div className="items-center mt-2 w-10 h-6"><PiDotsSixVerticalBold className="w-6 h-5 cursor-pointer" /></div>
@@ -350,13 +351,13 @@ const DropdownSelect: React.FC<DropdownProps> = ({
     </div>
 
       <div className='w-full'>
-        <div className='flex'>
+        <div className='flex mt-2'>
         <div className="items-center mt-1 w-10 h-6"></div> 
-        <p>Option Value</p>
+        <p className='text-sm font-semibold'>Option Value</p>
         </div>
         </div>
     {inputs.map((input, index) => (
-        <div className='flex'>
+        <div className='flex mb-3'>
         <div className="items-center mt-2 w-10 h-6"><PiDotsSixVerticalBold className="w-6 h-5 cursor-pointer" /></div>
         <input
           key={index}
@@ -367,24 +368,27 @@ const DropdownSelect: React.FC<DropdownProps> = ({
         />
         </div>
     ))}
+    <div className="flex items-center justify-between grow gap-1 rounded-md py-1 px-1 pl-10">
 
+    <button className="border border-body text-xs text-[#991b1b] font-semibold rounded-md py-[4.8px] px-2.5">Delete</button>
     <button
       onClick={handleDoneClick}
-      className="self-end bg-black text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition duration-300 ease-in-out"
+      className="border text-xs text-white bg-black shadow-inner shadow-[#ffffff80] font-semibold rounded-md py-1.5 px-2.5 transition duration-300 ease-in-out"
     >
       Done
     </button>
+    </div>
   </div>
 );
 
 const OptionList: React.FC<OptionListProps> = ({ title, data }) => (
-  <div className="flex items-center justify-center p-5">
+  <div className="flex items-center justify-center p-5 border-b border-[#c4c4c4]">
     <PiDotsSixVerticalBold className="w-6" />
     <div className="bg-white  rounded-tr-lg w-full">
       <div className="flex items-center justify-between gap-2">
         <div className="w-4 h-6"></div>
         <h3 className="grow text-lg font-semibold mb-2">{title}</h3>
-        <button className="border text-xs font-semibold rounded-md p-2 px-2">
+        <button className="border text-xs font-semibold rounded-md p-1 px-3">
           Edit
         </button>
       </div>
@@ -398,7 +402,7 @@ const OptionList: React.FC<OptionListProps> = ({ title, data }) => (
                 {values.length > 1
                   ? values.map((value, index) => (
                       <div
-                        className="text-xs px-2 rounded-lg bg-[#ebebeb]"
+                        className="text-xs font-semibold text-[#64748bcf] px-2 rounded-lg bg-[#ebebeb]"
                         key={index}
                       >
                         {value}
