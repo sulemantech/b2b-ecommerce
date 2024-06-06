@@ -4,9 +4,9 @@ import { setActiveSort } from "../../helpers/product";
 
 const ShopSize = ({ sizes, getSortParams }) => {
   return (
-    <div className="sidebar-widget mt-40">
-      <h4 className="pro-sidebar-title">Size </h4>
-      <div className="sidebar-widget-list mt-20">
+    <div className="sidebar-widget mt-2">
+      <h4 className="pro-sidebar-title px-3">Size </h4>
+      <div className="sidebar-widget-list mt-2 px-3">
         {sizes ? (
           <ul>
             <li>

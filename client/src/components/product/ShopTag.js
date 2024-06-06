@@ -7,16 +7,16 @@ const ShopTag = ({ tags, getSortParams,tagFilterSortParams }) => {
  
   
   return (
-    <div className="sidebar-widget mt-50">
-      <h4 className="pro-sidebar-title">Tag </h4>
-      <div className="sidebar-widget-tag mt-25">
+    <div className="sidebar-widget mt-2">
+      <h4 className="pro-sidebar-title px-3">Tag </h4>
+      <div className="sidebar-widget-tag px-3 col">
         {tags ? (
-          <ul>
+          <ul className="">
             {tags.map((tag, key) => {
               //  tag = tag.replace(/^{|\}$/g, '');
               tag = tag.replace(/(^["{]+)|(["}]+$)/g, '');
               return (
-                <li key={key}>
+                <li key={key} className="mb-0 mx-0">
                   <button
                     onClick={e => {
                       tagFilterSortParams("tag", tag)

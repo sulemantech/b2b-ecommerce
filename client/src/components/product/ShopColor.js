@@ -5,9 +5,9 @@ import { setActiveSort } from "../../helpers/product";
 const ShopColor = ({ colors, getSortParams }) => {
   
   return (
-    <div className="sidebar-widget mt-50">
-      <h4 className="pro-sidebar-title">Color </h4>
-      <div className="sidebar-widget-list mt-20">
+    <div className="sidebar-widget mt-2">
+      <h4 className="pro-sidebar-title px-3">Color </h4>
+      <div className="sidebar-widget-list mt-2 px-3">
         {colors ? (
           <ul>
             <li>

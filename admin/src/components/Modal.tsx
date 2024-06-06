@@ -13,12 +13,21 @@ const MyModal = () => {
     setShowModal(false);
   };
 
+  const [hover, setHover] = useState(false);
+
   return (
     <div>
       <button
         onClick={openModal}
+        style={{
+          boxShadow: hover
+            ? 'none'
+            : '1.5px 1.5px 4px 0.1px rgb(27, 27, 27, 10)'
+        }}
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
         className=" items-center justify-center flex
-         rounded-md border py-1.5 gap-2 text-xs sm:text-lg sm:lg px-4 text-center font-medium text-black hover:bg-opacity-90 "
+         rounded-md border border-white hover:border-black py-1.5 gap-2 text-xs sm:text-lg sm:lg px-4 text-center font-medium text-black transition duration-300 ease-in-out "
    
       >
         <TfiImport/>

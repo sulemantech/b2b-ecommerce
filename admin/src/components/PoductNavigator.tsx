@@ -1,13 +1,15 @@
 import { NavLink, Link } from 'react-router-dom';
-// import { CiImport } from "react-icons/ci";
 import MyModal from './Modal';
+import { useState } from 'react';
 // import Breadcrumb from './Breadcrumb';
 
 const ProductNavigate = () => {
+  const [hover, setHover] = useState(false);
+
   return (
     <>
-    {/* <Breadcrumb pageName="New Product" /> */}
-    <div></div>
+      {/* <Breadcrumb pageName="New Product" /> */}
+      <div></div>
       <h1 className="font-bold text-black-2 text-xl ">Products</h1>
       <br />
       <div className="rounded-xl border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark ">
@@ -18,10 +20,6 @@ const ProductNavigate = () => {
               className={
                 'h-full group relative flex items-center gap-2.5 text-black duration-300 ease-in-out'
               }
-              //             className={({isActive})=>
-              //             'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-black duration-300 ease-in-out hover:bg-bodydark1  ' +
-              //             (isActive && 'bg-gray')
-              // }
             >
               <p className="w-full sm:h-full hover:bg-bodydark1 rounded px-2 mr-2">
                 Product by sell-through rate <br />0 % -
@@ -33,12 +31,8 @@ const ProductNavigate = () => {
             <NavLink
               to={'/'}
               className={
-                'group relative flex items-center gap-2.5    text-black duration-300 ease-in-out  '
+                'group relative flex items-center gap-2.5 text-black duration-300 ease-in-out  '
               }
-              //             className={({isActive})=>
-              //             'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-black duration-300 ease-in-out hover:bg-bodydark1  ' +
-              //             (isActive && 'bg-gray')
-              // }
             >
               <p className="w-full h- hover:bg-bodydark1 rounded px-2 mr-2">
                 Products by days of inventory remaining There was no data found
@@ -49,12 +43,7 @@ const ProductNavigate = () => {
           <div className='border-r'>
             <NavLink
               to={'/'}
-              className={'h-full group relative flex items-center gap-2.5 text-black duration-300 ease-in-out  '
-              }
-              //             className={({isActive})=>
-              //             'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-black duration-300 ease-in-out hover:bg-bodydark1  ' +
-              //             (isActive && 'bg-gray')
-              // }
+              className={'h-full group relative flex items-center gap-2.5 text-black duration-300 ease-in-out  '}
             >
               <p className="h-[48px] sm:h-full hover:bg-bodydark1 rounded px-2 mr-2">
                 ABC product analysis There was no data found for this date range
@@ -89,14 +78,19 @@ const ProductNavigate = () => {
           <div className="my-5 flex">
             <Link
               to="/new/product"
-              className="inline-flex items-center justify-center rounded-md text-xs sm:text-lg sm:lg bg-black-2 py-1.5 px-4 text-center font-medium text-white hover:bg-opacity-90 "
+              style={{
+                boxShadow: hover
+                  ? 'none'
+                  : '1.5px 1.5px 4px 0.1px rgb(27, 27, 27, 10)'
+              }}
+              onMouseEnter={() => setHover(true)}
+              onMouseLeave={() => setHover(false)}
+              className="inline-flex items-center justify-center rounded-md text-xs sm:text-lg sm:lg bg-black-2 py-1.5 px-4 text-center font-medium text-white transition duration-300 ease-in-out "
             >
               +&nbsp;&nbsp;Add product
             </Link>
             <div className="ml-5">
-                <MyModal/>
-          
-            
+              <MyModal />
             </div>
           </div>
         </div>
@@ -104,4 +98,5 @@ const ProductNavigate = () => {
     </>
   );
 };
+
 export default ProductNavigate;

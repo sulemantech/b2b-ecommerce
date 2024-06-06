@@ -30,7 +30,7 @@ const ProductGridList = ({ products, spaceBottomClass }) => {
   )
 ) : (
   products.map((product) => (
-    <div className="col-xl-4 col-sm-6" key={product.id}>
+    <div className="col-xl-3 col-sm-6" key={product.id}>
       <ProductGridListSingle
         spaceBottomClass={spaceBottomClass}
         product={product}

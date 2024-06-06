@@ -23,11 +23,10 @@ const ShopCategories = ({ categories, getSortParams, selectedCategories }) => {
   };
 
   return (
-    <div className="sidebar-widget">
+    <div className="sidebar-widget position-relative">
       {subcategories.length > 0 && show ? (
         <div
-          className="position-absolute top-50 rounded h-50 bg-gray border"
-          style={{ marginLeft: "24%", zIndex: 5 }}
+        className="position-absolute top-0 start-100 rounded h-100 bg-gray border" style={{ width: '160px',zIndex: 5 }}
           onMouseLeave={() => setShow(false)} // Hide subcategories when mouse leaves
         >
           <ul style={{ padding: "20px" }}>
@@ -85,8 +84,8 @@ const ShopCategories = ({ categories, getSortParams, selectedCategories }) => {
         </div>
       ) : null}
 
-      <h4 className="pro-sidebar-title">Categories </h4>
-      <div className="sidebar-widget-list mt-30">
+      <h4 className="pro-sidebar-title px-3">Categories </h4>
+      <div className="sidebar-widget-list mt-2 px-3">
         {categories ? (
           <ul>
             <li>

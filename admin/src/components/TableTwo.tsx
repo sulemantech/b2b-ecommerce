@@ -169,7 +169,7 @@ const TableTwo: React.FC = () => {
       {showBulk ? (
         <div>
           <button
-            className="flex px-1 mb-3 ml-1.5 pr-2 rounded-md text-black-2 font-semibold text-sm shadow-lg shadow-[#ebebeb] hover:bg-white py-1"
+            className="flex px-1 mb-3 ml-1.5 pr-2 rounded-md text-black-2 font-semibold text-sm shadow-lg shadow-[#ebebeb] hover:bg-white py-1 transition duration-300 ease-in-out"
             onClick={() => setShowBulk(false)}
           >
             <IoMdArrowRoundBack className="flex items-center justify-center mr-1 h-5 w-5" />{' '}

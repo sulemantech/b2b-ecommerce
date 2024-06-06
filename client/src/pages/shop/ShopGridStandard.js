@@ -175,10 +175,10 @@ const ShopGridStandard = () => {
           ]}
         />
 
-        <div className="shop-area pt-45 pb-100 ">
-          <div className="container-fluid ">
+        <div className="shop-area pb-20 ">
+          <div className="container-fluid">
             <div className="row">
-              <div className="col-lg-3 order-2 order-lg-1 p-0">
+              <div className="col-lg-2 order-2 order-lg-1 p-0">
                 {/* shop sidebar */}
                 <ShopSidebar
                   products={products}
@@ -189,7 +189,7 @@ const ShopGridStandard = () => {
                 />
               </div>
               <div
-                className="col-lg-9 order-1 order-lg-2"
+                className="col-lg-10 order-1 order-lg-2 p-3"
                 style={{ zIndex: 2 }}
               >
                 {/* shop topbar default */}

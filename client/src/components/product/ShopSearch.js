@@ -47,7 +47,7 @@ const ShopSearch = () => {
   return (
     <>
       <div className="sidebar-widget" >
-        <div className="pro-sidebar-search mb-50 ">
+        <div className="pro-sidebar-search mb-10 ">
           <form className="pro-sidebar-search-form" onSubmit={handleSubmit}>
             <input
               type="text"
