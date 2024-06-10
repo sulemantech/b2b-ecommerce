@@ -39,6 +39,7 @@ const ProductGridList = ({ products, spaceBottomClass }) => {
             style={{
               // border: hoveredProductId === product.id ? '1px solid #000' : 'none',
               transition: 'border 0.3s ease-in-out', borderRadius:'10px', 
+              boxShadow: hoveredProductId === product.id ? '0px 0px 10px rgba(0, 0, 0, 0.3)' : 'none',
             }}
           >
             <ProductGridListSingle
