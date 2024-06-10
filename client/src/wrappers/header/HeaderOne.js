@@ -49,21 +49,21 @@ const HeaderOne = ({
       <div
         className={clsx(
           headerPaddingClass, 
-          "sticky-bar header-res-padding clearfix", 
+          "sticky-bar header-res-padding clearfix h-10", 
           scroll > headerTop && "stick"
         )}
       >
-        <div className={layout === "container-fluid" ? layout : "container"}>
-          <div className="row">
-            <div className="col-xl-2 col-lg-2 col-md-6 col-4">
+        <div className={layout === "container-fluid" ? layout : "container-fluid px-20 mx-50"}>
+          <div className="row  align-items-center">
+            <div className="col-xl-3 col-lg-2 col-md-6 col-4">
               {/* header logo */}
               <Logo imageUrl="/assets/img/logo/logo.png" logoClass="logo" />
             </div>
-            <div className="col-xl-8 col-lg-8 d-none d-lg-block">
+            <div className="col-xl-6 col-lg-8 d-none d-lg-block">
               {/* Nav menu */}
               <NavMenu />
             </div>
-            <div className="col-xl-2 col-lg-2 col-md-6 col-8">
+            <div className="col-xl-3 col-lg-2 col-md-6 col-8">
               {/* Icon group */}
               <IconGroup />
             </div>

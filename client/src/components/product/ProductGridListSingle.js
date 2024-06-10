@@ -181,20 +181,22 @@ const ProductGridListSingle = ({
     <Fragment>
      
       
-      <div className={clsx("product-wrap", spaceBottomClass)}>
-        <div className="product-img ">
-          <Link
+      <div className={clsx("product-wrap m-0", spaceBottomClass)}>
+        <div className="product-img">
+          <Link className=""
             to={process.env.PUBLIC_URL + "/product-tab-right/" + product.id}
           >
+            <div className="ratio ratio-1x1 overflow-hidden d-flex justify-content-center align-items-center">
+
             {product?.productImages?.[0]?.images?.[0] ? (
               <img
-                className="default-img"
+                className="img-fluid w-100 h-100 rounded"
                 src={`${APIHost}${product?.productImages?.[0]?.images?.[0]}`}
                 alt="Product"
               />
             ) : (
               <img
-                className="default-img"
+                className="img-fluid w-100 h-100 rounded"
                 src="https://www.cureuppharma.in/wp-content/uploads/2018/06/dummy.jpg"
                 alt="Dummy Image"
               />
@@ -202,19 +204,21 @@ const ProductGridListSingle = ({
 
             {product.productImages.length > 1 ? (
               <img
-                className="hover-img"
+              // hover-img
+                className="img-fluid w-100 h-100"
                 src={`${APIHost}${product?.productImages[0]?.images[0]}`}
                 alt="Product Hover"
               />
-            ) : (
-              ""
-            )}
+              ) : (
+                ""
+                )}
+              </div>
           </Link>
 
           {product.discount || product.new ? (
-            <div className="product-img-badges">
+            <div className="product-img-badges ">
               {product.discount ? (
-                <span className="pink">-{product.discount}%</span>
+                <span className="pink fs-10 fs-sm-5">-{product.discount}%</span>
               ) : (
                 ""
               )}
@@ -297,20 +301,23 @@ const ProductGridListSingle = ({
         ) : (
           ""
         )}
-        <div className="product-content d-flex">
+        <div className="product-content d-flex ">
           <div className="product-price">
             {product.SaleStatus == true ? (
               <Fragment>
-                <span>{currency.currencySymbol + product.SalePrice}</span>{" "}
-                <span className="old">
+                <span className="fs-6"
+                >{currency.currencySymbol + product.SalePrice}</span>{" "}
+                <span className="old fs-6">
                   {currency.currencySymbol + finalProductPrice}
                 </span>
               </Fragment>
             ) : (
-              <span>{currency.currencySymbol + finalProductPrice} </span>
+              <span className="fs-6"
+              >{currency.currencySymbol + finalProductPrice} </span>
             )}
           </div>
-          <div>{sellingTime && <p>Sold {sellingTime}</p>}</div>
+          <div className="">{sellingTime && 
+            <p className="text-nowrap overflow-hidden" style={{ width: '100px', textOverflow: 'ellipsis' }}>Sold {sellingTime}</p>}</div>
 
           <div>
             {product.SaleStatus == true && product.discount !== 0 ? (
@@ -331,15 +338,15 @@ const ProductGridListSingle = ({
             )}
           </div>
         </div>
-        <div className="product-content">
-          <h3 style={{ lineHeight: "15px" }}>
+        <div className="product-content text-nowrap">
+          <h3 className="pb-1" style={{ lineHeight: "15px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", width: "100%" }}>
             <Link to={process.env.PUBLIC_URL + "/product/" + product.id}>
               {product.name}
             </Link>
           </h3>
 
           {product.rating && product.rating > 0 ? (
-            <div className="product-rating">
+            <div className="product-rating m-0">
               <Rating ratingValue={product.rating} />
             </div>
           ) : (

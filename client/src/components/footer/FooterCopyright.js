@@ -6,7 +6,7 @@ import {STORE_NAME} from '../../../src/config'
 const FooterCopyright = ({ footerLogo, spaceBottomClass, colorClass }) => {
   return (
     <div className={clsx("copyright", spaceBottomClass, colorClass)}>
-      <h1 style={{color: "#555252", opacity:"0.9"}}>{STORE_NAME}</h1>
+      <h1 style={{color: "#555252", opacity:"0.9",fontSize: "25px"}}>{STORE_NAME}</h1>
       <p>
         &copy; {new Date().getFullYear()}{" "}
         <a
