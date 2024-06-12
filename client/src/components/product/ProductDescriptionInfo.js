@@ -38,7 +38,7 @@ const ProductDescriptionInfo = ({
   );
 
   return (
-    <div className="product-details-content ml-70">
+    <div className="product-details-content ml-70 pt-10">
       <h2>{product.name}</h2>
       <div className="product-details-price">
         {discountedPrice !== null ? (

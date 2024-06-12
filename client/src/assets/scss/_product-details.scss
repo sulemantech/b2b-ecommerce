@@ -122,10 +122,10 @@
         color: #000000;
       }
       @media #{$xs-layout} {
-        font-size: 15px;
+        font-size: 11.5px;
 
-        margin: 0 4px 15px;
-        padding: 0 0 8px;
+        margin: 0 8px 0px;
+        padding: 0 0 2px;
       }
       @media #{$sm-layout} {
         font-size: 18px;

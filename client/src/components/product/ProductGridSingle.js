@@ -29,9 +29,9 @@ const ProductGridSingle = ({
     <Fragment>
       <div className={clsx("product-wrap", spaceBottomClass)}>
         <div className="product-img">
-          <Link to={process.env.PUBLIC_URL + "/product-tab-right/" + product.id}>
+          <Link className="ratio ratio-1x1 overflow-hidden d-flex justify-content-center align-items-center" to={process.env.PUBLIC_URL + "/product-tab-right/" + product.id}>
             <img
-              className="default-img"
+              className="default-img img-fluid w-100 h-100"
               src={process.env.REACT_APP_PUBLIC_URL + product?.productImages[0]?.images[0]}
               alt=""
             />

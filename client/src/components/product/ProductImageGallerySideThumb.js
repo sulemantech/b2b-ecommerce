@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment, useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { EffectFade, Thumbs } from "swiper";
@@ -12,6 +12,22 @@ import { APIHost } from "../../API";
 const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [index, setIndex] = useState(-1);
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      console.log('Window width:', width);
+      setWindowWidth(width);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   const slides = product?.productImages.flatMap((productImage, i) =>
     productImage.images.map((img, j) => ({
       src: process.env.PUBLIC_URL + img,
@@ -62,6 +78,12 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
     },
   };
 
+  const divStyle = {
+    height: windowWidth < 1200 ? '100px' : '430px',
+  };
+
+  console.log('divStyle:', divStyle);
+
   return (
     <Fragment>
       <div className="row row-5 test">
@@ -69,7 +91,7 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
           className={clsx(
             thumbPosition && thumbPosition === "left"
               ? "col-xl-10 order-1 order-xl-2"
-              : "col-xl-10"
+              : "col-xl-9"
           )}
         >
           <div className="product-large-image-wrapper">
@@ -86,8 +108,7 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
               ""
             )}
 
-            {
-            product?.productImages?.length ? (
+            {product?.productImages?.length ? (
               <Swiper options={gallerySwiperParams}>
                 {product.productImages.map((imageSet, key) => (
                   <SwiperSlide key={key}>
@@ -118,32 +139,34 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
                   plugins={[Thumbnails, Zoom, Fullscreen]}
                 />
               </Swiper>
-            ) :(
+            ) : (
               <div className="single-image">
-              <img
-              className="img-fluid"
-              src="https://www.cureuppharma.in/wp-content/uploads/2018/06/dummy.jpg"
-              />
+                <img
+                  className="img-fluid"
+                  src="https://www.cureuppharma.in/wp-content/uploads/2018/06/dummy.jpg"
+                  alt=""
+                />
               </div>
-             )}
+            )}
           </div>
         </div>
         <div
           className={clsx(
             thumbPosition && thumbPosition === "left"
               ? "col-xl-2 order-2 order-xl-1"
-              : "col-xl-2"
+              : "col-xl-3"
           )}
         >
-          <div className="product-small-image-wrapper product-small-image-wrapper--side-thumb">
+          <div className="product-small-image-wrapper product-small-image-wrapper--side-thumb" style={divStyle}>
             {product?.productImages?.length ? (
               <Swiper options={thumbnailSwiperParams}>
                 {product?.productImages.map((single, key) => (
                   <SwiperSlide key={key}>
-                    <div className="single-image">
+                    <div className="single-image" style={{ width: '100%', height: '100px' }}>
                       <img
                         src={`${APIHost}${single.images}`}
                         className="img-fluid"
+                        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
                         alt=""
                       />
                     </div>
@@ -159,7 +182,16 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
 };
 
 ProductImageGalleryLeftThumb.propTypes = {
-  product: PropTypes.shape({}),
+  product: PropTypes.shape({
+    productImages: PropTypes.arrayOf(
+      PropTypes.shape({
+        images: PropTypes.arrayOf(PropTypes.string),
+        caption: PropTypes.string,
+      })
+    ),
+    discount: PropTypes.string,
+    new: PropTypes.bool,
+  }),
   thumbPosition: PropTypes.string,
 };
 

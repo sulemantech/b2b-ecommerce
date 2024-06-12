@@ -218,11 +218,11 @@ const ProductGridListSingle = ({
           {product.discount || product.new ? (
             <div className="product-img-badges ">
               {product.discount ? (
-                <span className="pink fs-10 fs-sm-5">-{product.discount}%</span>
+                <span className="pink fs-10 fs-sm-5 ">-{product.discount}%</span>
               ) : (
                 ""
               )}
-              {product.new ? <span className="purple">New</span> : ""}
+              {product.new ? <span className="purple ">New</span> : ""}
             </div>
           ) : (
             ""
@@ -339,8 +339,10 @@ const ProductGridListSingle = ({
           </div>
         </div>
         <div className="product-content text-nowrap">
-          <h3 className="pb-1" style={{ lineHeight: "15px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", width: "100%" }}>
-            <Link to={process.env.PUBLIC_URL + "/product/" + product.id}>
+          <h3 className="pb-1" 
+          style={{ lineHeight: "15px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", width: "100%" }}
+          >
+            <Link className="*link-danger" to={process.env.PUBLIC_URL + "/product/" + product.id}>
               {product.name}
             </Link>
           </h3>

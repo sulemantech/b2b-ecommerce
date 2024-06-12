@@ -49,8 +49,9 @@
     "yet-another-react-lightbox": "^2.2.0"
   },
   "scripts": {
-    "start": "cross-env HTTPS=true SSL_CRT_FILE=./cert/cert.crt SSL_KEY_FILE=./cert/cert.KEY react-scripts start",
+    
     "build": "react-scripts build",
+    "start": "react-scripts start",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

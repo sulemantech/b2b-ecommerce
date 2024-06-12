@@ -62,7 +62,7 @@ export const logoutAsync = () => async (dispatch) => {
     dispatch(deleteAllFromCart());
     dispatch(deleteAllFromWishlist());
 
-    console.log("Logout successful:", result.success);
+    // console.log("Logout successful:", result.success);
   } catch (error) {
     console.error("Error during logout:", error);
   }
