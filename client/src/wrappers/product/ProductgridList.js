@@ -33,7 +33,7 @@ const ProductGridList = ({ products, spaceBottomClass }) => {
         products.map((product) => (
           <div
             key={product.id}
-            className="col-xl-2 col-md-3 col-sm-4 col-6 p-2 gap-2"
+            className="col-xl-2 col-md-3 col-sm-4 col-12 p-2 gap-2"
             onMouseEnter={() => setHoveredProductId(product.id)}
             onMouseLeave={() => setHoveredProductId(null)}
             style={{

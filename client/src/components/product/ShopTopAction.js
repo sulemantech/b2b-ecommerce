@@ -14,7 +14,7 @@ const ShopTopAction = ({
   return (
     <div className="shop-top-bar ">
       <div className="select-shoing-wrap m-auto">
-        <p>
+        <p className="mb-1 mx-1">
           Showing {sortedProductCount} of {productCount} result
         </p>
       </div>
@@ -32,7 +32,7 @@ const ShopTopAction = ({
           </select>
         </div>
         </div>
-        <div>
+        <div className="d-flex align-items-center justify-content-center">
         <button
           onClick={e => {
             getLayout("grid two-column");
