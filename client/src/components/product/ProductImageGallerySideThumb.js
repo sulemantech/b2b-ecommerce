@@ -13,6 +13,7 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [index, setIndex] = useState(-1);
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(null);
 
   useEffect(() => {
     const handleResize = () => {
@@ -161,12 +162,29 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
             {product?.productImages?.length ? (
               <Swiper options={thumbnailSwiperParams}>
                 {product?.productImages.map((single, key) => (
-                  <SwiperSlide key={key}>
-                    <div className="single-image" style={{ width: '100%', height: '100px' }}>
+                  <SwiperSlide key={key}
+                  style={{ 
+                   
+                    // paddingLeft: selectedImageIndex === key ? '1px' : 'none',
+                    // paddingRight: selectedImageIndex === key ? '1px' : 'none',
+                  }}
+                  >
+                    <div 
+                      className="single-image" 
+                      style={{ 
+                        width: '100%', 
+                        height: '100px', 
+                        }}
+                        onClick={() => setSelectedImageIndex(key)}
+                        >
                       <img
                         src={`${APIHost}${single.images}`}
                         className="img-fluid"
-                        style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+                        style={{ width: '100%', height: '100%', objectFit: 'contain',
+                        border: selectedImageIndex === key ? '1px solid black' : 'none',
+                        borderRadius: selectedImageIndex === key ? '5px' : 'none',
+
+                         }}
                         alt=""
                       />
                     </div>

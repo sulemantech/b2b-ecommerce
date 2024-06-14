@@ -176,9 +176,9 @@ const ShopGridStandard = () => {
         />
 
         <div className="shop-area pb-20 ">
-          <div className="container-fluid">
+          <div className="container-fluid p-0">
             <div className="row">
-              <div className="col-lg-2 order-2 order-lg-1 p-0 bg-gray">
+              <div className="col-lg-2 order-2 order-lg-1 p-0 bg-gray" style={{  }}>
                 {/* shop sidebar */}
                 <ShopSidebar
                   products={products}

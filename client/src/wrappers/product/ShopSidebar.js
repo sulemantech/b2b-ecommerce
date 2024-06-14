@@ -32,7 +32,7 @@ dispatch(fetchCategory(dispatch))
   },[dispatch])
 
   return (
-    <div className={clsx("sidebar-style", sideSpaceClass)} style={{height: "100vh",paddingLeft:"0px",position:"flex"}}>
+    <div className={clsx("sidebar-style", sideSpaceClass)} style={{position: 'sticky', top: '70px',paddingLeft:"15px"}}>
       {/* shop search */}
       <ShopSearch />
 
