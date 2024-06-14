@@ -176,33 +176,33 @@ const ShopGridStandard = () => {
         />
 
         <div className="shop-area pb-20 ">
-          <div className="container-fluid p-0">
+          <div className="container-fluid">
             <div className="row">
               <div className="col-lg-2 order-2 order-lg-1 p-0 bg-gray" style={{zIndex:99}}>
-                {/* shop sidebar */}
+               
                 <ShopSidebar
                   products={products}
                   getSortParams={handleSortParams}
                   selectedCategories={selectedCategories}
                   tagFilterSortParams={tagFilterSortParams}
-                  // subcategories={subcategories}
+                  
                 />
               </div>
               <div
                 className="col-lg-10 order-1 order-lg-2 p-3"
                 style={{ zIndex: 2 }}
               >
-                {/* shop topbar default */}
+                
                 <ShopTopbar
                   getLayout={getLayout}
                   getFilterSortParams={getFilterSortParams}
                   productCount={products.length}
                   sortedProductCount={currentData.length}
                 />
-                {/* shop page content default */}
+                
                 <ShopProducts layout={layout} products={currentData} />
 
-                {/* shop product pagination */}
+                
                 <div className="pro-pagination-style text-center mt-30">
                   <Paginator
                     totalRecords={sortedProducts.length}

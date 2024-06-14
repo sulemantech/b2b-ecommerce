@@ -18,7 +18,7 @@ const FooterOne = ({
 }) => {
   return (
     <footer className={clsx("footer-area", backgroundColorClass, spaceTopClass, spaceBottomClass, extraFooterClass, spaceLeftClass, spaceRightClass )} style={{p:"20px"}}>
-      <div className={`${containerClass ? containerClass : "container"}`}>
+      <div className={`${containerClass ? containerClass : "container pt-25"}`}>
         <div className="row">
           <div
             className={`${
