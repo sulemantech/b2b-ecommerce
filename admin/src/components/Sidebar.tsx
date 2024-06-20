@@ -381,7 +381,7 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                           <li>
                             <NavLink
                               onClick={() => setSidebarOpen(!sidebarOpen)}
-                              to="/Variants"
+                              to="/import"
                               className={({ isActive }) =>
                                 'group relative flex items-center gap-2.5 rounded-lg px-3 py-1 text-sm font-bold text-bodydark2 hover:text-black duration-300 ease-in-out hover:bg-[#f1f1f1] ' +
                                 (isActive && '!text-black-2  bg-white')
