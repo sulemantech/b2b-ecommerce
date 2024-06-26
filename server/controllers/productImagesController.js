@@ -33,21 +33,24 @@ let getAllProduct = async (req, res) => {
 };
 
 let deleteProduct = async (req, res) => {
-  
   try {
     const { productId } = req.params;
 
-    // Check if the product image exists
-    const existingProductImage = await productImagesModel.findByPk(productId);
-    console.log(existingProductImage);
-    if (!existingProductImage) {
-      return res.status(404).json({ error: 'Product image not found' });
+    // Check if the product images exist
+    const existingProductImages = await productImagesModel.findAll({
+      where: {
+        productId: productId
+      }
+    });
+
+    if (!existingProductImages || existingProductImages.length === 0) {
+      return res.status(404).json({ error: 'Product images not found' });
     }
 
     // Delete all product images for the given productId
     await productImagesModel.destroy({
       where: {
-        id: productId
+        productId: productId
       }
     });
 
@@ -57,6 +60,7 @@ let deleteProduct = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 let updateProduct = async (req, res) => {
   try {

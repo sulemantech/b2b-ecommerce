@@ -53,26 +53,6 @@ const FormElements = () => {
 
   console.log(objcolor ,objsize)
 
-
-
-
-
-
-
-
-
-
-  
-
-
-  const handleEditorReady = (editor: any) => {
-    console.log(editor);
-  };
-  const handleEditorChange = (_: any, editor: any) => {
-    const content = editor.getData();
-    setEditorContent(content);
-  };
-
   const [value, setvalues] = useState({
     name: '',
     description: 'best',
@@ -95,83 +75,9 @@ const FormElements = () => {
     SalePrice: '',
   });
 
-  // console.log("Data",Deal);
+ 
 
-  // Define the Variant type
-
-  // const handleFormSubmit = async () => {
-  //   handleSubmitImage();
-  //   try {
-  //     if (dealChecked) {
-  //       await postData();
-  //     }
-  //     const variantsData = Object.entries(submittedData).map(
-  //       ([option, values], index) => {
-  //         const tableInput = tableInputValues[index];
-
-  //         return {
-  //           key: option,
-  //           values: values,
-  //           type: tableInput?.type || undefined,
-  //           weight: tableInput?.weight || undefined,
-  //           unit: tableInput?.unit || undefined,
-  //           availableQuantity: tableInput?.availableQuantity || undefined,
-  //           variantPrice: tableInput?.variantPrice || undefined,
-  //           variantSku: tableInput?.variantSku || '',
-  //           optionValues: values.map((name, id) => {
-  //             return {
-  //               id: id.toString(),
-  //               name: name,
-  //               variantSku: [`${value.sku}-${name.toLowerCase()}`],
-  //             };
-  //           }),
-  //         };
-  //       },
-  //     );
-
-  //     // Prepare the full request data
-  //     const requestData = {
-  //       products: { ...value, DealId: DealRes?.DealId },
-  //       variants: variantsData,
-  //     };
-  //     const response = await axios.post(
-  //       `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/products`,
-  //       requestData,
-  //     );
-  //     console.log('Product and Variants created:', response.data);
-  //     setTableInputValues([]);
-  //     setSubmittedData({});
-  //     // setvalues({
-  //     //   name: '',
-  //     //   description: 'best',
-  //     //   price: '',
-  //     //   weight: 20,
-  //     //   new: 'true',
-  //     //   rating: 5,
-  //     //   manufacturer: 'china',
-  //     //   tag: [],
-  //     //   quantityInStock: '',
-  //     //   sku: '',
-  //     //   quantity: '',
-  //     //   category_id: '',
-  //     //   supplier_id: '',
-  //     //   categoryName: '',
-  //     //   status: '',
-  //     //   DealStatus: 0,
-  //     //   SaleStatus: 0,
-  //     //   Approved: 0,
-  //     //   SalePrice: '',
-  //     // });
-
-  //     setFormData({
-  //       selectedOption: '',
-  //       inputValue: '',
-  //       dynamicFields: [],
-  //     });
-  //   } catch (error) {
-  //     console.error('Error creating product and variants:', error);
-  //   }
-  // };
+ 
   const handleFormSubmit = async () => {
     handleSubmitImage();
     try {
@@ -284,7 +190,7 @@ const FormElements = () => {
         },
       );
 
-      if (!response.ok) {
+      if (response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
@@ -395,6 +301,7 @@ const FormElements = () => {
       {/* <div className='flex items-center mb-1'>
       </div> */}
       <div className="grid grid-cols-1 gap-5 xl:grid-cols-[2fr,1fr]">
+      
         <div className="flex flex-col gap-9">
           <div className="rounded-xl border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark p-5">
             <label className="ml-5 font-bold">Title</label>

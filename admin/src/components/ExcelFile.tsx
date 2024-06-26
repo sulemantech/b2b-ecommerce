@@ -23,6 +23,11 @@ interface Products {
   category_id: number;
   supplier_id: number;
   categoryName: string;
+  DealStatus:boolean;
+  SaleStatus:boolean;
+  Approved:boolean;
+  SalePrice:number,
+
   productImages: Array<{ date: string; images: string[] }>;
   // productImages?: { date: string; images: string[] }[] | undefined;
 }
@@ -113,32 +118,51 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
 
   // Add this method to your class
   postBulkData(data: any[]) {
+    const token = Cookies.get('token');
+  
+    // Validate data
+    const validData = data.filter((rowData) => {
+      return (
+        rowData[0] !== null && // name
+        rowData[4] !== null && // manufacturer
+        rowData[15] !== null // categoryName
+      );
+    }).map((rowData) => ({
+      name: rowData[0] || '',
+      description: rowData[1] || '',
+      price: rowData[2] || 0,
+      quantity: rowData[3] || 0,
+      manufacturer: rowData[4] || '',
+      discount: rowData[5] || 0,
+      new: rowData[6] || false,
+      rating: rowData[7] || 0,
+      saleCount: rowData[8] || 0,
+      tag: Array.isArray(rowData[9]) ? rowData[9] : [],
+      stock: rowData[10] || 0,
+      quantityInStock: rowData[11] || 0,
+      sku: rowData[12] || '',
+      category_id: rowData[13] || 0,
+      supplier_id: rowData[14] || 0,
+      categoryName: rowData[15] || '',
+      status: rowData[16] || '',
+      DealStatus: rowData[17] || false,
+      SaleStatus: rowData[18] || false,
+      Approved: rowData[19] || false,
+      SalePrice: rowData[20] || 0,
+    }));
+  
+    if (validData.length === 0) {
+      console.error('No valid data to send.');
+      return;
+    }
+  
     fetch('http://localhost:5001/api/products/bulk', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(
-        data.map((rowData) => ({
-          name: rowData[0],
-          description: rowData[1],
-          price: rowData[2],
-          quantity: rowData[3],
-          manufacture: rowData[4],
-          discount: rowData[5],
-          new: rowData[6],
-          rating: rowData[7],
-          saleCount: rowData[8],
-          tag: Array.isArray(rowData[9]) ? rowData[9] : [],
-          stock: rowData[10],
-          qunatityInStock: rowData[11],
-          sku: rowData[12],
-          category_id: rowData[13],
-          supplier_id: rowData[14],
-          category_name: rowData[15],
-          status: rowData[16],
-        })),
-      ),
+      body: JSON.stringify(validData),
     })
       .then((response) => {
         if (response.ok) {
@@ -149,13 +173,12 @@ class SheetJSApp extends React.Component<SheetJSAppProps, SheetJSAppState> {
       })
       .then((result) => {
         console.log('Bulk data sent successfully:', result);
-
-        // Handle success as needed
       })
       .catch((error) => {
         console.error('Error sending bulk data:', error);
       });
   }
+  
 
   exportFile() {
     /* Convert state to workbook */
@@ -391,6 +414,11 @@ class OutTable extends React.Component<
       supplier_id: rowData[14],
       category_name: rowData[15],
       status: rowData[16],
+      DealStatus:rowData[17],
+      SaleStatus:rowData[18],
+      Approved:rowData[19],
+      SalePrice:rowData[20],
+
     };
 
     fetch('http://localhost:5001/api/products', {
@@ -452,6 +480,11 @@ class OutTable extends React.Component<
       supplier_id: product[14],
       categoryName: product[15],
       status: product[16],
+      DealStatus:product[17],
+      SaleStatus:product[18],
+      Approved:product[19],
+      SalePrice:product[20],
+
     }));
 
     // Send bulk request to the backend API
