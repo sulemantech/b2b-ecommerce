@@ -180,7 +180,7 @@ const ProductImageGalleryLeftThumb = ({ product, thumbPosition }) => {
                       <img
                         src={`${APIHost}${single.images}`}
                         className="img-fluid"
-                        style={{ width: '100%', height: '100%', objectFit: 'contain',
+                        style={{ width: '100%', height: '100%', objectFit: 'cover',
                         border: selectedImageIndex === key ? '1px solid black' : 'none',
                         borderRadius: selectedImageIndex === key ? '5px' : 'none',
 

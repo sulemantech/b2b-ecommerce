@@ -5,11 +5,15 @@ import SEO from "../../components/seo";
 import { getDiscountPrice } from "../../helpers/product";
 import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
-import { addToCart, decreaseQuantity, deleteFromCart, deleteAllFromCart } from "../../store/slices/cart-slice";
+import {
+  addToCart,
+  decreaseQuantity,
+  deleteFromCart,
+  deleteAllFromCart,
+} from "../../store/slices/cart-slice";
 import { cartItemStock } from "../../helpers/product";
 import { logoutAsync } from "../../store/slices/Auth-Action";
 import { APIHost } from "../../API";
-
 
 const Cart = () => {
   let cartTotalPrice = 0;
@@ -17,22 +21,16 @@ const Cart = () => {
   const [quantityCount] = useState(1);
   const dispatch = useDispatch();
   let { pathname } = useLocation();
-  
+
   const currency = useSelector((state) => state.currency);
   const { cartItems } = useSelector((state) => state.cart);
   const { products } = useSelector((state) => state.product);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const authToken = useSelector((state) => state.auth.token);
 
-
   const handleLogout = () => {
     dispatch(logoutAsync(authToken));
   };
-
-
-  
-  
-
 
   return (
     <Fragment>
@@ -43,20 +41,155 @@ const Cart = () => {
 
       <LayoutOne headerTop="visible">
         {/* breadcrumb */}
-        <Breadcrumb 
+        <Breadcrumb
           pages={[
-            {label: "Home", path: process.env.PUBLIC_URL + "/" },
-            {label: "Cart", path: process.env.PUBLIC_URL + pathname }
-          ]} 
+            { label: "Home", path: process.env.PUBLIC_URL + "/" },
+            { label: "Cart", path: process.env.PUBLIC_URL + pathname },
+          ]}
         />
-        <div className="cart-main-area pt-90 pb-100">
+        <div className="cart-main-area pt-15 pb-100">
           <div className="container">
             {cartItems && cartItems.length >= 1 ? (
               <Fragment>
-                <h3 className="cart-page-title">Your cart items</h3>
+                {/* <div></div> */}
                 <div className="row">
-                  <div className="col-12">
-                    <div className="table-content table-responsive cart-table-content">
+                  <div className="col-12 border p-3 rounded">
+                    <h3 className="cart-page-title">Your cart items</h3>
+                    {cartItems.map((cartItem, key) => {
+                      const discountedPrice = getDiscountPrice(
+                        cartItem.price,
+                        cartItem.discount
+                      );
+                      const finalProductPrice = (
+                        cartItem.price * currency.currencyRate
+                      ).toFixed(2);
+                      const finalDiscountedPrice = (
+                        discountedPrice * currency.currencyRate
+                      ).toFixed(2);
+
+                      discountedPrice != null
+                        ? (cartTotalPrice +=
+                            finalDiscountedPrice * cartItem.quantity)
+                        : (cartTotalPrice +=
+                            finalProductPrice * cartItem.quantity);
+
+                      return (
+                        <div key={key} className="d-flex pt-2 pb-2 border-top">
+                          <div className="cart-img">
+                            <Link
+                              to={
+                                process.env.PUBLIC_URL +
+                                "/product/" +
+                                cartItem.id
+                              }
+                            >
+                              <img
+                                className="img-fluid"
+                                src={`${APIHost}${cartItem?.productImages[0].images} `}
+                              />
+                            </Link>
+                          </div>
+                          <div className=" p-2 ml-5 d-flex flex-column flex-grow-1">
+                            <div className="d-flex justify-content-between">
+                              <div className="d-flex flex-column flex-grow-1">
+                                <Link
+                                  to={
+                                    process.env.PUBLIC_URL +
+                                    "/product/" +
+                                    cartItem.id
+                                  }
+                                >
+                                  {cartItem.name}
+                                </Link>
+                              </div>
+                              <div className="product-delete">
+                                <button
+                                  onClick={() =>
+                                    dispatch(
+                                      deleteFromCart(cartItem.cartItemId)
+                                    )
+                                  }
+                                >
+                                  <i className="fa fa-times"></i>
+                                </button>
+                              </div>
+                            </div>
+                            <div className="variant-btn">
+                              <button>Size</button>
+                            </div>
+
+                            <div className=" d-flex justify-content-betweend-flex">
+                              <div className="d-flex flex-column flex-grow-1">
+
+                              <div className="product-price-car">
+                                {discountedPrice !== null ? (
+                                  <Fragment>
+                                    <span className="amount old">
+                                      {currency.currencySymbol +
+                                        finalProductPrice}
+                                    </span>
+                                    <span className="amount">
+                                      {currency.currencySymbol +
+                                        finalDiscountedPrice}
+                                    </span>
+                                  </Fragment>
+                                ) : (
+                                  <span className="amount">
+                                    {currency.currencySymbol +
+                                      finalProductPrice}
+                                  </span>
+                                )}
+                              </div>
+                              </div>
+                                <div className="product-quantity ">
+                                  <div className="cart-plus-minus">
+                                    <button
+                                      className="dec qtybutton"
+                                      onClick={() =>
+                                        dispatch(decreaseQuantity(cartItem))
+                                      }
+                                    >
+                                      -
+                                    </button>
+                                    <input
+                                      className="cart-plus-minus-box"
+                                      type="text"
+                                      value={cartItem.quantity}
+                                      readOnly
+                                    />
+                                    <button
+                                      className="inc qtybutton"
+                                      onClick={() =>
+                                        dispatch(
+                                          addToCart({
+                                            ...cartItem,
+                                            quantity: quantityCount,
+                                          })
+                                        )
+                                      }
+                                      disabled={
+                                        cartItem !== undefined &&
+                                        cartItem.quantity &&
+                                        cartItem.quantity >=
+                                          cartItemStock(
+                                            cartItem,
+                                            cartItem.selectedProductColor,
+                                            cartItem.selectedProductSize
+                                          )
+                                      }
+                                    >
+                                      +
+                                    </button>
+                                  </div>
+                                </div>
+                            </div>
+
+                            <div></div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                    {/* <div className="table-content table-responsive cart-table-content">
                       <table>
                         <thead>
                           <tr>
@@ -219,7 +352,7 @@ const Cart = () => {
                           })}
                         </tbody>
                       </table>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
                 <div className="row">
@@ -242,13 +375,9 @@ const Cart = () => {
                 </div>
 
                 <div className="row">
-                    <div className="col-lg-4 col-md-12 text-white">
-                      
-                    </div>
-                    <div className="col-lg-4 col-md-12 text-white">
-                      
-                    </div>
-                  <div className="col-lg-4 col-md-12" >
+                  {/* <div className="col-lg-4 col-md-12 text-white"></div>
+                  <div className="col-lg-4 col-md-12 text-white"></div> */}
+                  <div className="col-12">
                     <div className="grand-totall">
                       <div className="title-wrap">
                         <h4 className="cart-bottom-title section-bg-gary-cart">
@@ -269,13 +398,13 @@ const Cart = () => {
                         </span>
                       </h4>
                       {isLoggedIn ? (
-                      <Link to={process.env.PUBLIC_URL + "/checkout"}>
-                        Proceed to Checkout
-                      </Link>
-                      ):(
+                        <Link to={process.env.PUBLIC_URL + "/checkout"}>
+                          Proceed to Checkout
+                        </Link>
+                      ) : (
                         <Link to={process.env.PUBLIC_URL + "/login-register"}>
-                        Proceed to Checkout
-                      </Link>
+                          Proceed to Checkout
+                        </Link>
                       )}
                     </div>
                   </div>
