@@ -14,6 +14,140 @@ h3.cart-page-title {
   margin: 0 0 15px;
 }
 
+.product-price-cart {
+  // width: 435px;
+  
+  span {
+    font-weight: 500;
+    // font-size: 12px;
+
+    color: #333;
+    &.old {
+      margin-right: 10px;
+
+      text-decoration: line-through;
+
+      color: #8e8e8e;
+    }
+  }
+  @media (max-width: 576px) {
+    span {
+      font-size: 12px;
+    }
+  }
+}
+
+.product-quantity {
+  width: 90px;
+  border: none;
+
+  .cart-plus-minus {
+    position: relative;
+    display: flex;
+    width: 25px;
+    padding: 0;
+
+    .qtybutton {
+      font-size: 16px;
+      float: inherit;
+      width: 20px;
+      margin: 0;
+      cursor: pointer;
+      transition: all 0.3s ease 0s;
+      text-align: center;
+      color: #333;
+      border: none;
+      background: none;
+    }
+
+    .dec.qtybutton {
+      padding-left: 7px;
+      padding-right: 7px;
+      height: 25px;
+      width: 25px;
+      border-radius: 50%;
+      background-color: #e5e5e5;
+      border: 1px solid #e5e5e5;
+    }
+
+    .inc.qtybutton {
+      height: 25px;
+      width: 25px;
+      border-radius: 50%;
+      background-color: #e5e5e5;
+      border: 1px solid #e5e5e5;
+    }
+
+    input.cart-plus-minus-box {
+      font-size: 14px;
+      font-weight: 500;
+      float: left;
+      width: 40px;
+      height: 25px;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+      color: #333;
+      border: none;
+      background: transparent none repeat scroll 0 0;
+
+      @media (max-width: 576px) {
+        font-size: 12px;
+        width: 30px;
+      }
+    }
+  }
+  @media (max-width: 576px) {
+    width: 80px;
+    padding-left: 2px;
+  }
+}
+
+.cart-img{
+  width: 110px;
+  height: 110px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+
+.product-delete {
+  // width: 100px;
+  a,
+  button {
+    font-size: 17px;
+
+    margin: 0 0px;
+
+    color: #666;
+    border: none;
+    background: none;
+    &:hover {
+      color: $theme-color;
+    }
+  }
+}
+
+.variant-btn{
+  button {
+    font-size: 12px;
+    font-weight: 500;
+
+    margin: 0 0px;
+
+    color: #666;
+    border: none;
+    background: #f2f2f2;
+    border-radius: 15px;
+    &:hover {
+      color: $theme-color;
+    }
+  }
+}
+
 .cart-table-content {
   table {
     border: 1px solid #ebebeb;
@@ -142,7 +276,7 @@ h3.cart-page-title {
           }
         }
       }
-      td.product-remove {
+      div.product-remove {
         width: 100px;
         a,
         button {
@@ -201,11 +335,11 @@ h3.cart-page-title {
   display: flex;
   justify-content: space-between;
 
-  padding: 30px 0 55px;
+  padding: 15px 0 15px;
   @media #{$xs-layout} {
-    display: block;
+    display: flex;
 
-    padding: 30px 0 15px;
+    padding: 15px 0 0px;
   }
   .cart-shiping-update > a,
   .cart-clear > button,
@@ -216,7 +350,7 @@ h3.cart-page-title {
 
     display: inline-block;
 
-    padding: 18px 63px 17px;
+    padding: 18px 15px 17px;
 
     text-transform: uppercase;
 
@@ -226,11 +360,12 @@ h3.cart-page-title {
     @media #{$md-layout} {
       font-size: 13px;
 
-      padding: 18px 25px 17px;
+      padding: 15px 25px 15px;
     }
     @media #{$xs-layout} {
       margin: 0 0 15px;
-      padding: 18px 40px 17px;
+      padding: 18px 15px 17px;
+      font-size: smaller;
     }
     &:hover {
       color: #fff;
@@ -407,7 +542,7 @@ h3.cart-page-title {
     padding: 45px 18px 50px;
   }
   @media #{$md-layout} {
-    margin-top: 30px;
+    margin-top: 0px;
   }
   .title-wrap {
     position: relative;
