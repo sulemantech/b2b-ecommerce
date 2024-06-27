@@ -121,7 +121,7 @@ const Cart = () => {
                             <div className=" d-flex justify-content-betweend-flex">
                               <div className="d-flex flex-column flex-grow-1">
 
-                              <div className="product-price-car">
+                              <div className="product-price-cart">
                                 {discountedPrice !== null ? (
                                   <Fragment>
                                     <span className="amount old">
