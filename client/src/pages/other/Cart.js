@@ -375,9 +375,9 @@ const Cart = () => {
                 </div>
 
                 <div className="row">
-                  {/* <div className="col-lg-4 col-md-12 text-white"></div>
-                  <div className="col-lg-4 col-md-12 text-white"></div> */}
-                  <div className="col-12">
+                  <div className="col-lg-4 col-md-12 text-white"></div>
+                  <div className="col-lg-4 col-md-12 text-white"></div>
+                  <div className="col-lg-4 col-md-12">
                     <div className="grand-totall">
                       <div className="title-wrap">
                         <h4 className="cart-bottom-title section-bg-gary-cart">

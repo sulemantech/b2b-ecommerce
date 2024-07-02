@@ -472,7 +472,7 @@ const LoginRegister = () => {
                                   required
                                   className="form-control w-100 rounded-lg border border-stroke bg-white py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none"
                                   type="password"
-                                  placeholder="Creat password"
+                                  placeholder="Password"
                                   onChange={(e) =>
                                     setvalues({
                                       ...values,
@@ -574,18 +574,20 @@ const LoginRegister = () => {
                                     </span>
                                   </div> */}
 
-                              {/* <div className="mt-3 mb-2">
+                              <div className="mt-3 mb-2">
                                 <p>
                                   Already have an account?
                                   <Link
                                     className="purple-link"
                                     to="/login-register"
+                                    eventKey="login"
                                   >
                                     {" "}
                                     Login
                                   </Link>
+                                  
                                 </p>
-                              </div> */}
+                              </div>
 
                             </div>
                           </div>
