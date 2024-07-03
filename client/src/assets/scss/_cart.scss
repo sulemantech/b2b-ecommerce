@@ -38,31 +38,36 @@ h3.cart-page-title {
 }
 
 .product-wishlist-cart > a,
-      .product-wishlist-cart > button {
-        font-size: 13px;
-        font-weight: 500;
-        line-height: 1.2;
+.product-wishlist-cart > button {
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.2;
+  display: block;
+  margin: 0 auto;
+  padding: 10px 15px;
+  text-transform: uppercase;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  background: none;
+  background-color: $theme-color;
 
-        display: block;
+  &:hover,
+  &.active {
+    background-color: #333;
+  }
 
-        margin: 0 auto;
-        padding: 10px 15px;
+  &:disabled {
+    cursor: not-allowed;
+  }
 
-        text-transform: uppercase;
+  /* Media query for xs screens */
+  @media (max-width: 575.98px) {
+    font-size: 10px;
+    padding: 10px 8px;
+  }
+}
 
-        color: #fff;
-        border: none;
-        border-radius: 50px;
-        background: none;
-        background-color: $theme-color;
-        &:hover,
-        &.active {
-          background-color: #333;
-        }
-        &:disabled {
-          cursor: not-allowed;
-        }
-      }
       td {
         font-size: 15px;
 

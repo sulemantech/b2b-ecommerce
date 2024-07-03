@@ -18,6 +18,7 @@ import FacebookLogin from "react-facebook-login";
 import { registerUserSSO } from "../../API";
 import "./stylFb.css";
 import fb from "../../image/fb.svg";
+// import { BiHide } from "react-icons/bi";
 
 const LoginRegister = () => {
   const dispatch = useDispatch();
@@ -208,7 +209,7 @@ const LoginRegister = () => {
                                     {" "}
                                     {error === "Incorrect password" && error}
                                   </p>
-                                  <div className="">
+                                  <div className="position-relative">
                                     <input
                                       className="form-control w-100 rounded-lg border border-stroke bg-white py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none"
                                       type="password"
@@ -220,6 +221,11 @@ const LoginRegister = () => {
                                         })
                                       }
                                       name={values.password}
+                                    />
+                                    <img
+                                      src={`${process.env.PUBLIC_URL}/icons8-blind-32.png`}
+                                      alt="My Icon"
+                                      className="position-absolute top-50 translate-middle-y end-0 me-3 p-1 rounded rounded-circle cursor-pointer icon-hover"
                                     />
                                   </div>
                                   <div className="button-box">
@@ -481,19 +487,26 @@ const LoginRegister = () => {
                                   }
                                   name={values.password}
                                 />
-                                <input
-                                  required
-                                  className="form-control w-100 rounded-lg border border-stroke bg-white py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none"
-                                  type="confirm password"
-                                  placeholder="Confirm password"
-                                  onChange={(e) =>
-                                    setvalues({
-                                      ...values,
-                                      password: e.target.value,
-                                    })
-                                  }
-                                  name={values.password}
-                                />
+                                <div className="position-relative">
+                                  <input
+                                    required
+                                    className="form-control w-100 rounded-lg border border-stroke bg-white py-4 pl-6 pr-10 outline-none focus:border-primary focus-visible:shadow-none"
+                                    type="confirm password"
+                                    placeholder="Confirm password"
+                                    onChange={(e) =>
+                                      setvalues({
+                                        ...values,
+                                        password: e.target.value,
+                                      })
+                                    }
+                                    name={values.password}
+                                  />
+                                  <img
+                                    src={`${process.env.PUBLIC_URL}/icons8-blind-32.png`}
+                                    alt="My Icon"
+                                    className="position-absolute top-50 translate-middle-y end-0 me-3 p-1 rounded rounded-circle cursor-pointer icon-hover"
+                                  />
+                                </div>
                               </div>
                               <input
                                 required
@@ -585,10 +598,8 @@ const LoginRegister = () => {
                                     {" "}
                                     Login
                                   </Link>
-                                  
                                 </p>
                               </div>
-
                             </div>
                           </div>
                         </div>

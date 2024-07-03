@@ -5,6 +5,17 @@
   // .purple-link{
   //   color: blue;
   // }
+  .cursor-pointer {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+  }
+
+  .icon-hover:hover {
+    background-color: #f5f5f5;
+    // width: 10px;
+    // height: 10px;
+  }
   
   .login-register-tab-list {
     display: flex;
