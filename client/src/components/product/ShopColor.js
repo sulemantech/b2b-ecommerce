@@ -7,7 +7,7 @@ const ShopColor = ({ colors, getSortParams }) => {
   return (
     <div className="sidebar-widget mt-2">
       <h4 className="pro-sidebar-title px-3">Color </h4>
-      <div className="sidebar-widget-list mt-2 px-3">
+      <div className="sidebar-widget-list mt-2 px-2">
         {colors ? (
           <ul>
             <li>

@@ -15,15 +15,16 @@ interface User {
 
 const User: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
+  const [searchValue, setSearchValue] = useState<string>('');
 
   useEffect(() => {
     const getAllUsers = async () => {
       try {
         const response = await axios.get<User[]>(
-          `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/user/getAll`,
+          `${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}/api/user/getAll`
         );
         setUsers(response.data);
-        console.log('All user', response.data);
+        console.log('All users', response.data);
       } catch (error) {
         console.error('Error fetching users:', error);
       }
@@ -36,7 +37,10 @@ const User: React.FC = () => {
     <>
       {/* <Breadcrumb pageName="Users" /> */}
       <div className=" border border-stroke bg-white shadow-md dark:border-strokedark dark:bg-boxdark rounded-xl">
-      <ProductWrapper Value='Users'>
+      <ProductWrapper 
+      searchValue={searchValue}
+      setSearchValue={setSearchValue}
+      Value="Users">
         <div className="grid text-xs sm:text-sm grid-cols-4 border-t border-stroke py-4.5 px-4 dark:border-strokedark sm:grid-cols-5 md:px-6 2xl:px-7.5">
           <div className="col-span-1 flex items-center justify-center">
             <p className="font-medium text-black">First Name</p>
