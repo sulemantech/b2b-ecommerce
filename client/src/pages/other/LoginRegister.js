@@ -11,8 +11,10 @@ import { useDispatch } from "react-redux";
 import { submitLoginAsync } from "../../store/slices/Auth-Action";
 import { postRegistration } from "../../API";
 import { useGoogleLogin } from "@react-oauth/google";
+// import { FacebookLoginButton } from "react-social-login-buttons";
 import axios from "axios";
 import { login } from "../../store/slices/Auth-slice";
+// import FacebookLogin from "react-facebook-login";
 import { registerUserSSO } from "../../API";
 import "./stylFb.css";
 import fb from "../../image/fb.svg";
@@ -23,7 +25,7 @@ const LoginRegister = () => {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [facebook, setFacebook] = useState();
   const [shouldRegister, setShouldRegister] = useState(false);
-  const [google, setGoogle] = useState(); 
+  const [google, setGoogle] = useState();
   const [error, setError] = useState(null);
   const [values, setvalues] = useState({
     firstname: "",
@@ -373,6 +375,7 @@ const LoginRegister = () => {
                                         Login with Google
                                       </span>
                                     </div>
+                                    
                                     <div
                                       className="m-auto"
                                       style={{ width: "100%" }}
