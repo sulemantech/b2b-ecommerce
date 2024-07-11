@@ -11,10 +11,8 @@ import { useDispatch } from "react-redux";
 import { submitLoginAsync } from "../../store/slices/Auth-Action";
 import { postRegistration } from "../../API";
 import { useGoogleLogin } from "@react-oauth/google";
-// import { FacebookLoginButton } from "react-social-login-buttons";
 import axios from "axios";
 import { login } from "../../store/slices/Auth-slice";
-// import FacebookLogin from "react-facebook-login";
 import { registerUserSSO } from "../../API";
 import "./stylFb.css";
 import fb from "../../image/fb.svg";
@@ -374,45 +372,6 @@ const LoginRegister = () => {
                                       >
                                         Login with Google
                                       </span>
-                                    </div>
-                                    <div
-                                      className="m-auto"
-                                      style={{ width: "100%" }}
-                                    >
-                                      <FacebookLogin
-                                        appId="1353052488720779"
-                                        fields="name,email,picture"
-                                        autoLoad={false}
-                                        onClick={responseFacebook}
-                                        callback={responseFacebook}
-                                        cssClass="btnFacebook d-flex justify-content-center align-items-center text-center"
-                                        icon={
-                                          <i style={{ marginRight: "10px" }}>
-                                            {
-                                              <svg
-                                                width="25"
-                                                height="25"
-                                                viewBox="0 0 50 49"
-                                                fill="none"
-                                                xmlns="http://www.w3.org/2000/svg"
-                                              >
-                                                <path
-                                                  d="M49.1716 24.2222C49.1716 10.8865 38.3609 0.0758324 25.0252 0.0758324C11.6895 0.0758324 0.878819 10.8865 0.878819 24.2222C0.878819 36.2743 9.7088 46.2638 21.2523 48.0752V31.202H15.1214V24.2222H21.2523V18.9025C21.2523 12.8508 24.8572 9.508 30.3728 9.508C33.0146 9.508 35.7779 9.97961 35.7779 9.97961V15.9219H32.7331C29.7335 15.9219 28.7981 17.7832 28.7981 19.6927V24.2222H35.4949L34.4243 31.202H28.7981V48.0752C40.3416 46.2638 49.1716 36.2743 49.1716 24.2222Z"
-                                                  fill="white"
-                                                />
-                                              </svg>
-                                            }
-                                          </i>
-                                        }
-                                        textButton={
-                                          <span
-                                            className="mr-200"
-                                            style={{ fontSize: "16px" }}
-                                          >
-                                            Login with Facebook
-                                          </span>
-                                        }
-                                      />
                                     </div>
                                     <div
                                       className="m-auto"
