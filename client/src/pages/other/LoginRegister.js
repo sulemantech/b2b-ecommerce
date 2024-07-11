@@ -23,7 +23,7 @@ const LoginRegister = () => {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [facebook, setFacebook] = useState();
   const [shouldRegister, setShouldRegister] = useState(false);
-  const [google, setGoogle] = useState();
+  const [google, setGoogle] = useState(); 
   const [error, setError] = useState(null);
   const [values, setvalues] = useState({
     firstname: "",
