@@ -52,7 +52,7 @@ const NavMenu = ({ menuWhiteClass, sidebarMenu }) => {
               </li> */}
             </ul>
           </li>
-          <li>
+          {/* <li> */}
             {/* <Link to={process.env.PUBLIC_URL + "/"}>
               {t("pages")}
               {sidebarMenu ? (
@@ -63,7 +63,7 @@ const NavMenu = ({ menuWhiteClass, sidebarMenu }) => {
                 <i className="fa fa-angle-down" />
               )}
             </Link> */}
-            <ul className="submenu">
+            {/* <ul className="submenu">
               <li>
                 <Link to={process.env.PUBLIC_URL + "/cart"}>
                   {t("cart")}
@@ -114,8 +114,8 @@ const NavMenu = ({ menuWhiteClass, sidebarMenu }) => {
                   {t("404_page")}
                 </Link>
               </li>
-            </ul>
-          </li>
+            </ul> */}
+          {/* </li> */}
           <li>
             <Link to={process.env.PUBLIC_URL + "/"}>
               {t("About")}
