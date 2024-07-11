@@ -114,6 +114,7 @@ const LoginRegister = () => {
           console.error(error);
         });
       setShouldRegister(false);
+      
     }
   }, [shouldRegister, google, facebook, dispatch, navigate]);
 
