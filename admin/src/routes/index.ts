@@ -20,6 +20,7 @@ const BulkUpdate=lazy(()=>import ('../components/BulkUpdate'));
 const ApproveProducts=lazy(()=>import ('../components/ApproveProducts'));
 const ADDpractuc=lazy(()=>import ('../pages/Form/addPractus'));
 const Variants=lazy(()=>import ('../pages/Form/Variants'));
+const inventory=lazy(()=>import ('../pages/Form/inventory'));
 
 
 
@@ -28,6 +29,12 @@ const Variants=lazy(()=>import ('../pages/Form/Variants'));
 
 
 const coreRoutes = [
+  {
+    path: '/inventory',
+    title: 'inventory',
+    component:inventory,
+
+  },
   {
     path: '/Variants',
     title: 'Variants',

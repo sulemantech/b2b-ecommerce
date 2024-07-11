@@ -7,6 +7,7 @@ import LayoutOne from "../../layouts/LayoutOne";
 import Breadcrumb from "../../wrappers/breadcrumb/Breadcrumb";
 import { addToCart } from "../../store/slices/cart-slice";
 import { deleteFromWishlist, deleteAllFromWishlist } from "../../store/slices/wishlist-slice"
+import { APIHost } from "../../API";
 
 const Wishlist = () => {
   const dispatch = useDispatch();
@@ -31,14 +32,156 @@ const Wishlist = () => {
             {label: "Wishlist", path: process.env.PUBLIC_URL + pathname }
           ]} 
         />
-        <div className="cart-main-area pt-90 pb-100">
+        <div className="cart-main-area pt-15 pb-100">
           <div className="container">
             {wishlistItems && wishlistItems.length >= 1 ? (
               <Fragment>
-                <h3 className="cart-page-title">Your wishlist items</h3>
                 <div className="row">
-                  <div className="col-12">
-                    <div className="table-content table-responsive cart-table-content">
+                  <div className="col-12 border p-3 rounded">
+                <h3 className="cart-page-title">Your wishlist items</h3>
+                          {wishlistItems.map((wishlistItem, key) => {
+                            const discountedPrice = getDiscountPrice(
+                              wishlistItem.price,
+                              wishlistItem.discount
+                            );
+                            const finalProductPrice = (
+                              wishlistItem.price * currency.currencyRate
+                            ).toFixed(2);
+                            const finalDiscountedPrice = (
+                              discountedPrice * currency.currencyRate
+                            ).toFixed(2);
+                            const cartItem = cartItems.find(
+                              item => item.id === wishlistItem.id
+                            );
+                            return (
+                              <div key={key} className="d-flex pt-2 pb-2 border-top">
+                          <div className="cart-img">
+                          <Link
+                                    to={
+                                      process.env.PUBLIC_URL +
+                                      "/product/" +
+                                      wishlistItem.id
+                                    }
+                                  >
+                                    <img
+                                      className="img-fluid"
+                                      src={`${APIHost}${wishlistItem.productImages[0].images}`}
+
+                                      alt=""
+                                    />
+                                  </Link>
+                          </div>
+                          <div className=" p-2 ml-5 d-flex flex-column flex-grow-1">
+                            <div className="d-flex justify-content-between">
+                              <div className="d-flex flex-column flex-grow-1">
+                                 <Link
+                                    to={
+                                      process.env.PUBLIC_URL +
+                                      "/product/" +
+                                      wishlistItem.id
+                                    }
+                                  >
+                                    {wishlistItem.name}
+                                  </Link>
+                              </div>
+                              <div className="product-delete">
+                              <button
+                                    onClick={() =>
+                                      dispatch(deleteFromWishlist(wishlistItem.id))
+                                    }
+                                  >
+                                    <i className="fa fa-times"></i>
+                                  </button>
+                              </div>
+                            </div>
+                            <div className="variant-btn">
+                              <button>Size</button>
+                            </div>
+
+                            <div className=" d-flex justify-content-betweend-flex">
+                              <div className="d-flex flex-column flex-grow-1">
+
+                              <div className="product-price-cart">
+                                {discountedPrice !== null ? (
+                                  <Fragment>
+                                  <span className="amount old">
+                                    {currency.currencySymbol +
+                                      finalProductPrice}
+                                  </span>
+                                  <span className="amount">
+                                    {currency.currencySymbol +
+                                      finalDiscountedPrice}
+                                  </span>
+                                </Fragment>
+                              ) : (
+                                <span className="amount">
+                                  {currency.currencySymbol +
+                                    finalProductPrice}
+                                </span>
+                                )}
+                              </div>
+                              </div>
+                                <div className="">
+                                  <div className="product-wishlist-cart">
+                                  {wishlistItem.affiliateLink ? (
+                                    <a
+                                      href={wishlistItem.affiliateLink}
+                                      rel="noopener noreferrer"
+                                      target="_blank"
+                                    >
+                                      {" "}
+                                      Buy now{" "}
+                                    </a>
+                                  ) : wishlistItem.variation &&
+                                    wishlistItem.variation.length >= 1 ? (
+                                    <Link
+                                      to={`${process.env.PUBLIC_URL}/product/${wishlistItem.id}`}
+                                    >
+                                      Select option
+                                    </Link>
+                                  ) : wishlistItem.stock &&
+                                    wishlistItem.stock > 0 ? (
+                                    <button
+                                      onClick={() =>
+                                        dispatch(addToCart(wishlistItem))
+                                      }
+                                      className={
+                                        cartItem !== undefined &&
+                                        cartItem.quantity > 0
+                                          ? "active"
+                                          : ""
+                                      }
+                                      disabled={
+                                        cartItem !== undefined &&
+                                        cartItem.quantity > 0
+                                      }
+                                      title={
+                                        wishlistItem !== undefined
+                                          ? "Added to cart"
+                                          : "Add to cart"
+                                      }
+                                    >
+                                      {cartItem !== undefined &&
+                                      cartItem.quantity > 0
+                                        ? "Added"
+                                        : "Add to cart"}
+                                    </button>
+                                  ) : (
+                                    <button disabled className="active">
+                                      Out of stock
+                                    </button>
+                                  )}
+                                  </div>
+                                </div>
+                            </div>
+
+                            <div></div>
+                          </div>
+                        </div>
+                            );
+                          })}
+                    
+                    {/* <div className="table-content table-responsive cart-table-content">
                       <table>
                         <thead>
                           <tr>
@@ -182,7 +325,7 @@ const Wishlist = () => {
                           })}
                         </tbody>
                       </table>
-                    </div>
+                    </div> */}
                   </div>
                 </div>
 
