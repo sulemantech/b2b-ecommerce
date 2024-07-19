@@ -13,3 +13,8 @@
 .inputField::placeholder {
   color: #8a8a8a; /* Change placeholder color to red */
 }
+
+.placeholder-xs::placeholder {
+  font-size: 14px; /* Adjust the font size as needed */
+  font-weight: 500;
+}

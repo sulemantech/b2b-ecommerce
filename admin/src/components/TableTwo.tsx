@@ -39,7 +39,7 @@ const TableTwo: React.FC = () => {
     DealStatus: boolean;
     Approved: boolean;
     SaleStatus: boolean;
-    quantityInStock:string;
+    quantityInStock: string;
     productImages: Array<{ date: string; images: string[] }>;
   }
 
@@ -70,16 +70,19 @@ const TableTwo: React.FC = () => {
 
   const toggleProductSelection = (productId: number) => {
     if (selectedProducts.some((product) => product.id === productId)) {
-      setSelectedProducts(selectedProducts.filter((product) => product.id !== productId));
+      setSelectedProducts(
+        selectedProducts.filter((product) => product.id !== productId),
+      );
     } else {
-      const selectedProduct = products.find((product) => product.id === productId) ||
-                              results.find((product) => product.id === productId);
+      const selectedProduct =
+        products.find((product) => product.id === productId) ||
+        results.find((product) => product.id === productId);
       if (selectedProduct) {
         setSelectedProducts([...selectedProducts, selectedProduct]);
       }
     }
   };
-  
+
   useEffect(() => {
     setShowHeight(selectedProducts.length > 0);
   }, [selectedProducts]);
@@ -283,7 +286,7 @@ const TableTwo: React.FC = () => {
                       />
                     </p>
                     <p className="w-20 font-medium text-[#616161] text-center">
-                      Product
+                      Produc
                     </p>
                   </div>
                   <div className="col-span-1 hidden items-center justify-center sm:flex">
@@ -334,9 +337,11 @@ const TableTwo: React.FC = () => {
                         onChange={() => toggleProductSelection(product.id)}
                       />
                       <div className="w-20 flex flex-col gap-2 sm:flex-col sm:items-center">
-                        <div className="h-10 w-10 sm:w-15 sm:h-15 rounded-md flex mx-auto justify-center items-center overflow-hidden">
+                        <div className="w-full aspect-w-1 aspect-h-1 rounded-md overflow-hidden">
                           <img
                             src={`${import.meta.env.VITE_REACT_APP_RESOURCE_SERVER_HOST}${product?.productImages[0]?.images[0]}`}
+                            alt="Product Image"
+                            className="object-cover w-full h-full"
                           />
                         </div>
                         <p className="text-xs sm:text-sm text-black dark:text-white">
@@ -367,7 +372,7 @@ const TableTwo: React.FC = () => {
                     <div className="col-span-1 flex items-center justify-center">
                       <Link
                         to={`/UpdateProducts/${product.id}`}
-                        className="text-xs sm:text-sm text-meta-3"
+                        className="p-1 px-3 text-black text-sm font-semibold bg-white rounded-lg shadow-sm shadow-[#3a3737] hover:shadow-none hover:border hover:border-[#ebebeb] hover:bg-[rgba(241,241,241,0.45)]"
                       >
                         Edit
                       </Link>

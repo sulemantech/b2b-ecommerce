@@ -234,7 +234,7 @@ const BulkUpdate: FC<BulkUpdateProps> = ({ selectedProducts }) => {
           ? 'none'
           : '1.5px 1.5px 4px 0.1px rgb(27, 27, 27, 10)'
       }}
-        className='absolute text-white text-center font-semibold text-sm border-meta-1 outline-none border-none bg-black-2 px-4 py-1 top-17 right-8 rounded-md transition duration-300 ease-in-out'
+        className='absolute text-white text-center font-semibold text-sm  bg-black-2 px-4 py-1 top-17 right-8 rounded-md transition duration-300 ease-in-out'
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         onClick={updateBulkProducts}>Save</button>
