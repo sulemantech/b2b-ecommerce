@@ -286,7 +286,7 @@ const TableTwo: React.FC = () => {
                       />
                     </p>
                     <p className="w-20 font-medium text-[#616161] text-center">
-                      Produc
+                      Product
                     </p>
                   </div>
                   <div className="col-span-1 hidden items-center justify-center sm:flex">
@@ -351,7 +351,12 @@ const TableTwo: React.FC = () => {
                     </div>
                     <div className="col-span-1 hidden items-center justify-center sm:flex">
                       <p className="text-xs sm:text-sm text-black dark:text-white text-center">
-                        {product.categoryName}
+                      {Array.isArray(product.tag)
+      ? product.tag.map((tag: string) => typeof tag === 'string' ? tag.replace(/[{}]/g, '') : '').join(', ')
+      : typeof product.tag === 'string'
+      ? product.tag.replace(/[{}]/g, '')
+      : "hello"
+    }
                       </p>
                     </div>
                     <div className="col-span-1 flex items-center justify-center">
