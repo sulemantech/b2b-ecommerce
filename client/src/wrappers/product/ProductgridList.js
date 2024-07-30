@@ -2,8 +2,9 @@ import PropTypes from "prop-types";
 import React, { Fragment, useState } from "react";
 import { useSelector } from "react-redux";
 import ProductGridListSingle from "../../components/product/ProductGridListSingle";
+import { $CombinedState } from "redux";
 
-const ProductGridList = ({ products, spaceBottomClass }) => {
+const ProductGridList = ({ products, spaceBottomClass, layout }) => {
   const hasSearched = useSelector((state) => state.searchpro.hasSearched);
   const currency = useSelector((state) => state.currency);
   const { cartItems } = useSelector((state) => state.cart);
@@ -33,7 +34,7 @@ const ProductGridList = ({ products, spaceBottomClass }) => {
         products.map((product) => (
           <div
             key={product.id}
-            className="col-xl-3 col-md-3 col-sm-4 col-12 p-3 gap-2"
+            className={`${layout}`}
             onMouseEnter={() => setHoveredProductId(product.id)}
             onMouseLeave={() => setHoveredProductId(null)}
             style={{
@@ -60,6 +61,8 @@ const ProductGridList = ({ products, spaceBottomClass }) => {
 ProductGridList.propTypes = {
   products: PropTypes.array,
   spaceBottomClass: PropTypes.string,
+  layout: PropTypes.string,
+
 };
 
 export default ProductGridList;

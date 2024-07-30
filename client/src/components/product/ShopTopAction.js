@@ -35,7 +35,7 @@ const ShopTopAction = ({
         <div className="d-flex align-items-center justify-content-center">
         <button
           onClick={e => {
-            getLayout("grid two-column");
+            getLayout("col-lg-3 col-md-4 col-sm-6 col-12 p-3 gap-2");
             setActiveLayout(e);
           }}
         >
@@ -43,15 +43,16 @@ const ShopTopAction = ({
         </button>
         <button
           onClick={e => {
-            getLayout("grid three-column");
+            getLayout("col-lg-2 col-md-3 col-sm-4 col-6 p-3 gap-2");
             setActiveLayout(e);
           }}
         >
           <i className="fa fa-th" />
         </button>
         <button
+        className="hidden"
           onClick={e => {
-            getLayout("list");
+            getLayout("flex p-3 gap-2 scale-50");
             setActiveLayout(e);
           }}
         >

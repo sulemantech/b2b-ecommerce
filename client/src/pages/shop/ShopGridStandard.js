@@ -18,7 +18,7 @@ import { setProducts } from "../../store/slices/product-slice";
 
 const ShopGridStandard = () => {
   const dispatch = useDispatch();
-  const [layout, setLayout] = useState("grid three-column");
+  const [layout, setLayout] = useState("col-lg-3 col-md-4 col-sm-6 col-12 p-3 gap-2");
   const [sortType, setSortType] = useState("");
   const [sortValue, setSortValue] = useState("");
   const [filterSortType, setFilterSortType] = useState("");

@@ -19,6 +19,7 @@
     "@ckeditor/ckeditor5-build-classic": "^41.0.0",
     "@ckeditor/ckeditor5-react": "^6.2.0",
     "@shopify/polaris": "^12.10.0",
+    "@tailwindcss/aspect-ratio": "^0.4.2",
     "@types/react-router-dom": "^5.3.3",
     "apexcharts": "^3.41.0",
     "axios": "^1.6.4",

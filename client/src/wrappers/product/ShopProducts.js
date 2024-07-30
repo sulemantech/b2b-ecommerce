@@ -9,8 +9,8 @@ const ShopProducts = ({ products, layout }) => {
 
   return (
     <div className="shop-bottom-area mt-30">
-      <div className={clsx("row", layout)}>
-        <ProductgridList products={products} spaceBottomClass="mb-25" />
+      <div className={clsx("row")}>
+        <ProductgridList products={products} layout={layout} spaceBottomClass="mb-25" />
         
       </div>
     </div>
