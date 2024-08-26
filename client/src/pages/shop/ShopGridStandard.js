@@ -34,6 +34,7 @@ const ShopGridStandard = () => {
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [subcategory,setSubcategory]=useState(false);
   const categoryIds = categories.map((category) => category.id);
+  
 
   const handleSortParams = (type, value, isSubcategory = false) => {
     if (type !== "category") {
