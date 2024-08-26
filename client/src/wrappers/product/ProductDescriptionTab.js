@@ -5,9 +5,9 @@ import Nav from "react-bootstrap/Nav";
 
 const ProductDescriptionTab = ({ spaceBottomClass, productFullDesc }) => {
   return (
-    <div className={clsx("description-review-area", spaceBottomClass)}>
+    <div className={clsx("description-review-area pb-0", spaceBottomClass)}>
       <div className="container">
-        <div className="description-review-wrapper">
+        {/* <div className="description-review-wrapper">
           <Tab.Container defaultActiveKey="productDescription">
             <Nav variant="pills" className="description-review-topbar">
               <Nav.Item>
@@ -172,7 +172,7 @@ const ProductDescriptionTab = ({ spaceBottomClass, productFullDesc }) => {
               </Tab.Pane>
             </Tab.Content>
           </Tab.Container>
-        </div>
+        </div> */}
       </div>
     </div>
   );

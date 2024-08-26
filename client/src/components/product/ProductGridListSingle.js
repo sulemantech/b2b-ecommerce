@@ -191,6 +191,8 @@ const ProductGridListSingle = ({
             {product?.productImages?.[0]?.images?.[0] ? (
               <img
                 className="img-fluid w-100 h-100 rounded"
+                // style={{ border: '1px solid #e0e4e4', zIndex: 1 }}
+                // style={{ objectFit: 'cover' }}
                 src={`${APIHost}${product?.productImages?.[0]?.images?.[0]}`}
                 alt="Product"
               />

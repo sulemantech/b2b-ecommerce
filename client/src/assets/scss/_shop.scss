@@ -293,11 +293,16 @@
   }
 }
 
-@media #{$xs-layout} {
-  .shop-area.pb-100 {
-    padding-bottom: 45px;
-  }
+.shop-area.pb-100 {
+  padding-bottom: 35px;
+  padding-top: 35px;
 }
+
+// @media #{$xs-layout} {
+//   .shop-area.pb-100 {
+//     padding-bottom: 45px;
+//   }
+// }
 
 .list2-col-style {
   .shop-list-wrap {
@@ -430,7 +435,7 @@
       padding: 0 15px;
     }
     @media #{$lg-layout} {
-      padding: 0 30px;
+      padding: 0 15px;
     }
     @media #{$md-layout} {
       padding: 0 40px;

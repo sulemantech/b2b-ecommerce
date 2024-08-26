@@ -1,6 +1,21 @@
 /*------ 24. login register Page  --------*/
 
 .login-register-wrapper {
+
+  // .purple-link{
+  //   color: blue;
+  // }
+  .cursor-pointer {
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+  }
+
+  .icon-hover:hover {
+    background-color: #f5f5f5;
+    // width: 10px;
+    // height: 10px;
+  }
   
   .login-register-tab-list {
     display: flex;
@@ -51,16 +66,16 @@
   .login-form-container {
     background: #f5f5f5;
     box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
-    padding: 20px;
+    padding: 20px 20px;
 
     margin-top: 0px;
     text-align: left;
     margin: auto;
     @media #{$lg-layout} {
-      padding: 80px 50px;
+      padding: 20px 20px;
     }
     @media #{$xs-layout} {
-      padding: 40px 0 15px;
+      padding: 15px 15px;
     }
     .login-register-form {
       form {
@@ -70,8 +85,12 @@
           color: #333;
           font-size: 14px;
           height: 45px;
-          margin-bottom: 18px;
+          margin-bottom: 5px;
+          margin-top: 12px;
           padding: 0 15px;
+          &::placeholder {
+            color: #888888e2; /* Change this to the desired placeholder color */
+          }
         }
         input[type="checkbox"] {
           height: 13px;
@@ -91,9 +110,10 @@
               }
             }
             a {
-              color: #242424;
+              color: blue;
               float: right;
               font-size: 15px;
+              margin-right: 5px;
               @media #{$xs-layout} {
                 font-size: 14px;
               }

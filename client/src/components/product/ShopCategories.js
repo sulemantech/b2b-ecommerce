@@ -26,10 +26,10 @@ const ShopCategories = ({ categories, getSortParams, selectedCategories }) => {
     <div className="sidebar-widget position-relative">
       {subcategories.length > 0 && show ? (
         <div
-        className="position-absolute top-0 start-100 rounded h-100 bg-gray border" style={{ width: '160px',zIndex: 5 }}
+        className="container-fluid position-absolute top-0 start-100 rounded bg-gray border" style={{ width: '160px',zIndex: 5 }}
           onMouseLeave={() => setShow(false)} // Hide subcategories when mouse leaves
         >
-          <ul style={{ padding: "20px" }}>
+          <ul style={{ padding: "10px" }}>
             {subcategories.map((category, index) => (
               <li key={index}>
                 <ul>
@@ -46,19 +46,19 @@ const ShopCategories = ({ categories, getSortParams, selectedCategories }) => {
                           className="d-flex "
                           onMouseOver={(e) => {
                             e.currentTarget.classList.add(
-                              "bg-white",
-                              "text-danger"
+                              // "bg-white",
+                              "text-purple"
                             );
-                            e.currentTarget.querySelector("img").style.display =
-                              "inline";
+                            // e.currentTarget.querySelector("img").style.display =
+                            //   "inline";
                           }}
                           onMouseOut={(e) => {
                             e.currentTarget.classList.remove(
-                              "bg-white",
-                              "text-danger"
+                              // "bg-white",
+                              "text-purple"
                             );
-                            e.currentTarget.querySelector("img").style.display =
-                              "none";
+                            // e.currentTarget.querySelector("img").style.display =
+                            //   "none";
                           }}
                         >
                           {subcategory.name}
@@ -85,7 +85,7 @@ const ShopCategories = ({ categories, getSortParams, selectedCategories }) => {
       ) : null}
 
       <h4 className="pro-sidebar-title px-3">Categories </h4>
-      <div className="sidebar-widget-list mt-2 px-3">
+      <div className="sidebar-widget-list mt-2 px-2">
         {categories ? (
           <ul>
             <li>
@@ -134,19 +134,19 @@ const ShopCategories = ({ categories, getSortParams, selectedCategories }) => {
                         className="d-flex"
                         onMouseOver={(e) => {
                           e.currentTarget.classList.add(
-                            "bg-white",
-                            "text-danger"
+                            // "bg-white",
+                            "text-purple"
                           );
-                          e.currentTarget.querySelector("img").style.display =
-                            "inline";
+                          // e.currentTarget.querySelector("img").style.display =
+                          //   "inline";
                         }}
                         onMouseOut={(e) => {
                           e.currentTarget.classList.remove(
-                            "bg-white",
-                            "text-danger"
+                            // "bg-white",
+                            "text-purple"
                           );
-                          e.currentTarget.querySelector("img").style.display =
-                            "none"; // Hide the arrow image
+                          // e.currentTarget.querySelector("img").style.display =
+                          //   "none"; // Hide the arrow image
                         }}
                       >
                         {category.name}

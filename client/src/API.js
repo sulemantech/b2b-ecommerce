@@ -19,6 +19,7 @@ const selectCategory= `${APIHost}/api/products`;
 //     if (!response) {
 //       throw new Error(`HTTP error! Status: ${response.status}`);
 //     }
+
 //     return response.data;
     
 //   } catch (error) {

@@ -37,6 +37,10 @@
   }
 }
 
+.text-purple {
+  color: #a749ff !important;
+}
+
 .sidebar-widget {
   h4.pro-sidebar-title {
     font-size: 16px;
@@ -118,7 +122,7 @@
 
           width: 100%;
           padding: 0;
-          padding-left: 30px;
+          padding-left: 22px;
 
           text-align: left;
           text-transform: capitalize;
@@ -145,6 +149,9 @@
             color: #9a9a9a;
             border-radius: 50px;
             background-color: #eeeeee;
+          }
+          &:hover {
+            color: #a749ff;
           }
           // &:hover,
           &.active {

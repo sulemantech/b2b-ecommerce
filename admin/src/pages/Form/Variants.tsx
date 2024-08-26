@@ -182,7 +182,7 @@ const Dropdown: React.FC<Dropdown> = ({ setObjsizee, setObjcolorr }) => {
             ) : (
               <div
                 onClick={addNewVariant}
-                className="flex cursor-pointer  items-center w-full h-14 text-start text-sm font-semibold border-none border-[#c4c4c4] border-t-0 rounded-b-md p-2 pl-8 mb-2"
+                className="flex cursor-pointer  items-center w-full h-14 text-start text-sm font-semibold border-none border-[#c4c4c4] border-t-0 rounded-b-md p-2 pl-8"
               >
                <p className='hover:text-black border-none duration-1000 transition-all'> + Add new variants like size or color</p>
               </div>

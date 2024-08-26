@@ -9,7 +9,7 @@ const ShopTag = ({ tags, getSortParams,tagFilterSortParams }) => {
   return (
     <div className="sidebar-widget mt-2">
       <h4 className="pro-sidebar-title px-3">Tag </h4>
-      <div className="sidebar-widget-tag px-3 col">
+      <div className="sidebar-widget-tag px-1 col">
         {tags ? (
           <ul className="">
             {tags.map((tag, key) => {
