@@ -26,6 +26,7 @@ const swaggerUi = require('swagger-ui-express');
 const notificationRoute=require('./routes/notificationRoute.js')
 const sequelize = require('./config/config.js');
 const WebSocket = require('ws');
+const stripe =require('stripe')('sk_test_51Prv0dRt1P6M940AeyNOY174WG1OtANIsvvIh6D9Mpw8jhIoafJP3ZFh9DZLO6YksZc2kPas5ia4ZEd34MdTewZD00XOcOw2aL')
 
 
 
@@ -76,7 +77,10 @@ const server = new ApolloServer({
 //authRoute firebase
 // app.use('/verify-id-token', authRoutes);
 
+   app.post('/payment',(req,res)=>{
 
+
+   })
 //notification
 app.use('/notifications',notificationRoute)
 
